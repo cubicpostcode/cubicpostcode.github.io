@@ -41,7 +41,7 @@
                             <h4 class="col-12 font-weight-bold mb-3" >Enter 22 algarisms cube code: </h4>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-group row no-gutters">
-                                    <input id="cube" type="number" class="col form-control px-3" >
+                                    <input id="cube" type="number" class="col form-control px-3" onKeyUp="maxDigits()" > 
                                     &nbsp;
                                     <button id="calculate" type="button" class="col-sm-4 col-12 mt-sm-0 mt-2 btn btn-success">Calculate</button>
                                 </div>
@@ -77,6 +77,29 @@
     </div>
     
     <script>
+
+
+        function maxDigits() {
+            var textField = document.getElementById("cube");
+
+            if (textField.value.length > 22) {
+                /* must be > 22, not == 22 or else the substring statement on the next line 
+                will cause the function to run again if the user dismisses the alert
+                by pressing the 'enter' key rather than clicking 'OK'. */
+
+                textField.value = textField.value.substring(0, 22)
+                // set field's value equal to first five characters. 
+
+                textField.blur()
+                /* move cursor out of form element 
+                to keep it from placing itself at position zero, 
+                causing an overwrite of the first character */
+
+                alert("Max 22 digits allowed")
+            }
+
+        }
+
         window.onload = function() {
             document.getElementById('calculate').onclick = function() {
                 var cube = parseFloat(document.getElementById('cube').value);
