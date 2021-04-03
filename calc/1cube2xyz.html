@@ -1,36 +1,41 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title></title>
     <style>
-        body{
-            background-color:#f4f4f4;
+        body {
+            background-color: #f4f4f4;
         }
-        .card{
+
+        .card {
             box-shadow: 0 0 10px #0000002b;
         }
+
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         /* Firefox */
         input[type=number] {
-        -moz-appearance: textfield;
+            -moz-appearance: textfield;
         }
     </style>
-  </head>
-  <body>
-      
+</head>
+
+<body>
+
     <div class="container py-5">
         <div class="row">
 
@@ -38,33 +43,36 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">
-                            <h4 class="col-12 font-weight-bold mb-3" >Enter 22 algarisms cube code: </h4>
+                            <h4 class="col-12 font-weight-bold mb-3">Enter 22 algarisms cube code: </h4>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-group row no-gutters">
-                                    <input id="cube" type="number" class="col form-control px-3" >
-                                    &nbsp;
-                                    <button id="calculate" type="button" class="col-sm-4 col-12 mt-sm-0 mt-2 btn btn-success">Calculate</button>
+                                    <input id="cube" type="number" class="col form-control px-3" onKeyUp="maxDigits()">
+                                    <button id="calculate" type="button"
+                                        class="col-sm-4 col-12 mt-sm-0 mt-2 btn btn-success">Calculate</button>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
 
                         <div class="col-lg-6 col-md-8 pl-0 pr-md-3 pr-0">
                             <hr>
                             <br>
                             <div class="form-group row no-gutters">
-                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">X: </label>
+                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">X:
+                                </label>
                                 <div class="col-sm-10 col-11">
                                     <input id="x" type="number" class="form-control" readonly="" disabled="">
                                 </div>
                             </div>
                             <div class="form-group row no-gutters">
-                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">Y: </label>
+                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">Y:
+                                </label>
                                 <div class="col-sm-10 col-11">
                                     <input id="y" type="number" class="form-control" readonly="" disabled="">
                                 </div>
                             </div>
                             <div class="form-group row no-gutters">
-                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">Z: </label>
+                                <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">Z:
+                                </label>
                                 <div class="col-sm-10 col-11">
                                     <input id="z" type="number" class="form-control" readonly="" disabled="">
                                 </div>
@@ -75,16 +83,38 @@
             </div>
         </div>
     </div>
-    
+
     <script>
-        window.onload = function() {
-            document.getElementById('calculate').onclick = function() {
+
+        function maxDigits() {
+            var textField = document.getElementById("cube");
+
+            if (textField.value.length > 22) {
+                /* must be > 22, not == 22 or else the substring statement on the next line 
+                will cause the function to run again if the user dismisses the alert
+                by pressing the 'enter' key rather than clicking 'OK'. */
+
+                textField.value = textField.value.substring(0, 22)
+                // set field's value equal to first five characters. 
+
+                textField.blur()
+                /* move cursor out of form element 
+                to keep it from placing itself at position zero, 
+                causing an overwrite of the first character */
+
+                alert("Max 22 digits allowed")
+            }
+
+        }
+
+        window.onload = function () {
+            document.getElementById('calculate').onclick = function () {
                 var cube = parseFloat(document.getElementById('cube').value);
-                
-                var a = 441000000000000 
-                var cube_projection = (cube % a) 
-                var half_of_1 = (1/2.0)
-                var n_squareference = (((cube_projection - 1) ** half_of_1) / 2) + 1 
+
+                var a = 441000000000000
+                var cube_projection = (cube % a)
+                var half_of_1 = (1 / 2.0)
+                var n_squareference = (((cube_projection - 1) ** half_of_1) / 2) + 1
                 var n_squareference = parseInt(n_squareference)
 
                 var right_top = (2 * (n_squareference - 1)) ** 2 + 2 * n_squareference
@@ -97,7 +127,7 @@
                     var Y_meters = -n_squareference + 1
                 else if (cube_projection < right_top)
                     var Y_meters = cube_projection - right_top + n_squareference
-                else 
+                else
                     var Y_meters = right_bottom - cube_projection + n_squareference
                 Y_meters -= 0.5
 
@@ -107,26 +137,27 @@
                     var Z_meters = -n_squareference
                 else if (cube_projection < right_bottom)
                     var Z_meters = right_top - cube_projection + n_squareference - 1
-                else 
+                else
                     var Z_meters = cube_projection - left_bottom - n_squareference
                 Z_meters += 0.5
 
-                var n_layer = Math.floor(cube/a);
+                var n_layer = Math.floor(cube / a);
                 n_layer = parseInt(n_layer)
                 n_layer += 1
 
-                if ((n_layer % 2) != 0 )
-                    var X_meters = n_layer / 2.0 
+                if ((n_layer % 2) != 0)
+                    var X_meters = n_layer / 2.0
 
-                if ((n_layer % 2) == 0 )     
-                    var X_meters =  - (n_layer - 1) / 2.0 
-                
+                if ((n_layer % 2) == 0)
+                    var X_meters = - (n_layer - 1) / 2.0
+
                 document.getElementById('x').value = X_meters;
                 document.getElementById('y').value = Y_meters;
                 document.getElementById('z').value = Z_meters;
-                
+
             }
         }
     </script>
-  </body>
+</body>
+
 </html>
