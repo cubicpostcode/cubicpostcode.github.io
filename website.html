@@ -239,19 +239,17 @@ print(<span style='color:#0000e6; '>'Z_meters: '</span> <span style='color:#8080
 <pre style='color:#000000;background:#ffffff;'><span style='color:#696969; '># File: xyz2code.py</span>
 <span style='color:#696969; '># Author: Daniel Alexandre, BEng (Hons)</span>
 <span style='color:#696969; '># Collaboration: Vyacheslav Sokolov (https://github.com/TheOsch)</span>
-<span style='color:#696969; '># Date: 14/Aug/2020</span>
-
 <span style='color:#800000; font-weight:bold; '>from</span> <span style='color:#800000; font-weight:bold; '>sys</span> import argv
 
 
 def coord_round(x):
     <span style='color:#0000e6; '>''</span><span style='color:#0000e6; '>'</span>
-    This function transfers the float coordinate to an integer value.
+    # This function transfers the float coordinate to an integer value.
     
-    It can be replaced <span style='color:#800000; font-weight:bold; '>in</span> <span style='color:#800000; font-weight:bold; '>order</span> to handle the case when a coordinate
-    is integer<span style='color:#808030; '>,</span> i.e. the point is between two cubes <span style='color:#800000; font-weight:bold; '>in</span> some special way.
+    # It can be replaced <span style='color:#800000; font-weight:bold; '>in</span> <span style='color:#800000; font-weight:bold; '>order</span> to handle the case when a coordinate
+    # is integer<span style='color:#808030; '>,</span> i.e. the point is between two cubes <span style='color:#800000; font-weight:bold; '>in</span> some special way.
 
-    The <span style='color:#800000; font-weight:bold; '>default</span> implementation just chops <span style='color:#800000; font-weight:bold; '>out</span> a fractional part of the coordinate
+    # The <span style='color:#800000; font-weight:bold; '>default</span> implementation just chops <span style='color:#800000; font-weight:bold; '>out</span> a fractional part of the coordinate
     <span style='color:#0000e6; '>''</span><span style='color:#0000e6; '>'</span>
     return int(x) if x ><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> else int(x) - <span style='color:#008c00; '>1</span>
 
@@ -346,7 +344,6 @@ print(<span style='color:#0000e6; '>'code ='</span><span style='color:#808030; '
 							<br>
 							<br>
 							<pre style='color:#000000;background:#ffffff;'><span style='color:#696969; '># File: LLA_ECEF_Conversion.py</span>
-<span style='color:#696969; '># Date: 23/Jun/2020 </span>
 <span style='color:#696969; '># Converts between GPS coordinates (Latitude-Longitude-Altitude) and X-Y-Z cartesian coordinates, or vice versa</span>
 
 <span style='color:#800000; font-weight:bold; '>from</span> __future__ <span style='color:#800000; font-weight:bold; '>import</span> print_function
