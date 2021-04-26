@@ -31,6 +31,16 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .table-label {
+            background-color: #e9ecef;
+            border: 1px solid #0000002b;
+            padding-left: 10px;
+        }
+
+        .table-cell {
+            border: 1px solid #0000002b;
+        }
     </style>
 </head>
 
@@ -57,6 +67,7 @@
                         <div class="col-lg-6 col-md-8 pl-0 pr-md-3 pr-0">
                             <hr>
                             <br>
+			    <h5 class="col-12 font-weight-bold mb-3">Cube's Center: </h5>
                             <div class="form-group row no-gutters">
                                 <label for="colFormLabel" class="col-sm-2 col-1 col-form-label font-weight-bold">X:
                                 </label>
@@ -79,6 +90,79 @@
                                 </div>
                             </div>
                         </div>
+			<hr>
+			<br>
+			<h5 class="col-12 font-weight-bold mb-3">Cube's Eight Vertices: </h5>
+                        <div class="row">
+                            <div class="col-sm-2 col-2 font-weight-bold">&nbsp;</div>
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">X</div>
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">Y</div>
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">Z</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Top-Left-Front
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell top left front x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top left front y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top left front z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Top-Left-Back
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell top left back x" id="t-l-b-x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top left back y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top left back z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Top-Right-Front
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell top right front x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top right front y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top right front z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Top-Right-Back
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell top right back x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top right back y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell top right back z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Bottom-Left-Front
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell bottom left front x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom left front y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom left front z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Bottom-Left-Back
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell bottom left back x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom left back y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom left back z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Bottom-Right-Front
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell bottom right front x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom right front y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom right front z">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="table-label col-sm-2 col-2 font-weight-bold">
+                                Bottom-Left-Back
+                            </div>
+                            <div class="col-sm-2 col-2 table-cell bottom right back x">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom right back y">&nbsp;</div>
+                            <div class="col-sm-2 col-2 table-cell bottom right back z">&nbsp;</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,16 +175,16 @@
             var textField = document.getElementById("cube");
 
             if (textField.value.length > 22) {
-                /* must be > 22, not == 22 or else the substring statement on the next line 
+                /* must be > 22, not == 22 or else the substring statement on the next line
                 will cause the function to run again if the user dismisses the alert
                 by pressing the 'enter' key rather than clicking 'OK'. */
 
                 textField.value = textField.value.substring(0, 22)
-                // set field's value equal to first five characters. 
+                // set field's value equal to first five characters.
 
                 textField.blur()
-                /* move cursor out of form element 
-                to keep it from placing itself at position zero, 
+                /* move cursor out of form element
+                to keep it from placing itself at position zero,
                 causing an overwrite of the first character */
 
                 alert("Max 22 digits allowed")
@@ -155,6 +239,13 @@
                 document.getElementById('x').value = X_meters;
                 document.getElementById('y').value = Y_meters;
                 document.getElementById('z').value = Z_meters;
+
+                document.querySelectorAll('.back.x').forEach(e => e.innerHTML = X_meters - 0.5);
+                document.querySelectorAll('.front.x').forEach(e => e.innerHTML = X_meters + 0.5);
+                document.querySelectorAll('.left.y').forEach(e => e.innerHTML = Y_meters - 0.5);
+                document.querySelectorAll('.right.y').forEach(e => e.innerHTML = Y_meters + 0.5);
+                document.querySelectorAll('.bottom.z').forEach(e => e.innerHTML = Z_meters - 0.5);
+                document.querySelectorAll('.top.z').forEach(e => e.innerHTML = Z_meters + 0.5);
 
             }
         }
