@@ -297,7 +297,7 @@ print(<span style='color:#0000e6; '>'x, y, z ='</span><span style='color:#808030
 <span style='color:#696969; '># but the absolute values are the same. So do top and bottom sides, but the coordinate is Z.</span>
 <span style='color:#696969; '># Thus, the square number is just one of the point's coordinates, Y or Z. Which one?</span>
 <span style='color:#696969; '># Obviously: the Y coordinate can't be more than the coordinate of the right side and less than</span>
-<span style='color:#696969; '># the coordinate of the right one; so do Z coordinate, top and bottom sides.</span>
+<span style='color:#696969; '># the coordinate of the left one; so do Z coordinate, top and bottom sides.</span>
 <span style='color:#696969; '># Thus, the square number is just a maximum of absolute values of Y and Z</span>
 
 square_number <span style='color:#808030; '>=</span> max(y + <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> z + <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> -y<span style='color:#808030; '>,</span> -z)
