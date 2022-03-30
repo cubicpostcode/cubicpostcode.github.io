@@ -1,0 +1,199 @@
+<!doctype html> 
+<html id='HideCursor' onclick="toggleFullscreen()"> 
+<head> 	
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>(3,4,5) Pattern</title> 
+	<style> 
+		body { 
+    		background: #000000; 
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		}
+		#HideCursor{
+		}
+		#MyClockDisplay { 
+    		color: #FFFFFF; 
+                font-size: 22px; 
+    		font-family: Orbitron; 
+		letter-spacing: 7px;
+		font-weight: bold;
+                }
+		#MyId2 { 
+    		color: #FFFFFF; 
+                font-size: 16px; 
+		font-family: Orbitron; 
+		letter-spacing: 4px; 
+		font-weight: bold;
+                }
+		#MyId3 { 
+    		color: #FFFFFF; 
+                font-size: 16px; 
+		font-family: Orbitron; 
+		letter-spacing: 4px; 
+		font-weight: bold;
+                }
+		#MyId4 { 
+    		color: #FFFF00; 
+		text-decoration: underline;
+                }
+	</style> 
+</head> 
+
+<body>  
+	
+<script>
+
+display_c7();
+
+var boolfullscreen = 0;
+function toggleFullscreen() {
+        if (boolfullscreen == 0)  
+		{openFullscreen();
+		 boolfullscreen = !boolfullscreen;}
+        else
+		{closeFullscreen();
+		 boolfullscreen = !boolfullscreen;}
+
+function openFullscreen() {
+   document.getElementById("HideCursor").style.cursor="none";
+   document.getElementById("newpost").style.opacity="0";
+  if (document.requestFullscreen) {
+    document.requestFullscreen();
+  } else if (document.webkitRequestFullscreen) { /* Safari */
+    document.webkitRequestFullscreen();
+  } else if (document.msRequestFullscreen) { /* IE11 */
+    document.msRequestFullscreen();
+  }
+ }
+
+function closeFullscreen() {
+   document.getElementById("HideCursor").style.cursor="auto";
+   document.getElementById("newpost").style.opacity="1";
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE11 */
+    document.msExitFullscreen();
+  }
+ }
+
+}
+
+function display_ct7() {
+		const monthNames = ["January", "February", "March", "April", "May", "June",
+		  "July", "August", "September", "October", "November", "December"];
+	var x = new Date();
+	var dateoffset = new Date();
+	dateoffset = dateoffset.getTimezoneOffset();
+	dateoffset = (dateoffset * 60); // in seconds
+	var b = new Date();
+	var SinceMidnight = b.getTime() - b.setHours(0,0,0,0);
+	SinceMidnight = SinceMidnight.toString();
+	SinceMidnight = SinceMidnight.slice(0, -3);
+	SinceMidnight = parseInt(SinceMidnight); 
+        if ((SinceMidnight + dateoffset) < 0){SinceMidnight = 86400+(SinceMidnight + dateoffset);}
+        else {SinceMidnight = SinceMidnight + dateoffset };
+	
+	var booloffON = 0;
+	if ((SinceMidnight % 27 == 0)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 1)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 2)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 3)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 4)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 5)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 6)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 7)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 8)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 9)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 10)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 11)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 12)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 13)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 14)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 15)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 16)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 17)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 18)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 19)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 20)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 21)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 22)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 23)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 24)) {booloffON = 0;};
+	if ((SinceMidnight % 27 == 25)) {booloffON = 1;};
+	if ((SinceMidnight % 27 == 26)) {booloffON = 0;};
+
+	var ampm = x.getHours( ) >= 12 ? ' PM' : ' AM';
+	hours = x.getHours( ) % 12;
+	hours = hours ? hours : 12;
+	hours=hours.toString().length==1? 0+hours.toString() : hours;
+
+	var minutes=x.getMinutes().toString();
+	minutes=minutes.length==1 ? 0+minutes : minutes;
+
+	var seconds=x.getSeconds().toString();
+	seconds=seconds.length==1 ? 0+seconds : seconds;
+
+	var month=monthNames[x.getMonth()];
+
+	var dt=x.getDate().toString();
+	dt=dt.length==1 ? 0+dt : dt;
+
+	var x1="Date: " + dt + "/" + month + "/" + x.getFullYear(); 
+	x1 = x1 + " - Time: " +  hours + ":" +  minutes + ":" +  seconds + " " + ampm ;
+	document.getElementById('MyClockDisplay').innerHTML = x1;
+	document.getElementById('MyId2').innerHTML = "Seconds since the midnight reference (UTC Time Zone): " + SinceMidnight ;
+
+	if (booloffON == 1) {
+		document.body.style.background = "white";
+		document.getElementById("MyClockDisplay").style.color = 'black';
+		document.getElementById("MyId2").style.color = 'black';
+		document.getElementById("MyId3").style.color = 'black';
+		}
+	else {
+		document.body.style.background = "black";
+		document.getElementById("MyClockDisplay").style.color = 'white';
+		document.getElementById("MyId2").style.color = 'white';
+		document.getElementById("MyId3").style.color = 'white';
+		};
+
+	display_c7();
+ 	} // ends display_ct7()
+
+	 function display_c7(){
+		var refresh=1; 
+		mytime=setTimeout('display_ct7()',refresh)
+		}
+	display_c7()
+	
+ </script>
+
+  <div id='newpost'> 
+	<span id='MyClockDisplay'></span>
+	<br><br>
+	<span id='MyId2'></span>
+	<br><br>
+	<div id='MyId3'> 
+		(3,4,5) Pattern: 
+		<br>
+		<br>1-Off, 
+		<br>2-ON, 3-Off, 4-ON, 5-Off, 6-ON, 
+		<br>7-Off, 8-Off, 
+		<br>9-ON, 10-Off, 11-ON, 12-Off, 13-ON, 14-Off, 15-ON, 
+		<br>16-Off, 17-Off, 
+		<br>18-ON, 19-Off, 20-ON, 21-Off, 22-ON, 23-Off, 24-ON, 25-Off, 26-ON, 
+		<br>27-Off
+		<br>
+		<br> Cycle: 27 seconds. Total: 3200 cycles (Every 24h. Starting at midnight, UTC Time Zone). <br><br>
+		<br>
+		Click to hide-show info. Press F11 to toggle full-screen.
+	</div>
+  </div>
+</body> 
+</html>
