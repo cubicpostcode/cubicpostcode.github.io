@@ -84,6 +84,12 @@ function closeFullscreen() {
  }
 
 }
+	
+document.addEventListener('keydown', (e) => {
+    if (e.code === "Space") {
+        toggleFullscreen();
+    }
+});	
 
 function display_ct7() {
 		const monthNames = ["January", "February", "March", "April", "May", "June",
