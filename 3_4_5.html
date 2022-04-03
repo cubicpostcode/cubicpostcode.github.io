@@ -92,13 +92,11 @@
 <body>  
 	
 <script>
-	window.onload = function(){
-        	document.getElementById('close').onclick = function(){
-        		this.parentNode.parentNode.parentNode
-        		.removeChild(this.parentNode.parentNode);
-       			return false;
-   			};
-		};
+
+let close = document.getElementById("close");
+
+close.addEventListener("mouseover", function( event ) {
+  this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)}, false);
 
 display_c7();
 
