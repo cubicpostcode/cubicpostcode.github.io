@@ -42,23 +42,16 @@
 		text-decoration: underline;
                 }
 		
-		.fragment {
+		#fragment {
  			  display: flex;
                           flex-wrap: wrap;
    			  border: 1px solid #ccc;
    			  display: block;
    			  padding: 10px;
     			  box-sizing: border-box;
+			  border-bottom: 1px dashed #888;
 			  }
 
-	        .fragment:hover {
-  		         box-shadow: 2px 2px 5px rgba(0,0,0,.2);
-		}
-
-		.fragment img { 
-    			float: left;
-    			margin-right: 10px;
-		}
 
 		#close {
     			float:right;
@@ -77,8 +70,13 @@
 	</style> 
 </head> 
 
-<body>  	
+<body>  
+<script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>	
 <script>	
+
+function closediv() {
+	document.getElementById("fragment").style.display = 'none';
+ }
 
 display_c7();
 
@@ -234,8 +232,8 @@ function display_ct7() {
 		<br>
 		Let's put the planet (and the stars) blinking the THREE-FOUR-FIVE pattern!
 		<br><br>
-		<div class="fragment" onmouseover="javascript:alert('Testing!');">
-                <span id='close'>x</span>
+		<div id="fragment" onmouseover="closediv()">
+                <span class="iconify" data-icon="simple-line-icons:magnifier-add" data-rotate="90deg" data-width="100"></span>
 		<p>
 		P.S. Important message for 'Tor Browser' improvement:
 		<br>
@@ -257,11 +255,11 @@ function display_ct7() {
 		surveillance) in a shuffled virtual keyboard that was locked beforehand in a safer 
 		environment (possibly by someone else at an unknown location) at a specific date and time that nobody 
 		could guess, and with a specific (very long random number of any anted size) key.
-		<br>
+		<br><br>
 		On the other hand, online logging systems could allow for dynamic passwords, where things like the latest
 		tweet of your favorite people, or your geolocation, or local date and time, would have to be known to type 
 		the correct password. A simple script in your favorite dynamic programming language could be used to tell 
-		how your dynamic password was. The idea is not actually new. It is has old as Gmail, at least. But was never
+		how your dynamic password was. The idea is not actually new. It is as old as Gmail, at least. But was never
 		implemented, as it happens.
 		</p>	
                 </div>
