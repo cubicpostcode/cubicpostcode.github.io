@@ -57,7 +57,7 @@
   			  word-break: break-word;
 			  }
 		
-		.blink_text
+		#blink_text
 		{
 		    animation:1s blinker linear infinite;
 		    -webkit-animation:1s blinker linear infinite;
@@ -209,12 +209,14 @@ function display_ct7() {
 		document.getElementById("MyClockDisplay").style.color = 'black';
 		document.getElementById("MyId2").style.color = 'black';
 		document.getElementById("MyId3").style.color = 'black';
+		document.getElementById("blink_text").style.color = 'black';
 		}
 	else {
 		document.body.style.background = "black";
 		document.getElementById("MyClockDisplay").style.color = 'white';
 		document.getElementById("MyId2").style.color = 'white';
 		document.getElementById("MyId3").style.color = 'white';
+		document.getElementById("blink_text").style.color = 'white';
 		};
 
 	display_c7();
@@ -284,7 +286,7 @@ P.S. - 1 - Please use SyncThing instead of using the web, central server apps li
 		the correct password. A simple script in your favorite dynamic programming language could be used to tell 
 		how your dynamic password was. The idea is actually not new. It is as old as Gmail, at least. But was never
 		implemented, as it happens. More info and further details at: 
-			<span class="blink_text">
+			<span id="blink_text">
 			https://cubicpostcode.github.io/password.html
 			</span>	
 		<br><br>
