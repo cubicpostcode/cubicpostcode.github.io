@@ -202,7 +202,6 @@
                 var slice_number = -x * 2 - 1;
 
             var code = slice_number * 441000000000000 + cube_p;
-            code2 = code;
             code = code.toPrecision(22) + "";
             if (code.includes('.')) {
                 let foundNonZero = false;
@@ -215,7 +214,6 @@
             }
 
             document.getElementById('cube-code').innerHTML = code;
-            document.getElementById('cube-code2').innerHTML = code2;
             
         }
     </script>
