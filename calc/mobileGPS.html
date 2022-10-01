@@ -39,6 +39,7 @@
 
             <div class="col-12">
                 <div class="card">
+                  
                     <div class="card-body">         
                         <h4 class="font-weight-bold mb-3" >You need a device with GPS for this page. </h4>  
                         <br> 
@@ -50,18 +51,12 @@
                         <p style="font-size: 18px;"><strong>Y: </strong> <span id="y"></span></p>
                         <p style="font-size: 18px;"><strong>Z: </strong> <span id="z"></span></p>                     
                         <br>     
-                      <!-- 
-                      <br>
-                        <p style="font-size: 18px;"><strong>X2: </strong> <span id="x2"></span></p>
-                        <p style="font-size: 18px;"><strong>Y2: </strong> <span id="y2"></span></p>
-                        <p style="font-size: 18px;"><strong>Z2: </strong> <span id="z2"></span></p>                     
-                        <br>     
-                      -->
-                        <p style="font-size: 18px;"><strong>Cube code:</strong> <span id="cube-code"></span></p>
-                        
+                        <p style="font-size: 18px;"><strong>Cube code:</strong> <span id="cube-code"></span></p>                       
                     </div>
+                  
                 </div>
             </div>
+          
         </div>
     </div>
     
@@ -171,11 +166,7 @@
             var x = coord_round(res[0]);
             var y = coord_round(res[1]);
             var z = coord_round(res[2]);
-          
-            document.getElementById('x2').innerHTML = x;
-            document.getElementById('y2').innerHTML = y;
-            document.getElementById('z2').innerHTML = z;
-
+         
             function max(v1, v2, v3) {
                 let m = v1;
                 if (v2 > m)
@@ -224,10 +215,8 @@
             }
 
             document.getElementById('cube-code').innerHTML = code;
-            
+           
         }
-    </script>
-    <br>
-    
+    </script>  
   </body>
 </html>
