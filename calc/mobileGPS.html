@@ -51,6 +51,8 @@
                         <p style="font-size: 18px;"><strong>Z: </strong> <span id="z"></span></p>                     
                         <br>     
                         <p style="font-size: 18px;"><strong>Cube code:</strong> <span id="cube-code"></span></p>
+                        <br>     
+                        <p style="font-size: 18px;"><strong>Cube code junk test:</strong> <span id="cube-code2"></span></p>
                     </div>
                 </div>
             </div>
@@ -173,34 +175,34 @@
                 return m;
             }
 
-            var square_number = max(y + 1, z + 1, -y, -z)
+            var square_number = max(y + 1, z + 1, -y, -z);
 
-            var left_top = (2 * (square_number - 1)) ** 2 + 1
-            var right_top = left_top + 2 * square_number - 1
-            var right_bottom = right_top + 2 * square_number - 1
-            var left_bottom = right_bottom + 2 * square_number - 1
+            var left_top = (2 * (square_number - 1)) ** 2 + 1;
+            var right_top = left_top + 2 * square_number - 1;
+            var right_bottom = right_top + 2 * square_number - 1;
+            var left_bottom = right_bottom + 2 * square_number - 1;
 
             if (square_number == - y) {
                 if (square_number == z + 1)
-                    cube_p = left_top
+                    cube_p = left_top;
                 else
-                    cube_p = z + left_bottom + square_number
+                    cube_p = z + left_bottom + square_number;
             }
             else if (square_number == y + 1)
-                cube_p = right_top + square_number - 1 - z
+                cube_p = right_top + square_number - 1 - z;
             else if (square_number == z + 1)
-                cube_p = right_top - square_number - y
+                cube_p = right_top - square_number - y;
             else
-                cube_p = right_bottom + square_number - y
+                cube_p = right_bottom + square_number - y;
 
 
             if (x >= 0)
-                var slice_number = x * 2
+                var slice_number = x * 2;
             else
-                var slice_number = -x * 2 - 1
+                var slice_number = -x * 2 - 1;
 
-            var code = slice_number * 441000000000000 + cube_p
-
+            var code = slice_number * 441000000000000 + cube_p;
+            code2 = code;
             code = code.toPrecision(22) + "";
             if (code.includes('.')) {
                 let foundNonZero = false;
@@ -209,10 +211,11 @@
                         foundNonZero = true;
                 }
                 if (!foundNonZero)
-                    code = code.substring(0, code.indexOf('.'))
+                    code = code.substring(0, code.indexOf('.'));
             }
 
-            document.getElementById('cube-code').innerHTML = code
+            document.getElementById('cube-code').innerHTML = code;
+            document.getElementById('cube-code2').innerHTML = code2;
             
         }
     </script>
