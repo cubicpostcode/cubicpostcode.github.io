@@ -50,6 +50,11 @@
                         <p style="font-size: 18px;"><strong>Y: </strong> <span id="y"></span></p>
                         <p style="font-size: 18px;"><strong>Z: </strong> <span id="z"></span></p>                     
                         <br>     
+                        <br>
+                        <p style="font-size: 18px;"><strong>X2: </strong> <span id="x2"></span></p>
+                        <p style="font-size: 18px;"><strong>Y2: </strong> <span id="y2"></span></p>
+                        <p style="font-size: 18px;"><strong>Z2: </strong> <span id="z2"></span></p>                     
+                        <br>     
                         <p style="font-size: 18px;"><strong>Cube code:</strong> <span id="cube-code"></span></p>
                         
                     </div>
@@ -164,6 +169,10 @@
             var x = coord_round(res[0]);
             var y = coord_round(res[1]);
             var z = coord_round(res[2]);
+          
+            document.getElementById('x2').innerHTML = x;
+            document.getElementById('y2').innerHTML = y;
+            document.getElementById('z2').innerHTML = z;
 
             function max(v1, v2, v3) {
                 let m = v1;
@@ -173,11 +182,7 @@
                     m = v3;
                 return m;
             }
-            
-            x = 3003456;
-            y = -9999;
-            z = 4003456;
-          
+
             var square_number = max(y + 1, z + 1, -y, -z);
 
             var left_top = (2 * (square_number - 1)) ** 2 + 1;
