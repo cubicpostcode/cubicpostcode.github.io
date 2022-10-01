@@ -163,9 +163,9 @@
                     return parseInt(x) - 1
             }
 
-            var x = coord_round(res[0]);
-            var y = coord_round(res[1]);
-            var z = coord_round(res[2]);
+            var my_x = coord_round(res[0]);
+            var my_y = coord_round(res[1]);
+            var my_z = coord_round(res[2]);
          
             function max(v1, v2, v3) {
                 let m = v1;
@@ -176,31 +176,31 @@
                 return m;
             }
 
-            var square_number = max(y + 1, z + 1, -y, -z);
+            var square_number = max(my_y + 1, my_z + 1, -my_y, -my_z);
 
             var left_top = (2 * (square_number - 1)) ** 2 + 1;
             var right_top = left_top + 2 * square_number - 1;
             var right_bottom = right_top + 2 * square_number - 1;
             var left_bottom = right_bottom + 2 * square_number - 1;
 
-            if (square_number == - y) {
-                if (square_number == z + 1)
+            if (square_number == - my_y) {
+                if (square_number == my_z + 1)
                     cube_p = left_top;
                 else
-                    cube_p = z + left_bottom + square_number;
+                    cube_p = my_z + left_bottom + square_number;
             }
-            else if (square_number == y + 1)
-                cube_p = right_top + square_number - 1 - z;
-            else if (square_number == z + 1)
-                cube_p = right_top - square_number - y;
+            else if (square_number == my_y + 1)
+                cube_p = right_top + square_number - 1 - my_z;
+            else if (square_number == my_z + 1)
+                cube_p = right_top - square_number - my_y;
             else
-                cube_p = right_bottom + square_number - y;
+                cube_p = right_bottom + square_number - my_y;
 
 
-            if (x >= 0)
-                var slice_number = x * 2;
+            if (my_x >= 0)
+                var slice_number = my_x * 2;
             else
-                var slice_number = -x * 2 - 1;
+                var slice_number = -my_x * 2 - 1;
 
             var code = slice_number * 441000000000000 + cube_p;
             code = code.toPrecision(22) + "";
