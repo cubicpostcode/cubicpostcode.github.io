@@ -1,0 +1,1787 @@
+Version 1.03
+October 2019
+Welcome to
+SQRL
+Secure Quick Reliable Login
+This first of the four SQRL system documents provides a broad overview of the SQRL system.
+Documentation Download Links:
+SQRL Explained
+SQRL Operating Details
+SQRL Cryptography
+SQRL On The Wire
+https://www.grc.com/sqrl/sqrl_explained.pdf
+https://www.grc.com/sqrl/sqrl_operating_details.pdf
+https://www.grc.com/sqrl/sqrl_cryptography.pdf
+https://www.grc.com/sqrl/sqrl_on_the_wire.pdf
+Contents
+List of Figures .......................................................................................................................... 2
+Glossary of Cryptographic Terminology........................................................................................ 3
+SQRL-Specific Terminology ........................................................................................................ 4
+What is SQRL? ......................................................................................................................... 6
+Implementations ...................................................................................................................... 6
+How SQRL Works (in a nutshell) ................................................................................................. 7
+Again, but with a bit more detail .............................................................................................. 7
+Visualizing the browser / server / SQRL client interaction .............................................................. 8
+Introducing client provided session (CPS) ................................................................................. 8
+Smartphone authentication ..................................................................................................... 8
+Password Recovery & Hardening................................................................................................. 9
+The SQRL client as a proxy for the user .................................................................................... 9
+Single-party password recovery ............................................................................................... 9
+Brute-force attack hardening ................................................................................................. 10
+How Scrypt operates: ........................................................................................................... 10
+Identity Security..................................................................................................................... 11
+SQRL’s Secure Storage System (S4) ....................................................................................... 11
+The need for identity backup ................................................................................................. 11
+SQRL’s “QuickPass” .............................................................................................................. 12
+Secure SINGLE-Factor Identity Authentication ......................................................................... 13
+Suppressing the Weakest Link ............................................................................................... 13
+Tight Identity Binding.............................................................................................................. 14
+Managed Shared Access ....................................................................................................... 14
+Explicitly Shared Identities .................................................................................................... 15
+Alternate Identities .............................................................................................................. 15
+Keeping Secrets for the User .................................................................................................... 16
+The EnHash function ............................................................................................................ 16
+-1-Version 1.03
+October 2019
+All Identity Eggs in One Basket................................................................................................. 17
+Identity Lifecycle .................................................................................................................... 17
+SQRL’s Rescue Code............................................................................................................. 18
+Identity “Association” & Lock ................................................................................................. 18
+Identity “ReKeying” ................................................................................................................ 19
+“Taking back” a compromised identity .................................................................................... 20
+Preventing malicious use before rekeying................................................................................ 20
+“ASK”ing High-Security Questions............................................................................................. 21
+No History Kept ...................................................................................................................... 21
+No Centralized Point of Failure.................................................................................................. 22
+And Now for the Full Detailed Specification… .............................................................................. 22
+List of Figures
+Figure 1: SQRL authentication URL containing a nonce .................................................................. 7
+Figure 2: Browser / Server / SQRL Client Interaction..................................................................... 8
+Figure 3: "Cross-Device" QR Code Authentication ......................................................................... 8
+Figure 4: Simplified (conceptual) Key Flow................................................................................... 9
+Figure 5: Sqrl's EnScrypt PBKDF ............................................................................................... 10
+Figure 6: SQRL S4 Secure Storage............................................................................................ 11
+Figure 7: A Complete Textual Identity ....................................................................................... 11
+Figure 8: QR Code Identity ...................................................................................................... 12
+Figure 9: QuickPass Options..................................................................................................... 12
+Figure 10: Login Policy Preferences ........................................................................................... 13
+Figure 11: Alternate Identity Entry ........................................................................................... 15
+Figure 12: Synthesizing the Indexed Secret ............................................................................... 16
+Figure 13: EnHash Construction ............................................................................................... 16
+Figure 14: SQRL's Key Hierarchy .............................................................................................. 18
+-2-Version 1.03
+October 2019
+Glossary of Cryptographic Terminology
+(There will be no test on any of this.)
+Anyone who is already well-versed in standard crypto will be familiar with the meaning of the terms on
+this first page of this three-page glossary. However, those who do not spend their days working to foil
+the plans of bad guys may appreciate a quick refresher on the meaning of these standard terms:
+AEAD Cipher – “Authenticated Encryption with Associated Data” – most encryption modes do not also verify that
+the message has not been altered. An AEAD cipher performs encryption while simultaneously verifying that the
+message has not been changed. The “with Associated Data” feature allows in-the-clear plaintext to be included
+within the authenticated block so that it, too, is protected.
+AES-GCM – “Advanced Encryption Standard Galois/Counter Mode” – AES-GCM is an authenticated encryption
+with associated data (AEAD) cipher. It employs Rijndael/AES encryption in counter mode to produce a pseudo
+random stream which is XORed with the plaintext or with the ciphertext to produce the other. It simultaneously
+provides authentication of the entire message with additional non-encrypted data.
+ASIC – “Application Specific Integrated Circuit” – Unlike a CPU which is general purpose and programmable with
+software, an ASIC is designed for a specific purpose. In the context of cryptography, this is usually a chip used to
+dramatically increase the performance of a fixed “number crunching” task such as hashing input data. Because
+they are purpose-designed, they are typically the fastest solution, though also the most expensive.
+Authentication – The terms “identification” and “authentication” are technically distinct. The first identifies, and
+the second, often separately, authenticates the possibly-inaccurate identification. As we’ll see, SQRL securely and
+inseparably identifies and authenticates. Therefore, this text will use “Authentication” to describe both processes.
+FPGA – “Field Programmable Gate Array” – An FPGA falls in between a software programmable CPU and a fixed-
+purpose ASIC. It is firmware-programmable hardware. It can be reprogrammed as needed and it will dramatically
+outperform a general-purpose CPU, but its “generality” makes it larger (and therefore more expensive) and also
+slower than ASICs.
+Multifactor – If a single factor is insufficiently specific or reliable for identifying an individual, multiple differing
+factors may be used to increase the overall identification reliability and assurance.
+Nonce – Short for “number used once” – In cryptography, there are many places where the reuse of some critical
+data must never be allowed to occur. For example, when eavesdropping could occur, the answer to a question
+might be overheard. So, if the same question were ever asked again, it might be correctly answered, not by
+someone who actually knew the answer, but by someone who overheard the question and its answer the first
+time. Secure cryptographic systems use “nonces” so that they never ask the same question twice.
+PBKDF – “Password Based Key Derivation Function” – Any mathematical process that takes a variable-length
+password string and returns a fixed-length key. The function must have the property that whenever it is given the
+same password it will return the same key. Any cryptographic hash function meets this requirement. However,
+modern PBKDF functions typically add a “salt” input to create per-user versions of the PBKDF and add complexity
+to deliberately slow down their operation for resistance to ASIC and FPGA acceleration brute-force attack.
+SALT – Cryptographic systems use the slang term “salt” to refer to any data added to a hash or other
+cryptographic function which provides additional randomization to, or customization of, an otherwise uniform and
+standard function.
+SCRYPT – Scrypt (pronounced “ess-crypt”) is a “memory hard” PBKDF (see above) which was deliberately
+designed by Colin Perceval to thwart the acceleration capabilities of ASIC and FPGA devices by requiring that a
+large block of RAM memory be committed to each PBKDF operation. Large blocks of RAM memory is not
+something that any custom hardware devices have in the required quantity, nor are likely to anytime soon.
+URL – “Universal Resource Locator” – Since it would be possible for someone not to know that a URL is that
+funky string of characters we type into our web browsers to access web pages and to download files, and since
+SQRL is all about URLs and has them coming and going, it seemed useful, if only in the interest of completeness,
+to make sure that no one would confuse URLs for the Urals, that famous mountain range running longitudinally
+through Western Russia. We just wanted to be sure.
+-3-Version 1.03
+October 2019
+SQRL-Specific Terminology
+The development of SQRL required the invention of new ideas and several bits of technology. They
+needed naming so they could be described and discussed. You might find that scanning though these
+SQRL-specific definitions will be useful as an introduction to the descriptions on the pages that follow.
+Alt-ID – Alternate Identity – SQRL automatically provides a single unique “native” user identity to every website.
+But there may be an occasion when a SQRL user wishes to be appear as someone else. SQRL’s built-in Alt-ID
+facility allows any number of named alternate identities to be used.
+Ask – Provides a means for a website to present its SQRL user with any high-security question and to receive
+their SQRL-signed authenticated reply, completely bypassing the hack/attack-prone web browser interface.
+CPS – Client Provided Session – When the SQRL client resides in the same machine as the web browser being
+used, SQRL provides the authenticated session received from the web server over SQRL’s secure channel, directly
+to the web browser. This has the highly desirable effect of thwarting every possible form of spoofing and man-in-
+the-middle attack.
+Cross-Device Sign-in – SQRL sign-in webpages display a QR code version of their SQRL authentication URLs.
+This allows a SQRL client in a smartphone (for example), separate from the computer and web browser being
+signed into, to scan the displayed QR code and perform the authentication of the web browser session. This is
+termed “cross-device” sign-in as opposed to “same-device” sign in.
+EnHash – Hash functions take a variable-length input and produce a fixed-size output. They are designed with a
+“security margin” which reflects a trade-off of security vs performance. Previous cryptographic hashes no longer
+deliver sufficient security as analytical and computational resources have improved. SQRL’s use of hashing is not
+performance sensitive but it is extremely security sensitive. Therefore, SQRL uses a compound iterative hash
+function to provide an extremely large margin of security.
+EnScrypt – The use of SQRL clients is protected by their SQRL password which is used to decrypt their stored
+SQRL identity file. Being a local password exposes it to brute force attacks. To harden SQRL clients against such
+attacks, SQRL iterates the memory-hard acceleration-resistant Scrypt PBKDF function to significantly further slow
+down its operation so that a single password decryption attempt requires many seconds.
+Identity Lock – To prevent identity abuse, SQRL’s identity lock prevents a website account’s SQRL identity from
+being changed once it has been set. Only a higher level of authentication, provided by the identity’s “Rescue
+Code”, provides the information required to unlock a website’s SQRL identity for removal or replacement.
+IMK – The “Identity Master Key”, derived from the IUK, is always stored encrypted and is briefly decrypted, when
+needed, by the user’s SQRL password. When decrypted, it keys the HMAC256 which hashes the authentication
+domain (from the website’s URL) to produce the per-site public/private key pair.
+IUK – The “Identity Unlock Key” is obtained randomly when the user’s SQRL identity is created. It is always
+stored encrypted and is decrypted by the identity’s Rescue Code. In SQRL’s key hierarchy, it is the antecedent of
+the identity’s IMK and has a number of highly-privileged roles including password reset and identity unlock.
+MSA – “Managed Shared Access” – SQRL defines, and the SSP API fully supports, the management of multiple
+SQRL identities which can be used to access a single website. Since SQRL identities are not readily shared, this
+provides a well-managed solution which is normally solved by unmanaged “credential sharing.”
+NUT – In homage to its namesake “squirrel”, the SQRL system uses the term “nut” for its cryptographic nonces.
+QuickPass – SQRL users should use a long and strong local password to unlock their encrypted identity. But that
+becomes harassment if they’re required to constantly reenter that password every time they reauthenticate to
+another website. SQRL uses a “QuickPass” to allow just the first ‘n’ characters (by default, 4) to be quickly
+reentered after their whole password has been used once. “Guessing” is not allowed, and a mistakenly entered
+QuickPass will then require a full password reentry.
+-4-Version 1.03
+October 2019
+ReKeying – SQRL strongly protects the secrecy of its user’s master key. But accidents happen. So SQRL also
+provides a built-in “rekeying” facility to allow its users to replace a stolen or believed-compromised key when
+necessary. Rekeying should never be necessary, but it’s an available option, if needed.
+Rescue Code – SQRL’s Rescue Code is a randomly-obtained 24-digit value used to encrypt the user’s most
+privileged key. It is never needed during normal use of SQRL, but it can be used to reset a forgotten SQRL
+password or rekey a user’s identity which is believed to have become compromised.
+S4 – “SQRL Secure Storage System” – SQRL fully specifies its identity’s encrypted data storage format. This
+readily-extended format fully supports the range of features SQRL needs and enables seamless identity sharing
+among SQRL clients. In addition to the user’s master keys, this binary object format also contains and protects
+the user’s non-encrypted user preference settings and up to four previously-used and retired master identity
+keys.
+Same-Device Sign-in – When the user has a SQRL client or web browser extension installed in their machine,
+they click “Sign in with SQRL” to trigger authentication. Since they are signing into the browser which is running
+in the same machine as their SQRL client, this is referred to as “same-device” sign in.
+Secure Single-Factor – Since SQRL both identifies its user to the web server, and robustly verifies its user’s
+identity with strong cryptographic assurance, it functions as a secure single-factor identity solution with nothing,
+no additional identification assurance “factors,” required.
+SQRL Identity – For the sake of convenience, the term “SQRL Identity” is used interchangeably to refer to both
+the single master identity the user creates for themselves just once, and to the per-site identity which descends
+from that master identity. The user works with their master SQRL identity, whereas website receive a “per-site”
+SQRL identity which is unique to for each user and each website. The specific sense of SQRL identity being
+referred to should always be clear from its context.
+SQRL Password – The user’s master SQRL identity is always encrypted. Therefore, their password is required to
+decrypt their identity to RAM memory for use. Keeping the SQRL identity encrypted protects it from theft and
+abuse, and requiring the password before SQRL’s first use prevents someone other than its proper user from
+coming along and logging in with someone else’s SQRL identity.
+SSP API – The “SQRL Service Provider Application Programming Interface” completely abstracts away all aspects
+of the SQRL protocol management, placing it behind the SSP API. The SSP API exposes a simple, private, HTTP
+query/response interface to dramatically reduce the work required to add SQRL support to any new web server.
+-5-Version 1.03
+October 2019
+What is SQRL?
+SQRL (pronounced “squirrel”) is an open, free, intellectual property unencumbered, complete and
+practical system to cryptographically authenticate the identity of individuals across a network. Though
+principally intended for website visitor identification and account sign-in, its concepts may be extended
+for related applications. SQRL may be used alongside other traditional website sign-in systems, and it
+can replace all other systems while offering dramatic improvements in usability and security.
+Though designed and intended to be a two-party solution – website visitor to website – if needed,
+SQRL can also be used in a federated third-party mode to provide centralized identity management
+services to websites (e.g. login.gov).
+SQRL supports sign-in on a device containing the SQRL client, and “cross-device” sign-in using a SQRL
+client on a separate device, such as a smartphone, in the role of secure identity authenticator. SQRL
+clients currently exist for Windows, Linux/Mac (via WINE), Android, iOS, Chrome, Firefox, Edge.
+This document endeavors to completely explain SQRL. It assumes that the reader is starting out with
+no idea what SQRL is or how SQRL works. It is deliberately much less dry than an Internet RFC
+specification because its audience is intended to be much wider. Non-developers can use this to gain a
+working understanding of SQRL.
+The following three documents refine the concepts and topics introduced here to the level required
+by developers to build their own SQRL systems from scratch.
+If you have not used SQRL, we strongly recommend that you take a few minutes to acquaint
+yourself with it before proceeding. You may download GRC’s reference SQRL client for Windows, then
+create a SQRL identity, use SQRL to create an account and/or sign-in to GRC’s and other
+demonstration servers and SQRL’s public web forums.
+You may obtain GRC’s client from the link below, and experiment with SQRL at the sites shown:
+https://www.grc.com/files/sqrl.exe
+GRC’s reference SQRL client for Windows:
+The simplest SQRL demo server to play with:
+https://sqrl.grc.com/demo
+SQRL’s public web forums which support SQRL: https://sqrl.grc.com
+The demo server for experimenting with MSA:
+https://sqrl.grc.com/msa
+More features at the development server at GRC: https://www.grc.com/sqrl/demo.htm
+Implementations
+The official WordPress SQRL plug-in:https://wordpress.org/plugins/sqrl-login/
+SQRL plug-in for Firefox:https://addons.mozilla.org/en-US/firefox/addon/sqrl/
+For Chrome: https://chrome.google.com/webstore/detail/sqrl/adfaiodpchglcmalaiifkcclimpffono
+SQRL client for Android:https://github.com/kalaspuffar/secure-quick-reliable-login
+SQRL server base in JAVA:https://github.com/sqrlserverjava/sqrl-server-base
+A pluggable SSP API in GO:https://github.com/smw1218/sqrl-ssp
+-6-Version 1.03
+October 2019
+How SQRL Works (in a nutshell)
+sqrl://www.example.com/sqrl?nut=t10yVjNDoQ81uTvNorPr
+Data
+256-bit
+Master Key
+Key
+Per-Site
+Private Key
+HMAC
+Crypto
+SignatureSignature
+as identity
+authentication
+Make
+Public KeyPublic key as
+user identity
+Figure 1: SQRL authentication URL containing a nonce
+SQRL synthesizes elliptic curve public and private keys from a single master key and the full domain
+name of the website to which its user wishes to authenticate. This produces unique per-user/per-site
+key pairs which are used to both assert the user’s identity and to verify the user’s identity assertion.
+Websites provide a SQRL authentication URL containing a globally unique nonce.
+SQRL clients issue queries to that URL.
+Each website query reply supplies a new nonce for the next query in the chain.
+Each SQRL user has a single 256-bit master key.
+The domain name of the authentication URL is hashed with an HMAC keyed by the user's master
+key to produce a unique per-site public/private key pair.
+The public key is sent with every query to uniquely identify the user.
+The website retains the public key as the identifier of each SQRL user.
+Being a public key, there is no requirement that it be kept secret.
+The SQRL client uses the matching private key to sign every query sent to the website.
+The website uses the public key (which also identifies the user) to verify each query's signature.
+Since each signed query includes a nonce provided by the website, replay and impersonation
+attacks can never succeed.
+Again, but with a bit more detail
+Website sign-in pages provide SQRL authentication URLs containing unique nonces. When triggered by
+its user clicking on a “sqrl://” link on the web page, or scanning the page’s QR code, the user’s SQRL
+client issues an HTTPS POST query to that nonce-containing URL. The POST data includes the
+website’s URL and provides the user’s public key for that website domain. The POST’s query envelope
+is signed by the matching per-site private key which never leaves the SQRL client. The queried website
+uses the provided user-identifying public key to verify the query envelope’s signature. This allows the
+website to affirm the user’s identity claimed by the public key. Since the signed envelope includes the
+original URL and its nonce, which the server has never issued before, this simple and straightforward
+system cannot be spoofed or replayed and it is inherently immune to traditional attacks on both static
+and dynamic secrets.
+Websites only store their user’s public keys, so unlike passwords or time-based TOTP authenticators…
+SQRL gives websites no secrets to keep.
+-7-Version 1.03
+October 2019
+Visualizing the browser / server / SQRL client interaction
+Web
+Browser
+3
+1
+2
+Web
+Server
+6
+SQRL
+Client
+4
+5
+Figure 2: Browser / Server / SQRL Client Interaction
+1.
+2.
+3.
+4.
+5.
+User’s web browser requests a website’s sign-in page.
+Web server returns sign-in page including SQRL URL+Nonce.
+User clicks “Sign in with SQRL” to invoke local SQRL client, sending it the URL+Nonce.
+SQRL client sends its user’s public (identifying) key for this site domain signed with private key.
+With user’s identity authenticated, website returns signed-in session URL to SQRL client.
+6. SQRL client redirects user’s browser to the URL of the authenticated signed-in session.
+Introducing client provided session (CPS)
+Above, is the essence of the SQRL system. This offers the most powerfully secure anti-spoofing mode
+of SQRL’s operation, known as Client Provided Session (CPS). Unlike traditional browser sign-in, upon
+successful identification and authentication of the user, the web server does not authenticate the
+browser session that was initiated by the browser in step (1) above. Instead, the web server returns
+an authentication token URL in its final query reply to the user’s local SQRL client which then redirects
+the user’s waiting web browser to the web server provided URL. This “CPS loop” thwarts any known
+man-in-the-middle or website identity spoofing attacks by providing the resulting authenticated
+session directly to the user’s browser in a way that cannot be intercepted.
+Smartphone authentication
+Web
+Browser
+1
+2
+Web
+Server
+3
+SQRL Client in
+Smartphone
+4
+Figure 3: "Cross-Device" QR Code Authentication
+SQRL’s “sqrl://” URL’s can also be displayed on website sign-in pages as textual QR codes. This allows
+SQRL clients residing in smartphones to serve as SQRL authentication token/devices. As shown above,
+the SQRL client’s camera snaps the website’s SQRL QR code, synthesizes the user’s public and private
+keys for the site, as before, and queries the web server providing the user’s signed identity assertion.
+The web server signs-in the user to the web browser session to which it provided the SQRL URL. (Not
+shown is JavaScript running on the sign-in webpage which periodically asks the web server whether its
+session has been signed-in “out of band”.)
+-8-Version 1.03
+October 2019
+Password Recovery & Hardening
+The SQRL client as a proxy for the user
+SQRL effectively signs into websites for its user, serving as an identity proxy for its user. So a SQRL
+client must prevent its malicious use by anyone who is not its user. The SQRL identity master key and
+other usage settings must also be protected from theft and misuse. For this reason, SQRL uses a
+single master password to briefly decrypt (unlock) the user’s SQRL identity into RAM. Decrypted
+identities are never printed, exported or stored to any non-volatile medium. Devices offering biometric
+identification may re-encrypt the user’s decrypted identity for subsequent biometric access if desired.
+Single-party password recovery
+How do we design a password-based client unlock that cannot be successfully attacked by brute force,
+while also allowing the user to change their password as they wish, and providing a means to recover
+from the inevitable “I just changed my password but now I’ve forgotten what I changed it to?”
+When a SQRL identity is created, SQRL clients create tandem encryptions of the user’s master key,
+one under the user-chosen password and a second encryption under a purely-random 24-digit decimal
+number:
+System Supplied
+24-digit
+“Rescue Code”
+Hash
+GCM
+Key Encrypt
+Randomly obtained
+and stored offline
+until needed.
+SQRL Identity File
+Random
+256-bit
+Value
+User chosen. Used
+to unlock SQRL
+before each use.
+Operating
+Authentication
+Password
+Encrypted
+Identity
+Unlock Key
+Hash
+GCM
+Key Encrypt
+Always encrypted.
+Stored in client.
+Backed up offline.
+Encrypted
+Identity
+Master Key
+Figure 4: Simplified (conceptual) Key Flow
+When a user’s SQRL identity is created, a maximum-entropy 256-bit master key is derived by the
+SQRL client. That master key is encrypted using the hash of a randomly-chosen 24-digit decimal
+number as its key, and stored into the user’s identity file. The same 256-bit master key is also
+encrypted using a hash of the user-supplied password and stored alongside the first encryption.
+The 24-digit number is known as the “Rescue Code” because, as we’ll see, it is able to rescue its user
+from several situations including the loss of their password. As the diagram above shows, the user’s
+password would normally be used to decrypt the Identity Master Key. But if, for some reason, it
+cannot be used, there is a path from the upper “Encrypted Identity Unlock Key” down to the
+“Encrypted Identity Master Key” allowing it to be reestablished.
+SQRL employs the AEAD-mode AES-GCM cipher which allows it to verify decryption keys and bind
+non-encrypted information into the encrypted authentication to prevent storage tampering.
+-9-Version 1.03
+October 2019
+Brute-force attack hardening
+People pick poor passwords. This may be especially true in a setting where they only wish to prevent
+the abuse of a device that’s within their nominal control, such as their phone or computer. But SQRL
+amplifies the reward for a successful identity theft because impersonation is not only granted to the
+one website of a hacked password, but to all of the user’s online SQRL identity, now and (unless
+changed) into the future. So, although SQRL provides a means for the recovery of a stolen identity
+(we’ll get to that) hardening SQRL identities against brute force attack is a worthwhile line of defense.
+SQRL was created in a world where custom FPGA and ASIC hardware was busily mining Bitcoin by
+hashing at high speed. Therefore, traditional PBKDFs (password-based key derivation functions) using
+iterations of standard hash functions (which are all now hardware accelerated) was no longer the best
+solution. SQRL needed a form of brute-force hardening that would be resistant to advanced hardware-
+assisted forms of acceleration. The SCRYPT, a “memory hard” hashing algorithm designed by Colin
+Percival formed a good foundation (https://en.wikipedia.org/wiki/Scrypt). Because FPGA and ASIC
+cores are necessarily memory lean, Scrypt’s algorithm uses a large array of memory in such a way
+that it is not feasible to arrive at the same result as Scrypt without committing that large amount of
+memory to the task. Since FPGAs and ASICs do not have access to, for example, 16 megabytes of
+memory per core it is not feasible for custom hardware to usefully accelerate Scrypt.
+How Scrypt operates: Scrypt’s input data to be hashed determines the sequence of a pseudo-
+random number generator. A large array is filled by the output of this generator with values
+modulus the size of the array. These values are treated as pointers (offsets) into the array. A very
+long “chain walk” is taken by following the pointers. The path taken during this walk generates data
+which is hashed to produce the output.
+SQRL clients need to operate within modest-memory devices, such as less capable smartphones. So it
+could not require the use of, for example, 256 megabytes of array space which a busy device might
+not have available. This meant that while Scrypt was slow and acceleration resistant compared to
+traditional PBKDF2-style hashing, it was still far too fast when running within acceptable memory
+constraints. The other consideration was that this is client-side decryption, not a server-side PBKDF
+function, where a very slow function would cripple a busy server. For a single user entering a single
+password once per session, where we want maximum brute-force hardening, we want a very slow
+and acceleration-resistant process. In this setting “slow” isn’t a problem, it’s a beneficial feature.
+We also wanted to allow SQRL’s users to decide how long their password processing should take. The
+more time required, the more difficult to brute-force. We wanted user-specified decryption speed. This
+is provided by iterating over the acceleration-resistant Scrypt function and counting iterations while we
+wait for the user-specified time to elapse. We call this iterative function “EnScrypt”:
+Password
+Salt
+SCrypt
+SCrypt
+SCrypt
+XOR
+SCrypt
+XOR
+SCrypt
+XOR
+XOR
+32-byte (256 bits)
+Password Based Key
+Figure 5: Sqrl's EnScrypt PBKDF
+As shown above, the “salt” input of successive Scrypt iterations is the output of the previous iteration,
+and every output is XOR summed to produce the final result. Since each iteration of Scrypt depends
+upon the output of the previous one, and the result depends upon all of the intermediate products, the
+process can only be run sequentially and no stage can be bypassed.. The iteration count required
+during encryption is retained as a parameter for decryption which repeats the process, bounded by the
+count rather than by time.
+- 10 -Version 1.03
+October 2019
+Identity Security
+SQRL’s Secure Storage System (S4)
+SQRL’s design required a custom compartmentalized encrypted storage container to facilitate the
+secure storage of SQRL identities within an insecure (PC) environment and for secure long-term
+external backup. SQRL’s Secure Storage System is a lightweight, easily implemented solution
+consisting of a block of binary data managed by a bit of code surrounding an AES/Rijndael cipher using
+Galois/Counter Mode (AES-GCM) to provide authenticated encryption with associated data (AEAD).
+This produces a minimal size, inherently portable, always-encrypted identity representation. The
+incorporation of an encrypted storage format into SQRL’s formal specification allows all clients to safely
+exchange encrypted SQRL user identities. The small size of these identities allows securely-encrypted
+identity exchange via QR code.
+Figure 6: SQRL S4 Secure Storage
+The need for identity backup
+Since SQRL is, by design, a freestanding two-party system without any form of auto-magical cloud
+connection, there is an absolute requirement for the user to backup their identity for long-term safe
+keeping. This only needs to be done once to protect the user from any possibility of identity loss. But
+it does need to be done once. SQRL users will be making a large investment in their online SQRL
+identities, so the loss of that investment must be avoided. Since SQRL identities are derived randomly
+(like bitcoin addresses) they cannot be recreated. SQRL’s backup is comprised of two separate pieces:
+The very small (a few hundred bytes) encrypted identity file and the 24-digit decimal Rescue Code.
+A SQRL identity is so small it can be represented conveniently as text for printing and manual entry:
+jNRZ X6J9 RPz6 jKrY JGH7
+zWE6 xzzi FF8X NBzh i6sz
+nFqd nVza ttBZ SeQr kPrq
+P9jv uz8t C8VY mZVV 3q5E
+xjhe NdjT 6kvF PXef cnTT
+3qq5 h9y
+Figure 7: A Complete Textual Identity
+- 11 -Version 1.03
+October 2019
+This textual representation uses a custom alphabet to reduce character ambiguity with incremental
+per-line hashing to catch any previous manual entry errors before the next line is started. This design
+makes printing identities onto paper practical. No storage medium has withstood the test of time
+better than paper. (If you have data saved on a once-ubiquitous 8-inch floppy or an Iomega Zip disk,
+try to read it today.) Everyone typically has some place where important papers are stored. But more
+than anything, any paper-based backup solution is inherently offline. And “offline” is where the user’s
+identity backup and its associated Rescue Code must remain. The printed identity is stored in
+encrypted form so that its discovery will not compromise the user’s identity because the Rescue Code
+is required for its decryption. Consequently, if unauthorized discoverability is a possibility, the paper
+backup and its printed Rescue Code should also be stored apart. Most of today’s Internet users have
+more than one computer and often a smartphone. So, their identity will be naturally backed up as it is
+spread around among the various devices they use.
+The SQRL system also defines a standard binary QR code format for identity interchange. The identity
+shown above is represented by this QR code:
+Figure 8: QR Code Identity
+SQRL clients can display their user’s identities on screen as an encrypted QR code. This allows a user’s
+camera-equipped device to easily import their identity from another of the user’s SQRL clients.
+SQRL’s “QuickPass”
+When using any personal device, such as a PC or a smartphone, where some measure of continuity of
+use is available, the security thresholds for establishing “it’s me” versus “it’s still me” differ. Stated
+less formally: Asking someone sitting alone in front of their private computer, or holding their
+smartphone, to repeatedly reenter a long and complex password is needless and annoying. Doing so
+encourages the user to change their password to something much more convenient to enter but also
+much less secure.
+Figure 9: QuickPass Options
+SQRL clients acknowledge this with a system that allows only the first ‘n’ characters of the user’s full
+password to be used to reassert the user’s continued “yes, it’s still me” presence. This shortcut is the
+user’s “QuickPass.” Once the user has entered their full password to initiate a session, and their
+identity has been successfully decrypted, the password’s first ‘n’ characters are used to immediately
+re-encrypt their identity in RAM using an “EnScrypt time” of one second. This QuickPass data is
+retained in RAM and is never written to any non-volatile storage medium. During subsequent password
+challenges, the user may reenter just those first ‘n’ characters of their password to transiently decrypt
+their in-RAM identity. Even hitting “Enter” is unnecessary, since the system knows ‘n’.
+- 12 -Version 1.03
+October 2019
+However, if the re-decryption should fail (due to the wrong ‘n’ characters) the QuickPass RAM is
+immediately wiped and the user is prompted to reenter their full password. In other words, in return
+for the convenience of a password abbreviation, zero guessing is allowed. Since QuickPass privilege is
+intended for the assertion of “I’m still here”, any system event which might suggest that the user is
+not still there – such as screen blanking, system standby, user account switching, or a long period of
+inactivity – will also cause the QuickPass data to be proactively wiped from RAM with the first of these
+events. As an example, the upper right side of the Settings & Options dialog of GRC’s SQRL client for
+Windows (shown on the previous page) shows user-configurable triggers which will cause the RAM-
+based QuickPass information to be wiped. After that, the client will prompt for and require the user’s
+full-strength password. The result is a system that significantly increases ease of use while sacrificing
+very little practical security and encouraging the use of a long and strong full password.
+Secure SINGLE-Factor Identity Authentication
+A traditional username identifies a user, but it is not necessarily unique, and it is not typically secret.
+Moreover, the frequent need to reset user passwords has resulted in the increasing use of widely
+known public eMail addresses as user identifiers… making them even easier to guess. Passwords may
+not be unique either. And while they are more or less secret, they cannot be used to reliably identify
+their users. Being often user-chosen, they often contain low levels of entropy. Time-based 6-digit
+TOTP “authentication” tokens provide no user identification, and their value is that they change in a
+predictable sequence every 30 seconds. So, they can provide some additional real time confirmation of
+a proposed user who shares the same symmetric secret. The industry has taken to using a collection
+of many single factors because no one of them can both identify and securely authenticate its user.
+Now compare this with SQRL. SQRL’s per-user/per-site public key unambiguously identifies a user to a
+website with a unique 256-bit one-to-one pairing. And the website’s use of that public key to verify the
+signature returned of a never-before-used unique challenge securely authenticates the user with
+cryptographic veracity. It is, therefore, no exaggeration to state that SQRL provides secure single-
+factor identity authentication.
+Suppressing the Weakest Link
+The security of a system is limited by the strength of its weakest link. So, while SQRL might be super-
+strong and unspoofable, we know that the existing system of usernames and passwords falls far short.
+Therefore, adding SQRL authentication to an existing web account can dramatically increase its user’s
+ease of use. But, by definition, the addition of any system offering more security cannot increase the
+overall security of the system if the weaker solutions are allowed to persist. To address this, SQRL
+clients transmit two, sticky, global “login policy preference” flags, both which are initially unset. They
+are “sticky” in the sense that they are retained as password-protected settings in the SQRL identity file
+to keep the last setting given to them by their user. They are “global” in the sense that they are not
+“per-site”. They transmit the user’s login policy preference to every website where the user signs-in
+with their SQRL identity. Websites are asked to retain and honor the login policy settings they most
+recently received from each user. Once a user thoroughly understands how SQRL operates and has
+grown comfortable with its use, they may, at their sole discretion, enable either or both of these flags:
+The first flag asks sites to please disable all other non-SQRL forms of identity authentication and the
+second flag asks sites to please disable all forms of automated and human authentication recovery.
+Figure 10: Login Policy Preferences
+We all know that “I forgot my password” account recovery is one of the weakest links in login security.
+So, enabling either of these options will foreclose the use of that often exploited vulnerability. No SQRL
+user needs to enable either of these to obtain SQRL’s login ease of use. But until alternative non-SQRL
+login authentication has also been disabled, important accounts will remain vulnerable to traditional
+non-SQRL authentication.
+- 13 -Version 1.03
+October 2019
+Tight Identity Binding
+In identity jargon we would say that SQRL creates a “tight” user-identity binding. It’s “tight” in the
+sense that the system intends a user to create a single SQRL identity and to use that single identity for
+every website, possibly for life. Consequently, over time, users will make a significant investment in
+their online SQRL identity. By comparison, usernames and passwords are comparatively ephemeral.
+Little investment is made in them, and they can be, and often are, sometimes forced to change for
+enforcement of security or policy. In the jargon of identity, we would say that usernames and
+passwords are very “loosely bound” to the identity of their users.
+There are common occasions where the inherent looseness of username/password identity binding
+serves as a feature rather than a liability. “Hey Dad, what’s our Netflix password?” is an often heard
+and entirely reasonable question within households. When multiple users need to share access to a
+single online account, the inherent laxity of username and password identity binding can be quite
+handy. This is not something SQRL naturally accommodates because SQRL’s inherently tight identity
+binding completely prevents the “sharing” or “borrowing” of SQRL identities.
+So, what do we do?
+Tighter identity binding feels like the future. While the freedom provided by anonymity is valuable
+beyond measure, the use of the Internet for transactions that need not or must not be anonymous,
+such as commerce or voting, require knowing with greater certainty than we can today the true
+identity of the person at the other end of the connection. While “absolute real world identity” is not
+something SQRL attempts to offer – yet – SQRL is a strong contender as the starting point for such an
+online capability. For those instances where it is desirable to share online accounts, SQRL’s “Managed
+Shared Access” not only solves the problem, but also brings much improved management to an
+otherwise ad hoc free-for-all mess.
+Managed Shared Access
+The proper way for websites that wish to allow and encourage the sharing of a single account among
+multiple users is to offer such a facility directly. SQRL specifies and implements a fully articulated and
+secure facility for this, known as “Managed Shared Access” (MSA). The SQRL Service Provider (SSP)
+API described later fully supports MSA, and a working implementation can be experimented with using
+the demonstration site at GRC: https://sqrl.grc.com/msa.
+MSA supports the access management of any number of SQRL users in a simple fashion. The group of
+users initially contains only the original account owner as a manager of the group. Any users may be
+designated to be managers of the group, though the group must always have at least one manager
+designated. Any of the group’s managers may add or remove any other users from the group. New
+users are added to the group by invitation. To do this, one of the group’s managers requests an
+invitation consisting of a long single-use numeric nonce. The manager copies this nonce and sends it
+to the invitee through any sufficiently secure out-of-band communication channel. Being numeric, it
+may easily be verbalized and transcribed by its recipient. When the invitee, unknown to the website,
+signs in with SQRL, rather than creating a new account, they provide the invitation nonce. This
+securely associates their now-known SQRL identity with the shared group account. They will now be
+signed-in and a member of the group.
+The use of Managed Shared Access may also be ideal for corporate/enterprise users of SQRL who wish
+to manage the access of disjoint sets of users. MSA allows new users to be securely added to shared
+groups, and also allows existing users to have their group membership revoked under the supervision
+of any of the group’s managers.
+When Managed Shared Access is available for a website, it offers the optimal means for managing the
+dynamic association of SQRL identities with that site. But it is foreseeable that, especially in the early
+days of SQRL, websites may not understand or bother to implement MSA. For that, there is a
+workaround…
+- 14 -Version 1.03
+October 2019
+Explicitly Shared Identities
+Suppose that an online banking service has added SQRL sign-in but hasn’t yet understood the value of
+adding MSA support. Mom and Dad are both avid SQRL users and both also need to have access to the
+banking service. Since we know that usernames and passwords are not going away, probably ever, the
+obvious solution is for them to continue signing in the way they always have, by sharing a username
+and password.
+But suppose they very much want to use SQRL. The solution, though not “the SQRL way,” would be
+for the two of them to create a third SQRL identity which they share. SQRL clients support, though
+discourage, the use of multiple user identities in recognition of the fact that there are instances, such
+as this, where a single user might need to segment their online identity for sharing. In this case, Mom
+and Dad both have their own SQRL identities and share a “Mom & Dad” identity. They could then also
+use this explicitly shared identity for any other similar services that do not support SQRL’s Managed
+Shared Access.
+Over time, as MSA becomes more prevalent, retiring explicitly shared identities is facilitated by MSA.
+In this example, once the online banking service got its act together and added MSA, Mom or Dad
+would sign-in with their shared identity and send invitations to themselves, marking them as
+managers of the new MSA group. They would each sign in with their individual identities, and use their
+invitations to join the group. Once they were both present, their manager status with MSA would be
+used to delete the shared identity. Eventually, the need for any sharing would end, and the shared
+identity could be permanently retired, or at least shelved in case it might be needed again someday.
+Before we leave the topic of tight identity binding, one last requirement needs to be addressed…
+Alternate Identities
+There are instances where a SQRL user who is already known to a website might wish to transiently
+appear as someone who is unknown to the site. In a world with usernames and passwords, such a
+user would simply invent a new username and password and create an account as someone unknown.
+Since our goal is not only to improve upon but to also fully replace the functionality of usernames and
+passwords, SQRL needed to incorporate a solution for the need for “transient” identities.
+The obvious solution would be for a SQRL user to create and use another SQRL identity. But SQRL’s
+identity creation process is intended to be used very sparingly. In return for the strong recovery and
+protection features it offers, it is a bit involved and lengthy with a password and a 24-digit Rescue
+Code which needs to be written down and then proven by immediate reentry. It is not well suited to
+the creation of “ad hoc” disposable SQRL identities. The right solution is SQRL’s built-in Alternate
+Identity facility:
+Figure 11: Alternate Identity Entry
+If, when signing into a website, the Alternate identity name field is not blank, whatever text the user
+has entered is appended to the end of the domain name being hashed to create the user’s per-site
+identity. This presents an entirely new SQRL identity to the website. It can be thought of as a sub-
+identity, or as a fork of the primary identity. Since the text that’s entered determines the sub-identity,
+they can also be regarded as “named sub-identities.” And, if the same text is used anytime in the
+- 15 -Version 1.03
+October 2019
+future, the same sub-identity will be re-created. So, they can also be used to create persistent alter
+egos on sites that already know the user’s “primary ego.”
+Keeping Secrets for the User
+Another problem SQRL solves for websites is the need for sites to securely store information on behalf
+of their users in such a way that no possible security breach or employee compromise can expose their
+user’s data. This means encrypting user data without retaining any key. As we know, SQRL’s protocol
+operates by providing websites with a public key which performs double duty, serving both as the
+user’s identity and as a verifier of their client’s signatures. This doesn’t provide anything that a site
+might use as a secret encryption key. SQRL’s per-user/per-site private key would be perfect for this,
+except that it must be kept secret. So SQRL uses the per-site private key, safely, by hiding it behind
+an “EnHash” function and using its output to key another HMAC function which hashes a site-provided
+“secret index” to generate an “indexed secret”:
+Secret Index
+(from website)
+Data
+Per-Site
+Private Key
+EnHash
+Key
+Indexed Secret
+HMAC
+(to website)
+Figure 12: Synthesizing the Indexed Secret
+This mechanism allows websites wishing to obtain individualized static secrets from their SQRL users
+to provide a string as a “Secret Index” in a reply to a SQRL client’s query. The client will then return a
+256-bit “Indexed Secret” which will remain unchanged for the life of the user’s identity key. And if the
+user rekeys their identity (see below) SQRL arranges to provide both the previous and the updated
+Indexed Secrets so that the website can decrypt and re-encrypt the user’s data under their new key.
+The EnHash function
+A hash function is a one-way function which performs a lossy scrambling encryption of any variable-
+length input to produce a fixed-length “digest” output. Internally, hash functions are iterative. They
+incorporate some fixed number of “rounds” which are deemed to be sufficient to scramble their input
+enough to achieve their security design objectives. However, we have seen past hash functions fail
+and fail in the face of greater computation or analytical power. And even “reduced rounds” versions of
+contemporary hash functions have shown weaknesses.
+SQRL’s design employs an excessive security margin when such excessive margin is available at
+negligible cost in time or effort. The modern SHA-256 function is believed to be secure. After all, it was
+designed by the NSA, what could possibly go wrong? But earlier hashing efforts were also originally
+believed to be secure and later turned out not to be. There are several places within SQRL where we
+really (really really) need a one-way function to be absolutely one-way. In those places, we use the
+invented “EnHash” function:
+16 Iterations of SHA256
+SHA256
+SHA256
+SHA256
+XOR
+SHA256
+XOR
+Variable Length
+EnHash Input
+SHA256
+XOR
+256-bit EnHash
+Output
+Figure 13: EnHash Construction
+- 16 -
+XORVersion 1.03
+October 2019
+As shown above, we iterate 16 times over the SHA256 hash. Each successive SHA256 output is fed
+into the next iteration’s input, and all outputs are XOR summed to produce the final result. This
+construction will be familiar from the earlier description of EnScrypt, which uses similar iterative XOR
+summing. Our preference would have been to programmatically quadruple the number of rounds used
+internally by the SHA256 function, from 64 to 256, to achieve a similar “excessive” security margin.
+But this would have created a custom hash function unsupported by any cryptographic libraries. We
+chose, instead, to iterate the standard drop-in SHA256 for function-call-level compatibility.
+All Identity Eggs in One Basket
+SQRL’s greatest design strength is also its greatest design liability: All of a user’s identities derive from
+a single secret master key. That’s wonderful only as long as that master key remains secret. If
+anything were to cause that master key to be revealed to anyone, a user’s SQRL website identity in
+the past, and in the future, based upon that (previously) secret key would be vulnerable to wholesale
+impersonation. Although this might appear to be SQRL’s Achilles heel, SQRL’s design incorporates
+countermeasures to dramatically reduce the liability from a compromise of its user’s master key.
+Before we examine the additional features that make these countermeasures possible, it’s worth
+noting that we are seeing the appearance of inexpensive hardware security modules (HSMs) such as
+the Yubikeytm which are capable of strongly protecting the secrets they keep. SQRL’s cryptosystem is
+well suited to having its most security-sensitive elliptic curve signing operations performed inside an
+inexpensive consumer dongle or a consumer product’s “secure enclave”. This protects the user’s
+master key because it is never exported from the dongle. It does its job internally. Although we may
+not initially be able to rely upon security hardening to keep SQRL’s key safely locked inside hardware,
+in the longer term it is foreseeable that the burden of keeping SQRL’s most important secret – the
+user’s identity master key – will be lifted from the user… and from SQRL.
+Identity Lifecycle
+Situations could arise where “rekeying” a SQRL identity is prudent, useful or necessary. And this is
+true even when a master key has not been stolen. As more of our lives move online, governments and
+law enforcement are becoming more insistent upon viewing whatever they wish of our online lives.
+And access to our identities becomes more valuable to malicious actors. A SQRL user might be coerced
+into revealing their SQRL access password to customs, border agents or law enforcement officers.
+Because such use requires the brief decryption of SQRL’s Identity Master Key, depending upon the
+circumstances, the user may be concerned that their SQRL identity may no longer be trustworthy and
+may wish to abandon it in favor of a freshly “rekeyed” identity.
+SQRL is able to protect its user’s online identity from unauthorized change, while allowing for its
+authorized user to “rekey” their identity if that should ever become necessary for any reason. This
+could occur if “I think malware crawled into my computer and stole my identity” or “border agents had
+my phone overnight and now I’m not sure I can trust my online identity anymore.”
+More formally stating these requirements:
+1. The valid owner of an online identity, who believes that it may have been compromised
+and can no longer be trusted for any reason, must be able to “rekey” their identity then
+update and replace their obsolete and untrusted identity at remote websites.
+2. Anyone else who obtains access to a user’s identity, by any means whatsoever, must be
+absolutely prevented from updating, changing, or removing that identity at any websites
+where it is already known and authorized to identify its user.
+Points 1 and 2 appear to be mutually exclusive: The owner of an identity has privileges that
+someone who obtains full access to that same identity does not have. How is this possible?
+- 17 -Version 1.03
+October 2019
+SQRL’s Rescue Code
+Page 9 describes how SQRL’s 2-party system arranges to allow a forgotten password to be reset. This
+is facilitated by SQRL’s 24-digit Rescue Code which serves as a random, maximum entropy, symmetric
+key used to encrypt and, if needed later, decrypt a copy of the user’s key if the user is no longer able,
+for whatever reason, to use their password for that purpose. The diagram on that page carries the
+legend “Simplified (conceptual) Key Flow” because it depicted only one key when, in fact, there are
+actually two keys:
+Randomly obtained
+and encrypted with
+the Rescue Code
+Identity
+Unlock Key
+EnHash
+Identity
+Master Key
+Obtained by
+EnHashing the
+Identity Unlock Key
+Figure 14: SQRL's Key Hierarchy
+As this diagram shows, the “Identity Master Key” (IMK) descends from the “Identity Unlock Key” (IUK)
+through the very-strongly-one-way EnHash function. It is this primary IUK that is obtained at random.
+Neither of these keys is ever stored unencrypted in non-volatile storage. When either key is needed it
+is transiently decrypted in RAM for use, then wiped to zero immediately after use.
+This construction allows for password recovery, since the Rescue Code can be used to briefly decrypt
+the IUK, which is then “Enhashed” to produce the decrypted IMK. A new password can then be chosen
+and used to re-encrypt the IMK for subsequent use by the user.
+This creates a key hierarchy, with the decrypted IUK able to re-create the IMK. But the reverse is not
+true. The strong one-way EnHash function absolutely protects the IUK from attack and discovery, even
+if the IMK, which must be transiently decrypted whenever the user’s SQRL identity is used, were to
+become compromised.
+The Rescue Code is never online.
+That bears repeating: The user’s identity Rescue Code is never online. The essence of SQRL’s 2-party
+security is that there is an online “working secret” and a (very far) offline “master secret”.
+SQRL’s “working secret” (the IMK) must be made transiently available to the SQRL client for SQRL to
+generate its per-site public and private keys. When the user’s SQRL password “unlocks” the client,
+what’s actually happening is that the IMK is decrypted into RAM by the user’s password so that an
+identity authentication can be performed.
+By comparison, SQRL is designed to never need the identity’s “master secret” (the IUK) during daily
+use. Although the IUK is stored with the user’s identity, it is always stored strongly encrypted by the
+identity’s (entirely random) Rescue Code, which is written down somewhere safe and deliberately left
+at home or kept with other important papers in a safe place. Since the Rescue Code will never be kept
+on the person travelling, or stored in their device, it is not possible for its user to be coerced into
+divulging something that is not present and which everyone knows no SQRL user will have on their
+person or in their device. And since the only thing the rescue code is needed for is changing things for
+long term identity lifecycle management, there is also no valid reason for any authority to demand it,
+or to require that travelers carry it with them.
+Identity “Association” & Lock
+Let’s back up a bit to define a new term. Before using SQRL to sign-in to a website we first need to
+“associate” a user’s SQRL identity with an account on that site. SQRL provides exceptional account
+association security by introducing the concept of an “Identity Lock.” SQRL’s identity lock allows new
+identity/website account associations to be freely created by SQRL users as they associate their SQRL
+identities with websites. However, once such an association has been created it is “locked” and
+cannot be casually (or maliciously) removed or changed.
+- 18 -Version 1.03
+October 2019
+One of the special powers given to SQRL’s “Rescue Code” is its ability to “unlock” existing identity
+associations. The Identity Lock utilizes Diffie-Helman Key Agreement (DHKA) and elliptic curve signing
+in a unique way described in detail later in this document. It is an important anti-abuse/anti-hacking
+technology because it prevents mischief that could ensue if SQRL identities could be easily removed or
+replaced by entities other than their authentic user.
+Since it is possible that an attacker might obtain a SQRL user’s identity and access password, SQRL
+needed a system that would prevent even a seemingly authentic user from changing their own
+previously set SQRL identity association – since it might not really be the identity’s authentic user.
+Therefore, SQRL’s Identity Lock system, which can only be unlocked by the identity’s Rescue Code,
+provides that…
+
+
+Any SQRL client may establish new website identity associations, but…
+ONLY a SQRL client which has been temporarily loaded with its identity’s Rescue Code
+can make any alterations to, including removal of, any preexisting identity association.
+Since the Rescue Code is never stored by any SQRL client, any form of attack on or compromise of
+the SQRL client cannot also compromise the identity’s Rescue Code – since it is not present during the
+normal daily use of SQRL. If the user briefly needs the services of their Rescue Code – which is never
+required for SQRL’s use – it can be loaded into the client’s volatile memory and removed immediately
+after performing its required task.
+Identity “ReKeying”
+When a SQRL user has some reason to believe that their current online identity has been compromised
+and can no longer be trusted, they select their SQRL client’s “Rekey Identity” function. This requires
+the use of their decrypted Identity Unlock Key, so they must provide their current identity’s Rescue
+Code. Their SQRL client will randomly generate a new replacement Identity Unlock Key and provide
+them with a new Rescue Code protecting their new identity. Their new Rescue Code must, of course,
+be printed onto paper and stored safely and securely.
+Here’s the neat trick: Their SQRL identity now contains BOTH identity keys, the newly created key and
+their previous identity key. Anytime their client attempts to authenticate the user to a website, it will
+present public keys for that site generated by both the new and the old identity keys, and the client
+will also “co-sign” its queries using both private keys.
+If this is the first time a newly rekeyed user is visiting that website, the website will recognize its SQRL
+user by their previous properly-signed identity and will immediately update its records with the
+details of the user’s current properly-signed identity, thus automatically and autonomously replacing
+and removing all record of the user’s previous identity in favor of the newer identity.
+As this recently rekeyed SQRL user moves around the Internet visiting sites and using SQRL, every
+website visited will admit them as though nothing happened while quietly updating their records to the
+new identity, thus replacing and forgetting the old identity.
+Although identity rekeying is intended to never be necessary, SQRL recognizes that “stuff happens”,
+so it provides a means for making the process simple and transparent if lightning should strike.
+Previous keys are only 32-bytes long, so the SQRL identity storage specification allows for the storage
+of up to four previous identity keys. If a website indicates that it doesn’t recognize either of the user’s
+current or most recent previous identity, the SQRL client will retry with the current identity and the
+next most recent previous identity key, and so on until all available previous identity keys have been
+tried. Again, identity rekeying is designed and intended to be exceedingly rare so even one previous
+identity key should be sufficient. SQRL provides for four because it was simple to provide plenty of
+extra allowance.
+- 19 -Version 1.03
+October 2019
+It’s important to note that SQRL’s Identity Lock prevents malicious rekeying of existing identity keys.
+The Rescue Code is required for identity rekeying because only it can provide the cryptographic
+information required to unlock the current identity at the website’s end. This uses several additional
+keys that we have not discussed yet. It’s sufficient for now to understand that as long as the Rescue
+Code is not available, rekeying of SQRL identities cannot be accomplished.
+“Taking back” a compromised identity
+As explained above, when any website encounters a SQRL client presenting both a recognized and
+verified previous identity accompanied by a not-yet-known current identity, it immediately abandons,
+forgets and replaces all record of the user’s previous identity with the user’s new current identity. After
+this has been done, the website will no longer have any record of the user’s previous identity, and
+anyone attempting to use it will be completely unknown and ignored.
+This allows a SQRL user to “take back” a compromised identity.
+After rekeying their identity, it will be necessary for a SQRL user to revisit each website at which they
+wish to prevent the possible abuse of their previous identity key. This generally means prioritizing
+visits to their most important websites first. Each such visit will remove their previous, possibly-
+compromised identity from the site visited, thus preventing any subsequent misuse and abuse of their
+previous identity at that site.
+Over time, as additional sites are visited, all remnants of the previous identity will be erased from the
+Internet and SQRL, this absolutely private, untrackable, 2-party identity authentication system, will
+have successfully, if somewhat manually and deliberately, dealt with a situation that should never
+occur in the first place. But if it does, the SQRL user is able to reassert control over their identity,
+effectively retaking it from whomever might have caused its compromise.
+Preventing malicious use before rekeying
+SQRL’s Identity Lock system has one additional feature that might come in handy: It is possible for
+any SQRL user who is not in possession of their identity’s Rescue Code (which should be the case for
+ALL SQRL users all the time) to quickly and easily disable the use of SQRL at any website they wish.
+Such a disable command can only be reversed by the use of the identity’s Rescue Code, which can
+either reenable the use of SQRL with the user’s current key, or as part of a rekeying update event.
+We noted before that someone travelling with their SQRL identity might have reason to believe that it
+had been compromised. In that case, they will want to rekey their identity and “take it back”. But if
+they are on the road with their Rescue Code securely stored at home, any rekeying will have to wait
+until they return home. This creates a vulnerability if they are unable to quickly rekey. However, even
+without their Rescue Code, they can visit their most important sites to disable all subsequent use of
+SQRL… even for themselves. In that fashion, although they are denying their own access, they are
+also denying access to anyone who they believe might have obtained their identity. Once they have
+access to their Rescue Code they can choose whether they wish to reenable SQRL access under their
+old identity or reenable access by rekeying that identity.
+SQRL’s identity lifecycle management features are designed to never be required. Once SQRL identity
+keys can be moved into hardware dongles or strongly protected within software enclaves, the chance
+of SQRL identity theft by malware will disappear. However, the risk of coerced compromise will always
+exist. Therefore, the SQRL system provides a solution to a problem that will hopefully never occur. But
+if it should, it can “turn back the clock” on the compromise and allow a SQRL user to reassert their
+control over their identity.
+- 20 -Version 1.03
+October 2019
+“ASK”ing High-Security Questions
+During SQRL’s multi-year development we often hit upon features that we were sorely tempted to
+include. Since this was a “from scratch” effort, SQRL could include anything. Auto form-fill?, hey why
+not? Or more automated website sign-in?, that would be cool! Or maybe move more website account
+management into SQRL for standardization? Why not?? And so on. After flirting with each idea we
+would inevitably remember that SQRL is for authentication, not form-filling, or anything else, and that
+to aid its adoption it should remain as lightweight and readily implemented as possible. Everything
+written above supports that. There are already other ways to perform most of those “extra” functions.
+And that’s what makes SQRL’s “Ask” feature special and unique. This one non-authentication feature
+seemed so useful, uniquely suited to SQRL, and unavailable through any other means, that it survived
+all attempts at pruning. It is part of SQRL, and it’s called “Ask”…
+In response to a SQRL client’s query, a website may return a free-format question as text, and
+optionally the labels of one or two buttons. When a SQRL client receives this in the site’s reply, it will
+display a special “Ask” dialog and await the user’s response.
+If the user presses cancel, the SQRL client simply drops the Ask reply and that’s the end of it. But if
+one of the labelled buttons are pressed, the SQRL client submits another query to the website
+containing the user’s response. Note that since every SQRL client reply always includes the entire
+content of the website’s previous response, all signed by the user’s private key, the question being
+asked, and its response, are cryptographically tamper-proof.
+The unique “Ask” feature is present because it provides an “out-of-band” (out-of-browser) channel for
+a website to obtain highly security-sensitive and important confirmations from its user. Browsers have
+become such spoofing platforms, with no end of that in sight, that this seemed like something worthy
+of inclusion into SQRL.
+No History Kept
+The most often asked question is whether SQRL clients retain any sort of log or record of the websites
+where they have been used. The thought is that if rekeying was needed at some point in the future,
+having a master list of every website where the old key had been used would greatly aid the task of
+visiting all of those sites for automatic key replacement.
+No one disagrees with that premise, because it’s correct. But there are problems with the idea. For
+one thing, SQRL users will likely have their SQRL identities installed on all of the computers and
+smartphones they use. One of SQRL’s major benefits is that it’s a two-party system without any need
+- 21 -Version 1.03
+October 2019
+to communicate with “headquarters”. There is no headquarters, and that’s by design. So, if SQRL
+clients were keeping logs of the sites where they were used, they would all need to be synchronized
+through some mechanism. The other problem is that if a record of past SQRL usage was being kept by
+the SQRL client, and bad guys got control of the client, they would also obtain a list of all of the
+websites where the user’s presumably-stolen SQRL identity could immediately be used. Clearly, this
+list is not something we want the bad guys to ever get their hands on. They would immediately scan it
+for the biggest targets of opportunity and be greatly facilitated in their attack.
+The good news is, whether or not such a feature is added, nothing needs to change about SQRL’s core
+operation. So, some future version of SQRL, or a SQRL client which adds those features, could be
+something to consider for the future. But its implementation would need to be secured.
+No Centralized Point of Failure
+In a world without SQRL, users wishing to minimize the many pitfalls of traditional passwords have
+been left with no alternative but password managers. LastPass, one of the leading password
+managers, has suffered multiple service outages affecting their entire userbase and leaving their users
+with no ability to log in any of their websites. Outages caused by equipment failures, routing table
+mistakes and malicious denial-of-service attacks have become commonplace in today’s Internet.
+So, although it may go without saying, it is still worth pointing out that another benefit of SQRL’s two-
+party solution is that there is no middle man and no centralized point of failure or attack that could
+adversely affect the lives of the system’s users. For the future, that seems almost as important as
+SQRL’s many other benefits.
+Please see the other SQRL implementation documents for more:
+Documentation Download Links:
+SQRL Operating Details
+SQRL Cryptography
+SQRL On The Wire
+https://www.grc.com/sqrl/sqrl_operating_details.pdf
+https://www.grc.com/sqrl/sqrl_cryptography.pdf
+https://www.grc.com/sqrl/sqrl_on_the_wire.pdf
+Thank you for your attention and interest in this promising system and solution.
+- 22 -
+
+Version 1.01 October 2019
+- 5 -
+The “SQRL” URL
+Wherever a website’s sign-in username and password sign-in fields are present, the website may also
+display a “Sign-in with SQRL” button and a SQRL QR code. Or it might show a smaller, less obtrusive
+link to a dedicated SQRL sign-in page. Either way, both the sign-in button and the QR code contain a
+“sqrl://” URL of the form:
+sqrl://{authentication domain}/{page}?nut={unique URL-safe nonce}
+For example: sqrl://www.example.com/sqrl?nut=oOB4QOFJux5Z
+SQRL://  HTTPS://
+The “sqrl://” scheme is only used to invoke SQRL clients through scheme-based support in operating
+systems. The “sqrl://” is replaced with “https://” when the URL is used for Internet communications.
+SQRL’s URL Nut
+The URL’s ‘nut’ nonce must be unpredictable and single use. It serves double duty as a session nonce
+to enforce uniqueness for every authentication cycle and as entropy to be signed by the SQRL client. It
+must be unpredictable to prevent future nut guessing, and it must also be single use so that once a
+nut has been “consumed” it will not be accepted again. Nuts may be any length, but shorter is better
+since the entire URL will be encoded into a QR code and lower-density QR codes are smaller, less
+obtrusive, and scan more reliably. Our recommended nut generator looks like this:
+64-bit Monotonically
+Increasing Counter
+Fresh nut for
+next SQRL auth
+Fixed website secret key
+Blowfish 64-bit
+Block Cipher
+Key
+Data Base64url
+ASCII Encoder
+Figure 3: Recommended Nut Generator
+Bruce Schneier’s excellent Blowfish cipher is chosen since it uses a 64-bit block which is perfect for our
+purposes. Each website randomly chooses its own unique installation secret key to be used throughout
+its lifetime. As long as that key remains secret it should never be changed. The secretly keyed
+Blowfish cipher is fed by a 64-bit counter which the system arranges to only count upwards and to
+never revert to any previous lower value. 64-bits will never wrap under any conceivable level of usage.
+Thus, every count ever produced will be unique. This 64-bit counter value is encrypted with Blowfish to
+feed a Base64Url binary-to-text encoder to produce a 11-character URL-safe text string. This is the
+SQRL “nut.” Implementations may encode information into longer nuts; “By reference” is preferred.
+A fresh, never-before-used nut is issued every time a SQRL sign-in page is displayed. Since single-use
+is crucial to prevent replay attacks, some means must be provided for assuring that nuts are never
+reused. This typically means placing the nut onto a “valid nuts” list and removing it once the nut has
+been consumed or replaced. Since a SQRL authentication requires the use of several authentication
+cycles, and thus several unique nuts, GRC’s implementation allocates a single “Pending Auth” object
+for the transaction. It is placed into a traversable linked list with a “last activity” timestamp which
+allows stale transactions to be pruned. This “Pending Auth” object holds all of the data relevant to the
+transaction including the most recently issued nut for the pending authentication. As we’ll see later,
+this “Pending Auth” object holds many other important pieces of authentication data including the IP
+address of the browser which initiated the authentication. This facilitates one of SQRL’s two important
+anti-spoofing mitigations. It also holds the MACs (message authentication codes) of any provided by
+the web server to the SQRL server to prevent in-flight tampering. (Everything the server sends is
+returned in by the client with its next query, if any, so the server is able to verify the MAC of what the
+client has returned against the MAC that it created from the data it sent to the client.)
+Version 1.01 October 2019
+- 6 -
+What about random nuts?
+The 64-bit counter approach works well for a single server environment. But servers in a large load
+balanced multi-server environment might need to independently issue SQRL nuts. As long as a high
+quality source of nut entropy is available, 132 bits of entropy could be encoded into a 22-character
+SQRL nut (6 bits per encoded char x 22 chars). This approach would sufficiently satisfy SQRL’s
+requirements for unpredictability and single-use and 132-bits of entropy would prevent collisions.
+The authentication domain
+The “authentication domain” is that portion of the SQRL URL string which is hashed by HMAC-SHA256
+to yield SQRL’s per-site private key, as shown by this diagram repeated from the SQRL explainer:
+sqrl://www.example.com/sqrl?nut=t10yVjNDoQ81uTvNorPr
+HMAC
+256-bit
+Master Key
+Crypto
+Signature
+Make
+Public Key
+Signature
+as identity
+authentication
+Public key as
+user identity
+Per-Site
+Private KeyKey
+Data
+Figure 4: SQRL Authentication Domain Hashing
+Since the user’s per-site SQRL identity is entirely dependent upon the precise domain name string
+hashed, and since issues surrounding username & password, port specification, and alphabetic case
+can arise, the following authentication domain parsing rules apply:
+1. Domain names are 8-bit ASCII “octets” (bytes) compatible with DNS resolvers. Internationalized
+domain names (IDNs) are represented in standard Punycode ASCII, which is the way DNS sees
+them. (https://en.wikipedia.org/wiki/Punycode)
+2. To preserve DNS domain name case-insensitivity, A-Z uppercase alphabetic must be converted to
+lowercase.
+3. Simple domain names, as shown in the example above, begin immediately after the initial “sqrl://”
+scheme specification and end immediately before the first “/” is encountered.
+4. The formal URL specification provides for a username and password prefix using the format:
+“username:password@www.example.com”. Since URLs are not secure for information transport
+this is rarely encountered, though “username@domain” is sometimes seen. Therefore, as the URL
+is parsed from left to right after the scheme://, the start of the domain name will be reset to the
+right of the last @ encountered.
+5. Port number specifications in URLs may be used to override the implicit port 443 assumed for
+HTTPS connections. And it is foreseeable that a SQRL protocol server might be operating on a non-
+standard port. But a port specification must not alter the effective SQRL domain. Therefore, any
+port specification must be removed from SQRL’s effective authentication domain.
+Path Extension
+Some websites, notably GitHub, use the beginning of the URL’s path to delineate individual accounts
+within the website’s domain. SQRL’s “Path Extension” feature supports separate GitHub-style domains
+by allowing the SQRL URL to specify the use of additional characters beyond the formal end of the
+domain name. For example, a sub-site SQRL URL might look like this:
+sqrl://{authentication domain}/joey?x=5&nut={unique URL-safe nonce}
+Version 1.01 October 2019
+- 7 -
+If the SQRL URL’s parameter list contains the reserved parameter name ‘x’, then the decimal value
+associated with ‘x’ specifies the number of characters to extend the authentication domain to the right
+of the domain name – but never into the parameter tail beginning with ‘?’, or past the end of the URL.
+In the example above x=5, so the five characters, starting with and including the domain-terminating
+‘/’ are included at the end of the hashed authentication domain. And, if ‘x=10’ it only appends ‘/joey’.
+SQRL URL examples
+The following examples clarify the use of the preceding URL parsing rules:
+SQRL URL Auth Domain Rule shown
+sqrl://ExAmPlE.cOm/?nut=... example.com domain lowercased
+sqrl://example.com:44344/?nut=... example.com ignore port override
+sqrl://jonny@example.com/?nut=... example.com ignore username@
+sqrl://Jonny:Secret@example.com/?nut=... example.com ignore user:pass@
+sqrl://example.com/jimbo/?x=6&nut=... example.com/jimbo extend auth domain
+sqrl://EXAMPLE.COM/JIMBO?x=16&nut=... example.com/JIMBO extension’s CASE and
+end extension at ‘?’
+The CANcel parameter
+When a SQRL client is used in the same machine as the web browser being signed into, clicking the
+“Sign-in with SQRL” button causes the browser to execute a page-changing HREF jump to a web
+server the SQRL client has established on the system’s Localhost port 25519. The act of jumping to
+this resident web server terminates the operation of the sign-in page, and any scripting it may have
+been running, while the browser waits for the newly requested page to be delivered.
+We will discuss what happens then, shortly. But for the moment consider that the user changes their
+mind and wishes to cancel the SQRL operation. Their web browser has jumped to the built-in SQRL
+web server and is waiting to be told what to do next. If the user cancels the operation, we need to be
+able to return the web browser to its original page as if the user had never initiated the authentication.
+So, if the URL the web browser uses to query SQRL’s built-in web server contains a cancel parameter,
+SQRL’s built-in web server can respond to the browser’s waiting query with an HTTP 301 Redirect to
+return the web browser to the page it just left, to back out of a cancelled same-device authentication.
+The cancel parameter will typically be an encoded version of the sign-in page’s URL. So, JavaScript on
+the SQRL login page will obtain the URL of the current page, base64url-encode it, and append the
+additional parameter to the sign-in button’s URL when the page is loaded.
+An example of an actual sqrl:// URL for a “Sign-in with SQRL” button looks like this:
+sqrl://sqrl.grc.com/cli.sqrl?nut=oOB4QOFJux5Z&
+can=aHR0cHM6Ly9zcXJsLmdyYy5jb20vYWNjb3VudC9jb25uZWN0ZWQtYWNjb3VudHMv
+As mentioned previously, any webpage offering SQRL authentication should offer both a “Sign-in with
+SQRL” button for a visitor to click, and a SQRL QR code for the visitor to scan. Each of these contains a
+SQRL URL with a common nut which the webserver associates with the visitor’s browser session. But
+the URLs are NOT identical because the button’s HREF contains a URL with a cancel (can=) parameter
+whereas the SQRL QR code does not. As noted above, the cancel parameter is required to aid in the
+smooth functioning of SQRL’s most powerful anti-spoofing feature: Client Provided Session or CPS.
+The QR code could also contain the cancel parameter. It wouldn’t do any harm. But the cancel
+parameter’s value string will probably be long, and QR code data should be kept as small as possible.
+Therefore, since the cancel parameter serves no purpose in cross-device SQRL authentication, it’s
+much better to exclude it.
+Version 1.01 October 2019
+- 8 -
+Forming the Cancel parameter
+Since the cancel parameter’s value will be the full URL of the site’s SQRL sign-in page, it may contain
+characters which are not URL parameter value safe. So, the cancel URL is base64url encoded before
+being used as the “can=” parameter’s value. The SQRL protocol often employs base64url encoding and
+the optional trailing ‘=’ equals sign padding that often appears at the end of the encoding are
+unnecessary and should be removed from the end of the encoded value.
+The astute web developer might wonder why SQRL clients don’t simply use the Referer header in the browser’s
+query as the place to return the browser if the user cancels the operation. It would have been nice if that could
+have been done. But browsers have become increasingly careful to trim tracking information from their Referer
+headers. Moreover, whereas the SQRL sign-in page will certainly be HTTPS, the SQRL client’s little built-in web
+server is HTTP, and all browsers trim their Referer data when jumping from a secured to a non-secured page.
+What if no cancel parameter?
+It’s possible that a poorly designed website might fail to provide a cancel parameter to a local SQRL
+client. If this were to happen, the client would have a dilemma on its hands if the user chose to cancel
+the operation. It would have accepted a connection and query from the user’s web browser, which is
+now waiting for its reply, but the SQRL client would have nowhere to redirect the waiting browser. In
+this case, the SQRL client should return a simple webpage to the browser to show its users something
+like: “You have cancelled the SQRL sign-in. Please press your web browser’s BACK button to return to
+the previous login page. That simple page might also contain JavaScript to pop the browser’s page
+history stack to automatically return the user to the previous page. The SQRL specification requires
+the use of an explicit cancel parameter since that provides additional cancellation flexibility to the
+website, and also since the page returned by the SQRL client will not be HTTPS, it will be HTTP and it
+is foreseeable that browsers or add-ons might proactively block executable script from non-secured
+origins.
+Why HTTP and not HTTPS?
+The Referer header note above and the preceding paragraph noted that the web server running in the
+SQRL client uses HTTP rather than HTTPS and TLS. In other words, when the user clicks the “Sign-in
+with SQRL” button, the browser is redirected to http://localhost:25519/... This might strike some as
+reckless, but it is not insecure. Encryption and authentication are only required when communications
+are subject to interception. But, despite the fact that we’re using a protocol normally used for network
+communication, the use of a system’s local networking stack is not network communications, it is
+inter-process communications and it is no less secure than if the protocol were encrypted.
+We now know how to parse any sort of complex SQRL URL, what to exclude, what to include, what to
+lowercase and how to form SQRL URLs for SQRL’s use including its optional path extension and cancel
+parameters.
+sqrl://steve:badpass@SQRL.grc.com:8080/demo/cli.sqrl?x=5&nut=oOB4QOFJux5Z&
+can=aHR0cHM6Ly9zcXJsLmdyYy5jb20vYWNjb3VudC9jb25uZWN0ZWQtYWNjb3VudHMv
+Armed with this understanding of the SQRL URL format and handling, let’s rewind and examine the
+overall processes of same-device and cross-device authentication.
+Version 1.01 October 2019
+- 9 -
+Authentication Setup
+A SQRL user wishing to sign into a website arranges to display the site’s SQRL sign-in page. As we
+have seen, one way or another, that SQRL sign-in page arranges to present a “Sign-in with SQRL”
+button and to display a SQRL QR code. The “sqrl://” URL carried by those contains a SQRL nut that
+has never been used before. There are many ways a system can accomplish this, and the specific
+approach taken is left to the developer. For the sake of clarity, we’ll enumerate a few typical systems:
+1. The web server might directly obtain a guaranteed unique and unpredictable nut nonce from an
+encrypted incrementing counter or from a source of high entropy, and directly embed the SQRL
+URL into the “Sign-in with SQRL” button and also generate the QR code image containing the SQRL
+URL. In this model the web server would supply a fully formed webpage to the user’s browser.
+2. Since JavaScript is needed, anyway, to support SQRL sign-in automation, the page’s JavaScript can
+be given the additional task of getting the page setup. So, the web server would send a generic
+sign-in page containing JavaScript whose task is to customize the page. The JavaScript would
+query either the webserver or perhaps a separate SQRL server to obtain and register a unique nut.
+It would set the URL for the sign-in button, and either synthesize the image of a matching SQRL
+QR code in JavaScript, or set the URL of the QR code’s image “src=” parameter so that the web
+browser queries either the webserver or the separate SQRL server for the QR code image content.
+In either of those instances, the request for a new nut will either create or update a “Pending Auth”
+object residing in either the webserver or the SQRL server. Once created, that object will be indexed
+or searchable by the nut most recently issued for the authentication, and will contain information
+relating to the pending authentication including a timestamp used to remove unused and expired
+authentication objects, the IP address of the user’s browser, the most recently issued nut, and other
+management information the servers might require.
+At this point our path diverges depending upon whether same-device or cross-device authentication
+occurs...
+Internal vs External Browser Clients
+This document’s discussion of localhost connections to port 25519, HTTP 301 redirections and so on,
+assumes that the SQRL client lies outside the web browser, either as a standalone SQRL application or
+possibly as an operating system service. This is the way GRC’s Windows client and the clients for iOS
+and Android operate, since they are freestanding clients providing SQRL client services to any web
+browser running on the local machine. But this is not the way the SQRL browser extension for Firefox
+and Chrome operates, nor would it be the way SQRL clients would operate if they were to be
+integrated natively into the web browsers themselves.
+SQRL clients internal to the browser do not invoke any services of external SQRL clients. They have no
+need to connect to an external client’s webserver over localhost port 25519, receive an HTTP 301
+rediretion, or anything else. SQRL-aware web browsers or web extensions operate by parsing the
+“sqrl://” URLs found on SQRL logon pages and modifying the DOM (Document Object model) contents
+as needed to assume all of the functions of external clients.
+The internal client captures the user’s “Sign-in with SQRL” button click, then initiates the connection to
+the remote SQRL server specified in the “sqrl://” URL. It displays any required user interface
+prompting to authenticate its user, uses the SQRL protocol to negotiate the user’s identity with the
+remote SQRL server, then changes the browser’s page to the URL provided by the server’s CPS reply.
+SQRL sign-in pages are created with the assumption that no internal SQRL support is provided by the
+web browser or any browser extension. Therefore, if SQRL browser or extension support is present,
+that support must intercept and override the page’s normal behavior which always assumes the use of
+external SQRL clients.
+Version 1.01 October 2019
+- 10 -
+Same-Device Authentication
+SQRL’s same device authentication is all about leveraging the anti-abuse power of client provided
+session (CPS). The user clicks the website’s “Sign-in with SQRL” button to initiate authentication with
+the SQRL client which has been installed in, and is running on, the same device as the web browser.
+Local SQRL clients residing outside of the browser (external clients) are triggered by both of two
+separate and different mechanisms: triggering the operating-system-registered “sqrl://” scheme and
+jumping to the running client’s localhost webserver which is listening for HTTP queries on localhost
+port 25519. (Note that the SQRL client webserver must only bind to the machine’s 127.0.0.1 IP and
+interface and not also to the WAN interface!)
+On the desktop, triggering the operating system’s “sqrl://” scheme launches a new instance of the
+client, and on mobile platforms it awakens the mobile client which might be sleeping or suspended. If
+the newly launched SQRL client does not find another instance of SQRL already running it will remain
+running. This allows SQRL clients to be terminated until they are needed and then run on demand. If
+the newly launched SQRL client does find another instance of SQRL already running, it uses private
+inter-process communication to hand off the SQRL URL to the already-resident process instance.
+The newly launched client instance also transfers its “focus rights” to the resident process. Modern
+operating systems actively prevent “focus stealing” by applications which the user has not brought to
+the foreground with some manual action. When the user clicks “Sign-in with SQRL” on the browser, it
+will have focus. But we then want the SQRL client to pop-up a SQRL authorization password or
+Quickpass prompt, and we want that dialog to have the system and keyboard focus upon appearance
+so that the user can enter their password without needing to first click on the prompt’s input field.
+The http://localhost:25519 web query trigger
+The magic sauce of SQRL’s Client Provided Session (CPS) is that the resident SQRL client runs a small
+web server to which the user’s browser jumps in order to eventually receive an HTTP 301 Redirect URL
+to a logged-on website session. Therefore, any query to the root of http://localhost:25519/* which
+does not match any other defined and reserved queries (see below) will be treated as the browser’s
+request for a 301 Redirect.
+The http://localhost:25519/*.gif query
+Resident SQRL clients must respond to queries for a GIF image of any name. They only need to return
+a 1x1 pixel image, but they must return a valid image. This feature allows web pages to probe for the
+presence of a local running SQRL client and to avoid jumping the user’s browser to a non-existent
+client web server when a page’s “Sign-in with SQRL” button is clicked. If this “look before you leap”
+test was not performed, the browser’s attempt to jump to http://localhost:25519/ would result in a
+messy and uncool “Connection Refused” error from the web browser. Since the resident SQRL client
+might have been put to sleep or suspended by a mobile operating system, or a desktop client might
+not be running yet, the JavaScript code running on the page should not give up after a first failure.
+JavaScript on the page will have also triggered the operating system’s “sqrl://” scheme (described in
+detail next) so the SQRL client might be loading or waking up and need some time to reply. The page
+should keep retrying failed image loads (after a short delay) until it succeeds. And under no
+circumstances should the page’s JavaScript jump the browser to the Localhost server until and unless
+a /*.gif image load succeeds. To avoid any possible caching, the JavaScript should use a GIF name
+derived from a high-resolution date timestamp so that every name is guaranteed to be unique.
+The http://localhost:25519/stop.bmp /favicon.ico /sqrl.ico
+The SQRL client’s web server may choose to serve additional images to support any other pages it
+may wish to serve, such as a manual authentication cancellation instruction page if the authenticating
+website does not provide a CANcel (&can={...}) parameter in its localhost:25519 jump query so that
+the client has nowhere to redirect the web browser after a user-cancelled or failed authentication.
+Version 1.01 October 2019
+- 11 -
+The sqrl:// scheme access trigger
+The sqrl:// scheme trigger addresses different needs on desktop or mobile operating systems.
+Under Windows, and presumably macOS and Linux, applications are actively prohibited from “stealing”
+input focus from each other. When the user clicks the “Sign-in with SQRL” button on their browser, the
+browser has the system’s input focus. A password prompt dialog which pops-up due to the browser’s
+localhost:25519/ query will neither have focus nor any way to programmatically obtain it. But when
+the SQRL unlock password appears, the user wants to be able to immediately enter their password
+without first clicking on the pop-up password dialog. By launching a new instance of the SQRL client,
+that new instance will have focus rights and can programmatically hand them over to the running
+client, thus allowing the user to immediately enter their password.
+The scheme’s role on mobile systems is to awaken any possibly suspended and sleeping SQRL client.
+Mobile systems tend to “sleep” applications after some period of disuse. But the SQRL client needs to
+be able to respond to the /*.gif image probe request and then to the browser’s jump to the root of its
+web server. To do this the client must be awoken. The sign-in page’s trigger of a “sqrl://” scheme
+performs this task.
+The “Same IP” check
+Early in the development of SQRL it was clear that SQRL’s sign-in automation would open it to
+spoofing attack. The most worrisome attack is the easiest to perpetrate: A SQRL user unknowingly
+signs into an untrustworthy website which obtains a SQRL URL link and QR code from, for example,
+Citibank’s website. If the user is in a hurry and/or never appreciated the necessity of always double-
+checking the domain name they are signing into, they’ll enter their Quickpass and authenticate their
+identity to the SQRL URL the malicious site obtained from Citibank, thus signing the malicious site into
+Citibank under their identity.
+A closely related spoofing attack is more involved and also more insidious: A malicious website obtains
+a look-alike domain name for a popular website, say amaz0n.com. A spoofed e-mail induces the user
+to visit amazon.com but takes them, instead, to “amaz0n.com” and presents a lookalike site. Using
+some excuse, they are asked to login. The SQRL user now sees the real “amazon.com” they are being
+asked to login to and, even if they did carefully double-check the site, they see what they expect to
+see... amazon.com. Yet the malicious site would, again, be logged on as them.
+In these scenarios, unlike when using a username or e-mail and password, the use of SQRL prevents
+the malicious actor from obtaining the user’s authentication credentials. They cannot sign-in again
+later, nor anywhere else using the same credentials. They only receive a single session sign-in. But
+that’s still not desirable for a system that hopes to significantly advance the state of the art for remote
+network identification and sign-in.
+This section has the name “The Same IP check” because both of the scenarios described above share a
+common feature: When the malicious server requests a SQRL URL link and QR code from the valid
+website, it will do so from its IP address, not from the user’s IP. When the user’s local SQRL client
+then connects to the website’s SQRL server to use the URL provided to it by the malicious server, the
+SQRL client’s IP will not match the IP which originally fetch the URL. The “Same IP” address test will
+fail, the remote SQRL website will immediately fail the authentication and return an error code to the
+client.
+In short: When the user’s web browser and SQRL client occupy the same machine for same-device
+authentication, the IP address making the initial request for the authentication SQRL URL, and the IP
+address of the SQRL client that attempts to use that SQRL URL, should always be the same. This is a
+sanity-test, in addition to CPS, that SQRL applies to all same-device authentications. Smartphones
+signing into a website on their own browser are using same-device mode, so they also obtain the
+combined anti-spoofing strength of “Same IP” and CPS.
+Version 1.01 October 2019
+- 12 -
+However, a smartphone on its own cellular network being used to sign-in to a session on another
+computer using a SQRL QR code will be in cross-device mode where its SQRL client IP will not be
+expected to match the IP of the other machine. This means that cross-device mode cannot guarantee
+either “Same IP” or CPS for anti-spoofing protection. However, if the smartphone is preferentially
+using a Wi-Fi network, it might assume that it does present the same public IP as the browser it is
+signing in. So, in that case, the very valuable “Same IP” protection might be available.
+Since SQRL servers must be informed whether or not to expect an IP match or a mismatch, and since
+SQRL clients always know whether they are being used in same-device or cross-device mode, and also
+perhaps whether they are using a cellular or local Wi-Fi network, all SQRL clients include a noiptest
+flag when they need to suppress the SQRL server’s normal behavior of checking for SQRL URL and
+SQRL client IP match.
+Cross-Device Authentication
+Compared to same-device authentication, SQRL cross-device authentication is simple. It is also super
+sexy and almost magical in the way it works:
+While any SQRL sign-in page is being displayed and is visible in the foreground, that page’s JavaScript
+is periodically querying (polling) the website’s SQRL server or service using the ‘nut’ received to ask
+the server whether any change should be made in the currently displayed page. If a site wishes, it
+might choose to have its SQRL sign-in JavaScript establish a single persistent connection to await a
+page change reply, but this may overtax busy systems. In any event, the specific mechanism is left to
+the implementor.
+With the SQRL sign-in page waiting, the SQRL user scans the page’s displayed QR code which displays
+the domain name to which the user’s identity will be authenticated. As will be discussed extensively
+below, because SQRL’s cross-device authentication mode lacks the protection provided by Client
+Provided Session (CPS) and probably also “Same IP”, asking the cross-device authenticating user to
+carefully confirm the domain their identity will be provided to is very important.
+Once the user confirms that they wish to authenticate to the indicated domain, the SQRL
+authentication handshakes will complete and the SQRL server will sign the user into the web browser
+session which first requested the “nut” and which has been “pinging” for any update. Upon receiving
+the next update query from the web browser, the SQRL server will instruct it to change the page as
+appropriate, which will show the user newly signed-in and ready to proceed.
+What makes this authentication mode so striking is that from the user’s perspective, they didn’t touch
+the page. They let their smartphone “see” the page’s SQRL QR code, they authenticated themselves to
+their smartphone and double-checked the authentication domain, and without touching the machine
+being logged in to, the page updated itself to reveal that they are now logged in. The effect is quite
+dramatic.
+That’s the good news.
+The bad news is that, as we have seen above, because it may lack the protections provided by either
+CPS or “Same IP”, SQRL’s cross-device authentication is also much more dangerous to use.
+To drive this point home very clearly:
+The undeniable problem with cross-device authentication is
+that a website can EASILY spoof ANY inattentive SQRL user!
+And, in fact, as that second example above shows using a lookalike site “amaz0n”, even a more
+attentive user, who didn’t notice that they were at “amaz0n” rather than “amazon” could be fooled.
+Version 1.01 October 2019
+- 13 -
+Any time noiptest is used, some form of strong anti-spoofing countermeasure should be employed. A
+useful though admittedly burdensome mitigation would be to show the SQRL user, in big bold letters,
+the domain name to which they are providing their SQRL identity and then require them to manually
+enter the domain name they are authenticating to into an input field on their smartphone. In the first
+example above, the user would be required to enter citibank.com into their phone. Anything less will
+likely result in abuse of SQRL’s ease of use in cross-device mode where Same IP and CPS are absent.
+However, the resistance to this within the user community has been insurmountable because this
+makes SQRL’s magical instant authentication and sign-in much less magical and instant.
+If you are a web developer you may be thinking that there must be some way to solve this, some way
+around this. If you come up with anything, you’ll be a hero. This problem has received a great deal of
+time and attention to no avail. Several crucial pieces are missing from cross-device mode which are all
+present to merge synergistically in same-device mode:
+1. The user’s web browser jumps to the local SQRL client web server. In doing so, any possible code
+running on the page that has been jumped away from, malicious or not, is terminated while the
+browser waits for a reply from the local SQRL client’s web server.
+2. Rather than signing the user into the browser session that requested and probably displayed the
+original SQRL sign-in page, which might not be trustworthy, the web server being signed into
+returns an authentication URL directly to the user’s SQRL client.
+3. The user’s browser, and nothing else (no possible JavaScript), receives that authentication URL
+directly from the SQRL client in an HTTP 301 Redirect. This causes it to jump to the page provided.
+Nothing can intercept this redirection to the signed-in page.
+The obvious way to mimic this functionality with a smartphone in cross-device mode on a different IP
+would be to have the authenticating website return for display an authentication URL which the user
+would then manually enter into the browser’s URL address field. But no one thinks that’s practical.
+However, ...
+OS Support for Cross-Device CPS
+If SQRL wins the day to become the preferred website sign-in system, operating systems could easily
+incorporate very simple assistive support for SQRL’s cross-device authentication to imbue it with the
+“unspoofability” of SQRL’s full-strength Client Provided Session (CPS) protection:
+A keystroke or menu click would prime the system’s camera to receive a CPS URL. Upon completing a
+cross-device authentication, the website’s CPS URL would be displayed on the smartphone’s screen
+and presented to the waiting PC. Upon seeing the URL, the operating system would send the URL to
+the system’s registered browser, causing it to open a new signed-in page. The original waiting SQRL
+sign-in page, which has been polling for an update, would receive a “close yourself” command from
+the SQRL server, and the authentication would be complete.
+Since the CPS URL is being delivered to the user’s smartphone and then to the computer in front of
+them, we obtain the same benefits as same-device CPS authentication in a cross-device mode.
+Version 1.01 October 2019
+- 14 -
+Same-Device or Cross-Device?
+With Android and iOS mobile platforms increasingly replacing laptops and desktops to become true
+personal computers, where individuals are authenticating themselves to websites visited on their
+devices, SQRL’s support for same-device authentication – with full CPS and “Same IP” protections –
+on those mobile platforms, is crucial.
+SQRL’s cross-device authentication excites people because it is new and because no one has seen
+anything like it before. But when we stop to think about it, no one today is using their mobile devices
+to log into websites on the web browser of another computer. Is it cool that we can with SQRL? Yes,
+absolutely. But when a SQRL client with the user’s SQRL identity is present on those systems, it’s
+actually easier to just click the “Sign-in with SQRL” button and you’re done.
+So, while there will be many cool instances where cross-device sign-in will be useful, the lack of
+SQRL’s protections against spoofing in cross-device mode will be significantly mitigated by the fact
+that same-device sign-in will almost certainly be SQRL’s most often used mode.
+
+
+Version 1.04 December 2019
+- 32 -
+This SQRL.log sample using the development “Spec-Vectors-Identity”, provides the details of a two-
+query SQRL authentication consisting of a “query” query followed by an “ident” query:
+SQRL Client [1.0.7286.1] Initializing...
+SQRL Client Running...
+~~~~~~~~~~~~~~~~~~~ Beginning SQRL Transaction ~~~~~~~~~~~~~~~~~~~
+<<< CLIENT POST QUERY GENERATION >>>
+SQRL URL : sqrl://sqrl.grc.com/cli.sqrl?nut=fXkb4MBToCm7&can=aHR0cHM6Ly9zcXJsLmdyYy5jb20vZGVtbw
+Hostname : sqrl.grc.com
+ID Hash String : sqrl.grc.com
+Secure Query : Yes
+Query Port : 443
+URL Resource : /cli.sqrl?nut=fXkb4MBToCm7&can=aHR0cHM6Ly9zcXJsLmdyYy5jb20vZGVtbw
+ID Master Key : 2E471E106D758F3C7B242C8A4A0513A7192D8EDDB917BDD019F19E38ED292BA8
+HMAC256 input : sqrl.grc.com
+HMAC256 HashOut : 7A550E0797EF9E617D0E544EBE27FDE749D9EC2472BF9618DEE4C063EEFD51B5
+Site Private Key: 7A550E0797EF9E617D0E544EBE27FDE749D9EC2472BF9618DEE4C063EEFD51B5DA3801F9C47E12795882...
+Site Public Key : DA3801F9C47E1279588253DD193A0EB9C29823A083EAC52A7F893D32D92E897B
+IDK (base64url) : 2jgB-cR-EnlYglPdGToOucKYI6CD6sUqf4k9MtkuiXs
+Command Verb : query
+----------------+ Client's parameter list +----------------
+ver=1
+cmd=query
+idk=2jgB-cR-EnlYglPdGToOucKYI6CD6sUqf4k9MtkuiXs
+opt=cps~suk
+-----------------------------------------------------------
+'client=' value : dmVyPTENCmNtZD1xdWVyeQ0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrOU10a3Vp...
+'server=' value : c3FybDovL3NxcmwuZ3JjLmNvbS9jbGkuc3FybD9udXQ9ZlhrYjRNQlRvQ203JmNhbj1hSFIwY0hNNkx5OXpj...
+Buffer to sign : dmVyPTENCmNtZD1xdWVyeQ0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrOU10a3Vp...
+IDS (base64url) : qXFikmg_jZQJ7GjKCA_zBwzras2QyQAwWw2s80ZcUHmLLBUN5_hPuFtB6ZoV5wUcNs5XmSrqg1FQwGA6RlVBAQ
+POST Data String: client=dmVyPTENCmNtZD1xdWVyeQ0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrO...
+<<< SERVER RESPONSE >>>
+HTTP Status : 200
+ContentLength : 151
+<<< SERVER RESPONSE DATA >>>
+Server Response : dmVyPTENCm51dD0xV005bGZGMVNULXoNCnRpZj01DQpxcnk9L2NsaS5zcXJsP251dD0xV005bGZGMVNULXoN...
+----------------+ Server Response Decode +-----------------
+ver=1
+nut=1WM9lfF1ST-z
+tif=5
+qry=/cli.sqrl?nut=1WM9lfF1ST-z
+suk=BMFDm7bPlsQojuJsoDTvlS1McnwgScvktF84vLjscGk
+-----------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~ Beginning SQRL Transaction ~~~~~~~~~~~~~~~~~~~
+<<< CLIENT POST QUERY GENERATION >>>
+SQRL URL : sqrl://sqrl.grc.com/cli.sqrl?nut=1WM9lfF1ST-z
+Hostname : sqrl.grc.com
+ID Hash String : sqrl.grc.com
+Secure Query : Yes
+Query Port : 443
+URL Resource : /cli.sqrl?nut=1WM9lfF1ST-z
+IDK (base64url) : 2jgB-cR-EnlYglPdGToOucKYI6CD6sUqf4k9MtkuiXs
+Command Verb : ident
+----------------+ Client's parameter list +----------------
+ver=1
+cmd=ident
+idk=2jgB-cR-EnlYglPdGToOucKYI6CD6sUqf4k9MtkuiXs
+opt=cps~suk
+Version 1.04 December 2019
+- 33 -
+-----------------------------------------------------------
+'client=' value : dmVyPTENCmNtZD1pZGVudA0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrOU10a3Vp...
+'server=' value : dmVyPTENCm51dD0xV005bGZGMVNULXoNCnRpZj01DQpxcnk9L2NsaS5zcXJsP251dD0xV005bGZGMVNULXoN...
+Buffer to sign : dmVyPTENCmNtZD1pZGVudA0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrOU10a3Vp...
+IDS (base64url) : kQI05IpE_cu4u0mf7jymbap09hmS6ZCWjBGKUYnSNVRTXPbreTvDWHKNbSkUlQT2bx3wXwW3cCLBD0Qedd64AA
+POST Data String: client=dmVyPTENCmNtZD1pZGVudA0KaWRrPTJqZ0ItY1ItRW5sWWdsUGRHVG9PdWNLWUk2Q0Q2c1VxZjRrO...
+<<< SERVER RESPONSE >>>
+HTTP Status : 200
+ContentLength : 232
+<<< SERVER RESPONSE DATA >>>
+Server Response : dmVyPTENCm51dD1CRUZBSTF0SllmQm0NCnRpZj01DQpxcnk9L2NsaS5zcXJsP251dD1CRUZBSTF0SllmQm0N...
+----------------+ Server Response Decode +-----------------
+ver=1
+nut=BEFAI1tJYfBm
+tif=5
+qry=/cli.sqrl?nut=BEFAI1tJYfBm
+suk=BMFDm7bPlsQojuJsoDTvlS1McnwgScvktF84vLjscGk
+url=https://sqrl.grc.com/auth.test?4hVTe9LGHhMTuxz_mm6vRc_q
+-----------------------------------------------------------
+Figure 25: Sample SQRL.log file
+Server-Side Logging
+SQRL’s server-side logging is provided by a SQRL “Diagnostics” facility at GRC’s original SQRL server:
+https://www.grc.com/sqrl/diag.htm
+Developers may use authentication at this page – either with their own developmental SQRL client or
+with GRC’s or some other SQRL client for reference. After an authentication cycle, the diagnostics page
+will display the server’s view of the SQRL protocol interactions:
+Version 1.04 December 2019
+- 34 -
+Figure 26: Sample SQRL Server-Side Diagnostics
+These client- and server-side facilities may be used to exercise and observe all aspects of the SQRL
+protocol’s variations including authentication in the presence of multiple previous identities and
+rekeying of an existing identity. It should provide developers with a comprehensive ability to
+understand SQRL’s protocol and to verify the operation of their own SQRL implementations.
+
+Version 1.07 December 2019
+- 9 -
+Client Keys
+ idk = IDentity Key
+This is the user's SQRL ID which uniquely identifies them to the site. It is the elliptic curve public
+key derived from the user's Identity Master Key (IMK) by the HMAC hash of the site's effective
+domain name. The binary key is base64url encoded with trailing equals sign padding removed.
+ pidk = Previous IDentity Key
+When a user has rekeyed their identity to change their master key, all websites still holding the
+previous identity key need to be updated to the current identity key. So, SQRL S4 identity storage
+retains up to four Previous Identity Unlock Keys (PIUK) so that the client may synthesize both this
+PIDK along with the Unlock Request Signature (URS) to allow websites to replace their obsolete
+SQRL identity key data with the new data. During one or more query commands, the client will
+present the server with the user's current IDK, a previous identity key, and its matching previous
+identity signature (PIDS). In this manner the SQRL client is able to search for any previous identity
+the server may have and to update the server to the current identity during a subsequent ident
+command.
+ suk = Server Unlock Key
+This SUK key is included in every client ident query when the immediately previous server reply did
+not have the 0x01 bit of its TIF flags set. The lack of TIF bit 0x01 indicates that the server does not
+recognize the client by its current identity key and signature. The server might not recognize the
+client's identity at all (neither TIF 0x01 or 0x02 bits are set) or it might recognize the client by its
+previous identity (TIF bit 0x02 set). In either case, the client must assert its current identity by
+providing the server with both this SUK and a corresponding VUK (see below). As required by the
+identity lock protocol, the server unlock key is a DHKA (Diffie-Hellman Key Agreement) public key
+generated by the client and then stored by the server and returned to the client with every reply.
+ vuk = Verify Unlock Key
+This VUK key is generated with and always accompanies the SUK key described above. As required
+by the identity lock protocol, the verify unlock key is a DHKA (Diffie-Hellman Key Agreement)
+public key generated by the client, stored by the server, and used by the web server to verify the
+unlock request signature (URS) provided by the client whenever it wishes to authorize any
+operation requiring the identity's RescueCode. The RescueCode, in turn, allows the client to
+transiently decrypt the Identity Unlock Key (IUK) which is required for the DHKA function with the
+client’s provided SUK to synthesize the unlock request signature.
+Version 1.07 December 2019
+- 10 -
+Client Secrets
+ ins = INdex Secret
+When the immediately previous server reply contained a Secret Index (sin=value) name & value
+parameter, the output of the user's identity key forming HMAC256 is passed through the EnHash
+function and used to key to a secondary HMAC256 which is used to hash the server's provided sin
+literal value without modification. The secondary HMAC's 256-bit output is base64url encoded and
+returned to the server as the value for this INS parameter. This allows servers to obtain user-tied
+secrets, typically for decryption, which they do not need to store.
+ pins = Previous INdex Secret
+Whenever the INS parameter, above, is being returned to the server, and if the user's identity also
+contains at least one previous identity key (PIDK), that previous identity key is used, as above, to
+also produce and include the matching PINS parameter and value. When more than one previous
+identity key exists, and while the server continues indicating that it does not identity the user by
+either of the two presented identity keys, the client will successively iterate through each of the
+previous identity keys, producing and returning synchronized PIDK and PINS name=value
+parameters.
+Client Signatures
+All client queries sent to the web server are signed using private keys matching one or more of the
+public keys included in the “client=” name=value list. The data signed are the two base64url
+encoded values of the “client=” and “server=” parameters with the “server=” value concatenated
+to the end of the “client=” value as described on page 4 above. Each of the signatures below,
+generated as a binary token, must be base64url encoded before being appended to their respective
+“name=” parameter.
+ ids = IDentity Signature
+This is the signature used to authenticate the contents of the query block sent to the web server.
+It serves to prove, to the server, that the client “owns” the identity expressed as their IDK by
+signing the client/server values block with its matching private key. The SQRL client synthesizes
+the site-specific private key, uses that to sign the concatenated values of the previously mentioned
+client and server values, base64url encodes the resulting signature, and sends the signature to the
+web server as the value of this IDS parameter. The web server verifies the signature using the
+accompanying IDK which must also match the value stored in the user's SQRL account association.
+ pids = Previous IDentity Signature
+As with the PIDK (previous identity key), one or more of these are sent (in successive queries if
+more than one until recognized) to the web server when a SQRL client has rekeyed its identity and
+thus changed its Identity Unlock Key (IUK). The client retains up to four previous identity unlock
+keys (PIUKs) to enable it to generate the PIDK and PIDS values. These will both be necessary for
+the web server to identify and authenticate a user by one of their previous, not-yet-updated,
+identities.
+ urs = Unlock Request Signature
+The unlock request signature provides proof to the web server that the SQRL client is in possession
+of the identity unlock key (IUK) for which the server provided its stored server unlock key (SUK).
+Version 1.07 December 2019
+- 11 -
+SQRL clients must provide this URS signature in three instances: When the client's identity has
+been rekeyed so that the server's stored identity can be updated and when the client is requesting
+to either enable a currently disabled account or remove the SQRL authentication information
+entirely.
+If the SQRL client does not currently have the decrypted Identity Unlock Key available it will not,
+and cannot, supply the matching URS value and it may prompt the user to provide the identity's
+secret RescueCode if needed. As noted it SQRL previous documents, SQRL's most security-critical
+(and uncommon) operations are protected by this additional signing requirement. The web server
+supplies its stored server unlock key (SUK) with any replies that might require the SQRL client to
+provide a URS signature. The web server uses its stored verify unlock key (VUK) to verify the
+client's signature. The use of the enable or remove commands to re-enable or remove a disabled
+identity, or the replacement of a previous identity key with the current identity key, must be
+accompanied by a valid unlock request signature.
+Server-to-Client Reply
+A remote web server provides data to a SQRL client through two different channels:
+1. A unique SQRL URL containing the required “nut=”, and an optional “x=” domain extension
+specifier.
+2. The HTTP response body to SQRL client queries. Any of the parameters shown below may be used,
+as required, in the server's replies to client queries.
+As we have previously seen, parameters are named with a simple name=value syntax. When
+appearing in a URL query tail, the name=value pairs must be URL-safe and ampersand-separated
+following standard HTTP GET query syntax. When returned by a web server in response to a client's
+query, the name=value pairs occupy the body of the reply, appearing one per line with each line
+(including the last line) terminated by a CRLF character pair.
+Note: To increase the clarity of the descriptions below, the equals signs have been set off with spaces,
+but spaces are never used in the SQRL protocol:
+Server Parameters
+ ver = 1[,n],[n-m]
+The server MUST indicate the set of protocol versions it understands, supports, and is willing to
+use. Moreover, the version specification MUST be the first name=value pair appearing in the
+server's argument list. The protocol version specification consists of an unordered comma-
+separated list of one or more integer version numbers and/or version ranges. The server and client
+both declare their supported version sets and use the highest version available from the overlap of
+their sets.
+ nut = base64url encoded opaque token
+The server's “nut” value has been discussed extensively previously. It is a never-repeating opaque
+cryptographically strong single-use nonce which may, at the server's discretion, contain reversibly
+encrypted data used to associate and maintain state. A unique nut MUST be included with every
+response to guarantee uniqueness and prevent reuse/replay and it MUST be removed from a valid
+nuts list after it has been returned and validated by the next client query, if any. As with all of
+SQRL's use of base64url encoding, any trailing equals signs used for padding must be removed.
+Version 1.07 December 2019
+- 14 -
+Also note that all SQRL clients MUST immediately terminate any connection and abort any
+authentication operation with any SQRL server which includes TIF bits not defined by the specified
+and agreed upon SQRL protocol version. Protocol extensions within SQRL v1.0 are fully supported
+with additional name=value pairs in the query and response payload. But TIF bits may not be used
+for such purpose.
+ qry = /query-path
+The SQRL client initially makes contact with the remote web server by issuing the query contained
+in the SQRL link URL. But subsequent interactions may be made to different web server objects at
+the same domain and port as specified by the initial SQRL URL. The “qry” parameter is required in
+every reply. It instructs the client what server object to query in its next query, if any. To mitigate
+the potential for tampering, this qry parameter only supplies the full path from the root ( / ) and
+the object, not the scheme, domain name, or port. The scheme, domain and optional port override
+may only be specified once, in the initial URL, and they cannot subsequently be changed and will
+always be taken from the initially submitted SQRL URL.
+ url = successful authentication browser redirection URL
+This parameter must be provided by the server in its response to any command, other than
+query, when the SQRL client includes the “opt=cps” (client provided session) option. The presence
+of “cps” from the client informs the web server that it MUST NOT authenticate the browser session
+upon successful authentication. Instead, the SQRL client will use the URL provided by the server to
+redirect the user’s waiting browser, with an HTTP 302 Found redirect, to an authenticated session.
+ suk = server unlock key
+As defined by the identity lock protocol, the SUK value is originally generated and provided to the
+server by the SQRL client when the client is creating a new identity association, or modifying an
+existing association with an update identity. The server retains this value as part of the client's
+identity and returns it to the client whenever it might be required by the client.
+This would include when the server identifies the user's previous identity, so that the client may
+update the server to the user's current identity, and also whenever the user's account is disabled,
+so that the client may have the option of either re-enabling the user's account or completely
+removing the user's identity. In these cases, the server's provision of the stored SUK value allows
+the client to then provide the identity unlock signature to either update the server's stored identity,
+re-enable a previously disabled account, or entirely remove the account from the server.
+The SUK key must also be returned to the client whenever the client has explicitly requested the
+SUK by including “suk” in its query “opt=” list.
+ can = optional cancellation browser redirection URL
+This optional value may be provided by the server in its response to any query to provide or
+replace any previously provided authentication cancel URL. If the user aborts the authentication in
+a “same-device” client provided session (CPS) authentication, the SQRL client will redirect the
+user's waiting browser to the URL most recently specified by this URL parameter. This allows the
+website’s server to “change its mind” about where it would like to send the user in the event of a
+cancellation.
+Version 1.07 December 2019
+- 17 -
+(unlock request signature), the SQRL server will immediately replace the previous identity with the
+new current identity.
+And, since the server NOW recognizes the client by its new CURRENT identity, it will reply with a TIF
+with the 0x01 bit set to ‘1’ and the 0x02 bit reset to ‘0’, thus confirming to the SQRL client that
+everything has gone as expected and the client’s new identity has been accepted and updated.
+If the client had no previous identities, or if it runs out of previous identities without the SQRL server
+ever acknowledging any of the client’s available identities, the client may finally issue an ident
+command to assert its current, not-yet-known, identity to the SQRL server. The server’s response to
+such an ident command may – or may not – immediately reflect the association with the newly
+presented identity. In other words, both 0x01 and 0x02 bits might be reset, since the client would still
+be unknown to the server at that time. Depending upon the circumstances, the server would probably
+then prompt the user, through their web browser session, whether they wish to associate their SQRL
+identity with a new or existing account on the website, and the server would take the appropriate
+action given the current identity information provided by the client.
+To be clear, the 0x01 bit, which indicates that the current identity is known to the server might be
+delayed until that becomes true, based upon subsequent interaction with the user.
+Transient Error Details
+SQRL servers vary in their handling of expired nuts due to implementation differences between
+servers. Some SQRL servers may encode sufficient information into an expired nut that a valid
+browser session binding can be decoded and reused. Other implementations may use the nut as a
+pointer to transient data that is removed with the nut’s expiration. In that case any previous browser
+session binding would be unrecoverable. These differences determine the server’s response to its
+receipt of an expired nut.
+In the first case, the server would return a TIF with the “Transient Error” bit 0x20 set and with a newly
+minted fresh nut that’s associated with the browser session for the previous expired nut. The receipt of
+the 0x20 TIF bit would instruct the client to reissue their previous query using the new nut, to which
+the client should expect success.
+In the second case, the server would also return a TIF with the “Transient Error” bit 0x20 set, and that
+reply would also offer a newly issued nut. However, since this second-case server cannot reconnect
+any expired nuts to any previous browser sessions, it will respond to this second query with a new nut
+and exactly the same error having the 0x20 TIF bit set.
+SQRL clients are always checking for a pair of identical error messages received in succession. If this
+should ever occur, the user must be informed that the web page they are logging into has expired and
+that they should refresh the page and retry their login. This page refresh will reestablish a new
+browser session and with its associated data structures and will allow the second-case server to
+succeed any subsequent SQRL client queries.
+Handling Superseded Identities
+Due to the independence of individual SQRL clients and SQRL’s deliberate eschewing of centralized
+coordination, an unlikely but possible situation can occur where a user’s previously superseded SQRL
+identity is used for authentication to a website where the user’s updated & current SQRL identity has
+been used and is known.
+As we know, websites autonomously update their SQRL identity information during any non-query
+client command whenever they are presented with an unknown current identity and a previous identity
+they recognize; the previous identity is replaced by the user’s new current identity.
+Version 1.07 December 2019
+- 18 -
+This presents a problem if a SQRL user rekeys their identity on one client but fails to share their new
+identity among their other devices. If such a user were to attempt to authenticate with a superseded
+identity to a website that was already aware of their new current identity, it would not recognize their
+previous (forgotten and discarded) identity and would offer to have them either create a new account
+or associate their SQRL identity with an existing account. Neither of these outcomes are ideal.
+The solution is for websites to maintain a durable list of every valid but superseded previous identity
+key (PIDK) they encounter, and to always check any current identity key (IDK) against this list before
+accepting that current identity and returning a TIF with the 0x01 (current ID match) bit set.
+In the event that any SQRL client attempts to authenticate using a current identity key (IDK) which is
+a member of the server’s superseded identity keys list, the server must immediately fail that client
+query by returning a TIF of 0x240. This has the 0x200 “Superseded Identity” bit and the 0x40
+“Command Failed” bits set.
+Upon receiving this failure code, all SQRL clients must present their users with a dialog explaining that
+they are using an old and obsolete SQRL identity which has been replaced by a newer rekeyed identity
+on another of their devices. They should immediately update this and another other SQRL client
+devices with the most recent identity from that other device.
+Version 1.07 December 2019
+- 19 -
+Client & Server Parameters on One Page
+Client-to-server query parameters
+EVERY client query MUST include the "server", "client" and "ids" parameters. Additional parameters
+MAY or MUST be included as described by the specification above.
+client= the base64url encoding of a name=value list of required and optional parameters:
+Required:
+ver= the SQRL protocol versions supported by the client – must be the first parameter.
+cmd= one command token specifying this query's command.
+idk= the ECC public key corresponding to the user's current identity.
+Optional:
+opt= a tilde-separated list of command-modifier options.
+btn= a single decimal digit indicating the user's reply to a server's "ask" parameter.
+pidk= the ECC public key corresponding to (one of) the user's previous identity(s).
+ins= the indexed secret produced upon request of the server.
+pins= the previous indexed secret produced upon request of the server.
+suk= the server unlock key corresponding to the user's current identity.
+vuk= the verify unlock key corresponding to the user's current identity.
+server= the base64url encoding of the server's initial SQRL URL or its subsequent response.
+ids= the current identity signature of all preceding non-signature data.
+pids= the previous identity signature of all preceding non-signature data.
+urs= the signature used to validate a RescueCode authentication.
+Server-to-client response parameters
+EVERY server response to a SQRL client's query MUST include all of the following name-value
+parameters:
+Required:
+ver= the SQRL protocol versions supported by the server – must be the first parameter.
+nut= a nonce to guarantee the uniqueness of every server reply.
+tif= the status condition code results of the client's query.
+qry= the URL /path to be used for the client's next query, if any.
+Optional:
+url= the URL /path to be used only upon successful (CPS) authentication.
+can= the URL /path used to redirect the browser upon user cancellation.
+sin= sent by the server to request the client's matching indexed secrets.
+suk= returned when requested or when the client may need to generate a URS signature.
+ask= returned in query command replies when the server wishes to prompt the user.
+???= anything else: The web server may include any additional name=value pair data it
+wishes to, beyond those values enumerated above. (For example, a ‘mac=’ name and
+value might provide a message authentication code to detect any changes in the
+returned parameters.) If present, any additional parameters will have no protocol
+meaning whatsoever to the SQRL client and they will be silently ignored. They will,
+however, be returned by the client in its subsequent query, and signed. A web server
+may use additional parameters to validate or help it maintain state between its replies
+and the client’s next query.
