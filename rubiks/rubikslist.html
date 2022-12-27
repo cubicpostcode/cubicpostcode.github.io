@@ -12,7 +12,23 @@ body {
 }
 </style>
 </head>
-<body>    
+<body>  
+    <script>
+      function updateRandomNumber() {
+        // Generate a random number between 1 and 10
+        var randomNumber = Math.floor(Math.random() * 10) + 1;
+
+        // Update the content of the div element with the new random number
+        document.getElementById('random-number').innerHTML = randomNumber;
+      }
+
+      // Update the random number every second
+      setInterval(updateRandomNumber, 1000);
+    </script>
+    
+    <br>
+    Random integer (1-10): <div id="random-number">0</div>
+    <br>
     <b> 
 rubikslist.cubicpostcode.com </b> #rubiksLIST #rubiksLIST_cubicpostcode_com
 <br><br>
@@ -42,7 +58,7 @@ List of the 10 Rubik's Cube Beginner Method Sequences:
     10) "Corner Placer *" - <b>R'D'RD</b>. 
       <br><br> 
       <u>
-Tip: Start by commiting these sequences to memory and being able to perform (with the agility of a great magician) any of these sequences (with eyes closed and without any verbalization or internal dialogue) generating a random integer in the range 1-10: random.org.
+Tip: Start by commiting these sequences to memory and being able to perform (with the agility of a great magician) any of these sequences (with eyes closed and without any verbalization or internal dialogue) generating a random integer in the range 1-10: <div id="random-number">0</div>.
       </u></p>
 </body>
 </html>
