@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+	      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
         <meta charset="utf-8" />
 		<title>Rubiks 3D</title>
     </head>
     <body>
+	      <div class="simple-keyboard"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+  <script>
+const Keyboard = window.SimpleKeyboard.default;
+
+const myKeyboard = new Keyboard({
+  onChange: input => onChange(input),
+  onKeyPress: button => onKeyPress(button)
+});
+
+function onChange(input) {
+  document.querySelector(".input").value = input;
+  console.log("Input changed", input);
+}
+
+function onKeyPress(button) {
+  console.log("Button pressed", button);
+}
+</script>
 		<div id="container"></div>
 		<div id="main">
 			<div id="scramble"></div>
