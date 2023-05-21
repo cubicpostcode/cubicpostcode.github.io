@@ -84,11 +84,12 @@
         function showPosition(position) {
             document.getElementById('lat').innerHTML = position.coords.latitude;
             document.getElementById('lon').innerHTML = position.coords.longitude;
-            document.getElementById('alt').innerHTML = position.coords.altitude;
+            document.getElementById('alt').innerHTML = 31415; // position.coords.altitude;
 
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            altitude = position.coords.altitude;
+            
+            altitude = 31415; //altitude = position.coords.altitude;
             
             showXYZAndCubeCode();
         }
