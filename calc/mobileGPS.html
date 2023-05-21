@@ -143,17 +143,6 @@
 
             }
 
-            function getN(latitude) {
-                var sinlatitude = Math.sin(latitude)
-                var denom = Math.sqrt(1 - ECCENTRICITY() * ECCENTRICITY() * sinlatitude * sinlatitude)
-                var N = RADIUS / denom
-                return N
-            }
-
-            function degrees(angle) {
-                return angle * (180 / Math.PI)
-            }
-
             var res = LLAToECEF(latitude, longitude, altitude);
 
             document.getElementById('x').innerHTML = res[0];
