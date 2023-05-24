@@ -1,0 +1,2061 @@
+förhandling << negotiation
+kontrakt << contract
+affär << business
+affär << deal
+beställning << order
+bokföring << accounting
+överordnad << superior
+företag << company
+bonus << bonus
+lön << salary
+lön << wage
+lön << salary
+lön << wage
+verkställande direktör << president
+försäljning << sale
+IT-avdelning << IT department
+affärsresa << business trip
+marknadsföring << marketing
+avdelning << department
+industri << industry
+radio << radio
+skriva ut << print
+publicera << publish
+broschyr << pamphlet
+roman << novel
+sända << transmit
+tidningsförlag << newspaper publisher
+rapport << report
+skicka << submit
+nyheter << news
+tidning << magazine
+information << information
+TV-kanal << TV station
+redigera << edit
+program << program
+program << broadcast
+sändning << program
+sändning << broadcast
+internet << Internet
+kanal << channel
+media << media
+station << station
+trycka << printing
+styrelserum << boardroom
+ordförande << chairman
+tolk << interpreter
+översättare << translator
+revisor << accountant
+advokat << lawyer
+humoristisk << humorous
+skämta << joke
+intryck << impression
+sätt att tänka << way of thinking
+protest << objection
+energisk << energetic
+diskussion << discussion
+viktig << important
+möte << meeting
+håller inte med << disagree
+upphålla << maintain
+byta << change
+bestämma sig << decide
+motsätta << oppose
+samtycka << agree
+annonsera << announce
+höra << hear
+hålla ett möte << hold a meeting
+godkänna << approve
+kritisera << criticize
+lägga fram << put forward
+stödja << support
+planera << plan
+tro << believe
+forskning << research
+begäran << request
+förklara << explain
+förhandla << negotiate
+plan << plan
+träffa << meet
+bearbeta << revise
+direktör << director
+fabrik << factory
+produktion << output
+arbetskraft << workforce
+anställd << employee
+material << material
+jordbruk << agriculture
+del << part
+maskin << machine
+cement << cement
+kol << coal
+gas << gas
+textil << textile
+elektricitet << electricity
+inmatning << input
+fiske << fishing
+turism << tourism
+exportera << export
+importera << import
+bil << car
+bil << automobile
+bil << car
+bil << automobile
+minska << decrease
+bensin << gasoline
+halsduk << scarf
+skärp << belt
+hatt << hat
+handske << glove
+armbandsur << wristwatch
+glasögon << eyeglasses
+glasögon << glasses
+glasögon << eyeglasses
+glasögon << glasses
+örhänge << earring
+solglasögon << sunglasses
+halsband << necklace
+klocka << watch
+paraply << umbrella
+galge << hanger
+tyg << cloth
+kappa << coat
+jacka << jacket
+rock << overcoat
+regnjacka << raincoat
+träningsoverall << sweat suit
+tjocktröja << sweater
+väst << vest
+jeans << jeans
+kläder << clothes
+skjorta << shirt
+byxor << pants
+klänning << dress
+långärmad << long-sleeved
+kortärmad << short-sleeved
+ficka << pocket
+knapp << button
+gummisnodd << elastic band
+ärm << sleeve
+krage << collar
+kläder << clothing
+T-shirt << T-shirt
+ta av sig << take off
+prova << try on
+sätta på sig << put on
+skära sig << clash
+tvätta kläder << wash clothes
+sy << sew
+laga << mend
+sticka << knit
+färga << dye
+fixa passform << fit a garment
+matcha << go with
+matcha << match
+matcha << go with
+matcha << match
+tvätta << wash
+kort << short
+mjuk << soft
+märke << brand
+storlek << size
+stil << style
+trendig << fashionable
+slapp << loose
+tajt << tight
+städat << neat
+silke << silk
+small (S) << small (S)
+medium (M) << medium
+Large (L) << Large (L)
+Extra Large (XL) << Extra Large (XL)
+handgjord << handmade
+bomull << cotton
+ull << wool
+linne << linen
+slips << necktie
+slips << tie
+slips << necktie
+slips << tie
+kostym << suit
+klänning << gown
+smoking << tuxedo
+sandaler << sandal
+sko << shoe
+strumpa << sock
+gymnastiksko << sneaker
+stövlar << boot
+toffel << slipper
+ring << ring
+guld << gold
+silver << silver
+smink << makeup
+läppstift << lipstick
+eyeliner << eyeliner
+rouge << blush
+nagellack << nail polish
+underkläder << underwear
+undertröja << undershirt
+pyjamas << pajamas
+behå << brassiere
+boxershorts << boxer shorts
+nattlinne << nightgown
+trosor << panties
+baddräkt << swimsuit
+blus << blouse
+kjol << skirt
+minikjol << mini-skirt
+dag << day
+vecka << week
+månad << month
+år << year
+högtid << holiday
+idag << today
+imorgon << tomorrow
+igår << yesterday
+i övermorgon << day after tomorrow
+Kalender << calendar
+förrgår << day before yesterday
+sekund << second
+timme << hour
+minut << minute
+förmiddag << AM
+middag << noon
+midnatt << midnight
+klockan ... << o'clock
+kvart i << quarter to (hour)
+halv << half past
+eftermiddag << PM
+klocka << clock
+kvart över << quarter after (hour)
+ljus << light
+svart << black
+brun << brown
+grå << gray
+vit << white
+guld << gold
+lila << purple
+röd << red
+grön << green
+blå << blue
+gul << yellow
+rosa << pink
+silver << silver
+beige << beige
+ljus << bright
+färg << color
+indigoblå << indigo
+orange << orange
+persika << peach
+mörk << dark
+ta emot << receive
+kan << can
+leta << search
+ta << take
+använda << use
+göra << do
+gå << go
+komma << come
+säga << say
+ringa << call
+skratta << laugh
+göra << make
+se << see
+hitta << find
+prata << talk
+ge << give
+vila << rest
+känna << feel
+rita << draw
+vill ha << want
+placera << put
+minnas << remember
+hålla i << hold
+avsluta << finish
+försöka << try
+börja << start
+mäta << measure
+fortsätta << keep
+bli << become
+hjälpa << help
+lära sig << learn
+att flytta << move
+vänta << wait
+frukta << fear
+likna << resemble
+respektera << respect
+tacka << thank
+älska << love
+behöva << need
+läsa << read
+stå << stand
+träffa på << see
+titta << watch
+missa << miss
+inträda << enter
+glad << happy
+ledsen << sad
+arg << angry
+långt << far
+liten << small
+bra << good
+vacker << beautiful
+svag << weak
+stark << strong
+ful << ugly
+rolig << funny
+svår << difficult
+lätt << easy
+dålig << bad
+ren << clean
+smutsig << dirty
+nära << near
+låg << low
+hög << high
+tråkig << boring
+spännande << exciting
+billig << cheap
+dyr << expensive
+upptagen << busy
+vänlig << kind
+läskig << scary
+kallt << cold
+intressant << interesting
+het << hot
+seriös << serious
+elak << mean
+uttråkad << bored
+trött << tired
+motbjudande << disgusting
+utsökt << delicious
+avslappnande << relaxing
+nöjd << satisfied
+lugn << calm
+varm << warm
+populär << popular
+irriterande << annoying
+bred << wide
+smal << narrow
+hård << hard
+lätt << light
+mörk << dark
+svalt << cool
+missnöjd << dissatisfied
+plågsam << painful
+obetydlig << insignificant
+hoppfull << hopeful
+cool << cool
+blyg << shy
+nervös << nervous
+exhalterad << excited
+generad << embarrassed
+djup << deep
+grund << shallow
+rik << rich
+fattig << poor
+känd << famous
+ledig << casual
+Trevligt att träffas. << Nice to meet you.
+Hur mår du? << How are you?
+Jag mår bra. << I'm good.
+Tack. << Thank you!
+Hur mycket är klockan? << What time is it?
+ja << yes
+Nej. << No.
+Ballt! << Awesome!
+Utsökt! << Delicious!
+Jag tycker om det. << I like it.
+Jag tycker inte om det. << I don't like it.
+Tack. << Thanks.
+Hjälp! << Help!
+Förlåt. << I'm sorry.
+Oroa dig inte. << Don't worry.
+Inga problem. << No problem.
+Ursäkta mig. << Excuse me.
+Det är ok. << It's okay.
+På riktigt? << Really?
+Jag är...(...). << I'm...(____).
+Snälla. << Please.
+Snälla, förlåt mig. << Please forgive me.
+Jag skulle vilja ha... << I'd like...
+Jag skulle vilja,,,(verb) << I'd like to...(verb).
+sant << True.
+falsk << False.
+skärm << monitor
+tangentbord << keyboard
+hörlurar << headphones
+skrivare << printer
+bärbar dator << laptop computer
+mus << mouse
+högtalare << speaker
+webbkamera << webcam
+mikrofon << microphone
+stationär dator << desktop computer
+sätta på << turn on
+stänga av << turn off
+äta ute << eat out
+ringa << call
+ringa << telephone
+ringa << telephone
+telefon << telephone
+plugga << study
+arbeta << work
+närvara << attend
+att e-maila << e-mail
+surfa << surf the internet
+laga mat << cook
+återvända << return
+bada << bathe
+sova << sleep
+slappna av << relax
+duscha << shower
+träna << exercise
+bad << bath
+vakna << wake up
+pendla << commute
+äta << eat
+borsta << brush
+tvätta << wash
+lämna << leave
+borsta tänder << brush one's teeth
+måndag << Monday
+tisdag << Tuesday
+onsdag << Wednesday
+torsdag << Thursday
+fredag << Friday
+lördag << Saturday
+söndag << Sunday
+framsida << front
+baksida << back
+öst << east
+väst << west
+norr << north
+söder << south
+utanför << outside
+inne << inside
+vänster << left
+höger << right
+pund << pound
+engelsk mil << mile
+fot << foot
+tum << inch
+liter << liter
+kilogram << kilogram
+centimeter << centimeter
+gram << gram
+meter << meter
+kilometer << kilometer
+kreditkort << credit card
+check << check
+mynt << coin
+pengar << money
+betalkort << debit card
+sedel << bill
+maj << May
+januari << January
+februari << February
+mars << March
+april << April
+juni << June
+juli << July
+augusti << August
+september << September
+oktober << October
+november << November
+december << December
+noll << zero
+ett << one
+två << two
+tre << three
+fyra << four
+fem << five
+sex << six
+sju << seven
+åtta << eight
+nio << nine
+tio << ten
+femhundra << five hundred
+niohundranittionio << nine hundred ninety nine
+etthundraett << one hundred one
+fyrahundra << four hundred
+åttahundra << eight hundred
+tvåhundra << two hundred
+trehundra << three hundred
+sexhundra << six hundred
+sjuhundra << seven hundred
+niohundra << nine hundred
+elva << eleven
+tolv << twelve
+tretton << thirteen
+fjorton << fourteen
+femton << fifteen
+sexton << sixteen
+sjutton << seventeen
+arton << eighteen
+nitton << nineteen
+tjugo << twenty
+tjugoett << twenty-one
+tjugotvå << twenty-two
+trettiotre << thirty-three
+fyrtiofyra << forty-four
+femtiofem << fifty-five
+sextiosex << sixty-six
+sjuttiosju << seventy-seven
+åttioåtta << eighty-eight
+nittionio << ninety-nine
+etthundra << one hundred
+ett tusen << one thousand
+tvåtusen << two thousand
+åttatusen << eight thousand
+tiotusen << ten thousand
+fyratusen << four thousand
+femtusen << five thousand
+tretusen << three thousand
+sextusen << six thousand
+sjutusen << seven thousand
+niotusen << nine thousand
+en miljard << one billion
+en biljon << one trillion
+etthundratusen << one hundred thousand
+en miljon << one million
+etthundramiljarder << one hundred billion
+tiomiljarder << ten billion
+etthundramiljoner << one hundred million
+ett hundra biljoner << one hundred trillion
+tiobiljoner << ten trillion
+första << first
+andra << second
+tredje << third
+fjärde << fourth
+femte << fifth
+sjätte << sixth
+sjunde << seventh
+nionde << ninth
+tionde << tenth
+åttonde << eighth
+rutig << checkered
+prickig << polka dot
+kritstrecksrandig << pin-striped
+prick << dot
+enfärgad << solid
+randig << striped
+skotskrutig << plaid
+vågig << wavy
+nyckel << key
+körkort << driver's license
+plånbok << wallet
+handväska << purse
+legitimation << identification
+varför << why
+hur << how
+när << when
+var << where
+vad << what
+vem << who
+vad för slags << what kind
+hur är läget? << What's up?
+Vad heter du? << What's your name?
+Vad har du för telefonnummer? << What's your phone number?
+Vad har du för e-mail adress? << What's your e-mail address?
+Hur gammal är du? << How old are you?
+Var kommer du ifrån? << Where are you from?
+Vem är det? << Who is that?
+Vad är det? << What is it?
+Var bor du? << Where do you live?
+rund << round
+stor << big
+tät << dense
+vidsträckt << vast
+kvadrat << square
+grov << coarse
+slät << fine
+tung << heavy
+lång << long
+kub << cube
+kvitto << receipt
+present << present
+kund << customer
+retunera << return
+köpa << buy
+kostnad << cost
+rabatt << discount
+rea << sale
+säljare << salesperson
+kontant << cash
+spendera pengar << spend money
+klädesaffär << clothing store
+varuhus << department store
+butik << boutique
+skoaffär << shoe store
+smyckesbutik << jewelry store
+centrum << mall
+mataffär << supermarket
+varuprov << sample
+shopping << shopping
+affär << store
+marknad << market
+pris << price
+kupong << coupon
+mittgång << aisle
+väska << bag
+kundvagn << shopping cart
+plastpåse << plastic bag
+dator << computer
+bärbar dator << laptop
+SMSa << text
+internetcafé << Internet cafe
+Wi-Fi << Wi-Fi
+trådlöst << wireless
+e-mail << e-mail
+sms << text message
+skype << Skype
+Yahoo! << Yahoo!
+iPhone << iPhone
+blogg << blog
+community << social networking site
+hotmail << Hotmail
+söktjänst << search engine
+internet anslutning << Internet access
+telefonlur << receiver
+fax << fax
+telefonautomat << public phone
+upptaget << busy
+IP telefon << IP phone
+mobiltelefon << cellular phone
+mobiltelefon << mobile phone
+mobiltelefon << cellular phone
+mobiltelefon << mobile phone
+lokalsamtal << local phone call
+ringa fel nummer << call a wrong number
+slå << dial
+svara << pick up
+telefonnummer << phone number
+operatör << operator
+långdistanssamtal << long-distance call
+kväll << evening
+morgon << morning
+dygnet runt << all day
+nattetid << nighttime
+dagtid << daytime
+efter << after
+hädanefter << from now on
+innan << before
+aldrig << never
+nu << now
+ofta << often
+vanligtvis << usually
+vinter << winter
+sommar << summer
+vår << spring
+höst << fall
+regn << rain
+snö << snow
+moln << cloud
+ösregn << heavy rain
+frysa << freeze
+översvämning << flood
+tyfon << typhoon
+väderleksrapport << weather report
+soligt << sunny
+regnigt << rainy
+regnbåge << rainbow
+blixt << lightning
+celsius << Celsius
+fahrenheit << Fahrenheit
+klar himmel << clear sky
+skur << shower
+duggregn << drizzle
+temperatur << temperature
+fuktigt << humid
+fuktighet << humidity
+vind << wind
+blåsigt << windy
+slask << sleet
+frosta << ice over
+åska << thunder
+kvavt << muggy
+dimma << fog
+åskväder << thunderstorm
+orkan << hurricane
+tornado << tornado
+molnigt << cloudy
+under fryspunkten << below freezing
+kylig vind << wind chill
+under noll << below zero
+klarna << clear up
+extrem hetta << extreme heat
+frost << frost
+blir molnigt << become cloudy
+is << ice
+hagel << hail
+cyklon << cyclone
+målning << painting
+konst << art
+teckning << drawing
+skulptur << sculpture
+komedi << comedy
+bok << book
+litteratur << literature
+novell << short story
+författare << writer
+författare << author
+författare << writer
+författare << author
+film << movie
+skådespelare << actor
+skådespelerska << actress
+regissör << director
+handling << story
+handling << plot
+pop musik << pop music
+sångare << singer
+sångare << singer
+sångerska << singer
+sångerska << singer
+musik << music
+musikinstrument << musical instrument
+opera << opera
+jazz << jazz
+rock'n'roll << rock 'n' roll
+klassisk musik << classical music
+rap musik << rap music
+band << band
+gitarr << guitar
+trumpet << trumpet
+fiol << violin
+piano << piano
+flöjt << flute
+trombon << trombone
+saxofon << saxophone
+trummor << drums
+munspel << harmonica
+keyboard << keyboard
+teater << theater
+musikal << musical
+fotografi << photo
+fotografi << photograph
+fotografi << photo
+fotografi << photograph
+fotografi << photography
+kamera << camera
+njuta << enjoy
+hungrig << hungry
+törstig << thirsty
+smaktillsats << condiment
+vitlök << garlic
+socker << sugar
+salt << salt
+vinäger << vinegar
+chili << chili pepper
+smör << butter
+stark sås << hot sauce
+ketchup << ketchup
+senap << mustard
+Tabasco << Tabasco sauce
+peppar << pepper
+ris << rice
+bröd << bread
+grönsak << vegetable
+fisk- och skaldjur << seafood
+fisk << fish
+biff << beef
+fläsk << pork
+kyckling << chicken
+lamm << lamb
+tårta << cake
+ägg << egg
+servera << serve
+blanda << mix
+hacka << chop
+mala << mince
+baka << bake
+grilla << grill
+förbereda << prepare
+steka under omrörning << stir-fry
+steka << fry
+rosta << roast
+skära << cut
+sautera << sauté
+koka << boil
+ånga << steam
+värma upp << reheat
+tillaga i mikrovågsugnen << microwave
+grilla << barbecue
+kaffe << coffee
+öl << beer
+whisky << whiskey
+kokande vatten << boiling water
+fruktjuice << fruit juice
+läsk << soda
+läsk << pop
+läsk << soda
+läsk << pop
+mjölk << milk
+is << ice
+svart té << black tea
+örtté << herb tea
+té << tea
+caffelatte << caffe latte
+vin << wine
+chockladdryck << cocoa
+läskedryck << soft drink
+juice << juice
+vatten << water
+alkohol << alcohol
+ätpinnar << chopsticks
+bestick << eating utensil
+sked << spoon
+gaffel << fork
+kniv << knife
+stekkniv << steak knife
+köttkniv << carving knife
+hamburgare << hamburger
+cheeseburgare << cheeseburger
+pizza << pizza
+varmkorv << hot dog
+salt << salty
+smak << taste
+söt << sweet
+bitter << bitter
+stark << spicy
+sur << sour
+smaka << taste
+vete << wheat
+tillagat ris << cooked rice
+korn << barley
+kött << meat
+sötsaker << sweets
+godis << candy
+nudel << noodle
+frukt << fruit
+aprikos << apricot
+banan << banana
+äpple << apple
+vindruva << grape
+vattenmelon << watermelon
+grapefrukt << grapefruit
+ananas << pineapple
+melon << melon
+tomat << tomato
+jordgubbe << strawberry
+fikon << fig
+plommon << plum
+körsbär << cherry
+blåbär << blueberry
+sviskon << prune
+mango << mango
+persika << peach
+citron << lemon
+hallon << raspberry
+tranbär << cranberry
+apelsin << orange
+ingefära << ginger
+olivolja << olive oil
+krydda << spice
+sås << sauce
+vegetabilisk olja << vegetable oil
+sesamolja << sesame oil
+ingrediens << ingredient
+mjöl << flour
+matolja << cooking oil
+lunch << lunch
+middag << dinner
+förrätt << appetizer
+varmrätt << entrée
+varmrätt << main course
+entré << entrée
+entré << main course
+hemlagat << home cooking
+tilltugg << snack
+nattmat << midnight snack
+mätt << full
+efterrätt << dessert
+rätter << course meal
+Buffé << buffet
+buffé << all-you-can-eat
+måltid << meal
+nöt << nut
+jordnöt << peanut
+cashewnöt << cashew nut
+dricks << tip
+servitris << waitress
+servitör << waiter
+hovmästare << maitre d'
+kock << chef
+meny << menu
+själv-servering << self-service
+vattenkanna << pitcher of water
+rökfritt << non-smoking
+rökning << smoking
+nota << bill
+beställa mat << order food
+snabbmat << fast food
+västerländsk mat << Western food
+Italiensk mat << Italian food
+Kinesisk mat << Chinese food
+etnisk mat << ethnic food
+restaurang << restaurant
+café << café
+café << coffee shop
+café << café
+café << coffee shop
+bar << bar
+räka << shrimp
+lax << salmon
+tonfisk << tuna
+krabba << crab
+hummer << lobster
+slev << ladle
+tandpetare << toothpick
+fat << dish
+tallrik << plate
+kopp << cup
+dricksglas << drinking glass
+kaffemugg << coffee mug
+tékopp << teacup
+kanna << pitcher
+tékanna << teapot
+vinglas << wine glass
+kaffekanna << coffee pot
+majs << corn
+potatis << potato
+sojaböna << soybean
+sötpotatis << sweet potato
+morot << carrot
+rova << turnip
+lök << onion
+svamp << mushroom
+sallad << lettuce
+gurka << cucumber
+blomkål << cauliflower
+kål << cabbage
+selleri << celery
+äggplanta << eggplant
+paprika << bell pepper
+broccoli << broccoli
+spenat << spinach
+böngrodd << bean sprout
+fot << foot
+ankel << ankle
+ben << leg
+huvud << head
+nacke << neck
+arm << arm
+armbåge << elbow
+handled << wrist
+hand << hand
+finger << finger
+muskel << muscle
+ben << bone
+ryggrad << backbone
+kropp << body
+mage << stomach
+knä << knee
+hud << skin
+blod << blood
+rygg << back
+bröst << chest
+dra << pull
+huka << squat
+gestikulera << gesture
+räcka upp handen << raise one's hand
+lyfta << lift up
+hänga << hang
+gräva << dig
+trycka << push
+klättra << climb
+skaka på huvudet << shake one's head
+stuka << sprain
+vrida << twist
+fånga << catch
+kroppsbyggnad << build
+hälsosam << healthy
+mager << skinny
+kort << short
+lång << tall
+smal << slim
+kroppstyp << body type
+figur << figure
+figur << frame
+kroppsbyggnad << figure
+kroppsbyggnad << frame
+tjock << thick
+smal << thin
+svettas << sweat
+nysa << sneeze
+saliv << saliva
+hicka << hiccup
+kissa << urinate
+fjärta << pass gas
+fisa << fart
+gråta << cry
+tår << tear
+finne << pimple
+svett << sweat
+hosta << cough
+att få (finnar) << break out
+defekera << defecate
+andas << breathe
+spotta << spit
+ansikte << face
+haka << chin
+öra << ear
+panna << forehead
+hår << hair
+blondt hår << blonde hair
+svart hår << black hair
+brunt hår << brown hair
+rött hår << red hair
+mun << mouth
+mustasch << mustache
+skägg << beard
+kind << cheek
+näsa << nose
+tand << tooth
+rynka << wrinkle
+ögonbryn << eyebrow
+ögonlock << eyelid
+öga << eye
+ögonfrans << eyelash
+ansiktshår << facial hair
+tunga << tongue
+smaklök << taste bud
+näsborre << nostril
+tänder << teeth
+läpp << lip
+lår << thigh
+vad << calf
+skinkor << buttocks
+tånagel << toenail
+häl << heel
+midja << waist
+knäskål << kneecap
+ljumske << groin
+akilleshäl << Achilles' heel
+axel << shoulder
+underarm << forearm
+tumme << thumb
+lillfinger << pinkie
+långfinger << middle finger
+pekfinger << index finger
+ringfinger << ring finger
+revben << rib
+mage << abdomen
+mage << belly
+buk << abdomen
+buk << belly
+ryggrad << spine
+njure << kidney
+skulderblad << shoulder blade
+tvål << soap
+sax << scissors
+bandage << bandage
+plasthandskar << disposable gloves
+pincett << tweezers
+plåster << adhesive bandage
+tejp << adhesive tape
+plåster << bandaid
+kroppstemperatur << body temperature
+ta temperaturen << take one's temperature
+operation << operation
+ta pulsen << take one's pulse
+akuten << emergency room
+ge en spruta << give an injection
+sjuksköterska << nurse
+läkare << medical doctor
+läkare << doctor
+doktor << medical doctor
+doktor << doctor
+patient << patient
+medicinsk historia << medical history
+försäkring << insurance
+röntgen << X-ray
+blodprov << blood test
+intravenös << intravenous
+sjukhus << hospital
+läkarmottagning << doctor's office
+termometer << thermometer
+nål << needle
+rakhyvel << shaving razor
+trasa << washcloth
+handduk << towel
+tandborste << toothbrush
+tandkräm << toothpaste
+schampo << shampoo
+balsam << conditioner
+deodorant << deodorant
+flytande tvål << liquid soap
+dusch << shower
+raka << shave
+kamma << comb
+ta ett bad << take a bath
+gurgla << gargle
+klippa << cut
+blåstorka << blow-dry
+infektion << infection
+sjuk << sick
+astma << asthma
+sjukdom << illness
+allergi << allergy
+influensa << flu
+förkylning << cold
+brännskada << burn
+skada << injury
+sår << cut
+bryta << break
+recept << prescription
+medicin << medicine
+hostmedicin << cough syrup
+alvedon << aspirin
+antibiotika << antibiotic
+vaccin << vaccine
+förkylningsmedicin << cold medicine
+smärta << pain
+utslag << rash
+hosta << cough
+huvudvärk << headache
+illamående << nausea
+utmattning << fatigue
+diarré << diarrhea
+klåda << itch
+symptom << symptom
+magont << stomachache
+feber << fever
+halsont << sore throat
+rinnande näsa << runny nose
+yr << dizzy
+nästäppa << stuffy nose
+fönster << window
+TV << television
+bokhylla << bookshelf
+säng << bed
+spegel << mirror
+byrå << dresser
+väckarklocka << alarm clock
+dörr << door
+fjärrkontroll << remote control
+skrivbord << desk
+möbel << furniture
+fotpall << footrest
+nattduksbord << nightstand
+soffbord << coffee table
+stol << chair
+soffa << sofa
+matbord << dinner table
+bord << table
+arbetsrum << study
+källare << basement
+sovrum << bedroom
+toalett << toilet
+kök << kitchen
+bakdörr << back door
+badrum << bathroom
+golv << floor
+vägg << wall
+tak << ceiling
+vardagsrum << living room
+matsal << dining room
+nedervåning << downstairs
+vind << attic
+garderob << closet
+hall << hallway
+trädgård << backyard
+dörröppning << doorway
+rum << room
+gräs << grass
+entré << entry
+trädgård << garden
+lägenhet << apartment
+hus << house
+balkong << balcony
+hem << home
+mikrovågsugn << microwave oven
+kylskåp << refrigerator
+dammsugare << vacuum cleaner
+tvättmaskin << washing machine
+DVD-spelare << DVD player
+fläkt << fan
+luftkonditionering << air conditioner
+luftkonditionering << air conditioner
+luftkonditionering << air conditioner
+luftkonditionering << air conditioner
+spis << stove
+mikrovågsugn << microwave
+mikrovågsugn << microwave oven
+mikrovågsugn << microwave
+elektrisk riskokare << electric rice cooker
+ugn << oven
+hårtork << hair dryer
+kontakt << electric plug
+videospelare << VCR
+skivspelare << record player
+diskmaskin << dishwasher
+elektriskt vägguttag << power outlet
+elektriskt vägguttag << power socket
+vägguttag << power outlet
+vägguttag << power socket
+lampa << lamp
+matta << carpet
+matta << mat
+väggklocka << wall clock
+köksbord << kitchen table
+gardin << curtain
+gungstol << rocking chair
+bord << table
+verktygslåda << toolbox
+måttband << tape measure
+vattpass << level
+skruv << screw
+skruvmejsel << screwdriver
+hammare << hammer
+såg << saw
+torka << wipe
+tvätta << clean
+torka << dry
+damma << dust
+dammsuga << vacuum
+sopa << sweep
+lägga undan << put away
+moppa << mop
+ta ut << take out
+glödlampa << light bulb
+batteri << battery
+toalettpapper << toilet paper
+tejp << Scotch tape
+soptunna << garbage pail
+ljus << candle
+pappersnäsduk << tissue
+tändare << lighter
+svamp << sponge
+askkopp << ashtray
+klädhängare << coat hanger
+flasköppnare << bottle opener
+konservöppnare << can opener
+tändsticka << match
+avfallscontainer << dumpster
+stekpanna << frying pan
+skärbräda << cutting board
+diskho << sink
+skål << bowl
+kanna << kettle
+kastrull << pot
+otillfredsställd << unsatisfied
+rädd << scared
+ogillar << dislike
+lillebror << younger brother
+storebror << older brother
+lillasyster << younger sister
+storasyster << older sister
+mormor (mother's mother), farmor (father's mother) << grandmother
+morfar (mother's father), farfar (father's father) << grandfather
+make << husband
+fru << wife
+son << son
+dotter << daughter
+chef << boss
+chef << boss
+chef << boss
+chef << boss
+Herr << Mr.
+fru << Mrs.
+kollega << colleague
+klasskamrat << classmate
+kvinna << woman
+man << man
+flickvän << girlfriend
+pojkvän << boyfriend
+partner << partner
+barn << child
+granne << neighbor
+ungdom << youth
+äldre << elderly
+vän << friend
+vuxen << adult
+bäbis << baby
+pensionär << senior citizen
+flicka << girl
+pojke << boy
+morfar << grandfather
+farfar << grandfather
+farmor << grandmother
+mormor << grandmother
+rädd << afraid
+upprörd << upset
+ensam << lonely
+oroa sig << worry
+nervös << anxious
+nervös << nervous
+nervös << anxious
+stolt << proud
+gilla << like
+intresserad << interested
+avslappnad << relaxed
+kort stubin << short-tempered
+artig << polite
+dryg << overbearing
+sträng << strict
+enastående << outstanding
+underbar << great
+öppen << open
+klipsk << clever
+anmärkningsvärd << remarkable
+livlig << lively
+listig << cunning
+listig << sly
+slug << cunning
+slug << sly
+aktiv << active
+ärlig << honest
+varm << warm
+fågel << bird
+syrsa << cricket
+hamster << hamster
+hund << dog
+katt << cat
+häst << horse
+fisk << fish
+hyresvärd << landlord
+sovsal << dormitory
+lägenhetsbyggnad << apartment building
+storstad << city
+bondgård << farm
+landet << country
+by << village
+stad << town
+förort << suburb
+groda << frog
+ödla << newt
+emu << emu
+näbbdjur << platypus
+känguru << kangaroo
+koala << koala
+vombat << wombat
+lejon << lion
+gepard << cheetah
+jaguar << jaguar
+tiger << tiger
+lejoninna << lioness
+ko << cow
+gris << pig
+får << sheep
+get << goat
+kyckling << chicken
+uggla << owl
+tvättbjörn << raccoon
+bäver << beaver
+örn << eagle
+att bära << bear
+hjort << deer
+buffel << buffalo
+varg << wolf
+räv << fox
+gorilla << gorilla
+vildsvin << wild boar
+fladdermus << bat
+myrslok << anteater
+schimpans << chimpanzee
+elefant << elephant
+giraff << giraffe
+zebra << zebra
+apa << monkey
+noshörning << rhinoceros
+tupp << rooster
+kalkon << turkey
+duva << pigeon
+anka << duck
+kråka << crow
+vaktel << quail
+gam << vulture
+påfågel << peacock
+trana << crane
+svan << swan
+fiskmås << seagull
+kackerlacka << cockroach
+mygga << mosquito
+bi << bee
+fluga << fly
+knott << gnat
+spindel << spider
+myra << ant
+skalbagge << beetle
+cikada << cicada
+insekt << bug
+eldfluga << firefly
+larv << inchworm
+nyckelpiga << ladybug
+mask << worm
+fjärilslarv << caterpillar
+kulle << hill
+skärgård << archipelago
+fastland << mainland
+berg << mountain
+strand << beach
+bergskedja << mountain range
+regnskog << rain forest
+ö << island
+skog << forest
+flod << river
+damm << pond
+träsk << marsh
+hav << ocean
+sund << strait
+kust << seaside
+sjö << lake
+fält << field
+grässlätt << grassland
+ödemark << wasteland
+himmel << sky
+vattenfall << waterfall
+öken << desert
+jord << soil
+jord << dirt
+sten << rock
+ros << rose
+blomma << flower
+lilja << lily
+solros << sunflower
+maskros << dandelion
+mus << mouse
+kanin << rabbit
+lamm << lamb
+säl << seal
+bläckfisk << octopus
+haj << shark
+val << whale
+delfin << dolphin
+sjöborre << urchin
+pälssäl << fur seal
+hummer << lobster
+krabba << crab
+rocka << stingray
+bläckfisk << squid
+manet << jellyfish
+torka << drought
+tsunami << tsunami
+lavin << avalanche
+eld << fire
+jordbävning << earthquake
+sandstorm << sandstorm
+löv << leaf
+blomma << bloom
+vissna << wilt
+gren << branch
+träd << tree
+buske << bush
+frö << seed
+ogräs << weed
+orm << snake
+sköldpadda << turtle
+krokodil << crocodile
+ödla << lizard
+alligator << alligator
+ek << oak tree
+lönn << maple tree
+rot << root
+tall << pine tree
+cederträd << cedar tree
+vide << willow tree
+varm << hot
+sol << sun
+väder << weather
+kall << cold
+grad << degree
+åska << thunderstorm
+akvarium << aquarium
+smuggelgods << contraband
+karantän << quarantine
+tull << customs
+deklarationspapper << declaration form
+böter << fine
+illegal << illegal
+taxfree << tax-free
+passerkort << entry card
+återinresetillstånd << re-entry permit
+nationalitet << nationality
+visum << visa
+pass << passport
+inspektera << inspect
+konfiskera << confiscate
+deklarera << declare
+betala skatt << pay taxes
+fylla i << fill out
+hälsa på släkt << visit relatives
+sedel << small bill
+växla << convert
+växla << change
+växla << change
+växla << convert
+växla << change
+växla << change
+växla << convert
+växla << change
+växla << change
+växelkurs << exchange rate
+valutaväxling << foreign exchange
+resecheck << traveler's check
+japanska yen << Japanese Yen
+euro << Euro
+brittisk pund << British Pound
+amerikanska dollar << United States Dollar
+valuta << currency
+bank << bank
+check << check
+spänning << suspense
+tecknad serie << cartoon
+animation << animation
+film << film
+film << movie
+film << film
+deckare << mystery
+romantisk komedi << romantic comedy
+drama << drama
+uppträdande << performance
+dokumentär << documentary
+teater << stage play
+röstskådespelare << voice actor
+stjärna << star
+ljudbok << audiobook
+tv-spel << video game
+tv-program << TV show
+springa << run
+hoppa << jump
+sparka << kick
+jogging << jogging
+motion << exercise
+flygvärdinna << flight attendant
+säte << seat
+ekonomiklass << economy class
+flyg << flight
+bagage << luggage
+boardingpass << boarding pass
+avgångsgate << departure gate
+avgång << departure
+ankomst << arrival
+flightnummer << flight number
+schack << chess
+poker << poker
+kalligrafi << calligraphy
+dansa << dance
+att sjunga en sång << sing a song
+spela ett instrument << play a musical instrument
+rockmusik << rock music
+ta en bild << take a picture
+surfa på nätet << surf the net
+samla frimärken << collect stamps
+frimärke << stamp
+skridskoåkning << ice skating
+språk << language
+kampsport << martial arts
+fiska << fish
+spela schack << play chess
+spela poker << play poker
+njuta av en hobby << enjoy a hobby
+träna << work out
+styrketräning << exercise
+styrketräning << work out
+resa << traveling
+motionering << exercising
+läsning << reading
+spelkort << playing cards
+lobby << lobby
+enkelsäng << single bed
+dubbelsäng << double bed
+väckartjänst << wake-up service
+svit << suite
+inget ledigt << no vacancy
+rumsbetjäning << room service
+hotell << hotel
+reception << front desk
+lounge << lounge
+tvättjänst << laundry service
+checka in << sign in
+checka in << check in
+checka in << sign in
+checka in << check in
+elektronisk nyckel << electronic key
+checka ut << check out
+rumsnummer << room number
+rumsnyckel << room key
+reservation << reservation
+telefonväckning << wake-up call
+ledig plats << vacancy
+sport << sports
+park << park
+lekpark << playground
+bassäng << pool
+picknick << picnic
+blomsterträdgård << flower garden
+välkomna << welcome
+Känn dig som hemma. << Make yourself at home.
+Mitt namn är... << My name is…
+Hej. << Hi.
+Förlåt att du fick vänta << Sorry to keep you waiting.
+Hur har du haft det? << How have you been?
+Det här är till dig. << This is for you.
+knacka << knock
+Varsågod << You're welcome.
+det var länge sedan << Long time no see.
+Det här är (personens namn) << This is (person's name).
+professionell atlet << professional athlete
+vinnare << winner
+förlorare << loser
+olympiska spelen << Olympics
+världskupp << World Cup
+mästare << champion
+stadium << stadium
+heja << cheer
+semi-final << semi-final
+tävling << competition
+match << game
+förlora << lose
+vinna << win
+mästerskapstävling << championship contest
+lag << team
+atlet << athlete
+spelare << player
+manager << manager
+mixed martial arts << mixed martial arts
+pingis << ping pong
+gymnastik << gymnastics
+löpning << running
+simning << swimming
+ridning << horseback riding
+skidåkning << skiing
+friidrott << track and field
+tennis << tennis
+badminton << badminton
+maraton << marathon
+golf << golf
+boxning << boxing
+cykling << cycling
+bilsport << auto racing
+baseboll << baseball
+ishockey << ice hockey
+volleyboll << volleyball
+basket << basketball
+fotboll << soccer
+amerikansk fotboll << football
+fotboll << football
+fråga << question
+bokstav << letter
+elev << student
+lärare << teacher
+manus << script
+verb << verb
+substantiv << noun
+karaktär << character
+adjektiv << adjective
+läsa högt << read aloud
+upprepa << repeat
+lektion << lesson
+engelska << English
+felaktig << incorrect
+korrekt << correct
+skriftlig uppsats << written composition
+rätta << correct
+biljett << ticket
+guide << guide
+guide << tour guide
+guide << guide
+guide << tour guide
+turist << tourist
+reseplan << itinerary
+guidebok << guidebook
+turistbuss << tour bus
+besöka << tour
+tempel << temple
+moské << mosque
+kyrka << church
+staty << statue
+palats << palace
+utgång << exit
+vägbeskrivning << directions
+turistattraktion << tourist attraction
+karta << map
+arrangera << arrange
+resväska << suitcase
+resebyrå << travel agency
+ingång << entrance
+gå på sightseeing << go sightseeing
+gå på sightseeing << sightsee
+turista << go sightseeing
+turista << sightsee
+följa << accompany
+agenda << agenda
+djurpark << zoo
+läxa << homework
+diktamen << dictation
+whiteboard << whiteboard
+svarta tavlan << blackboard
+projektor << projector
+prov << test
+prov << quiz
+penna << pen
+anteckningsblock << notebook
+blyertspenna << pencil
+sudd << eraser
+föreläsning << lecture
+klass << class
+textbok << textbook
+problem << problem
+krita << chalk
+papper << paper
+tuschpenna << marker
+ordbok << dictionary
+klassrum << classroom
+skola << school
+stol << school chair
+skolbänk << school desk
+sen << late
+närvara på lektioner << attend
+närvara på lektioner << attend
+närvara << attend
+anlända << arrive
+gå på föreläsning << attend a lecture
+svara << answer
+undervisa << teach
+ta ett prov << take a test
+fråga << ask
+vara sen << be late
+forma en mening << make a sentence
+stänga << close
+understrycka << underline
+sudda << erase
+öppna << open
+lyssna << listen
+klara ett prov << pass a test
+frånvarande << absent
+Långsammare, tack << Slower/ please.
+Jag förstår inte. << I don't understand.
+En gång till, tack. << Once again/ please.
+Det är svårt. << It's difficult.
+butiksbiträde << clerk
+poliskonstapel << police officer
+poliskonstapel << policeman
+polisman << police officer
+polisman << policeman
+kontorsarbetare << office worker
+bonde << farmer
+kock << cook
+hemmafru << housewife
+hemmafru << homemaker
+hemmafru << housewife
+hemmafru << homemaker
+fabriksarbetare << factory worker
+ingenjör << engineer
+brandman << firefighter
+sekreterare << secretary
+föreståndare << manager
+företagsarbetare << company worker
+affärsman << businessman
+professor << professor
+programmerare << programmer
+försäljare << salesman
+bankir << banker
+designer << designer
+konstnär << artist
+soldat << soldier
+entreprenör << entrepreneur
+byggnadsarbetare << construction worker
+mekaniker << mechanic
+kontor << office
+medarbetare << coworker
+dokument << document
+skrivbord << desk
+fax << fax machine
+kopiator << copy machine
+router << router
+kuvert << envelope
+DVD << DVD
+häftstift << staple
+häftapparat << stapler
+gem << paper clip
+CD << CD
+mapp << folder
+grundskola << elementary school
+mellanstadium << middle school
+gymnasie << high school
+universitet << university
+högskola << college
+undervisningsavgift << tuition fee
+bibliotek << library
+gym << gym
+skolår << school year
+lov << school holiday
+semester << vacation
+sommarlov << summer vacation
+sommarskola << summer school
+slutexamen << final
+avdelning << department
+rektor << principal
+ryggsäck << backpack
+häftstift << tack
+kulspetspenna << ballpoint pen
+stiftpenna << mechanical pencil
+linjal << ruler
+bly << lead
+lim << glue
+blyertsstift << pencil lead
+avsluta arbetet << finish work
+företagsamhet << enterprise
+tilldela << assign
+övertid << overtime
+underordnad << subordinate
+övervaka << supervise
+skift << shift
+gå i pension << retire
+översätta << translate
+alfabet << alphabet
+ord << word
+mening << sentence
+lingvistik << linguistics
+fras << phrase
+födelsedag << birthday
+examen << graduation
+befordran << promotion
+årsdag << anniversary
+begravning << funeral
+resa << travel
+ta examen << graduate
+bröllop << wedding
+flytta << move
+född << be born
+få ett jobb << get a job
+dö << die
+jobb << job
+födelse << birth
+förlova << engage
+gifta << marry
+festival << festival
+ceremoni << ceremony
+religion << religion
+islam << Islam
+protestantism << Protestantism
+katolicism << Catholicism
+hinduism << Hinduism
+buddhism << Buddhism
+Taoism << Taoism
+bibel << Bible
+koran << Quran
+präst << priest
+judendom << Judaism
+historia << history
+geografi << geography
+politik << politics
+biologi << biology
+kemi << chemistry
+fysik << physics
+ekonomi << economics
+datavetenskap << computer science
+medicin << medicine
+utbildning << education
+språk << language
+jordvetenskap << earth science
+vetenskap << science
+sociologi << sociology
+matematik << math
+ekonomi << economy
+juridik << law
+Stilla Havet << Pacific Ocean
+Atlanten << Atlantic Ocean
+Norra ishavet << Arctic Ocean
+Indiska Oceanen << Indian Ocean
+Antarktiska oceanen << Southern Ocean
+Bryssel << Brussels
+Mexiko City << Mexico City
+Madrid << Madrid
+New Dehli << New Delhi
+Tokyo << Tokyo
+Peking << Beijing
+London << London
+Washington D.C << Washington D.C.
+Toronto << Toronto
+Paris << Paris
+Sydney << Sydney
+Bangkok << Bangkok
+Berlin << Berlin
+Seoul << Seoul
+Los Angeles << Los Angeles
+New York << New York
+Rom << Rome
+Dubai << Dubai
+Moskva << Moscow
+Australien << Australia
+Antarktis << Antarctica
+Asien << Asia
+Afrika << Africa
+Europa << Europe
+Nordamerika << North America
+Sydamerika << South America
+Kina << China
+Amerikas Förenta Stater << United States of America
+Indien << India
+Frankrike << France
+England << England
+Kanada << Canada
+Italien << Italy
+Ryssland << Russia
+Japan << Japan
+Sydkorea << South Korea
+Brasilien << Brazil
+Portugal << Portugal
+Spanien << Spain
+Mexiko << Mexico
+Argentina << Argentina
+Egypten << Egypt
+Singapore << Singapore
+Australien << Australia
+första klass << first class
+flygplan << airplane
+säkerhetsbälte << seat belt
+stolsnummer << seat number
+kudde << pillow
+flytväst << flotation device
+livväst << life jacket
+tidsskillnad << time difference
+åksjuk << motion sickness
+filt << blanket
+spypåse << sick bag
+hörlurar << earphones
+hörlurar << earphones
+hörlurar << headphones
+kabin << cabin
+förvaringslucka << overhead storage compartment
+nödutgång << emergency exit
+gångsäte << aisle seat
+fönstersäte << window seat
+pilot << pilot
+frakt << freight
+terminal << terminal
+avboka << cancel
+valutaväxling << currency exchange
+bagagehämtning << luggage pickup
+flygbiljett << plane ticket
+gå ombord << board
+gate << boarding gate
+bekräfta << confirm
+försenat << delayed
+resevera << reserve
+lyfta << take off
+landa << land
+tax-free << duty-free
+hangar << hangar
+postkontor << post office
+närbutik << convenience store
+polisstation << police station
+apotek << pharmacy
+bageri << bakery
+biograf << movie theater
+hyra << rent
+våning << floor
+brandutgång << fire escape
+hiss << elevator
+torn << tower
+byggnad << building
+vice värd << superintendent
+skyskrapa << skyscraper
+rulltrappa << escalator
+trädgård << yard
+brevlåda << mailbox
+brevpapper << stationery
+skriva ett brev << write a letter
+paket << parcel
+adress << address
+posta ett brev << post a letter
+expressbrev << express letter
+expressbrev << express mail
+expresspost << express letter
+expresspost << express mail
+auktoriserad mail << certified mail
+mottagare << recipient
+varumottagare << consignee
+flygpost << airmail
+frimärke << stamp on a letter
+frimärken på ett brev << stamp
+frimärken på ett brev << stamp on a letter
+brevbärare << mailman
+ge tillbaka << return
+post << mail
+brev << letter
+försegla << seal
+tunnelbana << subway
+tåg << train
+buss << bus
+spårvagn << trolley car
+biljettpris << fare
+busshållplats << bus stop
+hörn << corner
+trottoar << sidewalk
+högersväng << right turn
+vänstersväng << left turn
+korsning << intersection
+korsning << crossroad
+korsning << intersection
+korsning << crossroad
+bro << overpass
+sväng runt hörnet << turn a corner
+fullpackat << crowded
+bro << bridge
+trafikstockning << traffic jam
+rondell << roundabout
+rödljus << red light
+stoppskylt << stop sign
+hastighetsbegränsning << speed limit
+motorväg << highway
+väg << road
+gata << street
+trafikljus << traffic light
+svänga << turn
+enkelriktat << one way
+parkera << park
+torg << square
+brogång << overhead walkway
+skylt << sign
+biljett << ticket
+biljett << ticket
+biljett << ticket
+rundresa << roundtrip
+biljettfönster << ticket window
+bagagekontroll << luggage check
+expresståg << express train
+lokaltåg << local train
+tidtabell << timetable
+biljettkontroll << ticket inspection
+spärr << ticket gate
+snabbtåg << bullet train
+perrong << platform
+tågnummer << train number
+konduktör << conductor
+tågspår << train track
+resturangvagn << dining car
+handikapplats << handicapped seating
+hålla i sig << hold onto the handrail
+offra sin plats << give up a seat
+väntrum << waiting room
+hållplats << stop
+tågstation << train station
+biljettautomat << ticket machine
+biljettstånd << ticket booth
+åka << ride
+färja << ferry
+byta << transfer
+betala kontant << pay money
+förare << driver
+tunnelbana << metro
+tunnelbana << subway
+tunnelbana << metro
+taxi << taxi
+cykel << bicycle
+monorail << monorail
+passagerare << passenger
+körkort << license
+motorcykel << motorbike
+motorcykel << motorcycle
+moped << scooter
+linbana << cable car
+fordon << vehicle
+båt << boat
+helikopter << helicopter
+lastbil << truck
+moped << moped
+stiga in i en bil << get in a car
