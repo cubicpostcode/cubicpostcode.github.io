@@ -27,9 +27,6 @@ img{
 	}
 	#divxsmall{
 	    font-size: x-small;
-	-webkit-text-fill-color: black;
-        -webkit-text-stroke-color: #12D2FF;
-         -webkit-text-stroke-width: 2.00px; 
 	}
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 		display: block;
