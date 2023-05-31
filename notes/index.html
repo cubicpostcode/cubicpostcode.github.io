@@ -27,11 +27,10 @@
       var audioElement = document.getElementById('audioElement');
       audioElement.src = audioFiles[audioIndex];
       audioElement.play();
-
-      audioElement.addEventListener('ended', function() {
-        playRandomAudio();
-      });
     }
+
+    // Attach event listener once when the page loads
+    document.getElementById('audioElement').addEventListener('ended', playRandomAudio);
 
     playRandomAudio();
 </script>
