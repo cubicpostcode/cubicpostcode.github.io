@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>(3,4,5) Pattern</title>
+</head>
+<body>
+
+  <audio id="audioElement" controls autoplay></audio>
+<script>
+    var audioFiles = [
+      'note40.mp3',
+      'note41.mp3',
+      'note42.mp3',
+      'note43.mp3',
+      'note44.mp3',
+      'note45.mp3',
+      'note46.mp3',
+      'note47.mp3',
+      'note48.mp3',
+      'note49.mp3',
+      'note50.mp3',
+      'note51.mp3'
+    ];
+
+    function playRandomAudio() {
+      var audioIndex = Math.floor(Math.random() * audioFiles.length);
+      var audioElement = document.getElementById('audioElement');
+      audioElement.src = audioFiles[audioIndex];
+      audioElement.play();
+
+      audioElement.addEventListener('ended', function() {
+        playRandomAudio();
+      });
+    }
+
+    playRandomAudio();
+
+function display_ct7() {
+  var date = new Date();
+  var SinceMidnight = ((date.getHours() * 3600) + (date.getMinutes() * 60) + date.getSeconds()) + (date.getTimezoneOffset() * 60);
+
+  var booloffON = (SinceMidnight % 27) % 2 === 1 ? 1 : 0;
+
+  document.body.style.background = booloffON === 1 ? "white" : "black";
+
+  setTimeout(display_ct7, 1000);
+}
+
+display_ct7();
+</script>
+</body>
+</html>
