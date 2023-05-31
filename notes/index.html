@@ -33,6 +33,18 @@
     document.getElementById('audioElement').addEventListener('ended', playRandomAudio);
 
     playRandomAudio();
+  function display_ct7() {
+  var date = new Date();
+  var SinceMidnight = ((date.getHours() * 3600) + (date.getMinutes() * 60) + date.getSeconds()) + (date.getTimezoneOffset() * 60);
+
+  var booloffON = (SinceMidnight % 27) % 2 === 1 ? 1 : 0;
+
+  document.body.style.background = booloffON === 1 ? "white" : "black";
+
+  setTimeout(display_ct7, 1000);
+}
+
+display_ct7();
 </script>
 </body>
 </html>
