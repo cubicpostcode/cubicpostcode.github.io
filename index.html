@@ -28,18 +28,28 @@
             max-width: 1380px;
             margin: 0 auto;
         }
-        .btns-wrap li{
-            list-style: none;
-            background: #28a0f9;
-            color: #fff;
-            display: inline-block;
-            padding: 5px 5px;
-            border-radius: 10px;
-            font-size: 100%;
-            margin: 0 15px 15px;
-            font-family: 'Noto Sans', sans-serif;
-            min-width: 300px;
-            text-align: center;
+        
+     .btns-wrap li {
+      display: inline-block;
+      background: #28a0f9;
+      color: #fff;   
+      min-width: 100px;
+      max-width: 100px;
+      width: 100%;
+      margin: 0 15px;
+      font-size: 100%;
+      text-align: center;
+      padding: 5px 5px;
+      border-radius: 10px;   
+      font-family: 'Noto Sans', sans-serif;
+      }
+        
+        @media screen and (max-width: 767px) {
+          .btns-wrap li {
+            min-width: 75px;
+            max-width: 75px;
+            width: 100%;
+          }
         }
         .btns-wrap a{
             color: inherit;
