@@ -38,47 +38,6 @@
 
 display_c7();
 
-var boolfullscreen = 0;
-function toggleFullscreen() {
-        if (boolfullscreen == 0)  
-		{openFullscreen();
-		 boolfullscreen = !boolfullscreen;}
-        else
-		{closeFullscreen();
-		 boolfullscreen = !boolfullscreen;}
-
-function openFullscreen() {
-   document.getElementById("HideCursor").style.cursor="none";
-   document.getElementById("newpost").style.opacity="0";
-  if (document.requestFullscreen) {
-    document.requestFullscreen();
-  } else if (document.webkitRequestFullscreen) { /* Safari */
-    document.webkitRequestFullscreen();
-  } else if (document.msRequestFullscreen) { /* IE11 */
-    document.msRequestFullscreen();
-  }
- }
-
-function closeFullscreen() {
-   document.getElementById("HideCursor").style.cursor="auto";
-   document.getElementById("newpost").style.opacity="1";
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) { /* Safari */
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) { /* IE11 */
-    document.msExitFullscreen();
-  }
- }
-
-}
-	
-document.addEventListener('keydown', (e) => {
-    if (e.code === "Space") {
-        toggleFullscreen();
-    }
-});	
-
 function display_ct7() {
 		const monthNames = ["January", "February", "March", "April", "May", "June",
 		  "July", "August", "September", "October", "November", "December"];
@@ -146,17 +105,9 @@ function display_ct7() {
 
 	if (booloffON == 1) {
 		document.body.style.background = "white";
-		document.getElementById("MyClockDisplay").style.color = 'black';
-		document.getElementById("MyId2").style.color = 'black';
-		document.getElementById("MyId3").style.color = 'black';
-		document.getElementById("blink_text").style.color = 'black';
 		}
 	else {
 		document.body.style.background = "black";
-		document.getElementById("MyClockDisplay").style.color = 'white';
-		document.getElementById("MyId2").style.color = 'white';
-		document.getElementById("MyId3").style.color = 'white';
-		document.getElementById("blink_text").style.color = 'white';
 		};
 
 	display_c7();
