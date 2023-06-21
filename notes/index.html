@@ -1,13 +1,21 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>(3,4,5) Pattern</title>
-</head>
-<body>
-  <audio id="audioElement" controls autoplay></audio>
-<script>
+<!doctype html> 
+<html> 
+<head> 	
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>(3,4,5) Pattern</title> 
+	<style> 
+		body { 
+    		background: #000000; 
+		}
+	</style> 
+</head> 
+
+<body>  
+  <audio id="audioElement" controls autoplay></audio>	
+<script>	
+
+
     var audioFiles = [
       'note40.mp3',
       'note41.mp3',
@@ -34,7 +42,6 @@
     document.getElementById('audioElement').addEventListener('ended', playRandomAudio);
 
     playRandomAudio();
-
 
 display_c7();
 
@@ -82,6 +89,26 @@ function display_ct7() {
 	if ((SinceMidnight % 27 == 25)) {booloffON = 1;};
 	if ((SinceMidnight % 27 == 26)) {booloffON = 0;};
 
+	var ampm = x.getHours( ) >= 12 ? ' PM' : ' AM';
+	hours = x.getHours( ) % 12;
+	hours = hours ? hours : 12;
+	hours=hours.toString().length==1? 0+hours.toString() : hours;
+
+	var minutes=x.getMinutes().toString();
+	minutes=minutes.length==1 ? 0+minutes : minutes;
+
+	var seconds=x.getSeconds().toString();
+	seconds=seconds.length==1 ? 0+seconds : seconds;
+
+	var month=monthNames[x.getMonth()];
+
+	var dt=x.getDate().toString();
+	dt=dt.length==1 ? 0+dt : dt;
+
+	var x1="Date: " + dt + "/" + month + "/" + x.getFullYear(); 
+	x1 = x1 + " - Time: " +  hours + ":" +  minutes + ":" +  seconds + " " + ampm ;
+	
+
 	if (booloffON == 1) {
 		document.body.style.background = "white";
 		}
@@ -92,12 +119,12 @@ function display_ct7() {
 	display_c7();
  	} // ends display_ct7()
 
-	function display_c7(){
+	 function display_c7(){
 		var refresh=1; 
 		mytime=setTimeout('display_ct7()',refresh)
 		}
 	display_c7();
+ </script>
 
-</script>
-</body>
+</body> 
 </html>
