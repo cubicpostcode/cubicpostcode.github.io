@@ -7,25 +7,16 @@
 	<style> 
 		body { 
     		background: #000000; 
-		}
-		#audioElement {
-		  /* Set the color for the audio player controls */
-		  color: black;
-		
-		  /* Set the background color for the audio player */
-		  background-color: white;
-		
-		  /* Set any other desired styling properties		 
-		  border: 2px solid black;
-		  border-radius: 4px;  */
-		}
+		}		
 	</style> 
 </head> 
 
 <body>  
   <audio id="audioElement" controls autoplay></audio>	
 <script>	
-    audioElement.play();
+
+	var audioElement = document.getElementById('audioElement');   
+	audioElement.play();
 
     var audioFiles = [
       'note40.mp3',
