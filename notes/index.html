@@ -14,7 +14,7 @@
 <body>  
   <audio id="audioElement" controls autoplay></audio>	
   <br>	
-  <button id="fullscreenButton" onclick="toggleFullScreen()">Toggle Full Screen</button>	
+  <button id="fullscreenButton" onclick="toggleFullScreen()">Full Screen</button>	
 <script>
 
 function toggleFullScreen() {
@@ -33,6 +33,8 @@ function toggleFullScreen() {
         doc.msExitFullscreen;
 
       if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+	document.getElementById('audioElement').style.display = 'none';
+	document.getElementById('fullscreenButton').style.display = 'none';      
         // Entering full screen mode
         if (docEl.requestFullscreen) {
           docEl.requestFullscreen();
