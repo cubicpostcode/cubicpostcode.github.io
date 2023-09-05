@@ -206,7 +206,7 @@
             else
                 var slice_number = -my_x * 2 - 1;
 
-            var code = slice_number * 441000000000000 + cube_p;
+            var code = Math.floor(slice_number) * 441000000000000 + cube_p;
             code = code.toPrecision(22) + "";
             if (code.includes('.')) {
                 let foundNonZero = false;
