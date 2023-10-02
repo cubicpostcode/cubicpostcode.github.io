@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- CSS for the tooltips -->
  <style>
-    .tooltip {
+    .toolt.tooltip {
         position: relative;
     }
 
-    .tooltip:hover::after {
-        content: attr(data-tip);
-        position: fixed; /* Changed to fixed */
-        left: 50%; /* Adjusted to 50% for perfect centering */
+    .dynamic-tooltip {
+        display: none; /* Initially hidden */
+        position: fixed; /* Positioned relative to viewport */
+        left: 50%; /* Horizontally centered */
         transform: translateX(-50%); /* Adjust horizontally */
         background: rgba(0, 0, 0, 0.8);
         color: #fff;
@@ -159,14 +159,35 @@
             });
         });
 
-      document.addEventListener("mouseover", function(event) {
-          if(event.target.classList.contains("tooltip")) {
-              let tooltipContent = event.target.querySelector("::after");
-              let rect = event.target.getBoundingClientRect();
-              tooltipContent.style.top = (rect.bottom + window.scrollY) + "px"; // Position it just below the hovered text
-          }
-      });
- 
+document.addEventListener("mouseover", function(event) {
+    if(event.target.classList.contains("tooltip")) {
+        let rect = event.target.getBoundingClientRect();
+        
+        // Check if tooltip already exists and remove if it does
+        let existingTooltip = document.querySelector(".dynamic-tooltip");
+        if (existingTooltip) {
+            existingTooltip.remove();
+        }
+
+        // Create a new tooltip div
+        let tooltipDiv = document.createElement("div");
+        tooltipDiv.className = "dynamic-tooltip";
+        tooltipDiv.textContent = event.target.getAttribute("data-tip");
+        tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px"; // Position it just below the hovered text
+
+        document.body.appendChild(tooltipDiv);
+    }
+});
+
+document.addEventListener("mouseout", function(event) {
+    if(event.target.classList.contains("tooltip")) {
+        let existingTooltip = document.querySelector(".dynamic-tooltip");
+        if (existingTooltip) {
+            existingTooltip.remove();
+        }
+    }
+});
+
     </script>
   </body>
 </html>
