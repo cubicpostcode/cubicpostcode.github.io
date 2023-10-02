@@ -11,11 +11,10 @@
 
         .tooltip:hover::after {
             content: attr(data-tip);
-            position: fixed;
-            top: 50%; /* Centered vertically */
-            left: 50%; /* Centered horizontally */
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
+            position: absolute;
+            top: 100%; /* Positioned just below the hovered text */
+            left: 50vw; /* Horizontally centered */
+            transform: translateX(-50%); /* Adjust horizontally for perfect centering */background: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 5px 10px;
             border-radius: 4px;
