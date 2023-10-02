@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- CSS for the tooltips -->
-    <style>
-        .tooltip {
-            position: relative;
-        }
+ <style>
+    .tooltip {
+        position: relative;
+    }
 
-        .tooltip:hover::after {
-            content: attr(data-tip);
-            position: absolute;
-            top: 100%; /* Positioned just below the hovered text */
-            left: 50vw; /* Horizontally centered */
-            transform: translateX(-50%); /* Adjust horizontally for perfect centering */background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 4px;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-    </style>
+    .tooltip:hover::after {
+        content: attr(data-tip);
+        position: fixed; /* Changed to fixed */
+        left: 50%; /* Adjusted to 50% for perfect centering */
+        transform: translateX(-50%); /* Adjust horizontally */
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 1000;
+    }
+</style>
   </head>
   <body>
 的是不我一有大在人了中到资要可以这个你会好为上来就学交也用能如文时没说他看提那问生过下请天们所多麽小
@@ -158,6 +158,15 @@
                 node.replaceWith(wrapper);
             });
         });
+
+      document.addEventListener("mouseover", function(event) {
+          if(event.target.classList.contains("tooltip")) {
+              let tooltipContent = event.target.querySelector("::after");
+              let rect = event.target.getBoundingClientRect();
+              tooltipContent.style.top = (rect.bottom + window.scrollY) + "px"; // Position it just below the hovered text
+          }
+      });
+ 
     </script>
   </body>
 </html>
