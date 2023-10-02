@@ -3,6 +3,27 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CSS for the tooltips -->
+    <style>
+        .tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted black; /* Optional styling for clarity */
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+    </style>
   </head>
   <body>
 的是不我一有大在人了中到资要可以这个你会好为上来就学交也用能如文时没说他看提那问生过下请天们所多麽小
@@ -105,5 +126,40 @@
 淬贲蝣綑潸瘐玎辍赈鸲嘀昃婬囿坳滮蔘饨雹畀渭掔綩胝搾軂觊崽沓褛衮傩虌嗲柰鏖崴濠鶩忒揄挛缰锉筵鸪糠礴亳幔
 宓瓒陕腱誏忾鳌玷谗鬟栲篓旌幄翳棻荞靛铛唅轭壕褟羌撂犷讫洵锭髻齰胼桹砝涔仃黔昂涸婀搀梏蛔偆纂堀倬晟紘锒
 琱玹凊寤鲔囥珞蚜豋搵倨皕戡迤埼膑儆擤纨忻蠔熇囍毐瓯祚蜉骈怼褊镑熏俚恪觔鎯踫弁啣锟芍蕁擢盹听旸斡痍忸轾
+     <!-- JavaScript for wrapping each Chinese character -->
+    <script>
+        // Wait for the DOM to be completely loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select the body as the container
+            let textContainer = document.body;
+
+            // Create a recursive function to traverse all text nodes in the DOM
+            function getTextNodes(node) {
+                let all = [];
+                for (node = node.firstChild; node; node = node.nextSibling) {
+                    if (node.nodeType == 3) all.push(node); // Text node
+                    else all = all.concat(getTextNodes(node));
+                }
+                return all;
+            }
+
+            let textNodes = getTextNodes(textContainer);
+
+            textNodes.forEach(node => {
+                let chars = Array.from(node.textContent);
+                let wrappedText = chars.map(char => {
+                    if (/\p{Script=Han}/u.test(char)) {  // Check if the character is a Han character (Chinese character)
+                        return `<span class="tooltip" data-tip="Meaning or Pinyin here">${char}</span>`;
+                    }
+                    return char;
+                }).join('');
+
+                let wrapper = document.createElement('span');
+                wrapper.innerHTML = wrappedText;
+
+                node.replaceWith(wrapper);
+            });
+        });
+    </script>
   </body>
 </html>
