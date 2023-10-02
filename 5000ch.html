@@ -12,8 +12,9 @@
         .tooltip:hover::after {
             content: attr(data-tip);
             position: fixed;
-            top: 100%;
-            left: 50%;
+            top: 50%; /* Centered vertically */
+            left: 50%; /* Centered horizontally */
+            transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 5px 10px;
