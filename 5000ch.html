@@ -162,6 +162,13 @@
 
 document.addEventListener("mouseover", function(event) {
     if(event.target.classList.contains("tooltip")) {
+
+        // Generate a random number (for example between 1 and 100000)
+        let randomNumber = Math.floor(Math.random() * 100000) + 1;
+
+        // Modify the URL
+        window.location.hash = "#" + randomNumber;
+      
         let rect = event.target.getBoundingClientRect();
         
         // Check if tooltip already exists and remove if it does
