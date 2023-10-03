@@ -173,7 +173,7 @@
             let char = event.target.textContent;
             let position = parseInt(event.target.getAttribute("data-index")) - 1;
 
-            window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/";
+            window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/" + "Shēngguò xià qǐng tiānmen suǒ wé";
             var currentURL = window.location.href;
             var decodedURL = decodeURIComponent(currentURL);
             window.history.replaceState({}, '', decodedURL);
