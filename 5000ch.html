@@ -217,28 +217,22 @@
         document.body.appendChild(tooltipElem);
 
 
-            // Position the tooltip
-            let coords = event.target.getBoundingClientRect();
-            
-            // Tooltip dimensions
-            let tooltipWidth = tooltipElem.offsetWidth;
-            let tooltipHeight = tooltipElem.offsetHeight;
-            
-            // Check horizontal position
-            if (coords.left + tooltipWidth > window.innerWidth) {
-                // If the tooltip would go beyond the right edge of the window, move it to the left
-                tooltipElem.style.left = (window.innerWidth - tooltipWidth) + "px";
-            } else {
-                tooltipElem.style.left = coords.left + "px";
-            }
-            
-            // Check vertical position
-            if (coords.bottom + tooltipHeight + 5 > window.innerHeight) {
-                // If the tooltip would go beyond the bottom edge of the window, move it above the target element
-                tooltipElem.style.top = (coords.top - tooltipHeight - 5) + "px";
-            } else {
-                tooltipElem.style.top = coords.bottom + 5 + "px";
-            }
+          // Position the tooltip at the center of the screen
+
+          // Tooltip dimensions
+          let tooltipWidth = tooltipElem.offsetWidth;
+          let tooltipHeight = tooltipElem.offsetHeight;
+          
+          // Calculate the left position for horizontal centering
+          let centerLeft = (window.innerWidth - tooltipWidth) / 2;
+          
+          // Calculate the top position for vertical centering
+          let centerTop = (window.innerHeight - tooltipHeight) / 2;
+          
+          // Apply the calculated positions to the tooltip
+          tooltipElem.style.left = centerLeft + "px";
+          tooltipElem.style.top = centerTop + "px";
+
 
     }
 });
