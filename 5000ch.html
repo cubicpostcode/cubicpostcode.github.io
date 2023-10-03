@@ -215,10 +215,30 @@
         tooltipElem.innerHTML = position + ": " + char;
         document.body.appendChild(tooltipElem);
 
-        // Position the tooltip
-        let coords = event.target.getBoundingClientRect();
-        tooltipElem.style.left = coords.left + "px";
-        tooltipElem.style.top = coords.bottom + 5 + "px";
+
+            // Position the tooltip
+            let coords = event.target.getBoundingClientRect();
+            
+            // Tooltip dimensions
+            let tooltipWidth = tooltipElem.offsetWidth;
+            let tooltipHeight = tooltipElem.offsetHeight;
+            
+            // Check horizontal position
+            if (coords.left + tooltipWidth > window.innerWidth) {
+                // If the tooltip would go beyond the right edge of the window, move it to the left
+                tooltipElem.style.left = (window.innerWidth - tooltipWidth) + "px";
+            } else {
+                tooltipElem.style.left = coords.left + "px";
+            }
+            
+            // Check vertical position
+            if (coords.bottom + tooltipHeight + 5 > window.innerHeight) {
+                // If the tooltip would go beyond the bottom edge of the window, move it above the target element
+                tooltipElem.style.top = (coords.top - tooltipHeight - 5) + "px";
+            } else {
+                tooltipElem.style.top = coords.bottom + 5 + "px";
+            }
+
     }
 });
 
