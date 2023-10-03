@@ -125,7 +125,7 @@
 
 <!-- JavaScript for wrapping each Chinese character -->
 <script>
-  /*
+  
     // Wait for the DOM to be completely loaded
     document.addEventListener("DOMContentLoaded", function () {
         // Select the body as the container
@@ -160,6 +160,8 @@
             node.replaceWith(wrapper);
         });
     });
+
+  /*
 
     document.addEventListener("mouseover", function(event) {
         if(event.target.classList.contains("tooltip")) {
@@ -199,7 +201,12 @@
     
   document.addEventListener("mouseover", function(event) {
     if(event.target.classList.contains("tooltip")) {
-        let char = event.target.textContent;
+            let char = event.target.textContent;
+            let position = parseInt(event.target.getAttribute("data-index")) - 1;
+            window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/" + "Shēngguò xià qǐng tiānmen suǒ wé";
+            var currentURL = window.location.href;
+            var decodedURL = decodeURIComponent(currentURL);
+            window.history.replaceState({}, '', decodedURL);
 
         // Create a tooltip element
         let tooltipElem = document.createElement('div');
