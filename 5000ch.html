@@ -216,24 +216,35 @@
         tooltipElem.innerHTML = position + "  " + char;
         document.body.appendChild(tooltipElem);
 
+      // Tooltip dimensions and its positioning
+        let tooltipWidth = tooltipElem.offsetWidth;
+        let tooltipHeight = tooltipElem.offsetHeight;
+        
+        // Calculate the left position for horizontal centering with respect to the mouse pointer
+        let centeredLeft = event.clientX - (tooltipWidth / 2);
 
-          // Position the tooltip at the center of the screen
+        // Ensure the tooltip does not go beyond the right edge of the window
+        if (centeredLeft + tooltipWidth > window.innerWidth) {
+            centeredLeft = window.innerWidth - tooltipWidth;
+        }
+        
+        // Ensure the tooltip does not go beyond the left edge of the window
+        if (centeredLeft < 0) {
+            centeredLeft = 0;
+        }
 
-          // Tooltip dimensions
-          let tooltipWidth = tooltipElem.offsetWidth;
-          let tooltipHeight = tooltipElem.offsetHeight;
-          
-          // Calculate the left position for horizontal centering
-          let centerLeft = (window.innerWidth - tooltipWidth) / 2;
-          
-          // Calculate the top position for vertical centering
-          let centerTop = (window.innerHeight - tooltipHeight) / 2;
-          
-          // Apply the calculated positions to the tooltip
-          tooltipElem.style.left = centerLeft + "px";
-          tooltipElem.style.top = centerTop + "px";
+        // Set the top position to be 150px below the mouse pointer
+        let belowPointer = event.clientY + 150;
 
+        // Ensure the tooltip does not go beyond the bottom edge of the window
+        if (belowPointer + tooltipHeight > window.innerHeight) {
+            belowPointer = window.innerHeight - tooltipHeight;
+        }
 
+        // Apply the calculated positions to the tooltip
+        tooltipElem.style.left = centeredLeft + "px";
+        tooltipElem.style.top = belowPointer + "px";
+      
     }
 });
 
