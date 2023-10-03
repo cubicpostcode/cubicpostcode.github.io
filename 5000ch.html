@@ -165,7 +165,7 @@ document.addEventListener("mouseover", function(event) {
 
         let char = event.target.textContent;
         // Modify the URL
-        window.location.hash = "#" + encodeURIComponent(char);
+        window.location.hash = "/" + encodeURIComponent(char) + "/";
       
         let rect = event.target.getBoundingClientRect();
         
