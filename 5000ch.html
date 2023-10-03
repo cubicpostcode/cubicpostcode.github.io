@@ -27,6 +27,16 @@
         white-space: nowrap;
         z-index: 1000;
     }
+   
+   .tooltip-content {
+    position: absolute;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
 </style>
   </head>
   <body>
@@ -202,6 +212,32 @@
             }
         }
     });
+  document.addEventListener("mouseover", function(event) {
+    if(event.target.classList.contains("tooltip")) {
+        let char = event.target.textContent;
+
+        // Create a tooltip element
+        let tooltipElem = document.createElement('div');
+        tooltipElem.className = 'tooltip-content';
+        tooltipElem.innerHTML = "You hovered over: " + char;
+        document.body.appendChild(tooltipElem);
+
+        // Position the tooltip
+        let coords = event.target.getBoundingClientRect();
+        tooltipElem.style.left = coords.left + "px";
+        tooltipElem.style.top = coords.bottom + 5 + "px";
+    }
+});
+
+document.addEventListener("mouseout", function(event) {
+    if(event.target.classList.contains("tooltip")) {
+        let tooltipElem = document.querySelector('.tooltip-content');
+        if (tooltipElem) {
+            tooltipElem.remove();
+        }
+    }
+});
+
 </script>
 
 </body>
