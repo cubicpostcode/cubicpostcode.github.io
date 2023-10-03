@@ -163,11 +163,9 @@
 document.addEventListener("mouseover", function(event) {
     if(event.target.classList.contains("tooltip")) {
 
-        // Generate a random number (for example between 1 and 100000)
-        let randomNumber = Math.floor(Math.random() * 100000) + 1;
-
+        let char = event.target.textContent;
         // Modify the URL
-        window.location.hash = "#" + randomNumber;
+        window.location.hash = "#" + encodeURIComponent(char);
       
         let rect = event.target.getBoundingClientRect();
         
