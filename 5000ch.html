@@ -166,8 +166,8 @@
     document.addEventListener("mouseover", function(event) {
         if(event.target.classList.contains("tooltip")) {
             let char = event.target.textContent;
-            let position = event.target.getAttribute("data-index");
-            
+            let position = parseInt(event.target.getAttribute("data-index")) - 1;
+
             window.location.hash = "/" + encodeURIComponent(char) + "/" + position;
 
             let rect = event.target.getBoundingClientRect();
