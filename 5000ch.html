@@ -13,7 +13,7 @@
   
    .tooltip-content {    
     position: fixed;
-    padding: 5px 10px;
+    padding: 2px 2px;
     background-color: rgba(247, 202, 208, 0.9);
     color: #fff;
     font-size: 44px;
@@ -187,7 +187,7 @@
             tooltipDiv.className = "dynamic-tooltip";
             tooltipDiv.textContent = event.target.getAttribute("data-tip");
             //tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px";
-            tooltipDiv.style.top = 20 + "px";
+            tooltipDiv.style.top = 10 + "px";
 
             document.body.appendChild(tooltipDiv);
         }
