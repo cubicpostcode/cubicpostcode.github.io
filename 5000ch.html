@@ -186,7 +186,8 @@
             let tooltipDiv = document.createElement("div");
             tooltipDiv.className = "dynamic-tooltip";
             tooltipDiv.textContent = event.target.getAttribute("data-tip");
-            tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px";
+            //tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px";
+            tooltipDiv.style.top = 20 + "px";
 
             document.body.appendChild(tooltipDiv);
         }
