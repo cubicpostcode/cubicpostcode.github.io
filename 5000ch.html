@@ -223,8 +223,10 @@
         let tooltipHeight = tooltipElem.offsetHeight;
         
         // Calculate the left position for horizontal centering with respect to the mouse pointer
-        let centeredLeft = event.clientX - (tooltipWidth / 2);
+        //let centeredLeft = event.clientX - (tooltipWidth / 2);
+        //let centeredLeft = (tooltipWidth / 2);
 
+      /*
         // Ensure the tooltip does not go beyond the right edge of the viewport
         if (centeredLeft + tooltipWidth > window.innerWidth) {
             centeredLeft = window.innerWidth - tooltipWidth;
@@ -242,10 +244,11 @@
         if (belowPointer + tooltipHeight > window.innerHeight) {
             belowPointer = window.innerHeight - tooltipHeight;
         }
-
+       */
+      
         // Apply the calculated positions to the tooltip
-        tooltipElem.style.left = centeredLeft + "px";
-        tooltipElem.style.top = belowPointer + "px";
+        tooltipElem.style.left = (tooltipWidth / 2) + "px";
+        tooltipElem.style.bottom = 10 + "px";
     }
 });
 
