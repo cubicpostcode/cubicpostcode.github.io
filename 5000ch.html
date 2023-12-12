@@ -31,7 +31,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Select the body as the container
         let textContainer = document.body;
-        let charPosition = 0;  // Initialize the counter for position
+        let charPosition = 1;  // Initialize the counter for position
 
         // Create a recursive function to traverse all text nodes in the DOM
         function getTextNodes(node) {
@@ -61,46 +61,7 @@
             node.replaceWith(wrapper);
         });
     });
-
-  /*
-
-    document.addEventListener("mouseover", function(event) {
-        if(event.target.classList.contains("tooltip")) {
-            let char = event.target.textContent;
-            let position = parseInt(event.target.getAttribute("data-index")) - 1;
-
-            window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/" + "Suǒ wé";
-            var currentURL = window.location.href;
-            var decodedURL = decodeURIComponent(currentURL);
-            window.history.replaceState({}, '', decodedURL);
-
-            let rect = event.target.getBoundingClientRect();
-            
-            let existingTooltip = document.querySelector(".dynamic-tooltip");
-            if (existingTooltip) {
-                existingTooltip.remove();
-            }
-
-            let tooltipDiv = document.createElement("div");
-            tooltipDiv.className = "dynamic-tooltip";
-            tooltipDiv.textContent = event.target.getAttribute("data-tip");
-            //tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px";
-            tooltipDiv.style.top = 10 + "px";
-
-            document.body.appendChild(tooltipDiv);
-        }
-    });
-
-    document.addEventListener("mouseout", function(event) {
-        if(event.target.classList.contains("tooltip")) {
-            let existingTooltip = document.querySelector(".dynamic-tooltip");
-            if (existingTooltip) {
-                existingTooltip.remove();
-            }
-        }
-    });
-  */
-    
+  
   document.addEventListener("mouseover", function(event) {
     if(event.target.classList.contains("tooltip")) {
             let char = event.target.textContent;
@@ -119,30 +80,6 @@
         // Tooltip dimensions
         let tooltipWidth = tooltipElem.offsetWidth;
         let tooltipHeight = tooltipElem.offsetHeight;
-        
-        // Calculate the left position for horizontal centering with respect to the mouse pointer
-        //let centeredLeft = event.clientX - (tooltipWidth / 2);
-        //let centeredLeft = (tooltipWidth / 2);
-
-      /*
-        // Ensure the tooltip does not go beyond the right edge of the viewport
-        if (centeredLeft + tooltipWidth > window.innerWidth) {
-            centeredLeft = window.innerWidth - tooltipWidth;
-        }
-        
-        // Ensure the tooltip does not go beyond the left edge of the viewport
-        if (centeredLeft < 0) {
-            centeredLeft = 0;
-        }
-
-        // Set the top position to be below the mouse pointer
-        let belowPointer = event.clientY - 100;
-
-        // Ensure the tooltip does not go beyond the bottom edge of the viewport
-        if (belowPointer + tooltipHeight > window.innerHeight) {
-            belowPointer = window.innerHeight - tooltipHeight;
-        }
-       */
       
         // Apply the calculated positions to the tooltip
         tooltipElem.style.left = (tooltipWidth / 2) + "px";
