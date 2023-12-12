@@ -12,9 +12,9 @@
         cursor: zoom-in; 
     }
   
-   .tooltip-content {    
-    position: sticky;
-    top: 150px; 
+.tooltip-content {    
+    position: fixed;
+    top: 0; 
     width: 100%;
     text-align: center;
     padding: 5px 10px;
@@ -23,8 +23,8 @@
     font-size: 44px;
     border-radius: 5px;
     z-index: 1000;
+    display: none; /* Initially hidden */
 }
-
   </style>
 </head>
 <body><br><br><br><br>?
@@ -67,45 +67,7 @@
             node.replaceWith(wrapper);
         });
     });
-
-  /*
-
-    document.addEventListener("mouseover", function(event) {
-        if(event.target.classList.contains("tooltip")) {
-            let char = event.target.textContent;
-            let position = parseInt(event.target.getAttribute("data-index")) - 1;
-
-            window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/" + "Suǒ wé";
-            var currentURL = window.location.href;
-            var decodedURL = decodeURIComponent(currentURL);
-            window.history.replaceState({}, '', decodedURL);
-
-            let rect = event.target.getBoundingClientRect();
-            
-            let existingTooltip = document.querySelector(".dynamic-tooltip");
-            if (existingTooltip) {
-                existingTooltip.remove();
-            }
-
-            let tooltipDiv = document.createElement("div");
-            tooltipDiv.className = "dynamic-tooltip";
-            tooltipDiv.textContent = event.target.getAttribute("data-tip");
-            tooltipDiv.style.top = (rect.bottom + window.scrollY) + "px";
-
-            document.body.appendChild(tooltipDiv);
-        }
-    });
-
-    document.addEventListener("mouseout", function(event) {
-        if(event.target.classList.contains("tooltip")) {
-            let existingTooltip = document.querySelector(".dynamic-tooltip");
-            if (existingTooltip) {
-                existingTooltip.remove();
-            }
-        }
-    });
-  */
-    
+  
   document.addEventListener("mouseover", function(event) {
     if(event.target.classList.contains("tooltip")) {
             let char = event.target.textContent;
@@ -152,14 +114,11 @@
     }
 });
 
-document.addEventListener("mouseout", function(event) {
-    if(event.target.classList.contains("tooltip")) {
-        let tooltipElem = document.querySelector('.tooltip-content');
-        if (tooltipElem) {
-            tooltipElem.remove();
+    document.addEventListener("mouseout", function(event) {
+        if(event.target.classList.contains("tooltip")) {
+            tooltipElem.style.display = 'none';
         }
-    }
-});
+    });
 
 </script>
 
