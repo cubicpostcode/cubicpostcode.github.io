@@ -9,6 +9,12 @@
         background-color: #FAF3E0;
         color: #4A4A4A;
     }
+     img {
+      pointer-events: none;
+      /* doing this makes sure .elementFromPoint
+			do not accquires theimage cursor object */
+      position: absolute;
+    } 
   
    .tooltip-content {    
     position: fixed;
