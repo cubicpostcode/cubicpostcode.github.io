@@ -10,13 +10,16 @@
         color: #4A4A4A;
     }
     
-    #pointer {
+         #pointer {
             position: absolute;
+            left: 100px;  /* Initial position */
+            top: 100px;   /* Initial position */
             width: 20px;
             height: 20px;
             background-color: red;
             border-radius: 50%;
             pointer-events: none;
+            z-index: 2000;  /* Ensuring it's above other elements */
         }	 
   
    .tooltip-content {    
@@ -104,37 +107,40 @@ document.addEventListener("mouseout", function(event) {
     }
 });	
 
-        const pointer = document.getElementById("pointer");
-        let posX = 100;
-        let posY = 100;
-        const moveStep = 10;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Move pointer script
+            const pointer = document.getElementById("pointer");
+            let posX = 100;  // Initial X Position
+            let posY = 100;  // Initial Y Position
+            const moveStep = 10;
 
-        function movePointer(dx, dy) {
-            posX += dx;
-            posY += dy;
-            pointer.style.left = posX + 'px';
-            pointer.style.top = posY + 'px';
-        }
-
-        document.addEventListener('keypress', function(event) {
-            switch(event.key) {
-                case 'Q':
-                case 'q':
-                    movePointer(0, -moveStep);
-                    break;
-                case 'A':
-                case 'a':
-                    movePointer(0, moveStep);
-                    break;
-                case 'O':
-                case 'o':
-                    movePointer(-moveStep, 0);
-                    break;
-                case 'P':
-                case 'p':
-                    movePointer(moveStep, 0);
-                    break;
+            function movePointer(dx, dy) {
+                posX += dx;
+                posY += dy;
+                pointer.style.left = posX + 'px';
+                pointer.style.top = posY + 'px';
             }
+
+            document.addEventListener('keypress', function(event) {
+                switch(event.key) {
+                    case 'Q':
+                    case 'q':
+                        movePointer(0, -moveStep);
+                        break;
+                    case 'A':
+                    case 'a':
+                        movePointer(0, moveStep);
+                        break;
+                    case 'O':
+                    case 'o':
+                        movePointer(-moveStep, 0);
+                        break;
+                    case 'P':
+                    case 'p':
+                        movePointer(moveStep, 0);
+                        break;
+                }
+            });
         });
 	
 </script>
