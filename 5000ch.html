@@ -69,7 +69,7 @@
             if(event.target.classList.contains("tooltip")) {
                 let char = event.target.textContent;
                 let position = parseInt(event.target.getAttribute("data-index")) - 1;
-		let position = position.toString().padStart(4, '0');
+		position = position.toString().padStart(4, '0');
                 window.location.hash = "/" + position + "/" + encodeURIComponent(char) + "/" + "Suǒ wé";
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
