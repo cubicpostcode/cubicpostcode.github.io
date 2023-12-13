@@ -9,12 +9,15 @@
         background-color: #FAF3E0;
         color: #4A4A4A;
     }
-     img {
-      pointer-events: none;
-      /* doing this makes sure .elementFromPoint
-			do not accquires theimage cursor object */
-      position: absolute;
-    } 
+    
+    #pointer {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            pointer-events: none;
+        }	 
   
    .tooltip-content {    
     position: fixed;
@@ -99,124 +102,42 @@ document.addEventListener("mouseout", function(event) {
             tooltipElem.remove();
         }
     }
-});
+});	
 
-    x = 0;
-    y = 0;
-    dx = 1;
-    dy = 1;
+        const pointer = document.getElementById("pointer");
+        let posX = 100;
+        let posY = 100;
+        const moveStep = 10;
 
-    function leftArrowPressed() {
-      var element = document.getElementById("image1");
-      if (parseInt(element.style.left) < 0) {
-        x = 0;
-        element.style.left = parseInt(screen.width) + 'px';
-      };
-      x += dx;
-      dx += 1;
-      element.style.left = parseInt(element.style.left) - x + 'px';
-    }
+        function movePointer(dx, dy) {
+            posX += dx;
+            posY += dy;
+            pointer.style.left = posX + 'px';
+            pointer.style.top = posY + 'px';
+        }
 
-    function rightArrowPressed() {
-      var element = document.getElementById("image1");
-      if (parseInt(element.style.left) >= (screen.width)) {
-        x = 0;
-        element.style.left = parseInt(0) + 'px';
-      };
-      x += dx;
-      dx += 1;
-      element.style.left = parseInt(element.style.left) + x + 'px';
-
-    }
-
-    function upArrowPressed() {
-      var element = document.getElementById("image1");
-      if (parseInt(element.style.top) < 0) {
-        y = 0;
-        element.style.top = parseInt(screen.height) + 'px';
-      };
-      y += dy;
-      dy += 1;
-      element.style.top = parseInt(element.style.top) - y + 'px';
-    }
-
-    function downArrowPressed() {
-      var element = document.getElementById("image1");
-      if (parseInt(element.style.top) > (screen.height)) {
-        y = 0;
-        element.style.top = parseInt(0) + 'px';
-      };
-
-      y += dy;
-      dy += 1;
-      element.style.top = parseInt(element.style.top) + y + 'px';
-    } 
-
-    let keys = {
-      q: false,
-      a: false,
-      o: false,
-      p: false,
-    };
-
-    addEventListener("keydown", (event) => {
-	   
-	    
-      if (event.key === "q") {
-        keys.q = true;
-      }
-      if (event.key === "a") {
-        keys.a = true;
-      }
-      if (event.key === "o") {
-        keys.o = true;
-      }
-      if (event.key === "p") {
-        keys.p = true;
-      }
-
-      if (keys.q) {
-        upArrowPressed();
-      }
-      if (keys.a) {
-        downArrowPressed();
-      }
-      if (keys.o) {
-        leftArrowPressed();
-      }
-      if (keys.p) {
-        rightArrowPressed();
-      }
-    });
-
-
-    addEventListener("keyup", (event) => {
-      if (event.key === "q") {
-        keys.q = false;
-	clearValues();
-      }
-      if (event.key === "a") {
-        keys.a = false;
-	clearValues();
-      }
-      if (event.key === "o") {
-        keys.o = false;
-	clearValues();
-      }
-      if (event.key === "p") {
-        keys.p = false;
-	clearValues();
-      }
-    });
-
-    function clearValues(evt) {
-      x = 0;
-      y = 0;
-      dx = 1;
-      dy = 1;
-    };
-
+        document.addEventListener('keypress', function(event) {
+            switch(event.key) {
+                case 'Q':
+                case 'q':
+                    movePointer(0, -moveStep);
+                    break;
+                case 'A':
+                case 'a':
+                    movePointer(0, moveStep);
+                    break;
+                case 'O':
+                case 'o':
+                    movePointer(-moveStep, 0);
+                    break;
+                case 'P':
+                case 'p':
+                    movePointer(moveStep, 0);
+                    break;
+            }
+        });
+	
 </script>
-<img id="image1" src="images/mousepointer.png" style="position:absolute;left:0; top:0;z-index:1005;">
+<div id="pointer"></div>
 </body>
 </html>
