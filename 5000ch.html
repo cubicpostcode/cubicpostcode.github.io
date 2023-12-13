@@ -12,7 +12,7 @@
   
    .tooltip-content {    
     position: fixed;
-    padding: 0px 0px;
+    padding: 5px 5px;
     background-color: rgba(247, 202, 208, 0.9);
     color: #000;
     font-size: 44px;
@@ -76,8 +76,8 @@
 
 		let tooltipElem = document.createElement('div');
 		tooltipElem.className = 'tooltip-content';
-		tooltipElem.innerHTML = '<span style="font-size: 14px; color: #000080;">' + position + '</span> ' 
-		    + '<span style="font-size: 14px; color: #004d00;">' + 'Guǒ' + '</span>'
+		tooltipElem.innerHTML = '<span style="font-size: 14px; color: #004d00;">' + position + '</span> ' 
+		    + '<span style="font-size: 14px; color: #80002a;">' + 'Guǒ' + ' </span>'
 		    + char + '<span style="font-size: 14px; color: #004d00;">' + ' Fruit' + '</span>' 
 		    + '<span style="font-size: 14px; color: #80002a;">' + ' Fruta' + '</span>';
 		document.body.appendChild(tooltipElem);
