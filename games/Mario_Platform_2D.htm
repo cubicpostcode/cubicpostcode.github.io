@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Care 2D Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 800px;
+            height: 400px;
+            background-color: #5c94fc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character {
+            width: 40px;
+            height: 60px;
+            background-color: red;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .plant {
+            width: 30px;
+            height: 30px;
+            background-color: green;
+            position: absolute;
+        }
+
+        .pest {
+            width: 20px;
+            height: 20px;
+            background-color: brown;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div class="character" id="character"></div>
+        <!-- Add more plants and pests here -->
+    </div>
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const character = document.getElementById('character');
+
+        const characterWidth = 40;
+        const characterSpeed = 5;
+        const jumpStrength = 15;
+        const gravity = 1;
+
+        let characterX = 100;
+        let characterY = 0;
+        let characterVelocityX = 0;
+        let characterVelocityY = 0;
+        let isJumping = false;
+
+        function createPlant(x, y) {
+            const plant = document.createElement('div');
+            plant.className = 'plant';
+            plant.style.left = `${x}px`;
+            plant.style.bottom = `${y}px`;
+            gameContainer.appendChild(plant);
+        }
+
+        function createPest(x, y) {
+            const pest = document.createElement('div');
+            pest.className = 'pest';
+            pest.style.left = `${x}px`;
+            pest.style.bottom = `${y}px`;
+            gameContainer.appendChild(pest);
+        }
+
+        function updateCharacter() {
+            character.style.transform = `translate(${characterX}px, ${characterY}px)`;
+        }
+
+        function handleKeyPress(event) {
+            switch (event.key) {
+                case 'ArrowLeft':
+                    characterVelocityX = -characterSpeed;
+                    break;
+                case 'ArrowRight':
+                    characterVelocityX = characterSpeed;
+                    break;
+                case 'Space':
+                    // Simulate watering plants (you can add more logic here)
+                    console.log('Watering plants!');
+                    break;
+                case 'ArrowUp':
+                    if (!isJumping) {
+                        characterVelocityY = jumpStrength;
+                        isJumping = true;
+                    }
+                    break;
+            }
+        }
+
+        function handlePhysics() {
+            characterVelocityY -= gravity;
+            characterX += characterVelocityX;
+            characterY += characterVelocityY;
+
+            characterX = Math.max(0, Math.min(gameContainer.clientWidth - characterWidth, characterX));
+
+            updateCharacter();
+        }
+
+        window.addEventListener('keydown', handleKeyPress);
+
+        function gameLoop() {
+            handlePhysics();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Create some initial plants and pests
+        createPlant(200, 40);
+        createPlant(300, 40);
+        createPest(250, 60);
+
+        gameLoop();
+    </script>
+</body>
+</html>

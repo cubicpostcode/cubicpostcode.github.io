@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple PAC-MAN Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #game-container {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pacman {
+            width: 30px;
+            height: 30px;
+            background: yellow;
+            border-radius: 50%;
+            position: absolute;
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div class="pacman" id="pacman"></div>
+    </div>
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const pacman = document.getElementById('pacman');
+        const pacmanSize = 30;
+        const containerWidth = gameContainer.clientWidth;
+        const containerHeight = gameContainer.clientHeight;
+        let pacmanX = containerWidth / 2 - pacmanSize / 2;
+        let pacmanY = containerHeight / 2 - pacmanSize / 2;
+        let pacmanAngle = 0;
+
+        // Function to update the position and rotation of PAC-MAN
+        function updatePacman() {
+            pacman.style.transform = `translate(${pacmanX}px, ${pacmanY}px) rotate(${pacmanAngle}deg)`;
+        }
+
+        // Function to handle arrow key presses
+        function handleKeyPress(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    pacmanAngle = 0;
+                    pacmanY -= 10;
+                    break;
+                case 'ArrowDown':
+                    pacmanAngle = 180;
+                    pacmanY += 10;
+                    break;
+                case 'ArrowLeft':
+                    pacmanAngle = 270;
+                    pacmanX -= 10;
+                    break;
+                case 'ArrowRight':
+                    pacmanAngle = 90;
+                    pacmanX += 10;
+                    break;
+            }
+            // Ensure PAC-MAN stays within the game container
+            pacmanX = Math.max(0, Math.min(containerWidth - pacmanSize, pacmanX));
+            pacmanY = Math.max(0, Math.min(containerHeight - pacmanSize, pacmanY));
+
+            updatePacman();
+        }
+
+        // Add event listener for arrow key presses
+        window.addEventListener('keydown', handleKeyPress);
+
+        // Initial placement of PAC-MAN
+        updatePacman();
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Tetris Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #game-container {
+            width: 300px;
+            height: 600px;
+            border: 1px solid #000;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cell {
+            width: 29px;
+            height: 29px;
+            border: 1px solid #ccc;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <script>
+        const ROWS = 20;
+        const COLUMNS = 10;
+        const CELL_SIZE = 30;
+        const gameContainer = document.getElementById('game-container');
+        const cells = [];
+
+        // Create the game grid
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < COLUMNS; col++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.style.top = `${row * CELL_SIZE}px`;
+                cell.style.left = `${col * CELL_SIZE}px`;
+                gameContainer.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        // Define a sample Tetromino
+        const tetromino = [
+            [1, 1, 1, 1], // I-shape
+        ];
+
+        let currentTetromino = tetromino;
+        let currentRow = 0;
+        let currentCol = 3;
+
+        // Function to draw the Tetromino on the grid
+        function drawTetromino() {
+            for (let row = 0; row < currentTetromino.length; row++) {
+                for (let col = 0; col < currentTetromino[row].length; col++) {
+                    if (currentTetromino[row][col]) {
+                        const index = (currentRow + row) * COLUMNS + currentCol + col;
+                        cells[index].style.backgroundColor = 'blue';
+                    }
+                }
+            }
+        }
+
+        // Function to clear the Tetromino from the grid
+        function clearTetromino() {
+            for (let row = 0; row < currentTetromino.length; row++) {
+                for (let col = 0; col < currentTetromino[row].length; col++) {
+                    if (currentTetromino[row][col]) {
+                        const index = (currentRow + row) * COLUMNS + currentCol + col;
+                        cells[index].style.backgroundColor = '';
+                    }
+                }
+            }
+        }
+
+        // Function to move the Tetromino down
+        function moveDown() {
+            clearTetromino();
+            currentRow++;
+            drawTetromino();
+        }
+
+        // Initial draw
+        drawTetromino();
+
+        // Move the Tetromino down periodically (for simplicity)
+        setInterval(moveDown, 1000);
+    </script>
+</body>
+</html> 
