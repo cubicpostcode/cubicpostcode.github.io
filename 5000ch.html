@@ -15,33 +15,42 @@
       margin: 5px;
     }
 
-    .charactereven {
-      font-size: 2em;
-      font-family: "Noto Sans CJK", serif;
-      color: #004d00; 
-    }
-   
-    .characterodd {
-      font-size: 2em;
-      font-family: "Noto Sans CJK", serif;
-      color: #80002a;  
-    }
+    .charactereven,
+.characterodd {
+  font-size: 2em;
+  font-family: "Noto Sans CJK", serif;
+}
 
-    .pinyin2 {
-      font-size: 0.8em;
-      position: relative;
-      top: -1.2em;
-      color: #0e4d92;    
-    }
+.charactereven {
+  color: #004d00;
+  opacity: 1; /* Full opacity */
+  z-index: 2; /* Higher z-index to appear on top */
+}
 
-    .translation1 {
-      font-style: italic;
-      font-size: 0.8em;
-      position: relative;
-      top: -1.2em;
-      z-index: 10;
-      color: #0080ff;
-    }	 
+.characterodd {
+  color: #80002a;
+  opacity: 0.8; /* Slightly transparent */
+  z-index: 1; /* Lower z-index to appear slightly behind */
+}
+
+.pinyin2 {
+  font-size: 0.8em;
+  position: relative;
+  top: -1.2em;
+  color: #0e4d92;
+  opacity: 0.7; /* Less transparent than translation */
+  z-index: 3; /* Highest z-index to ensure it's always on top */
+}
+
+.translation1 {
+  font-style: italic;
+  font-size: 0.8em;
+  position: relative;
+  top: -1.2em;
+  z-index: 2; /* Same z-index as charactereven for overlapping */
+  color: #0080ff;
+  opacity: 0.6; /* Most transparent */
+}
   
    .tooltip-content {    
     position: fixed;
