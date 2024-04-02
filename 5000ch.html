@@ -8,56 +8,39 @@
     body {
         background-color: #FAF3E0;
     }	
-	 
-.character-container {
-  display: inline-block;
-  text-align: center;
-  position: relative; /* Make container relative for absolute positioning */
-}
+	
+ .character-container {
+      display: inline-block;
+      text-align: center;
+      margin: 5px;
+    }
 
-.charactereven,
-.characterodd,
-.pinyin2,
-.translation1 {
-  position: absolute; /* Make elements absolutely positioned within the container */
-  top: 50%; /* Position elements vertically at 50% (center) */
-  left: 50%; /* Position elements horizontally at 50% (center) */
-  transform: translate(-50%, -50%); /* Offset elements by half their width/height to center them */
-  text-align: center; /* Maintain centered text within elements */
-}
+    .charactereven {
+      font-size: 2em;
+      font-family: "Noto Sans CJK", serif;
+      color: #004d00; 
+    }
+   
+    .characterodd {
+      font-size: 2em;
+      font-family: "Noto Sans CJK", serif;
+      color: #80002a;  
+    }
 
-.charactereven,
-.characterodd {
-  font-size: 2em;
-  font-family: "Noto Sans CJK", serif;
-}
+    .pinyin2 {
+      font-size: 0.8em;
+      position: relative;
+      top: -1.2em;
+      color: #0e4d92;    
+    }
 
-.charactereven {
-  color: #004d00;
-  opacity: 1;
-  z-index: 2; /* Higher z-index for character to appear on top (optional) */
-}
-
-.characterodd {
-  color: #80002a;
-  opacity: 0.8;
-  z-index: 1; /* Lower z-index (optional) */
-}
-
-.pinyin2 {
-  font-size: 0.8em;
-  color: #0e4d92;
-  opacity: 0.7;
-  z-index: 3; /* Highest z-index to ensure it overlaps (optional) */
-}
-
-.translation1 {
-  font-style: italic;
-  font-size: 0.8em;
-  color: #0080ff;
-  opacity: 0.6;
-  z-index: 2; /* Same z-index as charactereven (optional) */
-}
+    .translation1 {
+      font-style: italic;
+      font-size: 0.8em;
+      display: block;
+      text-align: center;
+      color: #0080ff;
+    }	 
   
    .tooltip-content {    
     position: fixed;
