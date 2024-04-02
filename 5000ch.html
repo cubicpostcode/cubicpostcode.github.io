@@ -16,9 +16,16 @@
       margin: 5px;
     }
 
-    .character {
+    .charactereven {
       font-size: 2em;
       font-family: "Noto Sans CJK", serif;
+      color: red;
+    }
+   
+    .characterodd {
+      font-size: 2em;
+      font-family: "Noto Sans CJK", serif;
+      color: green;
     }
 
     .pinyin {
@@ -83,7 +90,7 @@
 		
 		    const charSpan = document.createElement('span');
 		    charSpan.classList.add('character');
-		    charSpan.textContent = character.character;
+		    charSpan.textContent = character.charactereven;
 		    container.appendChild(charSpan);
 		
 		    const pinyinSpan = document.createElement('span');
