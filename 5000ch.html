@@ -16,11 +16,18 @@
       margin: 5px;
     }
 
-    .character {
+    .charactereven {
       font-size: 2em;
       font-family: "Noto Sans CJK", serif;
+      color: red; 
     }
 
+    .characterodd {
+      font-size: 2em;
+      font-family: "Noto Sans CJK", serif;
+      color: blue; 
+    }
+    
     .pinyin {
       font-size: 0.8em;
       position: relative;
@@ -80,13 +87,15 @@
 		  characters.forEach(function(character) {
 		    const container = document.createElement('div');
 		    container.classList.add('character-container');
-
-		    const color = (index % 2 === 0) ? 'green' : 'red'; // Determine color based on index
-    		    container.style.backgroundColor = color; // Set background color
 		
 		    const charSpan = document.createElement('span');
 		    charSpan.classList.add('character');
-		    charSpan.textContent = character.character;
+		    if (true) {
+			charSpan.textContent = character.charactereven;
+			} else {
+			charSpan.textContent = character.characterodd;
+			}
+		    
 		    container.appendChild(charSpan);
 		
 		    const pinyinSpan = document.createElement('span');
