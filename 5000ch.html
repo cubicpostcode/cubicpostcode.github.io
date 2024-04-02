@@ -9,13 +9,24 @@
         background-color: #FAF3E0;
     }	
 	 
-    .character-container {
-      display: inline-block;
-      text-align: center;
-      margin: 5px;
-    }
+.character-container {
+  display: inline-block;
+  text-align: center;
+  position: relative; /* Make container relative for absolute positioning */
+}
 
-    .charactereven,
+.charactereven,
+.characterodd,
+.pinyin2,
+.translation1 {
+  position: absolute; /* Make elements absolutely positioned within the container */
+  top: 50%; /* Position elements vertically at 50% (center) */
+  left: 50%; /* Position elements horizontally at 50% (center) */
+  transform: translate(-50%, -50%); /* Offset elements by half their width/height to center them */
+  text-align: center; /* Maintain centered text within elements */
+}
+
+.charactereven,
 .characterodd {
   font-size: 2em;
   font-family: "Noto Sans CJK", serif;
@@ -23,33 +34,29 @@
 
 .charactereven {
   color: #004d00;
-  opacity: 1; /* Full opacity */
-  z-index: 2; /* Higher z-index to appear on top */
+  opacity: 1;
+  z-index: 2; /* Higher z-index for character to appear on top (optional) */
 }
 
 .characterodd {
   color: #80002a;
-  opacity: 0.8; /* Slightly transparent */
-  z-index: 1; /* Lower z-index to appear slightly behind */
+  opacity: 0.8;
+  z-index: 1; /* Lower z-index (optional) */
 }
 
 .pinyin2 {
   font-size: 0.8em;
-  position: relative;
-  top: -1.2em;
   color: #0e4d92;
-  opacity: 0.7; /* Less transparent than translation */
-  z-index: 3; /* Highest z-index to ensure it's always on top */
+  opacity: 0.7;
+  z-index: 3; /* Highest z-index to ensure it overlaps (optional) */
 }
 
 .translation1 {
   font-style: italic;
   font-size: 0.8em;
-  position: relative;
-  top: -1.2em;
-  z-index: 2; /* Same z-index as charactereven for overlapping */
   color: #0080ff;
-  opacity: 0.6; /* Most transparent */
+  opacity: 0.6;
+  z-index: 2; /* Same z-index as charactereven (optional) */
 }
   
    .tooltip-content {    
