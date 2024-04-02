@@ -34,6 +34,8 @@
 <!-- JavaScript for wrapping each Chinese character -->
 <script>
           document.addEventListener("DOMContentLoaded", function () {
+	    let ch5000_en = [" ", of, is];	
+            let ch5000_pt = [" ", de, sim];
             let textContainer = document.body;
             let charPosition = 1;
 
@@ -79,8 +81,8 @@
 		tooltipElem.className = 'tooltip-content';
 		tooltipElem.innerHTML = '<span style="font-size: 14px; color: #004d00;">' + position + ':</span> ' 
 		    + '<span style="font-size: 14px; color: #80002a;">' + 'Guǒ' + ' </span>'
-		    + char + '<span style="font-size: 14px; color: #004d00;">' + ' Fruit' + '</span>' 
-		    + '<span style="font-size: 14px; color: #80002a;">' + ' Fruta' + '</span>';
+		    + char + '<span style="font-size: 14px; color: #004d00;">' + ch5000_en[String(position)] + '</span>' 
+		    + '<span style="font-size: 14px; color: #80002a;">' + ch5000_pt[String(position)] + '</span>';
 		document.body.appendChild(tooltipElem);
 
                 let tooltipWidth = tooltipElem.offsetWidth;
