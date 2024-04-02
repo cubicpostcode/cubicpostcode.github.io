@@ -8,6 +8,30 @@
     body {
         background-color: #FAF3E0;
         color: #4A4A4A;
+    }	
+	 
+    .character-container {
+      display: inline-block;
+      text-align: center;
+      margin: 5px;
+    }
+
+    .character {
+      font-size: 2em;
+      font-family: "Noto Sans CJK", serif;
+    }
+
+    .pinyin {
+      font-size: 0.8em;
+      position: relative;
+      top: -1.2em;
+    }
+
+    .translation {
+      font-style: italic;
+      font-size: 0.8em;
+      display: block;
+      text-align: center;
     }	 
   
    .tooltip-content {    
@@ -36,7 +60,42 @@
 	    let ch5000_py = [" ", " De ", " Shì "];
 	    let ch5000_en = [" ", " of ", " is "];	
             let ch5000_pt = [" ", " de ", " sim "];
-          document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function () {
+		  const body = document.body;
+		  body.innerHTML = ''; // Clear existing content
+		
+		  // Define some example characters (replace with your actual data)
+		  const characters = [
+		    { character: "水", pinyin: "shuǐ", translation: "water" },
+		    { character: "火", pinyin: "huǒ", translation: "fire" },
+		    { character: "天", pinyin: "tiān", translation: "sky" },
+		    { character: "人", pinyin: "rén", translation: "person" },
+		    { character: "学", pinyin: "xué", translation: "learn" },
+		    // Add more characters here following the same format
+		  ];
+		
+		  // Loop through characters and create the structure
+		  characters.forEach(function(character) {
+		    const container = document.createElement('div');
+		    container.classList.add('character-container');
+		
+		    const charSpan = document.createElement('span');
+		    charSpan.classList.add('character');
+		    charSpan.textContent = character.character;
+		    container.appendChild(charSpan);
+		
+		    const pinyinSpan = document.createElement('span');
+		    pinyinSpan.classList.add('pinyin');
+		    pinyinSpan.textContent = character.pinyin;
+		    container.appendChild(pinyinSpan);
+		
+		    const translationSpan = document.createElement('span');
+		    translationSpan.classList.add('translation');
+		    translationSpan.textContent = character.translation;
+		    container.appendChild(translationSpan);
+		
+		    body.appendChild(container);
+		  });
 
             let textContainer = document.body;
             let charPosition = 1;
