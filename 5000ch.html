@@ -89,7 +89,7 @@
 		    container.classList.add('character-container');
 		
 		    const charSpan = document.createElement('span');
-		    const isEven = Math.random() < 0.5; // Randomly determine even/odd
+		    let isEven = Math.random() < 0.5; 
 			if (isEven) {
 			charSpan.classList.add('charactereven');
 			} else {
