@@ -16,18 +16,11 @@
       margin: 5px;
     }
 
-    .charactereven {
+    .character {
       font-size: 2em;
       font-family: "Noto Sans CJK", serif;
-      color: red; 
     }
 
-    .characterodd {
-      font-size: 2em;
-      font-family: "Noto Sans CJK", serif;
-      color: blue; 
-    }
-    
     .pinyin {
       font-size: 0.8em;
       position: relative;
@@ -89,15 +82,8 @@
 		    container.classList.add('character-container');
 		
 		    const charSpan = document.createElement('span');
-		    charSpan.classList.add('charactereven');
+		    charSpan.classList.add('character');
 		    charSpan.textContent = character.character;
-
-
-
-
-
-			  
-		    
 		    container.appendChild(charSpan);
 		
 		    const pinyinSpan = document.createElement('span');
