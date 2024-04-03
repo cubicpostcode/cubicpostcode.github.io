@@ -35150,7 +35150,7 @@ const characters = [
                 const pinYin = charObject.pinyin;
 		*/
 		const pinYin = "testhello";
-                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + charObject;
+                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + "charObject";
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
