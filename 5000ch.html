@@ -35146,11 +35146,11 @@ const characters = [
 		const charPos = parseInt(charPosString, 10);
 		const charObject = characters[charPos]; 
 		    console.log(charObject);
-		    		    /* 
+		 
                 const pinYin = charObject.pinyin;
-		*/
+	
 		const pinYin = "testhello";
-                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + "charObject";
+                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + pinYin;
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
