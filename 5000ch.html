@@ -68,6 +68,9 @@
 	    let ch5000_py = [" ", " De ", " Shì "];
 	    let ch5000_en = [" ", " of ", " is "];	
             let ch5000_pt = [" ", " de ", " sim "];
+
+	    const myArray = new Array(5000);
+	
 document.addEventListener("DOMContentLoaded", function () {
 const body = document.body;
 body.innerHTML = ''; 
@@ -35076,6 +35079,7 @@ const characters = [
 		
 		  // Loop through characters and create the structure
 		  characters.forEach(function(character) {
+		    myArray.push(character.pinyin);
 		    const container = document.createElement('div');
 		    container.dataset.charpos = character.charpos;
 		    container.classList.add('character-container');
@@ -35143,9 +35147,9 @@ const characters = [
 		position = position.toString().padStart(4, '0');
 		   
 		const charPosString = event.target.closest('div').dataset.charpos;   
-		const charPos = parseInt(charPosString, 10);
+		const charPos = (parseInt(charPosString, 10) - 1);
 		    
-                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + charPos;
+                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + myArray[charPos];
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
