@@ -35077,6 +35077,7 @@ const characters = [
 		  // Loop through characters and create the structure
 		  characters.forEach(function(character) {
 		    const container = document.createElement('div');
+		    container.dataset.charpos = character.charpos;
 		    container.classList.add('character-container');
 		
 		    const charSpan = document.createElement('span');
@@ -35087,8 +35088,7 @@ const characters = [
 			charSpan.classList.add('characterodd');
 			};
 		    
-		    charSpan.textContent = character.character;
-		    charSpan.dataset.charpos = character.charpos;
+		    charSpan.textContent = character.character;		   
 		    container.appendChild(charSpan);
 		
 		    const pinyinSpan = document.createElement('span');
