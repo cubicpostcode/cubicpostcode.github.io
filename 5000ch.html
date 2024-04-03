@@ -35147,7 +35147,7 @@ const characters = [
 		position = position.toString().padStart(4, '0');
 		   
 		const charPosString = event.target.closest('div').dataset.charpos;   
-		const charPos = (parseInt(charPosString, 10) - 1);
+		const charPos = parseInt(charPosString, 10);
 		    
                 window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + myArray[charPos];
                 var currentURL = window.location.href;
