@@ -35141,7 +35141,7 @@ const characters = [
                 let position = parseInt(event.target.getAttribute("data-index")) - 1;
 		let position_int = position;    
 		position = position.toString().padStart(4, '0');
-                window.location.hash = "/" + event.target.closest('div') + "/" + encodeURIComponent(char) + "/" + "Suǒ wé";
+                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + "Suǒ wé";
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
