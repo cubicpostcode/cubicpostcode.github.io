@@ -35144,13 +35144,10 @@ const characters = [
 		   
 		const charPosString = event.target.closest('div').dataset.charpos;   
 		const charPos = parseInt(charPosString, 10);
-		const pinyin = characters[20]?.charpos;
+		
+		   // const pinyin = characters[20]?.charpos;
 
-		if (pinyin) {
-		  console.log("PinYin retrieved:", pinyin);
-		} else {
-		  console.warn("Error retrieving PinYin! Array might be empty or index might be out of bounds.");
-		};
+		  console.log("Hello_1");
 		    
                 window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + charPos;
                 var currentURL = window.location.href;
