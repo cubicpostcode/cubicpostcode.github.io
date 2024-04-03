@@ -35088,6 +35088,7 @@ const characters = [
 			};
 		    
 		    charSpan.textContent = character.character;
+		    charSpan.dataset.charpos = character.charpos;
 		    container.appendChild(charSpan);
 		
 		    const pinyinSpan = document.createElement('span');
