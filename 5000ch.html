@@ -35145,7 +35145,7 @@ const characters = [
 		const charPosString = event.target.closest('div').dataset.charpos;   
 		const charPos = parseInt(charPosString, 10);
 		//const pinyin = characters[20].pinyin;
-                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + characters[1].pinyin;
+                window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + charPos;
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
