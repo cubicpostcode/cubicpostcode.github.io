@@ -35149,6 +35149,9 @@ const characters = [
 
 		// const charObject = characters[3]; // Assuming characters[0] is a valid object
                  //const charPos = parseInt(charObject.charpos, 10);
+
+		const jsonString = JSON.stringify(characters);
+                console.log(jsonString);
 		    
                 window.location.hash = "/" + event.target.closest('div').dataset.charpos + "/" + encodeURIComponent(char) + "/" + charPos;
                 var currentURL = window.location.href;
