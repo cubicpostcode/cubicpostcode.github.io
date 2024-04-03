@@ -35138,7 +35138,7 @@ const characters = [
             });
         });
 
-        document.addEventListener("mouseover", function(event) {
+        document.addEventListener("click", function(event) {
             if(event.target.classList.contains("tooltip")) {
                 let char = event.target.textContent;
                 let position = parseInt(event.target.getAttribute("data-index")) - 1;
