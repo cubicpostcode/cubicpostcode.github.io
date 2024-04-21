@@ -35141,7 +35141,11 @@ const characters = [
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
-            }
+
+		let audio = new Audio('CHINA/wav/好' + '.wav');
+                audio.play();
+	    
+	    }
         });
 
 </script>
