@@ -35135,8 +35135,8 @@ const characters = [
                 node.replaceWith(wrapper);
             });
 
-	  var event2 = new MouseEvent("mouseover", { bubbles: true, cancelable: true });
- 	  document.dispatchEvent(event2);
+	  var event = new MouseEvent("mouseover", { bubbles: true, cancelable: true });
+ 	  document.dispatchEvent(event);
         });
 
         document.addEventListener("click", function(event) {
