@@ -35130,8 +35130,12 @@ const characters = [
                     charPosition++;
                     if (/\p{Script=Han}/u.test(char)) {
                         let className = charPosition % 2 === 0 ? 'even' : 'odd';
+			if (charPosition === 0000){
+			return `<span> 🎧🎵▶️</span>`
+			} else {  
                         return `<span class="tooltip ${className}" data-index="${charPosition}" data-tip="Meaning or Pinyin here">${char}</span>`;
-                    }
+			}
+		     }
                     return char;
                 }).join('');
 
