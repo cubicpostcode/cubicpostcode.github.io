@@ -35141,15 +35141,6 @@ const characters = [
                 var currentURL = window.location.href;
                 var decodedURL = decodeURIComponent(currentURL);
                 window.history.replaceState({}, '', decodedURL);
-
-		let tooltipElem = document.createElement('div');
-		tooltipElem.className = 'tooltip-content';
-		tooltipElem.innerHTML = '<span style="font-size: 14px; color: #004d00;">' + position + ':</span> ' 
-		    + '<span style="font-size: 14px; color: #80002a;">' + ch5000_py[position_int] + ' </span>'
-		    + char + '<span style="font-size: 14px; color: #004d00;">' + ch5000_en[position_int] + '</span>' 
-		    + '<span style="font-size: 14px; color: #80002a;">' + ch5000_pt[position_int] + '</span>';
-		document.body.appendChild(tooltipElem);
-
             }
         });
 
