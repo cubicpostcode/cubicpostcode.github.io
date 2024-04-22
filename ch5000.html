@@ -35125,7 +35125,7 @@ const characters = [
                     charPosition++;
                     if (/\p{Script=Han}/u.test(char)) {
                         let className = charPosition % 2 === 0 ? 'even' : 'odd';
-                        return `<span style="background-color: #F0D7B4;" class="tooltip ${className}" data-index="${charPosition}" data-tip="Meaning or Pinyin here">${char}</span>`;
+                        return `<span style="background-color: #E6C5A6;" class="tooltip ${className}" data-index="${charPosition}" data-tip="Meaning or Pinyin here">${char}</span>`;
 			}
                     return char;
                 }).join('');
