@@ -82,6 +82,10 @@
     <div class="gameView">
     <h1>Tetris</h1>
     <canvas id= "Tetris" width= "200" height="400" ></canvas>
+    <div id= "Score">
+       <span>Score:</span> <div id= "score">0</div>
+
+    </div>
     </div>
     <div class="game-over">
         <h1>GAME OVER</h1>
@@ -291,12 +295,12 @@
 	//piece colors
 
 	const PIECES = [
-	  [Z, "gray"],
-	  [S, "gray"],
-	  [T, "gray"],
-	  [O, "gray"],
-	  [L, "gray"],
-	  [J, "gray"]
+	  [Z, "black"],
+	  [S, "black"],
+	  [T, "black"],
+	  [O, "black"],
+	  [L, "black"],
+	  [J, "black"]
 	];
 
 	//generate a random piece
