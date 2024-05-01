@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Item</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10vw;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const items = ["F","F'","L","L'","R","R'","B","B'","U","U'","D","D'"];
+    setInterval(function() {
+      const randomIndex = Math.floor(Math.random() * items.length);
+      document.body.innerHTML = items[randomIndex];
+    }, 1000);
+  </script>
+</body>
+</html>
