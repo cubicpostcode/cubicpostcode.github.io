@@ -7,6 +7,11 @@
     all:unset !important;
 }
 
+.highlight_ {
+            background-color: #FFD700; /* Bright golden yellow color */
+            color: black; /* Text color for contrast */
+        }
+
 img{
     max-width: 100%;
 }
