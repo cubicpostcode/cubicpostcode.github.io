@@ -33,9 +33,10 @@
 </head> 
 
 <body>  
-	 <br>	
-  <button id="fullscreenButton" onclick="toggleFullScreen()">Full Screen</button>
+	<br>	
+        <button id="fullscreenButton" onclick="toggleFullScreen()">Full Screen</button>
 	<br>
+	<button id="fullscreenButton100" onclick="toggleFullScreen100()">100% Clear Screen</button>
 	<br>
   <audio id="audioElement" controls autoplay></audio>	
 <div>
@@ -45,6 +46,64 @@
 <script>
 
 function toggleFullScreen() {
+      var doc = window.document;
+      var docEl = doc.documentElement;
+
+      var requestFullScreen =
+        docEl.requestFullscreen ||
+        docEl.mozRequestFullScreen ||
+        docEl.webkitRequestFullScreen ||
+        docEl.msRequestFullscreen;
+      var cancelFullScreen =
+        doc.exitFullscreen ||
+        doc.mozCancelFullScreen ||
+        doc.webkitExitFullscreen ||
+        doc.msExitFullscreen;
+
+      if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+	document.getElementById('audioElement').style.display = 'none';
+	document.getElementById('fullscreenButton').style.display = 'none';      
+        // Entering full screen mode
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen();
+        } else if (docEl.mozRequestFullScreen) {
+          docEl.mozRequestFullScreen();
+        } else if (docEl.webkitRequestFullScreen) {
+          docEl.webkitRequestFullScreen();
+        } else if (docEl.msRequestFullscreen) {
+          docEl.msRequestFullscreen();
+        }
+
+        // Hide audio elements
+        var audioElements = document.getElementsByTagName('audio');
+        for (var i = 0; i < audioElements.length; i++) {
+          audioElements[i].classList.add('hidden-audio');
+        }
+
+        // Hide the button
+        var button = document.getElementById('fullscreenButton');
+        button.classList.add('hidden-button');
+      } else {
+        // Exiting full screen mode
+        if (cancelFullScreen) {
+          cancelFullScreen.call(doc);
+        } else if (doc.mozCancelFullScreen) {
+          doc.mozCancelFullScreen();
+        } else if (doc.webkitExitFullscreen) {
+          doc.webkitExitFullscreen();
+        } else if (doc.msExitFullscreen) {
+          doc.msExitFullscreen();
+        }
+
+        // Show audio elements
+        var audioElements = document.getElementsByTagName('audio');
+        for (var i = 0; i < audioElements.length; i++) {
+          audioElements[i].classList.remove('hidden-audio');
+        }
+      }
+    }	
+
+function toggleFullScreen100() {
       var doc = window.document;
       var docEl = doc.documentElement;
 
