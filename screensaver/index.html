@@ -23,6 +23,18 @@
             font-size: 16px;
             border-radius: 15px;	
         }
+        #fullscreenButton2 {
+            background-color: #F1F3F4;
+            border: 2px solid #F1F3F4;	
+            border: none;
+            color: black;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 15px;	
+        }
     </style> 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
@@ -101,9 +113,11 @@
                     audioElements[i].classList.add('hidden-audio');
                 }
 
-                // Hide the button
+                // Hide the buttons
                 var button = document.getElementById('fullscreenButton');
                 button.classList.add('hidden-button');
+                var button2 = document.getElementById('fullscreenButton2');
+                button2.classList.add('hidden-button');
             } else {
                 // Exiting full screen mode
                 if (cancelFullScreen) {
