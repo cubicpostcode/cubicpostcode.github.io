@@ -32,10 +32,24 @@
             color: #fff; /* White link text color */
             text-decoration: none;
             border-radius: 5px;
+            max-width: 300px; /* Set a maximum width */
+            margin: 0 auto; /* Center align on larger screens */
         }
 
         a:hover {
             background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        @media (min-width: 600px) {
+            a {
+                width: 50%; /* Set the width to 50% of the container on larger screens */
+            }
+        }
+
+        @media (min-width: 900px) {
+            a {
+                width: 30%; /* Set the width to 30% of the container on very large screens */
+            }
         }
     </style>
 </head>
