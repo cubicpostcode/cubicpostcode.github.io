@@ -203,12 +203,19 @@
                         break;
                 }
                 squares[pacmanCurrentIndex].classList.add('pac-man');
+                playMoveSound();
                 pacDotEaten();
                 powerPelletEaten();
                 checkForGameOver();
                 checkForWin();
             }
             document.addEventListener('keyup', movePacman);
+
+            // Play move sound
+            function playMoveSound() {
+                const moveSound = new Audio('sound.mp3');
+                moveSound.play();
+            }
 
             // What happens when you eat a pac-dot
             function pacDotEaten() {
