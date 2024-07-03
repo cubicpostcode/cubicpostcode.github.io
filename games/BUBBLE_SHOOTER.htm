@@ -16,12 +16,10 @@
   }
   #game {
     position: relative;
-    width: 90vmin;
-    height: 80vmin;
+    width: 400px;
+    height: 600px;
   }
   canvas {
-    width: 100%;
-    height: 100%;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
   }
@@ -59,7 +57,7 @@
 </head>
 <body>
 <div id="game">
-  <canvas id="gameCanvas"></canvas>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
   <div id="pauseMenu" class="menu">
     <h2>Paused</h2>
     <button class="btn" id="resumeBtn">Resume</button>
@@ -81,9 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resumeBtn = document.getElementById('resumeBtn');
   const restartBtn = document.getElementById('restartBtn');
   const playAgainBtn = document.getElementById('playAgainBtn');
-
-  canvas.width = 400;
-  canvas.height = 600;
 
   const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9d56e', '#8a2be2'];
   const bubbleRadius = 20;
@@ -151,7 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
       currentBubble.y += vy;
 
       if (currentBubble.x < bubbleRadius || currentBubble.x > canvas.width - bubbleRadius) {
-        vx *= -1;
+        currentBubble.x = Math.max(bubbleRadius, Math.min(canvas.width - bubbleRadius, currentBubble.x));
+        snapToGrid();
+        return;
       }
 
       if (currentBubble.y < bubbleRadius) {
@@ -189,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkForMatches() {
-    // Simplified match-3 logic
     bubbles = bubbles.filter(bubble => {
       const matches = bubbles.filter(b => 
         b.color === bubble.color && 
