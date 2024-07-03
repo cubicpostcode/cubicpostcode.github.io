@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PacMan</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #ecf0f1;
+            --accent-color: #e74c3c;
+            --background-gradient: linear-gradient(135deg, #3498db, #8e44ad);
+        }
+
         body, html {
             margin: 0;
             padding: 0;
@@ -13,9 +22,9 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background: #282c34;
-            color: #61dafb;
-            font-family: Arial, sans-serif;
+            background: var(--background-gradient);
+            color: var(--secondary-color);
+            font-family: 'Poppins', sans-serif;
         }
 
         .grid {
@@ -23,9 +32,10 @@
             flex-wrap: wrap;
             width: 560px;
             height: 560px;
-            border: 2px solid #fff;
-            background: #222;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--secondary-color);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
         }
 
         .grid div {
@@ -34,12 +44,12 @@
         }
 
         .pac-dot, .power-pellet {
-            background-color: #00ff00;   
+            background-color: var(--accent-color);
             animation: pulse 1s infinite;
         }
 
         .pac-dot {
-            border: 5px solid #282c34;
+            border: 5px solid var(--primary-color);
             box-sizing: border-box;
         }
 
@@ -48,7 +58,7 @@
         }
 
         .wall {
-            background-color: #000;
+            background-color: var(--primary-color);
         }
 
         .pac-man {
@@ -84,7 +94,8 @@
 
         h3 {
             margin: 20px;
-            font-size: 24px;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
