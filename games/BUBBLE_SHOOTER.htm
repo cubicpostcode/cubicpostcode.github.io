@@ -83,7 +83,7 @@
       const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9d56e', '#8a2be2'];
       const bubbleRadius = 20;
       let bubbles = [];
-      let shooter = { x: canvas.width / 2, y: canvas.height - 30, angle: 0 };
+      let shooter = { x: canvas.width / 2, y: canvas.height - 30, angle: -Math.PI / 2 };
       let currentBubble = null;
       let gameOver = false;
       let paused = false;
@@ -228,10 +228,10 @@
           }
         } else if (e.code === 'ArrowLeft') {
           shooter.angle -= 0.1;
-          shooter.angle = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, shooter.angle));
+          shooter.angle = Math.max(-Math.PI, Math.min(0, shooter.angle));
         } else if (e.code === 'ArrowRight') {
           shooter.angle += 0.1;
-          shooter.angle = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, shooter.angle));
+          shooter.angle = Math.max(-Math.PI, Math.min(0, shooter.angle));
         } else if (e.code === 'ArrowUp') {
           shoot();
         }
