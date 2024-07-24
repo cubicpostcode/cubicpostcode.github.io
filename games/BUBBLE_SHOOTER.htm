@@ -116,10 +116,13 @@
       }
 
       function drawShooter() {
-        ctx.drawImage(cannonImage, shooter.x - 20, shooter.y - 20, 40, 40);
+        ctx.save();
+        ctx.translate(shooter.x, shooter.y);
+        ctx.rotate(shooter.angle);
+        ctx.drawImage(cannonImage, -20, -20, 40, 40);
+        ctx.restore();
       }
       
-
       function update() {
         if (gameOver || paused) return;
 
