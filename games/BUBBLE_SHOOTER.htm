@@ -118,7 +118,7 @@
       function drawShooter() {
         ctx.save();
         ctx.translate(shooter.x, shooter.y);
-        ctx.rotate(shooter.angle);
+        ctx.rotate(shooter.angle + Math.PI / 2); // Add 90 degrees (π/2 radians) to the rotation
         ctx.drawImage(cannonImage, -20, -20, 40, 40);
         ctx.restore();
       }
