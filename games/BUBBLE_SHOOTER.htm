@@ -82,6 +82,9 @@
 
       const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9d56e', '#8a2be2'];
       const bubbleRadius = 20;
+      let cannonImage = new Image();
+      cannonImage.src = 'https://github.com/cubicpostcode/cubicpostcode.github.io/blob/master/assets/cannon.png?raw=true';
+
       let bubbles = [];
       let shooter = { x: canvas.width / 2, y: canvas.height - 30, angle: -Math.PI / 2 };
       let currentBubble = null;
@@ -113,14 +116,9 @@
       }
 
       function drawShooter() {
-        ctx.beginPath();
-        ctx.moveTo(shooter.x, shooter.y);
-        ctx.lineTo(shooter.x + Math.cos(shooter.angle) * 30, shooter.y + Math.sin(shooter.angle) * 30);
-        ctx.strokeStyle = '#333';
-        ctx.lineWidth = 5;
-        ctx.stroke();
-        ctx.closePath();
+        ctx.drawImage(cannonImage, shooter.x - 20, shooter.y - 20, 40, 40);
       }
+      
 
       function update() {
         if (gameOver || paused) return;
