@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+    <style>
+        @keyframes healing-glow {
+            0% { box-shadow: 0 0 5px #2ecc71; }
+            50% { box-shadow: 0 0 20px #2ecc71; }
+            100% { box-shadow: 0 0 5px #2ecc71; }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body {
+            font-family: 'Caveat', cursive;
+            color: #2ecc71;
+            line-height: 1.8;
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0fff0;
+        }
+
+        p {
+            margin-bottom: 20px;
+            animation: fade-in 1.5s ease-in-out;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            animation: healing-glow 3s infinite, fade-in 2s ease-in-out;
+        }
+
+        .signature {
+            font-style: italic;
+            text-align: right;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <p>Dear Jade,</p>
+
+    <p>We are sending you healing and positive vibrations, along with an abundance of love and affection. We sincerely wish for your quick recovery and hope you find a GP you can trust and work with for a lifetime.</p>
+
+    <p>You are in our thoughts and prayers, dear Jade. We hope you feel better soon, rejuvenated and restored to good health and spirits.</p>
+
+    <p>May you find strength in each passing day and comfort in knowing how deeply you are cared for.</p>
+
+    <img src="https://cubicpostcode.com/assets/Healing.jpg?raw=1" alt="Healing Image">
+
+    <p class="signature">Warmest regards,<br>Cubic</p>
+</body>
+</html>
