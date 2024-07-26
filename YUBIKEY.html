@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"BITWARDEN" - Secure Your Gmail with Yubikey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%);
+            animation: gradientBackground 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .step {
+            margin: 15px 0;
+        }
+
+        .step-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .best-practices, .additional-tips {
+            margin: 15px 0;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Using a Yubikey to Secure Your Gmail Account</h1>
+        <div class="step">
+            <div class="step-title">Step 1: Register Your Yubikey with Your Google Account</div>
+            <p>Insert Yubikey: Plug your Yubikey into a USB port on your computer.</p>
+            <p>Sign In to Google Account:
+                <ul>
+                    <li>Open a web browser and go to <a href="https://myaccount.google.com/security" target="_blank">myaccount.google.com/security</a>.</li>
+                    <li>Sign in to your Google account.</li>
+                </ul>
+            </p>
+            <p>Security Settings:
+                <ul>
+                    <li>In the "Signing in to Google" section, find and click on "2-Step Verification".</li>
+                    <li>If prompted, sign in again.</li>
+                </ul>
+            </p>
+            <p>Add Security Key:
+                <ul>
+                    <li>Scroll down to "Add more second steps to verify it’s you" and find "Security Key".</li>
+                    <li>Click on "Add Security Key" and follow the on-screen instructions.</li>
+                    <li>When prompted, insert your Yubikey (if it's not already inserted) and tap it when the light flashes.</li>
+                </ul>
+            </p>
+            <p>Confirm and Name Your Key:
+                <ul>
+                    <li>Give your security key a name (e.g., "Yubikey").</li>
+                    <li>Complete the process by following the remaining prompts.</li>
+                </ul>
+            </p>
+        </div>
+        <div class="step">
+            <div class="step-title">Step 2: Using Your Yubikey</div>
+            <p>Sign In:
+                <ul>
+                    <li>Go to the Google login page and enter your email and password as usual.</li>
+                    <li>When prompted for your second factor of authentication, insert your Yubikey and tap it.</li>
+                </ul>
+            </p>
+            <p>Access via Mobile:
+                <ul>
+                    <li>If you're accessing Gmail on your phone and your phone supports USB-OTG, you can use a USB-C or micro-USB adapter to connect your Yubikey.</li>
+                    <li>Alternatively, if your Yubikey has NFC, you can tap it on the back of your phone.</li>
+                </ul>
+            </p>
+        </div>
+        <div class="best-practices">
+            <div class="step-title">Best Practices for Using Yubikey in Public Places:</div>
+            <p>Keep It Secure:
+                <ul>
+                    <li>Always keep your Yubikey with you. Attach it to your keychain or store it in a safe place.</li>
+                    <li>Consider using a cover for your Yubikey to protect it from physical damage.</li>
+                </ul>
+            </p>
+            <p>Avoid Public USB Ports:
+                <ul>
+                    <li>Avoid using public USB ports to insert your Yubikey, as these could be compromised (a practice known as "juice jacking").</li>
+                    <li>Use your own USB adapter or portable charger if necessary.</li>
+                </ul>
+            </p>
+            <p>Privacy:
+                <ul>
+                    <li>When using your Yubikey in public, shield your screen to prevent shoulder surfing.</li>
+                    <li>Avoid logging into sensitive accounts when others are nearby or watching.</li>
+                </ul>
+            </p>
+            <p>Backup Options:
+                <ul>
+                    <li>Set up a backup security key or alternative 2-step verification methods (like Google Authenticator or backup codes) in case you lose your Yubikey.</li>
+                </ul>
+            </p>
+            <p>Regular Checks:
+                <ul>
+                    <li>Periodically check your security settings to ensure your Yubikey is still registered and active.</li>
+                    <li>Review your account activity for any unauthorized access.</li>
+                </ul>
+            </p>
+        </div>
+        <div class="additional-tips">
+            <div class="step-title">Additional Tips:</div>
+            <p>Using Yubikey with Mobile Devices:
+                <ul>
+                    <li>USB-OTG Support: Ensure your mobile device supports USB-OTG (On-The-Go) to connect your Yubikey via an adapter.</li>
+                    <li>NFC Capability: If your Yubikey supports NFC, simply tap it against your phone to authenticate.</li>
+                    <li>Google Authenticator: As a backup, install the Google Authenticator app on your phone.</li>
+                </ul>
+            </p>
+            <p>Label Your Keys: If you have multiple Yubikeys, label them to differentiate easily.</p>
+            <p>Firmware Updates: Check for firmware updates for your Yubikey and apply them as necessary.</p>
+            <p>Travel: When traveling, consider carrying a backup Yubikey stored separately from your primary one.</p>
+        </div>
+    </div>
+</body>
+</html>
