@@ -99,6 +99,15 @@
     <img src="https://cubicpostcode.com/assets/GataAquilina.png?raw=1" alt="Featured Image">
     <div class="text-animation">Eye Color: #7F6347</div>
     <!-- Embed the YouTube video in an iframe to play in the background -->
-    <iframe src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
+    <iframe id="background-music" src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var iframe = document.getElementById('background-music');
+            var src = iframe.src;
+            iframe.src = '';
+            iframe.src = src;
+        });
+    </script>
 </body>
 </html>
