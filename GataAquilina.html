@@ -14,15 +14,82 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #7F6347;
+            background: linear-gradient(135deg, #7F6347, #B2846A);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            overflow: hidden;
         }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         img {
             max-width: 100%;
             height: auto;
+            transition: transform 0.5s, filter 0.5s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .eye-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0 0 30px 10px #7F6347;
+            animation: glowAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes glowAnimation {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .eye-glow.left {
+            top: 35%;
+            left: 42%;
+        }
+
+        .eye-glow.right {
+            top: 35%;
+            left: 52%;
+        }
+
+        .text-animation {
+            position: absolute;
+            bottom: 20px;
+            font-size: 2rem;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid white;
+            animation: typing 4s steps(20, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: white; }
         }
     </style>
 </head>
 <body>
+    <div class="eye-glow left"></div>
+    <div class="eye-glow right"></div>
     <img src="https://cubicpostcode.com/assets/GataAquilina.png?raw=1" alt="Featured Image">
+    <div class="text-animation">Eye Color: #7F6347</div>
 </body>
 </html>
