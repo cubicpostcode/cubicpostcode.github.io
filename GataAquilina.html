@@ -84,10 +84,11 @@
             50% { border-color: white; }
         }
 
-        audio {
+        iframe {
             position: relative;
-            width: 300px; /* Adjust the width as needed */
-            margin-top: 20px;
+            width: 560px;
+            height: 315px;
+            border: none;
         }
     </style>
 </head>
@@ -96,16 +97,15 @@
     <div class="eye-glow right"></div>
     <img src="https://cubicpostcode.com/assets/GataAquilina.png?raw=1" alt="Featured Image">
     <div class="text-animation">Eye Color: #7F6347</div>
-    <!-- HTML5 audio player -->
-    <audio controls>
-        <source src="GataAquilina.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Embed the YouTube video in an iframe to play in the background -->
+    <iframe id="background-music" src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var audio = document.querySelector('audio');
-            audio.play();
+            var iframe = document.getElementById('background-music');
+            var src = iframe.src;
+            iframe.src = '';
+            iframe.src = src;
         });
     </script>
 </body>
