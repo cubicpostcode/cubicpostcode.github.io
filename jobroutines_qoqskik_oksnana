@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commuter Routes & Daily Routines in Portugal</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .route-list, .job-list {
+            margin: 20px auto;
+            padding: 0;
+            max-width: 800px;
+            list-style: none;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .route-list li, .job-list li {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .route-list li:hover, .job-list li:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Common Commuter Routes in Portugal</h1>
+    <ul class="route-list">
+        <li>Sintra Line (Lisbon Urban Trains): Sintra, Amadora, Benfica, Sete Rios, Entrecampos, Rossio.</li>
+        <li>Cascais/Estoril Line (Lisbon Urban Trains): Cascais, Estoril, Carcavelos, Oeiras, Algés, Cais do Sodré.</li>
+        <li>Vila Franca de Xira Line (Lisbon Urban Trains): Vila Franca de Xira, Alverca, Sacavém, Oriente, Santa Apolónia.</li>
+        <li>Lisbon Metro:
+            <ul>
+                <li>Blue Line: Reboleira, Amadora Este, Pontinha, Marquês de Pombal, Baixa-Chiado, Santa Apolónia.</li>
+                <li>Yellow Line: Odivelas, Campo Grande, Saldanha, Marquês de Pombal, Rato.</li>
+                <li>Green Line: Telheiras, Campo Grande, Alameda, Baixa-Chiado, Cais do Sodré.</li>
+                <li>Red Line: Aeroporto, Oriente, Saldanha, São Sebastião, Alameda.</li>
+            </ul>
+        </li>
+        <li>Porto Metro:
+            <ul>
+                <li>Blue Line (A): Estádio do Dragão, Trindade, Casa da Música, Senhora da Hora.</li>
+                <li>Red Line (B): Póvoa de Varzim, Vila do Conde, Senhora da Hora, Trindade.</li>
+                <li>Yellow Line (D): Hospital São João, Trindade, São Bento, Santo Ovídio.</li>
+                <li>Orange Line (F): Senhora da Hora, Mercado, Trindade.</li>
+            </ul>
+        </li>
+        <li>Alfa Pendular (Long-Distance Train): Braga, Porto-Campanhã, Aveiro, Coimbra-B, Lisbon-Oriente, Lisbon-Santa Apolónia, Albufeira, Faro.</li>
+        <li>Sado Line (Lisbon Urban Trains): Setúbal, Palmela, Pinhal Novo, Coina, Pragal, Roma-Areeiro.</li>
+        <li>Northern Line (Lisbon Urban Trains): Lisbon-Santa Apolónia, Lisbon-Oriente, Vila Franca de Xira, Santarém, Entroncamento.</li>
+        <li>Routes in the Algarve Region (Regional Trains): Vila Real de Santo António, Tavira, Olhão, Faro, Loulé, Portimão, Lagos.</li>
+    </ul>
+
+    <h2>Daily Routines of Different Jobs in Portugal</h2>
+    <ul class="job-list">
+        <li>Software Developer (Lisbon Tech Hub): Travels from Sintra to Rossio. Develops software for international clients.</li>
+        <li>Bank Clerk (Baixa-Chiado, Lisbon): Takes the train from Cascais to Cais do Sodré, then the metro. Balances customer service with financial operations.</li>
+        <li>University Professor (University of Porto): Travels from Hospital São João to São Bento, dedicates the day to research and lectures.</li>
+        <li>Chef (Alfama, Lisbon): Commutes from Amadora Este to Baixa-Chiado. Prepares traditional Portuguese dishes.</li>
+        <li>Architect (Porto): Travels from Estádio do Dragão to Casa da Música. Designs modern structures blending with Portugal's architectural history.</li>
+        <li>Tour Guide (Algarve Region): Travels between Tavira, Olhão, and Faro, guiding tourists through the Algarve.</li>
+        <li>Lawyer (Lisbon, Areeiro): Takes the train from Setúbal to Roma-Areeiro. Engages in legal practices for businesses and individuals.</li>
+        <li>Primary School Teacher (Lisbon Suburbs): Travels from Amadora to Sete Rios. Shapes young minds with traditional and modern educational techniques.</li>
+        <li>Healthcare Worker (Faro Hospital): Travels from Loulé to Faro, providing essential healthcare services.</li>
+        <li>Journalist (Lisbon, Parque das Nações): Starts the day in Oriente, covering breaking news.</li>
+        <li>Marketing Executive (Lisbon, Saldanha): Travels from Odivelas to Saldanha, works in dynamic digital marketing environments.</li>
+        <li>Fisherman (Cascais): Starts early in Cascais, adapting to modern fishing regulations.</li>
+        <li>Engineer (Porto, Matosinhos): Travels from Vila do Conde to Trindade, involved in industrial and technological projects.</li>
+        <li>Artist (Lisbon, Bairro Alto): Travels from Telheiras to Baixa-Chiado, creating art blending contemporary styles with traditional Portuguese themes.</li>
+        <li>Public Administrator (Lisbon, Santa Apolónia): Travels from Sintra to Santa Apolónia, ensuring smooth public service operations.</li>
+        <li>Research Scientist (University of Coimbra): Takes the Alfa Pendular from Lisbon to Coimbra-B, conducting research.</li>
+        <li>Shop Owner (Lisbon, Rossio): Travels daily from Amadora to Rossio, running a small business.</li>
+        <li>Taxi Driver (Porto): Begins the day at São Bento, providing critical transportation services across Porto.</li>
+        <li>Wine Producer (Alentejo Region): Travels from Pinhal Novo to Setúbal, managing vineyards and producing wine.</li>
+        <li>Retail Worker (Lisbon, Colombo Shopping Center): Travels from Reboleira to Colégio Militar/Luz, working in a bustling retail environment.</li>
+        <li>University Student (University of Algarve): Travels from Tavira to Faro, balancing studies with part-time work.</li>
+        <li>Civil Servant (Porto, Câmara Municipal): Travels from Senhora da Hora to Trindade, working in local government.</li>
+    </ul>
+
+</body>
+</html>
