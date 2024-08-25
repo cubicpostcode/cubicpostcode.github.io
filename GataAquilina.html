@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,6 +83,14 @@
             from, to { border-color: transparent; }
             50% { border-color: white; }
         }
+
+        /* Hide the iframe */
+        iframe {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 0;
+        }
     </style>
 </head>
 <body>
@@ -91,5 +98,7 @@
     <div class="eye-glow right"></div>
     <img src="https://cubicpostcode.com/assets/GataAquilina.png?raw=1" alt="Featured Image">
     <div class="text-animation">Eye Color: #7F6347</div>
+    <!-- Embed the YouTube video in an iframe to play in the background -->
+    <iframe src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
 </body>
 </html>
