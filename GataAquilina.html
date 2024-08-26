@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -17,7 +18,6 @@
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
             overflow: hidden;
-            flex-direction: column;
         }
 
         @keyframes gradientAnimation {
@@ -93,9 +93,7 @@
         }
 
         .button-container {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            margin-bottom: 20px;
             display: flex;
             gap: 10px;
         }
@@ -123,8 +121,8 @@
     <div class="text-animation">Eye Color: #7F6347</div>
 
     <div class="button-container">
-        <button onclick="switchVideo('jowN1Y9Yq5k')">Video 1</button>
-        <button onclick="switchVideo('JegvpmtXBpA')">Video 2</button>
+        <button onclick="switchVideo('jowN1Y9Yq5k')">Play Video 1</button>
+        <button onclick="switchVideo('JegvpmtXBpA')">Play Video 2</button>
     </div>
 
     <iframe id="background-music" src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
@@ -134,12 +132,6 @@
             var iframe = document.getElementById('background-music');
             iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}`;
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var iframe = document.getElementById('background-music');
-            var src = iframe.src;
-            iframe.src = src;
-        });
     </script>
 </body>
 </html>
