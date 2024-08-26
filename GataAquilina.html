@@ -17,6 +17,7 @@
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
             overflow: hidden;
+            flex-direction: column;
         }
 
         @keyframes gradientAnimation {
@@ -85,10 +86,33 @@
         }
 
         iframe {
-            position: relative;
             width: 560px;
             height: 315px;
             border: none;
+            margin: 10px 0;
+        }
+
+        .button-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #7F6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #B2846A;
         }
     </style>
 </head>
@@ -97,10 +121,20 @@
     <div class="eye-glow right"></div>
     <img src="https://cubicpostcode.com/assets/GataAquilina.png?raw=1" alt="Featured Image">
     <div class="text-animation">Eye Color: #7F6347</div>
-    <!-- Embed the YouTube video in an iframe to play in the background -->
+
+    <div class="button-container">
+        <button onclick="switchVideo('jowN1Y9Yq5k')">Video 1</button>
+        <button onclick="switchVideo('JegvpmtXBpA')">Video 2</button>
+    </div>
+
     <iframe id="background-music" src="https://www.youtube.com/embed/jowN1Y9Yq5k?autoplay=1&mute=1&loop=1&playlist=jowN1Y9Yq5k" allow="autoplay"></iframe>
 
     <script>
+        function switchVideo(videoId) {
+            var iframe = document.getElementById('background-music');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             var iframe = document.getElementById('background-music');
             var src = iframe.src;
