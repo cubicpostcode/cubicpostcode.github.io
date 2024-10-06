@@ -22,6 +22,36 @@
         gtag('js', new Date());
         gtag('config', 'G-QDG3NX05J6');
     </script>
+    <!-- Inline CSS for better text contrast -->
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #000000;
+        }
+        p, ul, li {
+            color: #000000;
+        }
+        a {
+            color: #007bff;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            color: #212529;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            color: #212529;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            color: #000000;
+        }
+    </style>
 </head>
 
 <body>
@@ -105,7 +135,8 @@
 
             <!-- Cube to Coordinates -->
             <h4>Converting Cube Number to Coordinates</h4>
-            <pre><code class="language-python">
+            <div class="code-block">
+                <pre><code class="language-python">
 # Converts a cube number to ECEF (Earth-Centered, Earth-Fixed) coordinates
 # Author: Mr. Cubic Postcode, BEng (Hons)
 # License: Creative Commons Attribution 4.0 International
@@ -155,11 +186,13 @@ else:
 print('X_meters:', X_meters)
 print('Y_meters:', Y_meters)
 print('Z_meters:', Z_meters)
-            </code></pre>
+                </code></pre>
+            </div>
 
             <!-- Coordinates to Cube -->
             <h4>Converting Coordinates to Cube Number</h4>
-            <pre><code class="language-python">
+            <div class="code-block">
+                <pre><code class="language-python">
 # Converts ECEF coordinates to a cube number
 # Author: Mr. Cubic Postcode, BEng (Hons)
 # License: Creative Commons Attribution 4.0 International
@@ -215,7 +248,8 @@ else:
 code = layer_number * 441000000000000 + cube_p
 
 print('Cube Number:', code)
-            </code></pre>
+                </code></pre>
+            </div>
         </section>
 
         <!-- Conclusion -->
@@ -228,7 +262,7 @@ print('Cube Number:', code)
     </main>
 
     <!-- Footer -->
-    <footer id="footer" class="text-center py-4">
+    <footer id="footer" class="footer text-center py-4">
         <div class="container">
             <ul class="list-inline mb-3">
                 <li class="list-inline-item"><a href="https://twitter.com/cubicpostcode" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
