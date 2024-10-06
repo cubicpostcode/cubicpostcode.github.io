@@ -12,7 +12,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/main.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Baskervville&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">
     <title>Cubic Postcode: A Universal Geolocation System</title>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
@@ -22,20 +22,28 @@
         gtag('js', new Date());
         gtag('config', 'G-QDG3NX05J6');
     </script>
-    <!-- Inline CSS for better text contrast -->
+    <!-- Inline CSS for better text contrast and readability -->
     <style>
         body {
             background-color: #ffffff;
             color: #000000;
+            font-size: 18px; /* Increased font size */
+            line-height: 1.6; /* Increased line height */
+            font-family: Arial, sans-serif; /* Changed to a more legible font */
         }
         h1, h2, h3, h4, h5, h6 {
             color: #000000;
+            font-weight: bold;
         }
         p, ul, li {
             color: #000000;
         }
         a {
             color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
         .code-block {
             background-color: #f8f9fa;
@@ -43,12 +51,21 @@
             padding: 15px;
             border-radius: 5px;
             overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 16px;
         }
         pre code {
             color: #212529;
         }
         .footer {
             background-color: #f8f9fa;
+            color: #000000;
+        }
+        .lead {
+            font-size: 1.25rem;
+        }
+        .logo a {
+            text-decoration: none;
             color: #000000;
         }
     </style>
@@ -58,7 +75,7 @@
     <!-- Header -->
     <header id="header" class="text-center py-4">
         <div class="logo">
-            <a href="http://cubicpostcode.com" class="h1 text-dark">CubicPostcode.com</a>
+            <a href="http://cubicpostcode.com" class="h1">CubicPostcode.com</a>
         </div>
         <div class="lead">by Mr. Cubic Postcode, BEng (Hons)</div>
     </header>
@@ -84,201 +101,4 @@
                 The cubic grid is centered at the Earth's center of mass and aligned along the Earth's rotational axis (North-South), the prime meridian, and the equatorial plane. The grid consists of 21 million cubes along each axis, totaling a staggering 9,261,000,000,000,000,000,000 (21 million cubed) individual cubes. Each cube is uniquely numbered from the center outward in a systematic spiral pattern, ensuring that every cubic meter of space has a distinct identifier.
             </p>
             <p>
-                The numbering starts from the center cube and expands outward layer by layer. Odd-numbered layers extend along the positive X-axis, while even-numbered layers extend along the negative X-axis. This methodical approach ensures a uniform distribution of cube identifiers throughout the three-dimensional space.
-            </p>
-            <div class="text-center my-4">
-                <img src="images/bluecubestt.png" alt="Cube Numbering" class="img-fluid" />
-                <p class="small mt-2">Systematic numbering of cubes from the center outward</p>
-            </div>
-        </section>
-
-        <!-- Applications -->
-        <section id="applications" class="mb-5">
-            <h3>Applications of the Cubic Postcode System</h3>
-            <ul>
-                <li><strong>Augmented Reality:</strong> Enhance AR experiences by overlaying cubic postcodes onto real-world locations for precise navigation and information retrieval.</li>
-                <li><strong>Geolocation Services:</strong> Provide accurate and granular location data for logistics, delivery services, and emergency response teams.</li>
-                <li><strong>Real Estate and Property Management:</strong> Simplify property registration and transactions by referencing specific cubic meters of space.</li>
-                <li><strong>Virtual and Augmented Worlds:</strong> Enable interoperability between different virtual environments and games by using cubic postcodes as universal reference points.</li>
-                <li><strong>Scientific Research:</strong> Offer a standardized grid for geological studies, environmental monitoring, and spatial data analysis.</li>
-                <li><strong>Standardized Identification:</strong> Utilize cubic postcodes for cataloging assets, inventory management, and tracking systems.</li>
-            </ul>
-        </section>
-
-        <!-- Benefits -->
-        <section id="benefits" class="mb-5">
-            <h3>Benefits of the Cubic Postcode System</h3>
-            <ul>
-                <li><strong>Universal Standardization:</strong> Provides a consistent and globally recognized method for location identification.</li>
-                <li><strong>High Precision:</strong> Offers pinpoint accuracy by dividing space into cubic meters, facilitating detailed mapping and navigation.</li>
-                <li><strong>Scalability:</strong> Adaptable to various applications, from local property management to global logistics and beyond.</li>
-                <li><strong>Interoperability:</strong> Enhances compatibility between different systems and platforms, fostering collaboration and innovation.</li>
-                <li><strong>Mathematical Precision:</strong> Employs a structured numerical system that simplifies calculations and spatial analysis.</li>
-            </ul>
-        </section>
-
-        <!-- Simplified Explanation -->
-        <section id="simplified-explanation" class="mb-5">
-            <h3>How It Works</h3>
-            <p>
-                Imagine the Earth enveloped in a giant cube divided into 21 million smaller cubes along each axis. Each smaller cube measures one cubic meter and is assigned a unique 22-digit identifier. This identifier corresponds to its position within the grid, allowing for precise location referencing.
-            </p>
-            <p>
-                The cubes are numbered starting from the center of the Earth and moving outward in a spiral pattern. This method ensures an orderly and logical distribution of identifiers, facilitating easy calculation and retrieval of location data.
-            </p>
-        </section>
-
-        <!-- Code Snippets -->
-        <section id="code-snippets" class="mb-5">
-            <h3>Implementation Examples</h3>
-            <p>Below are Python code snippets that demonstrate how to convert between cubic postcodes and geographic coordinates:</p>
-
-            <!-- Cube to Coordinates -->
-            <h4>Converting Cube Number to Coordinates</h4>
-            <div class="code-block">
-                <pre><code class="language-python">
-# Converts a cube number to ECEF (Earth-Centered, Earth-Fixed) coordinates
-# Author: Mr. Cubic Postcode, BEng (Hons)
-# License: Creative Commons Attribution 4.0 International
-
-cube = 3141592653589793238462  # Example cube number inspired by Pi
-layer_size = 441000000000000  # Number of cubes in one layer
-
-cube_projection = cube % layer_size
-n_layer = cube // layer_size + 1
-
-# Calculate square layer
-n_square = int((((cube_projection - 1) ** 0.5) / 2) + 1)
-
-# Calculate positions
-right_top = (2 * (n_square - 1)) ** 2 + 2 * n_square
-right_bottom = right_top + 2 * n_square - 1
-left_bottom = right_bottom + 2 * n_square - 1
-
-# Calculate Y coordinate
-if right_top <= cube_projection <= right_bottom:
-    Y_meters = n_square
-elif cube_projection >= left_bottom:
-    Y_meters = -n_square + 1
-elif cube_projection < right_top:
-    Y_meters = cube_projection - right_top + n_square
-else:
-    Y_meters = right_bottom - cube_projection + n_square
-Y_meters -= 0.5
-
-# Calculate Z coordinate
-if cube_projection <= right_top:
-    Z_meters = n_square - 1
-elif cube_projection >= right_bottom and cube_projection <= left_bottom:
-    Z_meters = -n_square
-elif cube_projection < right_bottom:
-    Z_meters = right_top - cube_projection + n_square - 1
-else:
-    Z_meters = cube_projection - left_bottom - n_square
-Z_meters += 0.5
-
-# Calculate X coordinate based on layer
-if n_layer % 2 != 0:
-    X_meters = n_layer / 2.0
-else:
-    X_meters = -(n_layer - 1) / 2.0
-
-print('X_meters:', X_meters)
-print('Y_meters:', Y_meters)
-print('Z_meters:', Z_meters)
-                </code></pre>
-            </div>
-
-            <!-- Coordinates to Cube -->
-            <h4>Converting Coordinates to Cube Number</h4>
-            <div class="code-block">
-                <pre><code class="language-python">
-# Converts ECEF coordinates to a cube number
-# Author: Mr. Cubic Postcode, BEng (Hons)
-# License: Creative Commons Attribution 4.0 International
-
-import sys
-
-def coord_round(x):
-    return int(x) if x >= 0 else int(x) - 1
-
-# Provide X, Y, Z coordinates
-if len(sys.argv) == 4:
-    X = float(sys.argv[1])
-    Y = float(sys.argv[2])
-    Z = float(sys.argv[3])
-else:
-    # Example coordinates corresponding to the cube number above
-    X = 3561896.5
-    Y = -8402969.5
-    Z = -9767161.5
-
-# Round coordinates to integers
-x, y, z = (coord_round(coord) for coord in (X, Y, Z))
-
-# Calculate square number
-square_number = max(y + 1, z + 1, -y, -z)
-
-# Calculate corner cube numbers
-left_top = (2 * (square_number - 1)) ** 2 + 1
-right_top = left_top + 2 * square_number - 1
-right_bottom = right_top + 2 * square_number - 1
-left_bottom = right_bottom + 2 * square_number - 1
-
-# Determine cube projection number
-if square_number == -y:
-    if square_number == z + 1:
-        cube_p = left_top
-    else:
-        cube_p = z + left_bottom + square_number
-elif square_number == y + 1:
-    cube_p = right_top + square_number - 1 - z
-elif square_number == z + 1:
-    cube_p = right_top - square_number - y
-else:
-    cube_p = right_bottom + square_number - y
-
-# Calculate layer number
-if x >= 0:
-    layer_number = x * 2
-else:
-    layer_number = -x * 2 - 1
-
-# Combine to get cube number
-code = layer_number * 441000000000000 + cube_p
-
-print('Cube Number:', code)
-                </code></pre>
-            </div>
-        </section>
-
-        <!-- Conclusion -->
-        <section id="conclusion" class="mb-5">
-            <h3>Conclusion</h3>
-            <p>
-                The Cubic Postcode system presents a bold and innovative approach to global geolocation. By standardizing location identifiers and providing unparalleled precision, it has the potential to revolutionize navigation, mapping, and spatial data management across various industries. Embracing this system could lead to significant advancements in technology, science, and everyday life, fostering a more interconnected and efficient world.
-            </p>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer id="footer" class="footer text-center py-4">
-        <div class="container">
-            <ul class="list-inline mb-3">
-                <li class="list-inline-item"><a href="https://twitter.com/cubicpostcode" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-                <li class="list-inline-item"><a href="https://www.facebook.com/CubicPostcode" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-                <li class="list-inline-item"><a href="https://www.instagram.com/cubicpostcode" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-                <li class="list-inline-item"><a href="mailto:contact@cubicpostcode.com" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-            </ul>
-            <div class="copyright">
-                &copy; 2023 Mr. Cubic Postcode. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <!-- Add other script dependencies if necessary -->
-</body>
-
-</html>
+                The numbering starts from the center cube and expands outward layer by layer. Odd-numbered layers extend along the positive X-axis, while even-numbered layers exten
