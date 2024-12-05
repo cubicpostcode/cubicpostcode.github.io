@@ -40,29 +40,31 @@
             document.getElementById("bitcoinMorse").value = bitcoinMorse;
         }
 
-        function convertToAddress() {
-            var bitcoinMorse = document.getElementById("bitcoinMorse").value;
-            var bitcoinAddress = "";
-            var i = 0;
-            while (i < bitcoinMorse.length) {
-                var found = false;
-                // Check for the longest possible match
-                for (var len = 7; len >= 1; len--) {
-                    var segment = bitcoinMorse.substr(i, len);
-                    if (decodeMap[segment]) {
-                        bitcoinAddress += decodeMap[segment];
-                        i += len;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    alert("Invalid or corrupted Bitcoin Morse code.");
-                    return;
-                }
+       function convertToAddress() {
+    var bitcoinMorse = document.getElementById("bitcoinMorse").value;
+    var bitcoinAddress = "";
+    var i = 0;
+    while (i < bitcoinMorse.length) {
+        var found = false;
+        // Possible codeword lengths based on prefixes
+        let possibleLengths = [3, 4]; // 'D' + digit, 'U'/'L' + two digits
+        for (let len of possibleLengths) {
+            var segment = bitcoinMorse.substr(i, len);
+            if (decodeMap[segment]) {
+                bitcoinAddress += decodeMap[segment];
+                i += len;
+                found = true;
+                break;
             }
-            document.getElementById("bitcoinAddress").value = bitcoinAddress;
         }
+        if (!found) {
+            alert("Invalid or corrupted Bitcoin Morse code.");
+            return;
+        }
+    }
+    document.getElementById("bitcoinAddress").value = bitcoinAddress;
+}
+
     </script>
 </head>
 <body>
