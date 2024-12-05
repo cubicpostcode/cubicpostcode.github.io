@@ -1,144 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Bitcoin Morse Converter</title>
-	<script>
-		function convertToMorse() {
-			// Get the Bitcoin address from the input field
-			var bitcoinAddress = document.getElementById("bitcoinAddress").value;
-			// Remove any whitespace or extra characters from the address
-			bitcoinAddress = bitcoinAddress.replace(/\s/g, "").toUpperCase();
-			// Initialize an empty string to hold the Bitcoin Morse encoding
-			var bitcoinMorse = "";
-			// Loop through each character in the Bitcoin address
-			for (var i = 0; i < bitcoinAddress.length; i++) {
-				// Look up the corresponding Bitcoin Morse encoding for the current character
-				switch (bitcoinAddress.charAt(i)) {
-					case "0":
-						bitcoinMorse += "14";
-						break;
-					case "1":
-						bitcoinMorse += "01";
-						break;
-					case "2":
-						bitcoinMorse += "02";
-						break;
-					case "3":
-						bitcoinMorse += "03";
-						break;
-					case "4":
-						bitcoinMorse += "04";
-						break;
-					case "5":
-						bitcoinMorse += "05";
-						break;
-					case "6":
-						bitcoinMorse += "06";
-						break;
-					case "7":
-						bitcoinMorse += "07";
-						break;
-					case "8":
-						bitcoinMorse += "08";
-						break;
-					case "9":
-						bitcoinMorse += "09";
-						break;
-					case "A":
-						bitcoinMorse += "001";
-						break;
-					case "B":
-						bitcoinMorse += "002";
-						break;
-					case "C":
-						bitcoinMorse += "003";
-						break;
-					case "D":
-						bitcoinMorse += "004";
-						break;
-					case "E":
-						bitcoinMorse += "005";
-						break;
-					case "F":
-						bitcoinMorse += "006";
-						break;
-					case "G":
-						bitcoinMorse += "007";
-						break;
-					case "H":
-						bitcoinMorse += "008";
-						break;
-					case "I":
-						bitcoinMorse += "009";
-						break;
-					case "J":
-						bitcoinMorse += "0001";
-						break;
-					case "K":
-						bitcoinMorse += "0002";
-						break;
-					case "L":
-						bitcoinMorse += "0003";
-						break;
-					case "M":
-						bitcoinMorse += "0004";
-						break;
-					case "N":
-						bitcoinMorse += "0005";
-						break;
-					case "O":
-						bitcoinMorse += "00006";
-						break;
-					case "P":
-						bitcoinMorse += "0007";
-						break;
-					case "Q":
-						bitcoinMorse += "0008";
-						break;
-					case "R":
-						bitcoinMorse += "0009";
-						break;
-					case "S":
-						bitcoinMorse += "000001";
-						break;
-					case "T":
-						bitcoinMorse += "000002";
-						break;
-					case "U":
-						bitcoinMorse += "000003";
-						break;
-					case "V":
-						bitcoinMorse += "000004";
-						break;
-					case "W":
-						bitcoinMorse += "000005";
-						break;
-					case "X":
-						bitcoinMorse += "000006";
-						break;
-					case "Y":
-						bitcoinMorse += "000007";
-						break;
-					case "Z":
-						bitcoinMorse += "000008";	
-						break;
-						}
-					}
-// Set the value of the output field to the Bitcoin Morse encoding
-document.getElementById("bitcoinMorse").value = bitcoinMorse;
-}
-</script>
+    <title>Bitcoin Morse Converter</title>
+    <script>
+        // Mapping for encoding and decoding
+        const encodeMap = {
+            // Digits
+            '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
+            '6': '6', '7': '7', '8': '8', '9': '9',
+            // Uppercase letters
+            'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06', 'G': '07', 'H': '08',
+            'J': '0001', 'K': '0002', 'L': '0003', 'M': '0004', 'N': '0005', 'P': '0007', 'Q': '0008', 'R': '0009',
+            'S': '000001', 'T': '000002', 'U': '000003', 'V': '000004', 'W': '000005', 'X': '000006', 'Y': '000007', 'Z': '000008',
+            // Lowercase letters
+            'a': '001', 'b': '002', 'c': '003', 'd': '004', 'e': '005', 'f': '006', 'g': '007', 'h': '008',
+            'j': '00001', 'k': '00002', 'l': '00003', 'm': '00004', 'n': '00005', 'p': '00007', 'q': '00008', 'r': '00009',
+            's': '0000001', 't': '0000002', 'u': '0000003', 'v': '0000004', 'w': '0000005', 'x': '0000006', 'y': '0000007', 'z': '0000008'
+        };
 
+        // Reverse mapping for decoding
+        const decodeMap = {};
+        for (let key in encodeMap) {
+            decodeMap[encodeMap[key]] = key;
+        }
+
+        function convertToMorse() {
+            var bitcoinAddress = document.getElementById("bitcoinAddress").value;
+            bitcoinAddress = bitcoinAddress.replace(/\s/g, "");
+            var bitcoinMorse = "";
+            for (var i = 0; i < bitcoinAddress.length; i++) {
+                var ch = bitcoinAddress.charAt(i);
+                if (encodeMap[ch]) {
+                    bitcoinMorse += encodeMap[ch];
+                } else {
+                    alert("Invalid character detected: " + ch);
+                    return;
+                }
+            }
+            document.getElementById("bitcoinMorse").value = bitcoinMorse;
+        }
+
+        function convertToAddress() {
+            var bitcoinMorse = document.getElementById("bitcoinMorse").value;
+            var bitcoinAddress = "";
+            var i = 0;
+            while (i < bitcoinMorse.length) {
+                var found = false;
+                // Check for the longest possible match
+                for (var len = 7; len >= 1; len--) {
+                    var segment = bitcoinMorse.substr(i, len);
+                    if (decodeMap[segment]) {
+                        bitcoinAddress += decodeMap[segment];
+                        i += len;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    alert("Invalid or corrupted Bitcoin Morse code.");
+                    return;
+                }
+            }
+            document.getElementById("bitcoinAddress").value = bitcoinAddress;
+        }
+    </script>
 </head>
 <body>
-	<h1>Bitcoin Morse Converter</h1>
-	<p>Enter a Bitcoin address to convert it to the Bitcoin Morse encoding.</p>
-	<form>
-		<label for="bitcoinAddress">Bitcoin Address:</label>
-		<input type="text" id="bitcoinAddress" name="bitcoinAddress" size="40"><br><br>
-		<button type="button" onclick="convertToMorse()">Convert to Bitcoin Morse</button><br><br>
-		<label for="bitcoinMorse">Bitcoin Morse:</label>
-		<input type="text" id="bitcoinMorse" name="bitcoinMorse" size="160" readonly>
-	</form>
+    <h1>Bitcoin Morse Converter</h1>
+    <p>Enter a Bitcoin address to convert it to Bitcoin Morse code, or enter Bitcoin Morse code to get the Bitcoin address.</p>
+    <form>
+        <label for="bitcoinAddress">Bitcoin Address:</label><br>
+        <textarea id="bitcoinAddress" name="bitcoinAddress" rows="2" cols="80"></textarea><br><br>
+        <button type="button" onclick="convertToMorse()">Convert to Bitcoin Morse</button><br><br>
+
+        <label for="bitcoinMorse">Bitcoin Morse:</label><br>
+        <textarea id="bitcoinMorse" name="bitcoinMorse" rows="4" cols="80"></textarea><br><br>
+        <button type="button" onclick="convertToAddress()">Convert to Bitcoin Address</button><br><br>
+    </form>
 </body>
 </html>
