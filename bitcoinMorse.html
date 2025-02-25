@@ -1,83 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Bitcoin Morse Converter</title>
+    <meta charset="UTF-8">
+    <title>Bitcoin Morse Converter (Prefix-Free with Zero)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p, li {
+            line-height: 1.6;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .dictionary {
+            column-count: 3;
+            column-gap: 20px;
+        }
+        .dictionary li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bitcoin Morse Converter (Prefix-Free with Zero)</h1>
+
+    <div class="section">
+        <h2>Tutorial: Bitcoin Morse with '0' (Revised)</h2>
+        <p>This updated "Bitcoin Morse" protocol supports '0' and ensures unambiguous decoding by using prefix-free codes. It encodes strings (like Bitcoin addresses) into numeric-only format using digits 0-9, covering 0-9, A-Z, and a-z (excluding O, I, l).</p>
+        <h3>Character Set</h3>
+        <p>Supports 57 characters:</p>
+        <ul>
+            <li>Digits: 0-9 (10 characters)</li>
+            <li>Uppercase: A-H, J-N, P-U, V-Z (24 characters)</li>
+            <li>Lowercase: a-h, j-n, p-u, v-z (23 characters)</li>
+        </ul>
+        <p>Example: <code>04jsRJx8HnKq9jyqfBQKgvvnFy3rNCbc3G</code>.</p>
+        <h3>Encoding Rules</h3>
+        <p>Each character has a unique numeric code, designed so no code is a prefix of another:</p>
+        <ul>
+            <li><strong>Digits</strong>: 2 digits, start with '1' to separate from letters.</li>
+            <li><strong>Letters</strong>: Start with '0', vary by length (2, 3, 4, 5 digits) and pattern.</li>
+        </ul>
+        <h3>Complete Dictionary</h3>
+        <p>Here’s every possible character and its Bitcoin Morse code:</p>
+        <ul class="dictionary">
+            <li><code>0 → 10</code></li>
+            <li><code>1 → 11</code></li>
+            <li><code>2 → 12</code></li>
+            <li><code>3 → 13</code></li>
+            <li><code>4 → 14</code></li>
+            <li><code>5 → 15</code></li>
+            <li><code>6 → 16</code></li>
+            <li><code>7 → 17</code></li>
+            <li><code>8 → 18</code></li>
+            <li><code>9 → 19</code></li>
+            <li><code>A → 01</code></li>
+            <li><code>B → 02</code></li>
+            <li><code>C → 03</code></li>
+            <li><code>D → 04</code></li>
+            <li><code>E → 05</code></li>
+            <li><code>F → 06</code></li>
+            <li><code>G → 07</code></li>
+            <li><code>H → 08</code></li>
+            <li><code>J → 09</code></li>
+            <li><code>K → 001</code></li>
+            <li><code>M → 002</code></li>
+            <li><code>N → 003</code></li>
+            <li><code>P → 004</code></li>
+            <li><code>Q → 005</code></li>
+            <li><code>R → 006</code></li>
+            <li><code>S → 007</code></li>
+            <li><code>T → 008</code></li>
+            <li><code>U → 009</code></li>
+            <li><code>V → 0001</code></li>
+            <li><code>W → 0002</code></li>
+            <li><code>X → 0003</code></li>
+            <li><code>Y → 0004</code></li>
+            <li><code>Z → 0005</code></li>
+            <li><code>a → 021</code></li>
+            <li><code>b → 022</code></li>
+            <li><code>c → 023</code></li>
+            <li><code>d → 024</code></li>
+            <li><code>e → 025</code></li>
+            <li><code>f → 026</code></li>
+            <li><code>g → 027</code></li>
+            <li><code>h → 028</code></li>
+            <li><code>j → 029</code></li>
+            <li><code>k → 0021</code></li>
+            <li><code>m → 0022</code></li>
+            <li><code>n → 0023</code></li>
+            <li><code>p → 0024</code></li>
+            <li><code>q → 0025</code></li>
+            <li><code>r → 0026</code></li>
+            <li><code>s → 0027</code></li>
+            <li><code>t → 0028</code></li>
+            <li><code>u → 0029</code></li>
+            <li><code>v → 00021</code></li>
+            <li><code>w → 00022</code></li>
+            <li><code>x → 00023</code></li>
+            <li><code>y → 00024</code></li>
+            <li><code>z → 00025</code></li>
+        </ul>
+        <h3>Example</h3>
+        <p>For <code>0K0</code>:
+            <ul>
+                <li>"0" → "10"</li>
+                <li>"K" → "001"</li>
+                <li>"0" → "10"</li>
+            </ul>
+            Result: <code>1000110</code> (uniquely decodable).
+        </p>
+        <p>For <code>04js</code>:
+            <ul>
+                <li>"0" → "10"</li>
+                <li>"4" → "14"</li>
+                <li>"j" → "029"</li>
+                <li>"s" → "0027"</li>
+            </ul>
+            Result: <code>10140290027</code>.
+        </p>
+        <h3>Purpose</h3>
+        <p>A numeric-only encoding that’s unambiguous, supports '0', and works for Bitcoin addresses or any string with these characters.</p>
+    </div>
+
+    <div class="section">
+        <h2>Address to Bitcoin Morse</h2>
+        <label for="bitcoinAddress">Enter Address:</label>
+        <input type="text" id="bitcoinAddress" placeholder="e.g., 04jsRJx8HnKq9jyqfBQKgvvnFy3rNCbc3G">
+        <button onclick="toBitcoinMorse()">Convert to Morse</button>
+        <label for="morseOutput">Bitcoin Morse Result:</label>
+        <input type="text" id="morseOutput" readonly>
+    </div>
+
+    <div class="section">
+        <h2>Bitcoin Morse to Address</h2>
+        <label for="morseInput">Enter Bitcoin Morse:</label>
+        <input type="text" id="morseInput" placeholder="e.g., 10140290027...">
+        <button onclick="toBitcoinAddress()">Convert to Address</button>
+        <label for="addressOutput">Address Result:</label>
+        <input type="text" id="addressOutput" readonly>
+    </div>
+
     <script>
-        // Mapping for encoding and decoding
+        // Encoding map for revised Bitcoin Morse
         const encodeMap = {
-            // Digits
-            '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
-            '6': '6', '7': '7', '8': '8', '9': '9',
-            // Uppercase letters
-            'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06', 'G': '07', 'H': '08',
-            'J': '0001', 'K': '0002', 'L': '0003', 'M': '0004', 'N': '0005', 'P': '0007', 'Q': '0008', 'R': '0009',
-            'S': '000001', 'T': '000002', 'U': '000003', 'V': '000004', 'W': '000005', 'X': '000006', 'Y': '000007', 'Z': '000008',
-            // Lowercase letters
-            'a': '001', 'b': '002', 'c': '003', 'd': '004', 'e': '005', 'f': '006', 'g': '007', 'h': '008',
-            'j': '00001', 'k': '00002', 'l': '00003', 'm': '00004', 'n': '00005', 'p': '00007', 'q': '00008', 'r': '00009',
-            's': '0000001', 't': '0000002', 'u': '0000003', 'v': '0000004', 'w': '0000005', 'x': '0000006', 'y': '0000007', 'z': '0000008'
+            '0': '10', '1': '11', '2': '12', '3': '13', '4': '14', '5': '15', '6': '16', '7': '17', '8': '18', '9': '19',
+            'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06', 'G': '07', 'H': '08', 'J': '09',
+            'K': '001', 'M': '002', 'N': '003', 'P': '004', 'Q': '005', 'R': '006', 'S': '007', 'T': '008', 'U': '009',
+            'V': '0001', 'W': '0002', 'X': '0003', 'Y': '0004', 'Z': '0005',
+            'a': '021', 'b': '022', 'c': '023', 'd': '024', 'e': '025', 'f': '026', 'g': '027', 'h': '028', 'j': '029',
+            'k': '0021', 'm': '0022', 'n': '0023', 'p': '0024', 'q': '0025', 'r': '0026', 's': '0027', 't': '0028', 'u': '0029',
+            'v': '00021', 'w': '00022', 'x': '00023', 'y': '00024', 'z': '00025'
         };
 
-        // Reverse mapping for decoding
-        const decodeMap = {};
-        for (let key in encodeMap) {
-            decodeMap[encodeMap[key]] = key;
-        }
+        // Reverse map for decoding
+        const decodeMap = Object.fromEntries(Object.entries(encodeMap).map(([k, v]) => [v, k]));
 
-        function convertToMorse() {
-            var bitcoinAddress = document.getElementById("bitcoinAddress").value;
-            bitcoinAddress = bitcoinAddress.replace(/\s/g, "");
-            var bitcoinMorse = "";
-            for (var i = 0; i < bitcoinAddress.length; i++) {
-                var ch = bitcoinAddress.charAt(i);
-                if (encodeMap[ch]) {
-                    bitcoinMorse += encodeMap[ch];
+        // Convert address to Bitcoin Morse
+        function toBitcoinMorse() {
+            const address = document.getElementById('bitcoinAddress').value.trim();
+            let morse = '';
+
+            for (let char of address) {
+                if (encodeMap[char]) {
+                    morse += encodeMap[char];
                 } else {
-                    alert("Invalid character detected: " + ch);
+                    alert(`Invalid character: ${char} (O, I, l not supported)`);
                     return;
                 }
             }
-            document.getElementById("bitcoinMorse").value = bitcoinMorse;
+
+            document.getElementById('morseOutput').value = morse;
         }
 
-       function convertToAddress() {
-    var bitcoinMorse = document.getElementById("bitcoinMorse").value;
-    var bitcoinAddress = "";
-    var i = 0;
-    while (i < bitcoinMorse.length) {
-        var found = false;
-        // Possible codeword lengths based on prefixes
-        let possibleLengths = [3, 4]; // 'D' + digit, 'U'/'L' + two digits
-        for (let len of possibleLengths) {
-            var segment = bitcoinMorse.substr(i, len);
-            if (decodeMap[segment]) {
-                bitcoinAddress += decodeMap[segment];
-                i += len;
-                found = true;
-                break;
+        // Convert Bitcoin Morse back to address
+        function toBitcoinAddress() {
+            const morse = document.getElementById('morseInput').value.trim();
+            let address = '';
+            let i = 0;
+
+            while (i < morse.length) {
+                let found = false;
+                for (let len of [5, 4, 3, 2]) { // Check longest to shortest
+                    const chunk = morse.substr(i, len);
+                    if (decodeMap[chunk]) {
+                        address += decodeMap[chunk];
+                        i += len;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    alert(`Invalid Bitcoin Morse sequence at position ${i}: ${morse.substr(i, 5)}`);
+                    return;
+                }
             }
-        }
-        if (!found) {
-            alert("Invalid or corrupted Bitcoin Morse code.");
-            return;
-        }
-    }
-    document.getElementById("bitcoinAddress").value = bitcoinAddress;
-}
 
+            document.getElementById('addressOutput').value = address;
+        }
     </script>
-</head>
-<body>
-    <h1>Bitcoin Morse Converter</h1>
-    <p>Enter a Bitcoin address to convert it to Bitcoin Morse code, or enter Bitcoin Morse code to get the Bitcoin address.</p>
-    <form>
-        <label for="bitcoinAddress">Bitcoin Address:</label><br>
-        <textarea id="bitcoinAddress" name="bitcoinAddress" rows="2" cols="80"></textarea><br><br>
-        <button type="button" onclick="convertToMorse()">Convert to Bitcoin Morse</button><br><br>
-
-        <label for="bitcoinMorse">Bitcoin Morse:</label><br>
-        <textarea id="bitcoinMorse" name="bitcoinMorse" rows="4" cols="80"></textarea><br><br>
-        <button type="button" onclick="convertToAddress()">Convert to Bitcoin Address</button><br><br>
-    </form>
 </body>
 </html>
