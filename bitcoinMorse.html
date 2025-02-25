@@ -58,15 +58,15 @@
 
     <div class="section">
         <h2>Tutorial: Bitcoin Morse with '0' (Revised)</h2>
-        <p>This updated "Bitcoin Morse" protocol supports '0' and ensures unambiguous decoding by using prefix-free codes. It encodes strings (like Bitcoin addresses) into numeric-only format using digits 0-9, covering 0-9, A-Z, and a-z (excluding O, I, l).</p>
+        <p>This updated "Bitcoin Morse" protocol supports '0' and ensures unambiguous decoding by using prefix-free codes. It encodes strings (like Bitcoin addresses) into numeric-only format using digits 0-9, covering all 58 base58 characters: 0-9, A-Z, and a-z (no exclusions).</p>
         <h3>Character Set</h3>
-        <p>Supports 57 characters:</p>
+        <p>Supports 58 characters:</p>
         <ul>
             <li>Digits: 0-9 (10 characters)</li>
-            <li>Uppercase: A-H, J-N, P-U, V-Z (24 characters)</li>
-            <li>Lowercase: a-h, j-n, p-u, v-z (23 characters)</li>
+            <li>Uppercase: A-Z (26 characters)</li>
+            <li>Lowercase: a-z (22 characters)</li>
         </ul>
-        <p>Example: <code>04jsRJx8HnKq9jyqfBQKgvvnFy3rNCbc3G</code>.</p>
+        <p>Example: <code>32VtnDNe7nuPqaNzifxJiCUguRkQEQWHn6</code>.</p>
         <h3>Encoding Rules</h3>
         <p>Each character has a unique numeric code, designed so no code is a prefix of another:</p>
         <ul>
@@ -94,10 +94,13 @@
             <li><code>F → 06</code></li>
             <li><code>G → 07</code></li>
             <li><code>H → 08</code></li>
+            <li><code>I → 0006</code></li>
             <li><code>J → 09</code></li>
             <li><code>K → 001</code></li>
+            <li><code>L → 0007</code></li>
             <li><code>M → 002</code></li>
             <li><code>N → 003</code></li>
+            <li><code>O → 0008</code></li>
             <li><code>P → 004</code></li>
             <li><code>Q → 005</code></li>
             <li><code>R → 006</code></li>
@@ -117,10 +120,13 @@
             <li><code>f → 026</code></li>
             <li><code>g → 027</code></li>
             <li><code>h → 028</code></li>
+            <li><code>i → 020</code></li>
             <li><code>j → 029</code></li>
             <li><code>k → 0021</code></li>
+            <li><code>l → 0009</code></li>
             <li><code>m → 0022</code></li>
             <li><code>n → 0023</code></li>
+            <li><code>o → 0020</code></li>
             <li><code>p → 0024</code></li>
             <li><code>q → 0025</code></li>
             <li><code>r → 0026</code></li>
@@ -142,23 +148,23 @@
             </ul>
             Result: <code>1000110</code> (uniquely decodable).
         </p>
-        <p>For <code>04js</code>:
+        <p>For <code>32Vi</code>:
             <ul>
-                <li>"0" → "10"</li>
-                <li>"4" → "14"</li>
-                <li>"j" → "029"</li>
-                <li>"s" → "0027"</li>
+                <li>"3" → "13"</li>
+                <li>"2" → "12"</li>
+                <li>"V" → "0001"</li>
+                <li>"i" → "020"</li>
             </ul>
-            Result: <code>10140290027</code>.
+            Result: <code>13120001020</code>.
         </p>
         <h3>Purpose</h3>
-        <p>A numeric-only encoding that’s unambiguous, supports '0', and works for Bitcoin addresses or any string with these characters.</p>
+        <p>A numeric-only encoding that’s unambiguous, supports '0', and works for Bitcoin addresses using the full base58 alphabet.</p>
     </div>
 
     <div class="section">
         <h2>Address to Bitcoin Morse</h2>
         <label for="bitcoinAddress">Enter Address:</label>
-        <input type="text" id="bitcoinAddress" placeholder="e.g., 04jsRJx8HnKq9jyqfBQKgvvnFy3rNCbc3G">
+        <input type="text" id="bitcoinAddress" placeholder="e.g., 32VtnDNe7nuPqaNzifxJiCUguRkQEQWHn6">
         <button onclick="toBitcoinMorse()">Convert to Morse</button>
         <label for="morseOutput">Bitcoin Morse Result:</label>
         <input type="text" id="morseOutput" readonly>
@@ -167,21 +173,21 @@
     <div class="section">
         <h2>Bitcoin Morse to Address</h2>
         <label for="morseInput">Enter Bitcoin Morse:</label>
-        <input type="text" id="morseInput" placeholder="e.g., 10140290027...">
+        <input type="text" id="morseInput" placeholder="e.g., 13120001020...">
         <button onclick="toBitcoinAddress()">Convert to Address</button>
         <label for="addressOutput">Address Result:</label>
         <input type="text" id="addressOutput" readonly>
     </div>
 
     <script>
-        // Encoding map for revised Bitcoin Morse
+        // Encoding map for revised Bitcoin Morse (full base58 support)
         const encodeMap = {
             '0': '10', '1': '11', '2': '12', '3': '13', '4': '14', '5': '15', '6': '16', '7': '17', '8': '18', '9': '19',
-            'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06', 'G': '07', 'H': '08', 'J': '09',
-            'K': '001', 'M': '002', 'N': '003', 'P': '004', 'Q': '005', 'R': '006', 'S': '007', 'T': '008', 'U': '009',
+            'A': '01', 'B': '02', 'C': '03', 'D': '04', 'E': '05', 'F': '06', 'G': '07', 'H': '08', 'I': '0006', 'J': '09',
+            'K': '001', 'L': '0007', 'M': '002', 'N': '003', 'O': '0008', 'P': '004', 'Q': '005', 'R': '006', 'S': '007', 'T': '008', 'U': '009',
             'V': '0001', 'W': '0002', 'X': '0003', 'Y': '0004', 'Z': '0005',
-            'a': '021', 'b': '022', 'c': '023', 'd': '024', 'e': '025', 'f': '026', 'g': '027', 'h': '028', 'j': '029',
-            'k': '0021', 'm': '0022', 'n': '0023', 'p': '0024', 'q': '0025', 'r': '0026', 's': '0027', 't': '0028', 'u': '0029',
+            'a': '021', 'b': '022', 'c': '023', 'd': '024', 'e': '025', 'f': '026', 'g': '027', 'h': '028', 'i': '020', 'j': '029',
+            'k': '0021', 'l': '0009', 'm': '0022', 'n': '0023', 'o': '0020', 'p': '0024', 'q': '0025', 'r': '0026', 's': '0027', 't': '0028', 'u': '0029',
             'v': '00021', 'w': '00022', 'x': '00023', 'y': '00024', 'z': '00025'
         };
 
@@ -197,7 +203,7 @@
                 if (encodeMap[char]) {
                     morse += encodeMap[char];
                 } else {
-                    alert(`Invalid character: ${char} (O, I, l not supported)`);
+                    alert(`Invalid character: ${char} (only base58 characters 0-9, A-Z, a-z supported)`);
                     return;
                 }
             }
