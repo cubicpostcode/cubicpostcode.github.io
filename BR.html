@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprenda Inglês!</title>
+    <style>
+        body {
+            background-color: #F0F8FF;
+            margin: 20px;
+            font-family: Arial, sans-serif;
+            padding-top: 50px;
+        }
+        #search-bar {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #content {
+            margin-top: 20px;
+        }
+        .word-container {
+            background-color: #FFFACD;
+            display: inline-block;
+            text-align: center;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 220px;
+            cursor: pointer;
+        }
+        .word-container:hover {
+            background-color: #FFD700;
+        }
+        .english-sentence {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #000080;
+            display: block;
+        }
+        .translation {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #228B22;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="search-bar" placeholder="Pesquise uma frase...">
+    <div id="content"></div>
+
+    <script>
+        const englishSentences = [
+            { "id": "V001", "sentence": "I run fast.", "translation": "Eu corro rápido." },
+            { "id": "V002", "sentence": "She eats lunch.", "translation": "Ela come almoço." },
+            { "id": "V003", "sentence": "He writes books.", "translation": "Ele escreve livros." },
+            { "id": "V004", "sentence": "They play soccer.", "translation": "Eles jogam futebol." },
+            { "id": "V005", "sentence": "We read novels.", "translation": "Nós lemos romances." },
+            { "id": "V006", "sentence": "You speak English.", "translation": "Você fala inglês." },
+            { "id": "V007", "sentence": "I see birds.", "translation": "Eu vejo pássaros." },
+            { "id": "V008", "sentence": "She hears music.", "translation": "Ela ouve música." },
+            { "id": "V009", "sentence": "He walks home.", "translation": "Ele caminha casa." },
+            { "id": "V010", "sentence": "They jump high.", "translation": "Eles pulam alto." },
+            { "id": "V011", "sentence": "We sing songs.", "translation": "Nós cantamos músicas." },
+            { "id": "V012", "sentence": "You dance well.", "translation": "Você dança bem." },
+            { "id": "V013", "sentence": "I swim daily.", "translation": "Eu nado diariamente." },
+            { "id": "V014", "sentence": "She drives carefully.", "translation": "Ela dirige cuidadosamente." },
+            { "id": "V015", "sentence": "He paints walls.", "translation": "Ele pinta paredes." },
+            { "id": "V016", "sentence": "They cook dinner.", "translation": "Eles cozinham jantar." },
+            { "id": "V017", "sentence": "We watch movies.", "translation": "Nós assistimos filmes." },
+            { "id": "V018", "sentence": "You listen quietly.", "translation": "Você escuta quieto." },
+            { "id": "V019", "sentence": "I sleep late.", "translation": "Eu durmo tarde." },
+            { "id": "V020", "sentence": "She talks loudly.", "translation": "Ela fala alto." },
+            { "id": "V021", "sentence": "He runs races.", "translation": "Ele corre corridas." },
+            { "id": "V022", "sentence": "They build houses.", "translation": "Eles constroem casas." },
+            { "id": "V023", "sentence": "We buy food.", "translation": "Nós compramos comida." },
+            { "id": "V024", "sentence": "You sell cars.", "translation": "Você vende carros." },
+            { "id": "V025", "sentence": "I give gifts.", "translation": "Eu dou presentes." },
+            { "id": "V026", "sentence": "She takes photos.", "translation": "Ela tira fotos." },
+            { "id": "V027", "sentence": "He finds keys.", "translation": "Ele encontra chaves." },
+            { "id": "V028", "sentence": "They lose games.", "translation": "Eles perdem jogos." },
+            { "id": "V029", "sentence": "We make cakes.", "translation": "Nós fazemos bolos." },
+            { "id": "V030", "sentence": "You break rules.", "translation": "Você quebra regras." },
+            { "id": "V031", "sentence": "I open doors.", "translation": "Eu abro portas." },
+            { "id": "V032", "sentence": "She closes windows.", "translation": "Ela fecha janelas." },
+            { "id": "V033", "sentence": "He fixes cars.", "translation": "Ele conserta carros." },
+            { "id": "V034", "sentence": "They clean rooms.", "translation": "Eles limpam quartos." },
+            { "id": "V035", "sentence": "We draw pictures.", "translation": "Nós desenhamos imagens." },
+            { "id": "V036", "sentence": "You cut paper.", "translation": "Você corta papel." },
+            { "id": "V037", "sentence": "I throw balls.", "translation": "Eu jogo bolas." },
+            { "id": "V038", "sentence": "She catches fish.", "translation": "Ela pega peixes." },
+            { "id": "V039", "sentence": "He kicks goals.", "translation": "Ele chuta gols." },
+            { "id": "V040", "sentence": "They hit targets.", "translation": "Eles acertam alvos." },
+            { "id": "V041", "sentence": "We pull ropes.", "translation": "Nós puxamos cordas." },
+            { "id": "V042", "sentence": "You push carts.", "translation": "Você empurra carrinhos." },
+            { "id": "V043", "sentence": "I lift weights.", "translation": "Eu levanto pesos." },
+            { "id": "V044", "sentence": "She drops coins.", "translation": "Ela deixa cair moedas." },
+            { "id": "V045", "sentence": "He holds hands.", "translation": "Ele segura mãos." },
+            { "id": "V046", "sentence": "They shake bottles.", "translation": "Eles chacoalham garrafas." },
+            { "id": "V047", "sentence": "We turn pages.", "translation": "Nós viramos páginas." },
+            { "id": "V048", "sentence": "You climb trees.", "translation": "Você sobe árvores." },
+            { "id": "V049", "sentence": "I fall often.", "translation": "Eu caio frequentemente." },
+            { "id": "V050", "sentence": "She rises early.", "translation": "Ela levanta cedo." },
+            { "id": "V051", "sentence": "He sits quietly.", "translation": "Ele senta quieto." },
+            { "id": "V052", "sentence": "They stand tall.", "translation": "Eles ficam em pé." },
+            { "id": "V053", "sentence": "We lie down.", "translation": "Nós deitamos." },
+            { "id": "V054", "sentence": "You wait patiently.", "translation": "Você espera pacientemente." },
+            { "id": "V055", "sentence": "I work hard.", "translation": "Eu trabalho duro." },
+            { "id": "V056", "sentence": "She studies math.", "translation": "Ela estuda matemática." },
+            { "id": "V057", "sentence": "He teaches kids.", "translation": "Ele ensina crianças." },
+            { "id": "V058", "sentence": "They learn quickly.", "translation": "Eles aprendem rápido." },
+            { "id": "V059", "sentence": "We try again.", "translation": "Nós tentamos novamente." },
+            { "id": "V060", "sentence": "You help friends.", "translation": "Você ajuda amigos." },
+            { "id": "V061", "sentence": "I ask questions.", "translation": "Eu faço perguntas." },
+            { "id": "V062", "sentence": "She answers calls.", "translation": "Ela atende chamadas." },
+            { "id": "V063", "sentence": "He tells stories.", "translation": "Ele conta histórias." },
+            { "id": "V064", "sentence": "They explain rules.", "translation": "Eles explicam regras." },
+            { "id": "V065", "sentence": "We show pictures.", "translation": "Nós mostramos fotos." },
+            { "id": "V066", "sentence": "You hide toys.", "translation": "Você esconde brinquedos." },
+            { "id": "V067", "sentence": "I seek help.", "translation": "Eu busco ajuda." },
+            { "id": "V068", "sentence": "She follows paths.", "translation": "Ela segue caminhos." },
+            { "id": "V069", "sentence": "He leads teams.", "translation": "Ele lidera times." },
+            { "id": "V070", "sentence": "They join clubs.", "translation": "Eles entram clubes." },
+            { "id": "V071", "sentence": "We leave home.", "translation": "Nós saímos casa." },
+            { "id": "V072", "sentence": "You arrive late.", "translation": "Você chega tarde." },
+            { "id": "V073", "sentence": "I stay here.", "translation": "Eu fico aqui." },
+            { "id": "V074", "sentence": "She visits museums.", "translation": "Ela visita museus." },
+            { "id": "V075", "sentence": "He travels often.", "translation": "Ele viaja frequentemente." },
+            { "id": "V076", "sentence": "They move boxes.", "translation": "Eles movem caixas." },
+            { "id": "V077", "sentence": "We carry bags.", "translation": "Nós carregamos sacolas." },
+            { "id": "V078", "sentence": "You bring water.", "translation": "Você traz água." },
+            { "id": "V079", "sentence": "I send emails.", "translation": "Eu envio e-mails." },
+            { "id": "V080", "sentence": "She receives letters.", "translation": "Ela recebe cartas." },
+            { "id": "V081", "sentence": "He saves money.", "translation": "Ele economiza dinheiro." },
+            { "id": "V082", "sentence": "They spend time.", "translation": "Eles gastam tempo." },
+            { "id": "V083", "sentence": "We earn rewards.", "translation": "Nós ganhamos recompensas." },
+            { "id": "V084", "sentence": "You win prizes.", "translation": "Você ganha prêmios." },
+            { "id": "V085", "sentence": "I lose keys.", "translation": "Eu perco chaves." },
+            { "id": "V086", "sentence": "She forgets names.", "translation": "Ela esquece nomes." },
+            { "id": "V087", "sentence": "He remembers dates.", "translation": "Ele lembra datas." },
+            { "id": "V088", "sentence": "They imagine worlds.", "translation": "Eles imaginam mundos." },
+            { "id": "V089", "sentence": "We dream big.", "translation": "Nós sonhamos grande." },
+            { "id": "V090", "sentence": "You hope daily.", "translation": "Você espera diariamente." },
+            { "id": "V091", "sentence": "I fear spiders.", "translation": "Eu temo aranhas." },
+            { "id": "V092", "sentence": "She loves dogs.", "translation": "Ela ama cachorros." },
+            { "id": "V093", "sentence": "He hates rain.", "translation": "Ele odeia chuva." },
+            { "id": "V094", "sentence": "They like music.", "translation": "Eles gostam música." },
+            { "id": "V095", "sentence": "We need food.", "translation": "Nós precisamos comida." },
+            { "id": "V096", "sentence": "You want peace.", "translation": "Você quer paz." },
+            { "id": "V097", "sentence": "I can swim.", "translation": "Eu posso nadar." },
+            { "id": "V098", "sentence": "She will go.", "translation": "Ela vai embora." },
+            { "id": "V099", "sentence": "He must study.", "translation": "Ele deve estudar." },
+            { "id": "V100", "sentence": "They should rest.", "translation": "Eles deveriam descansar." },
+            { "id": "V101", "sentence": "We might win.", "translation": "Nós podemos ganhar." },
+            { "id": "V102", "sentence": "You could try.", "translation": "Você poderia tentar." },
+            { "id": "V103", "sentence": "I would help.", "translation": "Eu ajudaria." },
+            { "id": "V104", "sentence": "She shall sing.", "translation": "Ela cantará." },
+            { "id": "V105", "sentence": "He does work.", "translation": "Ele faz trabalho." },
+            { "id": "V106", "sentence": "They have books.", "translation": "Eles têm livros." },
+            { "id": "V107", "sentence": "We are friends.", "translation": "Nós somos amigos." },
+            { "id": "V108", "sentence": "You become strong.", "translation": "Você fica forte." },
+            { "id": "V109", "sentence": "I begin now.", "translation": "Eu começo agora." },
+            { "id": "V110", "sentence": "She continues talking.", "translation": "Ela continua falando." },
+            { "id": "V111", "sentence": "He ends games.", "translation": "Ele termina jogos." },
+            { "id": "V112", "sentence": "They finish tasks.", "translation": "Eles terminam tarefas." },
+            { "id": "V113", "sentence": "We start early.", "translation": "Nós começamos cedo." },
+            { "id": "V114", "sentence": "You stop here.", "translation": "Você para aqui." },
+            { "id": "V115", "sentence": "I agree happily.", "translation": "Eu concordo feliz." },
+            { "id": "V116", "sentence": "She disagrees often.", "translation": "Ela discorda frequentemente." },
+            { "id": "V117", "sentence": "He accepts gifts.", "translation": "Ele aceita presentes." },
+            { "id": "V118", "sentence": "They refuse help.", "translation": "Eles recusam ajuda." },
+            { "id": "V119", "sentence": "We offer advice.", "translation": "Nós oferecemos conselhos." },
+            { "id": "V120", "sentence": "You promise truth.", "translation": "Você promete verdade." },
+            { "id": "V121", "sentence": "I decide quickly.", "translation": "Eu decido rápido." },
+            { "id": "V122", "sentence": "She chooses wisely.", "translation": "Ela escolhe sabiamente." },
+            { "id": "V123", "sentence": "He plans trips.", "translation": "Ele planeja viagens." },
+            { "id": "V124", "sentence": "They prepare meals.", "translation": "Eles preparam refeições." },
+            { "id": "V125", "sentence": "We arrange flowers.", "translation": "Nós arrumamos flores." },
+            { "id": "V126", "sentence": "You organize events.", "translation": "Você organiza eventos." },
+            { "id": "V127", "sentence": "I change clothes.", "translation": "Eu troco roupas." },
+            { "id": "V128", "sentence": "She replaces bulbs.", "translation": "Ela substitui lâmpadas." },
+            { "id": "V129", "sentence": "He repairs bikes.", "translation": "Ele conserta bicicletas." },
+            { "id": "V130", "sentence": "They improve skills.", "translation": "Eles melhoram habilidades." },
+            { "id": "V131", "sentence": "We develop ideas.", "translation": "Nós desenvolvemos ideias." },
+            { "id": "V132", "sentence": "You create art.", "translation": "Você cria arte." },
+            { "id": "V133", "sentence": "I destroy walls.", "translation": "Eu destruo paredes." },
+            { "id": "V134", "sentence": "She builds bridges.", "translation": "Ela constrói pontes." },
+            { "id": "V135", "sentence": "He grows plants.", "translation": "Ele cultiva plantas." },
+            { "id": "V136", "sentence": "They raise kids.", "translation": "Eles criam crianças." },
+            { "id": "V137", "sentence": "We train dogs.", "translation": "Nós treinamos cachorros." },
+            { "id": "V138", "sentence": "You teach math.", "translation": "Você ensina matemática." },
+            { "id": "V139", "sentence": "I advise friends.", "translation": "Eu aconselho amigos." },
+            { "id": "V140", "sentence": "She warns people.", "translation": "Ela avisa pessoas." },
+            { "id": "V141", "sentence": "He suggests ideas.", "translation": "Ele sugere ideias." },
+            { "id": "V142", "sentence": "They recommend books.", "translation": "Eles recomendam livros." },
+            { "id": "V143", "sentence": "We discuss plans.", "translation": "Nós discutimos planos." },
+            { "id": "V144", "sentence": "You argue well.", "translation": "Você argumenta bem." },
+            { "id": "V145", "sentence": "I complain often.", "translation": "Eu reclamo frequentemente." },
+            { "id": "V146", "sentence": "She praises kids.", "translation": "Ela elogia crianças." },
+            { "id": "V147", "sentence": "He criticizes work.", "translation": "Ele critica trabalho." },
+            { "id": "V148", "sentence": "They thank you.", "translation": "Eles agradecem você." },
+            { "id": "V149", "sentence": "We apologize quickly.", "translation": "Nós pedimos desculpas." },
+            { "id": "V150", "sentence": "You forgive easily.", "translation": "Você perdoa fácil." },
+            { "id": "V151", "sentence": "I punish mistakes.", "translation": "Eu puno erros." },
+            { "id": "V152", "sentence": "She rewards effort.", "translation": "Ela recompensa esforço." },
+            { "id": "V153", "sentence": "He encourages kids.", "translation": "Ele encoraja crianças." },
+            { "id": "V154", "sentence": "They support teams.", "translation": "Eles apoiam times." },
+            { "id": "V155", "sentence": "We oppose rules.", "translation": "Nós opomos regras." },
+            { "id": "V156", "sentence": "You defend friends.", "translation": "Você defende amigos." },
+            { "id": "V157", "sentence": "I attack problems.", "translation": "Eu ataco problemas." },
+            { "id": "V158", "sentence": "She protects kids.", "translation": "Ela protege crianças." },
+            { "id": "V159", "sentence": "He escapes danger.", "translation": "Ele escapa perigo." },
+            { "id": "V160", "sentence": "They survive storms.", "translation": "Eles sobrevivem tempestades." },
+            { "id": "V161", "sentence": "We avoid trouble.", "translation": "Nós evitamos problemas." },
+            { "id": "V162", "sentence": "You ignore noise.", "translation": "Você ignora barulho." },
+            { "id": "V163", "sentence": "I notice details.", "translation": "Eu noto detalhes." },
+            { "id": "V164", "sentence": "She observes birds.", "translation": "Ela observa pássaros." },
+            { "id": "V165", "sentence": "He recognizes faces.", "translation": "Ele reconhece rostos." },
+            { "id": "V166", "sentence": "They identify plants.", "translation": "Eles identificam plantas." },
+            { "id": "V167", "sentence": "We compare prices.", "translation": "Nós comparamos preços." },
+            { "id": "V168", "sentence": "You contrast colors.", "translation": "Você contrasta cores." },
+            { "id": "V169", "sentence": "I measure time.", "translation": "Eu meço tempo." },
+            { "id": "V170", "sentence": "She weighs fruit.", "translation": "Ela pesa frutas." },
+            { "id": "V171", "sentence": "He counts stars.", "translation": "Ele conta estrelas." },
+            { "id": "V172", "sentence": "They calculate costs.", "translation": "Eles calculam custos." },
+            { "id": "V173", "sentence": "We estimate distances.", "translation": "Nós estimamos distâncias." },
+            { "id": "V174", "sentence": "You predict rain.", "translation": "Você prevê chuva." },
+            { "id": "V175", "sentence": "I imagine stories.", "translation": "Eu imagino histórias." },
+            { "id": "V176", "sentence": "She invents games.", "translation": "Ela inventa jogos." },
+            { "id": "V177", "sentence": "He discovers places.", "translation": "Ele descobre lugares." },
+            { "id": "V178", "sentence": "They explore forests.", "translation": "Eles exploram florestas." },
+            { "id": "V179", "sentence": "We investigate mysteries.", "translation": "Nós investigamos mistérios." },
+            { "id": "V180", "sentence": "You solve puzzles.", "translation": "Você resolve enigmas." },
+            { "id": "V181", "sentence": "I enjoy music.", "translation": "Eu gosto música." },
+            { "id": "V182", "sentence": "She prefers tea.", "translation": "Ela prefere chá." },
+            { "id": "V183", "sentence": "He selects books.", "translation": "Ele seleciona livros." },
+            { "id": "V184", "sentence": "They collect stamps.", "translation": "Eles coletam selos." },
+            { "id": "V185", "sentence": "We gather wood.", "translation": "Nós juntamos madeira." },
+            { "id": "V186", "sentence": "You deliver mail.", "translation": "Você entrega correio." },
+            { "id": "V187", "sentence": "I distribute candy.", "translation": "Eu distribuo doces." },
+            { "id": "V188", "sentence": "She shares snacks.", "translation": "Ela compartilha lanches." },
+            { "id": "V189", "sentence": "He trades cards.", "translation": "Ele troca cartas." },
+            { "id": "V190", "sentence": "They exchange gifts.", "translation": "Eles trocam presentes." },
+            { "id": "V191", "sentence": "We borrow tools.", "translation": "Nós pegamos ferramentas." },
+            { "id": "V192", "sentence": "You lend money.", "translation": "Você empresta dinheiro." },
+            { "id": "V193", "sentence": "I owe nothing.", "translation": "Eu devo nada." },
+            { "id": "V194", "sentence": "She pays bills.", "translation": "Ela paga contas." },
+            { "id": "V195", "sentence": "He charges phones.", "translation": "Ele carrega telefones." },
+            { "id": "V196", "sentence": "They fill bottles.", "translation": "Eles enchem garrafas." },
+            { "id": "V197", "sentence": "We empty trash.", "translation": "Nós esvaziamos lixo." },
+            { "id": "V198", "sentence": "You cover tables.", "translation": "Você cobre mesas." },
+            { "id": "V199", "sentence": "I uncover secrets.", "translation": "Eu descubro segredos." },
+            { "id": "V200", "sentence": "She reveals truth.", "translation": "Ela revela verdade." },
+            { "id": "A001", "sentence": "The sky is blue.", "translation": "O céu é azul." },
+            { "id": "A002", "sentence": "Her dress is red.", "translation": "O vestido dela é vermelho." },
+            { "id": "A003", "sentence": "This book is big.", "translation": "Este livro é grande." },
+            { "id": "A004", "sentence": "That cat is small.", "translation": "Aquele gato é pequeno." },
+            { "id": "A005", "sentence": "The food is good.", "translation": "A comida é boa." },
+            { "id": "A006", "sentence": "His car is fast.", "translation": "O carro dele é rápido." },
+            { "id": "A007", "sentence": "My house is old.", "translation": "Minha casa é velha." },
+            { "id": "A008", "sentence": "Their dog is young.", "translation": "O cachorro deles é jovem." },
+            { "id": "A009", "sentence": "The water is cold.", "translation": "A água é fria." },
+            { "id": "A010", "sentence": "Her tea is hot.", "translation": "O chá dela é quente." },
+            { "id": "A011", "sentence": "This chair is hard.", "translation": "Esta cadeira é dura." },
+            { "id": "A012", "sentence": "That bed is soft.", "translation": "Aquela cama é macia." },
+            { "id": "A013", "sentence": "The room is dark.", "translation": "O quarto é escuro." },
+            { "id": "A014", "sentence": "His shirt is bright.", "translation": "A camisa dele é brilhante." },
+            { "id": "A015", "sentence": "My bag is heavy.", "translation": "Minha bolsa é pesada." },
+            { "id": "A016", "sentence": "Her shoes are light.", "translation": "Os sapatos dela são leves." },
+            { "id": "A017", "sentence": "The cake is sweet.", "translation": "O bolo é doce." },
+            { "id": "A018", "sentence": "This soup is salty.", "translation": "Esta sopa é salgada." },
+            { "id": "A019", "sentence": "That lemon is sour.", "translation": "Aquele limão é azedo." },
+            { "id": "A020", "sentence": "His coffee is bitter.", "translation": "O café dele é amargo." },
+            { "id": "A021", "sentence": "The day is sunny.", "translation": "O dia é ensolarado." },
+            { "id": "A022", "sentence": "Her hair is long.", "translation": "O cabelo dela é longo." },
+            { "id": "A023", "sentence": "His beard is short.", "translation": "A barba dele é curta." },
+            { "id": "A024", "sentence": "The tree is tall.", "translation": "A árvore é alta." },
+            { "id": "A025", "sentence": "That wall is low.", "translation": "Aquela parede é baixa." },
+            { "id": "A026", "sentence": "My phone is new.", "translation": "Meu telefone é novo." },
+            { "id": "A027", "sentence": "Her watch is old.", "translation": "O relógio dela é velho." },
+            { "id": "A028", "sentence": "The movie is funny.", "translation": "O filme é engraçado." },
+            { "id": "A029", "sentence": "His joke is silly.", "translation": "A piada dele é boba." },
+            { "id": "A030", "sentence": "This game is easy.", "translation": "Este jogo é fácil." },
+            { "id": "A031", "sentence": "That test is hard.", "translation": "Aquele teste é difícil." },
+            { "id": "A032", "sentence": "The music is loud.", "translation": "A música é alta." },
+            { "id": "A033", "sentence": "Her voice is quiet.", "translation": "A voz dela é baixa." },
+            { "id": "A034", "sentence": "My friend is kind.", "translation": "Meu amigo é gentil." },
+            { "id": "A035", "sentence": "His boss is mean.", "translation": "O chefe dele é mau." },
+            { "id": "A036", "sentence": "The baby is cute.", "translation": "O bebê é fofo." },
+            { "id": "A037", "sentence": "Her smile is pretty.", "translation": "O sorriso dela é bonito." },
+            { "id": "A038", "sentence": "His face is ugly.", "translation": "O rosto dele é feio." },
+            { "id": "A039", "sentence": "The flower is beautiful.", "translation": "A flor é linda." },
+            { "id": "A040", "sentence": "That bug is scary.", "translation": "Aquele inseto é assustador." },
+            { "id": "A041", "sentence": "My dog is happy.", "translation": "Meu cachorro é feliz." },
+            { "id": "A042", "sentence": "Her cat is sad.", "translation": "O gato dela é triste." },
+            { "id": "A043", "sentence": "The boy is angry.", "translation": "O menino é bravo." },
+            { "id": "A044", "sentence": "His sister is calm.", "translation": "A irmã dele é calma." },
+            { "id": "A045", "sentence": "The man is tired.", "translation": "O homem é cansado." },
+            { "id": "A046", "sentence": "Her eyes are sleepy.", "translation": "Os olhos dela são sonolentos." },
+            { "id": "A047", "sentence": "This shirt is clean.", "translation": "Esta camisa é limpa." },
+            { "id": "A048", "sentence": "That sock is dirty.", "translation": "Aquela meia é suja." },
+            { "id": "A049", "sentence": "The glass is full.", "translation": "O copo é cheio." },
+            { "id": "A050", "sentence": "Her cup is empty.", "translation": "A xícara dela é vazia." },
+            { "id": "A051", "sentence": "His bag is wet.", "translation": "A bolsa dele é molhada." },
+            { "id": "A052", "sentence": "My hair is dry.", "translation": "Meu cabelo é seco." },
+            { "id": "A053", "sentence": "The road is wide.", "translation": "A estrada é larga." },
+            { "id": "A054", "sentence": "That path is narrow.", "translation": "Aquele caminho é estreito." },
+            { "id": "A055", "sentence": "The pool is deep.", "translation": "A piscina é funda." },
+            { "id": "A056", "sentence": "Her well is shallow.", "translation": "O poço dela é raso." },
+            { "id": "A057", "sentence": "This hill is steep.", "translation": "Esta colina é íngreme." },
+            { "id": "A058", "sentence": "That field is flat.", "translation": "Aquele campo é plano." },
+            { "id": "A059", "sentence": "The air is fresh.", "translation": "O ar é fresco." },
+            { "id": "A060", "sentence": "His bread is stale.", "translation": "O pão dele é velho." },
+            { "id": "A061", "sentence": "My apple is ripe.", "translation": "Minha maçã é madura." },
+            { "id": "A062", "sentence": "Her fruit is green.", "translation": "A fruta dela é verde." },
+            { "id": "A063", "sentence": "The meat is raw.", "translation": "A carne é crua." },
+            { "id": "A064", "sentence": "His steak is cooked.", "translation": "O bife dele é cozido." },
+            { "id": "A065", "sentence": "This room is warm.", "translation": "Este quarto é quente." },
+            { "id": "A066", "sentence": "That cave is cool.", "translation": "Aquela caverna é fresca." },
+            { "id": "A067", "sentence": "The sun is strong.", "translation": "O sol é forte." },
+            { "id": "A068", "sentence": "Her wind is weak.", "translation": "O vento dela é fraco." },
+            { "id": "A069", "sentence": "My team is great.", "translation": "Meu time é ótimo." },
+            { "id": "A070", "sentence": "His plan is bad.", "translation": "O plano dele é ruim." },
+            { "id": "A071", "sentence": "The party is fun.", "translation": "A festa é divertida." },
+            { "id": "A072", "sentence": "Her class is boring.", "translation": "A aula dela é chata." },
+            { "id": "A073", "sentence": "This song is loud.", "translation": "Esta música é alta." },
+            { "id": "A074", "sentence": "That whisper is soft.", "translation": "Aquele sussurro é baixo." },
+            { "id": "A075", "sentence": "My friend is nice.", "translation": "Meu amigo é legal." },
+            { "id": "A076", "sentence": "Her teacher is strict.", "translation": "O professor dela é rigoroso." },
+            { "id": "A077", "sentence": "The baby is loud.", "translation": "O bebê é barulhento." },
+            { "id": "A078", "sentence": "His dog is quiet.", "translation": "O cachorro dele é silencioso." },
+            { "id": "A079", "sentence": "This place is safe.", "translation": "Este lugar é seguro." },
+            { "id": "A080", "sentence": "That street is dangerous.", "translation": "Aquela rua é perigosa." },
+            { "id": "A081", "sentence": "The food is tasty.", "translation": "A comida é saborosa." },
+            { "id": "A082", "sentence": "Her soup is bland.", "translation": "A sopa dela é sem graça." },
+            { "id": "A083", "sentence": "My car is shiny.", "translation": "Meu carro é brilhante." },
+            { "id": "A084", "sentence": "His bike is dull.", "translation": "A bicicleta dele é opaca." },
+            { "id": "A085", "sentence": "The sky is clear.", "translation": "O céu é claro." },
+            { "id": "A086", "sentence": "Her view is cloudy.", "translation": "A vista dela é nublada." },
+            { "id": "A087", "sentence": "This day is rainy.", "translation": "Este dia é chuvoso." },
+            { "id": "A088", "sentence": "That night is windy.", "translation": "Aquela noite é ventosa." },
+            { "id": "A089", "sentence": "The snow is white.", "translation": "A neve é branca." },
+            { "id": "A090", "sentence": "His coat is black.", "translation": "O casaco dele é preto." },
+            { "id": "A091", "sentence": "My hat is gray.", "translation": "Meu chapéu é cinza." },
+            { "id": "A092", "sentence": "Her scarf is yellow.", "translation": "O cachecol dela é amarelo." },
+            { "id": "A093", "sentence": "The flower is pink.", "translation": "A flor é rosa." },
+            { "id": "A094", "sentence": "His shirt is purple.", "translation": "A camisa dele é roxa." },
+            { "id": "A095", "sentence": "This bird is brown.", "translation": "Este pássaro é marrom." },
+            { "id": "A096", "sentence": "That fish is silver.", "translation": "Aquele peixe é prateado." },
+            { "id": "A097", "sentence": "The ring is golden.", "translation": "O anel é dourado." },
+            { "id": "A098", "sentence": "Her necklace is shiny.", "translation": "O colar dela é brilhante." },
+            { "id": "A099", "sentence": "My phone is sleek.", "translation": "Meu telefone é elegante." },
+            { "id": "A100", "sentence": "His watch is modern.", "translation": "O relógio dele é moderno." },
+            { "id": "A101", "sentence": "The house is cozy.", "translation": "A casa é aconchegante." },
+            { "id": "A102", "sentence": "Her room is messy.", "translation": "O quarto dela é bagunçado." },
+            { "id": "A103", "sentence": "This desk is neat.", "translation": "Esta mesa é arrumada." },
+            { "id": "A104", "sentence": "That shelf is tidy.", "translation": "Aquela prateleira é organizada." },
+            { "id": "A105", "sentence": "The car is fast.", "translation": "O carro é veloz." },
+            { "id": "A106", "sentence": "His bike is slow.", "translation": "A bicicleta dele é lenta." },
+            { "id": "A107", "sentence": "My train is late.", "translation": "Meu trem é atrasado." },
+            { "id": "A108", "sentence": "Her bus is early.", "translation": "O ônibus dela é adiantado." },
+            { "id": "A109", "sentence": "This plane is high.", "translation": "Este avião é alto." },
+            { "id": "A110", "sentence": "That kite is low.", "translation": "Aquele papagaio é baixo." },
+            { "id": "A111", "sentence": "The mountain is huge.", "translation": "A montanha é enorme." },
+            { "id": "A112", "sentence": "Her hill is tiny.", "translation": "A colina dela é minúscula." },
+            { "id": "A113", "sentence": "My lake is large.", "translation": "Meu lago é grande." },
+            { "id": "A114", "sentence": "His pond is small.", "translation": "O lago dele é pequeno." },
+            { "id": "A115", "sentence": "The forest is dense.", "translation": "A floresta é densa." },
+            { "id": "A116", "sentence": "Her garden is sparse.", "translation": "O jardim dela é esparso." },
+            { "id": "A117", "sentence": "This city is busy.", "translation": "Esta cidade é movimentada." },
+            { "id": "A118", "sentence": "That town is quiet.", "translation": "Aquela cidade é tranquila." },
+            { "id": "A119", "sentence": "My street is noisy.", "translation": "Minha rua é barulhenta." },
+            { "id": "A120", "sentence": "Her park is peaceful.", "translation": "O parque dela é pacífico." },
+            { "id": "A121", "sentence": "The beach is sandy.", "translation": "A praia é arenosa." },
+            { "id": "A122", "sentence": "His path is rocky.", "translation": "O caminho dele é rochoso." },
+            { "id": "A123", "sentence": "My yard is green.", "translation": "Meu quintal é verde." },
+            { "id": "A124", "sentence": "Her lawn is brown.", "translation": "O gramado dela é marrom." },
+            { "id": "A125", "sentence": "This fruit is juicy.", "translation": "Esta fruta é suculenta." },
+            { "id": "A126", "sentence": "That bread is dry.", "translation": "Aquele pão é seco." },
+            { "id": "A127", "sentence": "My soup is thick.", "translation": "Minha sopa é grossa." },
+            { "id": "A128", "sentence": "Her sauce is thin.", "translation": "O molho dela é fino." },
+            { "id": "A129", "sentence": "The milk is creamy.", "translation": "O leite é cremoso." },
+            { "id": "A130", "sentence": "His tea is weak.", "translation": "O chá dele é fraco." },
+            { "id": "A131", "sentence": "My coffee is strong.", "translation": "Meu café é forte." },
+            { "id": "A132", "sentence": "Her juice is fresh.", "translation": "O suco dela é fresco." },
+            { "id": "A133", "sentence": "This meat is tender.", "translation": "Esta carne é macia." },
+            { "id": "A134", "sentence": "That steak is tough.", "translation": "Aquele bife é duro." },
+            { "id": "A135", "sentence": "My fish is flaky.", "translation": "Meu peixe é escamoso." },
+            { "id": "A136", "sentence": "Her chicken is crispy.", "translation": "O frango dela é crocante." },
+            { "id": "A137", "sentence": "The shirt is smooth.", "translation": "A camisa é lisa." },
+            { "id": "A138", "sentence": "His pants are rough.", "translation": "As calças dele são ásperas." },
+            { "id": "A139", "sentence": "My skin is soft.", "translation": "Minha pele é macia." },
+            { "id": "A140", "sentence": "Her hands are dry.", "translation": "As mãos dela são secas." },
+            { "id": "A141", "sentence": "This fabric is silky.", "translation": "Este tecido é sedoso." },
+            { "id": "A142", "sentence": "That wool is itchy.", "translation": "Aquela lã é coçante." },
+            { "id": "A143", "sentence": "My blanket is warm.", "translation": "Meu cobertor é quente." },
+            { "id": "A144", "sentence": "Her towel is cool.", "translation": "A toalha dela é fresca." },
+            { "id": "A145", "sentence": "The light is bright.", "translation": "A luz é brilhante." },
+            { "id": "A146", "sentence": "His room is dim.", "translation": "O quarto dele é escuro." },
+            { "id": "A147", "sentence": "My lamp is warm.", "translation": "Minha lâmpada é quente." },
+            { "id": "A148", "sentence": "Her bulb is cool.", "translation": "A lâmpada dela é fria." },
+            { "id": "A149", "sentence": "This star is shiny.", "translation": "Esta estrela é brilhante." },
+            { "id": "A150", "sentence": "That moon is pale.", "translation": "Aquela lua é pálida." },
+            { "id": "A151", "sentence": "The child is smart.", "translation": "A criança é esperta." },
+            { "id": "A152", "sentence": "Her son is clever.", "translation": "O filho dela é inteligente." },
+            { "id": "A153", "sentence": "His girl is shy.", "translation": "A menina dele é tímida." },
+            { "id": "A154", "sentence": "My friend is bold.", "translation": "Meu amigo é ousado." },
+            { "id": "A155", "sentence": "The teacher is wise.", "translation": "O professor é sábio." },
+            { "id": "A156", "sentence": "Her boss is fair.", "translation": "O chefe dela é justo." },
+            { "id": "A157", "sentence": "This judge is strict.", "translation": "Este juiz é rigoroso." },
+            { "id": "A158", "sentence": "That cop is tough.", "translation": "Aquele policial é durão." },
+            { "id": "A159", "sentence": "My team is friendly.", "translation": "Meu time é amigável." },
+            { "id": "A160", "sentence": "Her group is rude.", "translation": "O grupo dela é rude." },
+            { "id": "A161", "sentence": "The man is honest.", "translation": "O homem é honesto." },
+            { "id": "A162", "sentence": "His wife is loyal.", "translation": "A esposa dele é leal." },
+            { "id": "A163", "sentence": "My kid is brave.", "translation": "Meu filho é corajoso." },
+            { "id": "A164", "sentence": "Her pet is scared.", "translation": "O pet dela é assustado." },
+            { "id": "A165", "sentence": "This job is easy.", "translation": "Este trabalho é fácil." },
+            { "id": "A166", "sentence": "That task is tough.", "translation": "Aquela tarefa é difícil." },
+            { "id": "A167", "sentence": "My work is busy.", "translation": "Meu trabalho é ocupado." },
+            { "id": "A168", "sentence": "Her day is free.", "translation": "O dia dela é livre." },
+            { "id": "A169", "sentence": "The store is open.", "translation": "A loja é aberta." },
+            { "id": "A170", "sentence": "His shop is closed.", "translation": "A loja dele é fechada." },
+            { "id": "A171", "sentence": "My bag is full.", "translation": "Minha bolsa é cheia." },
+            { "id": "A172", "sentence": "Her box is empty.", "translation": "A caixa dela é vazia." },
+            { "id": "A173", "sentence": "This road is straight.", "translation": "Esta estrada é reta." },
+            { "id": "A174", "sentence": "That path is curved.", "translation": "Aquele caminho é curvado." },
+            { "id": "A175", "sentence": "My line is long.", "translation": "Minha linha é longa." },
+            { "id": "A176", "sentence": "Her rope is short.", "translation": "A corda dela é curta." },
+            { "id": "A177", "sentence": "The wall is thick.", "translation": "A parede é grossa." },
+            { "id": "A178", "sentence": "His door is thin.", "translation": "A porta dele é fina." },
+            { "id": "A179", "sentence": "My book is heavy.", "translation": "Meu livro é pesado." },
+            { "id": "A180", "sentence": "Her pen is light.", "translation": "A caneta dela é leve." },
+            { "id": "A181", "sentence": "This chair is sturdy.", "translation": "Esta cadeira é robusta." },
+            { "id": "A182", "sentence": "That table is weak.", "translation": "Aquela mesa é fraca." },
+            { "id": "A183", "sentence": "My bed is comfy.", "translation": "Minha cama é confortável." },
+            { "id": "A184", "sentence": "Her couch is hard.", "translation": "O sofá dela é duro." },
+            { "id": "A185", "sentence": "The movie is exciting.", "translation": "O filme é empolgante." },
+            { "id": "A186", "sentence": "His game is dull.", "translation": "O jogo dele é monótono." },
+            { "id": "A187", "sentence": "My story is interesting.", "translation": "Minha história é interessante." },
+            { "id": "A188", "sentence": "Her tale is strange.", "translation": "O conto dela é estranho." },
+            { "id": "A189", "sentence": "This news is shocking.", "translation": "Esta notícia é chocante." },
+            { "id": "A190", "sentence": "That fact is weird.", "translation": "Aquele fato é esquisito." },
+            { "id": "A191", "sentence": "My dream is wild.", "translation": "Meu sonho é selvagem." },
+            { "id": "A192", "sentence": "Her idea is crazy.", "translation": "A ideia dela é louca." },
+            { "id": "A193", "sentence": "The plan is simple.", "translation": "O plano é simples." },
+            { "id": "A194", "sentence": "His task is complex.", "translation": "A tarefa dele é complexa." },
+            { "id": "A195", "sentence": "My goal is clear.", "translation": "Meu objetivo é claro." },
+            { "id": "A196", "sentence": "Her path is confusing.", "translation": "O caminho dela é confuso." },
+            { "id": "A197", "sentence": "This rule is strict.", "translation": "Esta regra é rígida." },
+            { "id": "A198", "sentence": "That law is loose.", "translation": "Aquela lei é frouxa." },
+            { "id": "A199", "sentence": "My friend is true.", "translation": "Meu amigo é verdadeiro." },
+            { "id": "A200", "sentence": "Her word is false.", "translation": "A palavra dela é falsa." }
+        ];
+
+        // Função para carregar as frases
+        function loadSentences(sentences) {
+            const content = document.getElementById('content');
+            content.innerHTML = '';
+            sentences.forEach(item => {
+                const container = document.createElement('div');
+                container.classList.add('word-container');
+                container.innerHTML = `
+                    <span class="english-sentence">${item.sentence}</span>
+                    <span class="translation">${item.translation}</span>
+                `;
+                container.addEventListener('click', () => speakSentence(item.sentence));
+                content.appendChild(container);
+            });
+        }
+
+        // Função para carregar as vozes com espera
+        function getVoices() {
+            return new Promise(resolve => {
+                let voices = window.speechSynthesis.getVoices();
+                console.log("Vozes iniciais:", voices);
+                if (voices.length > 0) {
+                    resolve(voices);
+                } else {
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        voices = window.speechSynthesis.getVoices();
+                        console.log("Vozes carregadas após evento:", voices);
+                        resolve(voices);
+                    };
+                    // Força uma tentativa após 1 segundo no Chrome
+                    setTimeout(() => {
+                        voices = window.speechSynthesis.getVoices();
+                        console.log("Vozes após timeout:", voices);
+                        resolve(voices);
+                    }, 1000);
+                }
+            });
+        }
+
+        // Função para falar a frase com voz feminina
+        async function speakSentence(sentence) {
+            if (!('speechSynthesis' in window)) {
+                console.error("SpeechSynthesis não é suportado neste navegador.");
+                alert("Seu navegador não suporta síntese de voz.");
+                return;
+            }
+
+            console.log("Tentando falar:", sentence);
+            const voices = await getVoices();
+            const utterance = new SpeechSynthesisUtterance(sentence);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+
+            // Seleciona uma voz feminina
+            const femaleVoice = voices.find(voice => 
+                voice.lang === 'en-US' && (
+                    voice.name.includes('Google US English') || 
+                    voice.name.includes('Samantha') || 
+                    voice.name.includes('Victoria') || 
+                    voice.name.toLowerCase().includes('female')
+                )
+            ) || voices.find(voice => voice.lang === 'en-US'); // Fallback
+
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+                console.log("Voz selecionada:", femaleVoice.name);
+            } else if (voices.length > 0) {
+                utterance.voice = voices[0];
+                console.log("Nenhuma voz feminina, usando padrão:", voices[0].name);
+            } else {
+                console.error("Nenhuma voz disponível!");
+                return;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Carrega as frases inicialmente
+        loadSentences(englishSentences);
+
+        // Funcionalidade de busca
+        document.getElementById('search-bar').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filteredSentences = englishSentences.filter(item => 
+                item.sentence.toLowerCase().includes(query) || 
+                item.translation.toLowerCase().includes(query)
+            );
+            loadSentences(filteredSentences);
+        });
+    </script>
+</body>
+</html>
