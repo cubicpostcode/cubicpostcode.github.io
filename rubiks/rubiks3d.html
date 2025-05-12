@@ -2,76 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Rubiks 3D — Voice‑Reactive Rainbow v4</title>
+  <title>Rubiks 3D — Voice‑Rainbow v6 (fine‑refactor)</title>
   <style>
-    :root{--ok:#0f0;--warn:#ff6a00;--bg-step:.4s}
-    html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;transition:background-color var(--bg-step) ease}
-    /* toolbar */
-    #toolbar{position:fixed;top:1rem;left:50%;transform:translateX(-50%);display:flex;gap:.7rem;align-items:center;z-index:10}
-    #mic-btn{background:#007aff;color:#fff;border:0;border-radius:8px;padding:.5rem 1rem;font-weight:600;font-size:.95rem;cursor:pointer}
+    :root {
+      --ok:  #0f0;
+      --warn:#ff6a00;
+      --bgStep:.4s;
+    }
+    html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;transition:background-color var(--bgStep) ease;-webkit-user-select:none;user-select:none}
+    #container{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+    /* Toolbar */
+    #toolbar{position:fixed;top:1rem;left:50%;transform:translateX(-50%);display:flex;gap:.8rem;align-items:center;z-index:20}
+    #mic-btn{background:#007aff;color:#fff;border:0;border-radius:9px;padding:.55rem 1.1rem;font-weight:600;font-size:.95rem;cursor:pointer}
     #status{font-size:.9rem;color:var(--warn)}
-    /* captions */
-    #caption{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);font-size:1.4rem;font-weight:600;color:#fff;text-shadow:0 0 6px #000,0 0 14px #000;pointer-events:none;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;opacity:.96}
+    /* Caption */
+    #caption{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);font-size:1.35rem;font-weight:600;color:#fff;text-shadow:0 0 6px #000,0 0 14px #000;pointer-events:none;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;z-index:20;opacity:.97}
+    /* Volume bar */
+    #vu{position:fixed;bottom:.8rem;right:1rem;width:120px;height:12px;background:#333;border-radius:6px;overflow:hidden;z-index:20}
+    #vu>div{height:100%;width:0;background:#0a84ff;transition:width .1s ease}
   </style>
 </head>
 <body>
   <div id="container"></div>
-  <div id="main"><div id="scramble"></div><button id="btn-refresh">Shuffle</button></div>
-  <div id="toolbar"><button id="mic-btn">🎤 Start listening</button><span id="status">idle</span></div>
+
+  <div id="toolbar">
+    <button id="mic-btn">🎤 Start</button>
+    <span id="status">idle</span>
+  </div>
   <div id="caption"></div>
+  <div id="vu"><div></div></div>
+
+  <div id="main" style="position:fixed;top:1rem;right:1rem;z-index:20">
+    <div id="scramble"></div>
+    <button id="btn-refresh">Shuffle</button>
+  </div>
 
   <script src="Libraries/cubescript.js" defer></script>
   <script defer>
-  /* ========= CONFIG ========= */
-  const MOVES={bee:"b",be:"b",dee:"d",fee:"f",left:"l",ree:"r",up:"u",right:"r",front:"f",back:"b",middle:"m",x:"x",y:"y",z:"z"};
-  const PRIMES={fip:"f",leep:"l",reep:"r",weep:"u"};
-  const SPECIALS={shuffle:()=>document.getElementById('btn-refresh').click()};
-  const COLORS=['#ff375f','#ff9f0a','#ffd60a','#32d74b','#64d2ff','#0a84ff','#bf5af2'];
-  const BG_MIN_GAP=80; // ms
+  /* ========================== CONFIG ========================== */
+  const MOVES = Object.freeze({
+    bee:'b', be:'b', dee:'d', fee:'f', left:'l', ree:'r', up:'u',
+    right:'r', front:'f', back:'b', middle:'m', x:'x', y:'y', z:'z'
+  });
+  const PRIMES  = Object.freeze({ fip:'f', leep:'l', reep:'r', weep:'u' });
+  const SPECIAL = Object.freeze({ shuffle:()=>document.getElementById('btn-refresh').click() });
+  const COLORS  = ['#ff375f','#ff9f0a','#ffd60a','#32d74b','#64d2ff','#0a84ff','#bf5af2'];
 
-  /* ========= STATE ========= */
-  let idx=0,lastBg=0,listening=false,backoff=500,lastTxt="";
-  let recog,analyser,dataArray,currentVol=0;
+  /* ========================== STATE  ========================== */
+  let colorIdx=0, recog=null, analyser=null, dataArray=null, vol=0, lastTxt='', listening=false, backoff=600;
+  const BG_GAP_MIN=70; let lastBg=0;
 
-  const $=s=>document.querySelector(s);
-  const btn=$('#mic-btn'),stat=$('#status'),cap=$('#caption');
+  /* ========================== DOM  ============================ */
+  const $=q=>document.querySelector(q);
+  const btn=$('#mic-btn'), status=$('#status'), cap=$('#caption'), vu=$('#vu>div');
 
-  /* ========= COLOR ========= */
-  function advanceColor(steps=1){for(let i=0;i<steps;i++){idx=(idx+1)%COLORS.length;}document.body.style.backgroundColor=COLORS[idx];lastBg=Date.now();}
-  function maybeColor(){const t=Date.now();if(t-lastBg>BG_MIN_GAP)advanceColor();}
+  /* ----------------- visual helpers ------------------ */
+  function jumpColor(steps=1){while(steps--) colorIdx=(colorIdx+1)%COLORS.length; document.body.style.backgroundColor=COLORS[colorIdx]; lastBg=Date.now();}
+  function loudSteps(){return Math.max(1,Math.min(7,Math.round(vol*22)));}
+  function updateVU(){vu.style.width=`${Math.min(1,vol*3)*100}%`;}
 
-  /* ========= KEY EVENTS ===== */
-  function fireKey(key,{shift=false}={}){for(const type of['keydown','keyup'])document.dispatchEvent(new KeyboardEvent(type,{key,code:key.length===1?`Key${key.toUpperCase()}`:key,shiftKey:shift,bubbles:true,composed:true}))}
+  /* ------------------ cube key events ---------------- */
+  function fireKey(k,{shift=false}={}){['keydown','keyup'].forEach(t=>document.dispatchEvent(new KeyboardEvent(t,{key:k,code:k.length===1?`Key${k.toUpperCase()}`:k,shiftKey:shift,bubbles:true})));}
+  function dispatchPhrase(p){if(SPECIAL[p])  return SPECIAL[p]();
+    if(PRIMES[p])        return fireKey(PRIMES[p],{shift:true});
+    const shift=p.startsWith('shift '), word=shift?p.slice(6):p, key=MOVES[word];
+    if(key) fireKey(key,{shift});
+  }
 
-  /* ========= AUDIO VOL ====== */
-  function setupVolume(stream){const ctx=new AudioContext();const src=ctx.createMediaStreamSource(stream);analyser=ctx.createAnalyser();analyser.fftSize=1024;src.connect(analyser);dataArray=new Uint8Array(analyser.fftSize);
-    function tick(){analyser.getByteTimeDomainData(dataArray);let sum=0;for(const v of dataArray){const n=(v-128)/128;sum+=n*n;}currentVol=Math.sqrt(sum/dataArray.length);requestAnimationFrame(tick);}tick();}
+  /* ------------------ audio volume ------------------- */
+  function initVolume(stream){const ctx=new (window.AudioContext||window.webkitAudioContext)(); const src=ctx.createMediaStreamSource(stream); analyser=ctx.createAnalyser(); analyser.fftSize=512; src.connect(analyser); dataArray=new Uint8Array(analyser.fftSize);
+    (function loop(){analyser.getByteTimeDomainData(dataArray); let sum=0; for(const v of dataArray){const d=(v-128)/128; sum+=d*d;} vol=Math.sqrt(sum/dataArray.length); updateVU(); requestAnimationFrame(loop);})();}
 
-  function volumeSteps(){// 0–0.6 roughly – map to 1‑7 steps
-    return Math.min(7,Math.max(1,Math.round(currentVol*20)));}
-
-  /* ========= SPEECH ========= */
+  /* ---------------- speech recognition --------------- */
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){stat.textContent='web‑speech unsupported';btn.disabled=true;}
+  if(!SR){status.textContent='no speech API';btn.disabled=true;}
 
-  function onTranscript(txt,final){const phrase=txt.trim().toLowerCase();if(!phrase||phrase===lastTxt)return;lastTxt=phrase;cap.textContent=phrase;advanceColor(volumeSteps());if(!final)return;
-    if(SPECIALS[phrase])return SPECIALS[phrase]();
-    if(PRIMES[phrase])return fireKey(PRIMES[phrase],{shift:true});
-    const shift=phrase.startsWith('shift ');const word=shift?phrase.slice(6):phrase;const key=MOVES[word];if(key)fireKey(key,{shift});}
+  function buildRecog(){recog=new SR(); Object.assign(recog,{lang:'en-GB',interimResults:true,continuous:true});
+    recog.onresult=e=>{const r=e.results[e.results.length-1]; const txt=r[0].transcript.trim().toLowerCase(); if(!txt||txt===lastTxt) return; lastTxt=txt; cap.textContent=txt; const now=Date.now(); if(now-lastBg>BG_GAP_MIN) jumpColor(loudSteps()); dispatchPhrase(txt); };
+    recog.onend=()=>{if(listening&&!document.hidden){backoff=600; try{recog.start()}catch{}}};
+    recog.onerror=e=>{console.warn(e); status.textContent=e.error; status.style.color='var(--warn)'; setTimeout(()=>{if(listening&&!document.hidden) try{recog.start()}catch{}},backoff); backoff=Math.min(backoff*2,8000);} }
 
-  function buildRecognizer(){recog=new SR();Object.assign(recog,{lang:'en-GB',interimResults:true,continuous:true});
-    recog.onresult=e=>{const r=e.results[e.results.length-1];onTranscript(r[0].transcript,r.isFinal)};
-    recog.onend=()=>{if(!listening)return;backoff=500;if(!document.hidden)recog.start();};
-    recog.onerror=e=>{console.warn(e);stat.textContent=e.error;stat.style.color='var(--warn)';setTimeout(()=>{if(listening&&!document.hidden)try{recog.start()}catch{}},backoff);backoff=Math.min(backoff*2,10000);} }
+  /* ---------------- control -------------------------- */
+  async function toggle(){ if(!SR) return;
+    if(listening){listening=false; btn.textContent='🎤 Start'; status.textContent='paused'; status.style.color='var(--warn)'; try{recog.stop()}catch{} return; }
+    try{const stream=await navigator.mediaDevices.getUserMedia({audio:true}); if(!recog) buildRecog(); if(!analyser) initVolume(stream); recog.start(); listening=true; btn.textContent='⏸ Stop'; status.textContent='listening'; status.style.color='var(--ok)'; }catch(err){console.error(err); status.textContent='mic blocked'; status.style.color='var(--warn)'; }}
 
-  /* ========= CONTROL ========= */
-  async function toggleMic(){if(!SR)return;if(listening){listening=false;btn.textContent='🎤 Start listening';stat.textContent='paused';stat.style.color='var(--warn)';try{recog.stop()}catch{}return;}
-    try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});if(!recog)buildRecognizer();if(!analyser)setupVolume(stream);recog.start();listening=true;btn.textContent='⏸ Stop listening';stat.textContent='listening';stat.style.color='var(--ok)';}catch(err){console.error(err);stat.textContent='mic blocked';stat.style.color='var(--warn)';}}
-
-  btn.addEventListener('click',toggleMic);
-  document.addEventListener('visibilitychange',()=>{if(!recog||!listening)return;if(document.hidden){try{recog.stop()}catch{}}else{try{recog.start()}catch{}}});
+  btn.addEventListener('click',toggle);
+  document.addEventListener('visibilitychange',()=>{if(!recog||!listening) return; if(document.hidden){try{recog.stop()}catch{}} else {try{recog.start()}catch{}}});
   </script>
-  <!-- Obfuscated cube engine (unchanged) -->
+
+  <!-- cube engine (obfuscated) -->
   <script>(function(){_ke('ggg<pessev;... (truncated)');})();</script>
 </body>
 </html>
