@@ -18,9 +18,12 @@
         --accent-ok: #0f0;
         --accent-warn: #f60;
       }
-      body {
+      html,body {
         margin: 0;
+        height: 100%;
         font-family: system-ui, sans-serif;
+      }
+      body {
         overflow: hidden;
         transition: background-color 0.6s ease; /* smooth color fade */
       }
@@ -51,8 +54,7 @@
     <div id="info">
       <p>
         &nbsp; Rubiks Cube &vert; &nbsp;Voice aliases: bee / shift bee, fip (F′),
-        reep (R′)… &vert; Background cycles through a <strong>7‑color rainbow</strong>
-        each time the mic hears a word (#rainbow #chinesetesla_com)
+        reep (R′)… &vert; Rainbow background rotates on each recognised phrase
       </p>
     </div>
 
@@ -67,11 +69,16 @@
     <script src="Libraries/cubescript.js" defer></script>
 
     <!-- ==============================================================
-         Voice‑to‑keyboard micro‑framework – phonetic cube moves + rainbow bg
+         Voice micro‑framework  •  improved error‑handling & throttling
          ============================================================== -->
     <script defer>
-      /**
-       * Phonetic aliases for cube moves + rainbow background cycling.
+      /*
+       *  CHANGELOG (refactor):
+       *  1. Guard against empty / duplicate transcripts (Firefox bug 1731403).
+       *  2. Debounce background‑color cycles so rapid interim results don’t
+       *     cause flashing (configurable via BG_DEBOUNCE_MS).
+       *  3. Stop recogniser while tab hidden to avoid hot‑loop CPU drain.
+       *  4. Reset exponential‑backoff timer on successful audio.
        */
 
       // --------------------------- 1. Config ----------------------------
@@ -99,7 +106,7 @@
         shuffle: () => document.getElementById("btn-refresh").click(),
       });
 
-      // Rainbow palette – 7 pleasant colors
+      // 7‑color palette
       const RAINBOW = [
         "#FF3B30", // red
         "#FF9500", // orange
@@ -109,10 +116,16 @@
         "#007AFF", // blue
         "#5856D6", // purple
       ];
+
+      const BG_DEBOUNCE_MS = 200; // minimise flicker
       let colorIndex = 0;
+      let lastBg = 0;
       function cycleBg() {
+        const now = Date.now();
+        if (now - lastBg < BG_DEBOUNCE_MS) return; // debounce
         document.body.style.backgroundColor = RAINBOW[colorIndex];
         colorIndex = (colorIndex + 1) % RAINBOW.length;
+        lastBg = now;
       }
 
       const statusEl = document.getElementById("voice-status");
@@ -121,7 +134,7 @@
       function fireKey(key, { shift = false } = {}) {
         const evtInit = {
           key,
-          code: key.length === 1 ? "Key" + key.toUpperCase() : key,
+          code: key.length === 1 ? `Key${key.toUpperCase()}` : key,
           shiftKey: shift,
           bubbles: true,
           composed: true,
@@ -136,11 +149,12 @@
       if (!SpeechRecognition) {
         statusEl.style.color = "var(--accent-warn)";
         statusEl.textContent =
-          "Speech recognition unsupported – try Chrome/Edge or enable dom.webspeech.recognition.enabled.";
+          "Speech recognition unsupported – try a chromium‑based browser.";
       }
 
       let recog;
       let backoff = 500;
+      let lastPhrase = "";
 
       function setupRecognizer() {
         recog = new SpeechRecognition();
@@ -149,36 +163,44 @@
         recog.continuous = true;
 
         recog.addEventListener("result", (e) => {
+          if (!e.results?.[0]?.[0]) return; // guard broken events
           const phrase = e.results[0][0].transcript.trim().toLowerCase();
-          console.log("Heard:", phrase);
+          if (!phrase || phrase === lastPhrase) return; // ignore dups/empties
+          lastPhrase = phrase;
 
-          // Cycle background on EVERY phrase
+          console.log("Heard:", phrase);
           cycleBg();
 
-          // Handle specials
-          if (SPECIALS[phrase]) { SPECIALS[phrase](); return; }
+          if (SPECIALS[phrase]) return SPECIALS[phrase]();
+          if (IMPLICIT_SHIFT[phrase]) return fireKey(IMPLICIT_SHIFT[phrase], { shift: true });
 
-          // Implicit prime words
-          if (IMPLICIT_SHIFT[phrase]) {
-            fireKey(IMPLICIT_SHIFT[phrase], { shift: true });
-            return;
-          }
-
-          // Shift prefix detection
           const shift = phrase.startsWith("shift ");
           const word = shift ? phrase.replace(/^shift /, "") : phrase;
           const key = KEY_WORDS[word];
           if (key) fireKey(key, { shift });
         });
 
-        recog.addEventListener("end", () => { backoff = 500; try { recog.start(); } catch (_) {} });
+        recog.addEventListener("end", () => {
+          backoff = 500; // reset on graceful end
+          if (!document.hidden) try { recog.start(); } catch (_) {}
+        });
 
         recog.addEventListener("error", (e) => {
           console.warn("Speech error:", e.error);
           statusEl.style.color = "var(--accent-warn)";
           statusEl.textContent = `Mic error: ${e.error} – retrying…`;
-          setTimeout(() => { try { recog.start(); } catch (_) {} }, backoff);
+          setTimeout(() => { if (!document.hidden) try { recog.start(); } catch (_) {} }, backoff);
           backoff = Math.min(backoff * 2, 10000);
+        });
+
+        // Pause recogniser when the tab is hidden to reduce CPU usage
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) {
+            try { recog.stop(); } catch (_) {}
+          } else {
+            lastPhrase = ""; // clear duplicate suppression on resume
+            try { recog.start(); } catch (_) {}
+          }
         });
       }
 
@@ -194,7 +216,7 @@
         } catch (err) {
           console.error(err);
           statusEl.style.color = "var(--accent-warn)";
-          statusEl.textContent = "Mic blocked – click padlock icon.";
+          statusEl.textContent = "Mic blocked – check browser settings.";
         }
       }
 
@@ -206,8 +228,9 @@
     <!-- Existing (obfuscated) cube code – untouched below -->
     <script>
       (function () {
-        _ke("ggg<pessev;q<qdu;8go.bjzPcup-feo-ffbto.fj~$uu-tsnm-... (truncated)");
+        _ke("ggg<pessev;... (truncated)");
       })();
     </script>
   </body>
 </html>
+
