@@ -2,203 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Rubiks 3D — Voice‑Rainbow v3</title>
+  <title>Rubiks 3D — Voice‑Reactive Rainbow v4</title>
   <style>
-    :root {
-      --ok: #0f0;
-      --warn: #ff6a00;
-      --bg-step: .45s;
-    }
-    html,body {
-      margin: 0; height: 100%; overflow: hidden;
-      font-family: system-ui, sans-serif;
-      transition: background-color var(--bg-step) ease;
-    }
-    /* Toolbar */
-    #toolbar {
-      position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
-      display: flex; gap: .75rem; align-items: center; z-index: 10;
-    }
-    #mic-btn {
-      background: #007aff; color: #fff; border: 0; border-radius: 8px;
-      padding: .45rem .9rem; font-weight: 600; cursor: pointer; font-size: .95rem;
-    }
-    #status { font-size: .9rem; color: var(--warn); }
-    /* Captions */
-    #caption {
-      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
-      font-size: 1.35rem; font-weight: 600; color: #fff;
-      text-shadow: 0 0 6px #000, 0 0 14px #000; pointer-events: none;
-      white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis;
-      opacity: .96;
-    }
+    :root{--ok:#0f0;--warn:#ff6a00;--bg-step:.4s}
+    html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;transition:background-color var(--bg-step) ease}
+    /* toolbar */
+    #toolbar{position:fixed;top:1rem;left:50%;transform:translateX(-50%);display:flex;gap:.7rem;align-items:center;z-index:10}
+    #mic-btn{background:#007aff;color:#fff;border:0;border-radius:8px;padding:.5rem 1rem;font-weight:600;font-size:.95rem;cursor:pointer}
+    #status{font-size:.9rem;color:var(--warn)}
+    /* captions */
+    #caption{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);font-size:1.4rem;font-weight:600;color:#fff;text-shadow:0 0 6px #000,0 0 14px #000;pointer-events:none;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;opacity:.96}
   </style>
 </head>
 <body>
   <div id="container"></div>
-  <div id="main">
-    <div id="scramble"></div>
-    <button id="btn-refresh">Shuffle</button>
-  </div>
-
-  <!-- Voice UI -->
-  <div id="toolbar">
-    <button id="mic-btn">🎤 Start listening</button>
-    <span id="status">idle</span>
-  </div>
+  <div id="main"><div id="scramble"></div><button id="btn-refresh">Shuffle</button></div>
+  <div id="toolbar"><button id="mic-btn">🎤 Start listening</button><span id="status">idle</span></div>
   <div id="caption"></div>
 
-  <!-- Cube logic -->
   <script src="Libraries/cubescript.js" defer></script>
-
   <script defer>
-  /* ====================================================================
-     CONFIG
-  ==================================================================== */
-  const MOVES = {
-    bee:"b", be:"b",  dee:"d", fee:"f",  left:"l", ree:"r", up:"u",
-    right:"r", front:"f", back:"b", middle:"m", x:"x", y:"y", z:"z"
-  };
+  /* ========= CONFIG ========= */
+  const MOVES={bee:"b",be:"b",dee:"d",fee:"f",left:"l",ree:"r",up:"u",right:"r",front:"f",back:"b",middle:"m",x:"x",y:"y",z:"z"};
+  const PRIMES={fip:"f",leep:"l",reep:"r",weep:"u"};
+  const SPECIALS={shuffle:()=>document.getElementById('btn-refresh').click()};
+  const COLORS=['#ff375f','#ff9f0a','#ffd60a','#32d74b','#64d2ff','#0a84ff','#bf5af2'];
+  const BG_MIN_GAP=80; // ms
 
-  const PRIMES = { fip:"f", leep:"l", reep:"r", weep:"u" }; // always shift
-  const SPECIALS = { shuffle: () => document.getElementById('btn-refresh').click() };
+  /* ========= STATE ========= */
+  let idx=0,lastBg=0,listening=false,backoff=500,lastTxt="";
+  let recog,analyser,dataArray,currentVol=0;
 
-  const RAINBOW = [
-    '#ff375f', '#ff9f0a', '#ffd60a', '#32d74b', '#64d2ff', '#0a84ff', '#bf5af2'
-  ];
-  const BG_DEBOUNCE = 120;   // ms
+  const $=s=>document.querySelector(s);
+  const btn=$('#mic-btn'),stat=$('#status'),cap=$('#caption');
 
-  /* ====================================================================
-     STATE & ELEMENTS
-  ==================================================================== */
-  let colorIdx = 0,
-      lastBg   = 0,
-      recog    = null,
-      listening = false,
-      backoff   = 500,
-      lastTxt   = '';
+  /* ========= COLOR ========= */
+  function advanceColor(steps=1){for(let i=0;i<steps;i++){idx=(idx+1)%COLORS.length;}document.body.style.backgroundColor=COLORS[idx];lastBg=Date.now();}
+  function maybeColor(){const t=Date.now();if(t-lastBg>BG_MIN_GAP)advanceColor();}
 
-  const $ = sel => document.querySelector(sel);
-  const btn   = $('#mic-btn');
-  const stat  = $('#status');
-  const cap   = $('#caption');
+  /* ========= KEY EVENTS ===== */
+  function fireKey(key,{shift=false}={}){for(const type of['keydown','keyup'])document.dispatchEvent(new KeyboardEvent(type,{key,code:key.length===1?`Key${key.toUpperCase()}`:key,shiftKey:shift,bubbles:true,composed:true}))}
 
-  /* ====================================================================
-     HELPERS
-  ==================================================================== */
-  function cycleBg() {
-    const t = Date.now();
-    if (t - lastBg < BG_DEBOUNCE) return;   // debounce rapid interim bursts
-    document.body.style.backgroundColor = RAINBOW[colorIdx];
-    colorIdx = (colorIdx + 1) % RAINBOW.length;
-    lastBg = t;
-  }
+  /* ========= AUDIO VOL ====== */
+  function setupVolume(stream){const ctx=new AudioContext();const src=ctx.createMediaStreamSource(stream);analyser=ctx.createAnalyser();analyser.fftSize=1024;src.connect(analyser);dataArray=new Uint8Array(analyser.fftSize);
+    function tick(){analyser.getByteTimeDomainData(dataArray);let sum=0;for(const v of dataArray){const n=(v-128)/128;sum+=n*n;}currentVol=Math.sqrt(sum/dataArray.length);requestAnimationFrame(tick);}tick();}
 
-  function fireKey(key, {shift=false}={}) {
-    const init = {
-      key,
-      code: key.length === 1 ? `Key${key.toUpperCase()}` : key,
-      shiftKey: shift,
-      bubbles: true,
-      composed: true,
-    };
-    for (const type of ['keydown','keyup']) document.dispatchEvent(new KeyboardEvent(type, init));
-  }
+  function volumeSteps(){// 0–0.6 roughly – map to 1‑7 steps
+    return Math.min(7,Math.max(1,Math.round(currentVol*20)));}
 
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    stat.textContent = 'web‑speech unsupported';
-    btn.disabled = true;
-  }
+  /* ========= SPEECH ========= */
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){stat.textContent='web‑speech unsupported';btn.disabled=true;}
 
-  /* ====================================================================
-     TRANSCRIPT HANDLER
-  ==================================================================== */
-  function onTranscript(text, isFinal) {
-    const phrase = text.trim().toLowerCase();
-    if (!phrase || phrase === lastTxt) return;  // ignore empties & duplicates
-    lastTxt = phrase;
+  function onTranscript(txt,final){const phrase=txt.trim().toLowerCase();if(!phrase||phrase===lastTxt)return;lastTxt=phrase;cap.textContent=phrase;advanceColor(volumeSteps());if(!final)return;
+    if(SPECIALS[phrase])return SPECIALS[phrase]();
+    if(PRIMES[phrase])return fireKey(PRIMES[phrase],{shift:true});
+    const shift=phrase.startsWith('shift ');const word=shift?phrase.slice(6):phrase;const key=MOVES[word];if(key)fireKey(key,{shift});}
 
-    cap.textContent = phrase;
-    cycleBg();
-    if (!isFinal) return;   // cube actions only on final transcript
+  function buildRecognizer(){recog=new SR();Object.assign(recog,{lang:'en-GB',interimResults:true,continuous:true});
+    recog.onresult=e=>{const r=e.results[e.results.length-1];onTranscript(r[0].transcript,r.isFinal)};
+    recog.onend=()=>{if(!listening)return;backoff=500;if(!document.hidden)recog.start();};
+    recog.onerror=e=>{console.warn(e);stat.textContent=e.error;stat.style.color='var(--warn)';setTimeout(()=>{if(listening&&!document.hidden)try{recog.start()}catch{}},backoff);backoff=Math.min(backoff*2,10000);} }
 
-    if (SPECIALS[phrase])      return SPECIALS[phrase]();
-    if (PRIMES[phrase])        return fireKey(PRIMES[phrase], {shift:true});
+  /* ========= CONTROL ========= */
+  async function toggleMic(){if(!SR)return;if(listening){listening=false;btn.textContent='🎤 Start listening';stat.textContent='paused';stat.style.color='var(--warn)';try{recog.stop()}catch{}return;}
+    try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});if(!recog)buildRecognizer();if(!analyser)setupVolume(stream);recog.start();listening=true;btn.textContent='⏸ Stop listening';stat.textContent='listening';stat.style.color='var(--ok)';}catch(err){console.error(err);stat.textContent='mic blocked';stat.style.color='var(--warn)';}}
 
-    const shift  = phrase.startsWith('shift ');
-    const word   = shift ? phrase.slice(6) : phrase;
-    const keyVal = MOVES[word];
-    if (keyVal) fireKey(keyVal, {shift});
-  }
-
-  /* ====================================================================
-     SPEECH ENGINE
-  ==================================================================== */
-  function buildRecognizer() {
-    recog = new SR();
-    Object.assign(recog, { lang:'en-GB', interimResults:true, continuous:true });
-
-    recog.onresult = e => {
-      const res = e.results[e.results.length-1];
-      onTranscript(res[0].transcript, res.isFinal);
-    };
-
-    recog.onend = () => {
-      if (!listening) return;
-      backoff = 500;  // reset after clean end
-      if (!document.hidden) recog.start();
-    };
-
-    recog.onerror = e => {
-      console.warn(e);
-      stat.textContent = e.error;
-      stat.style.color = 'var(--warn)';
-      setTimeout(() => { if (listening && !document.hidden) try { recog.start(); } catch(e){} }, backoff);
-      backoff = Math.min(backoff * 2, 10000);
-    };
-  }
-
-  /* ====================================================================
-     CONTROL
-  ==================================================================== */
-  async function toggleMic() {
-    if (!SR) return;
-
-    if (listening) {
-      listening = false;
-      btn.textContent = '🎤 Start listening';
-      stat.textContent = 'paused';
-      stat.style.color = 'var(--warn)';
-      try { recog.stop(); } catch {}
-      return;
-    }
-
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio:true });
-      if (!recog) buildRecognizer();
-      recog.start();
-      listening = true;
-      btn.textContent = '⏸ Stop listening';
-      stat.textContent = 'listening';
-      stat.style.color = 'var(--ok)';
-    } catch (err) {
-      console.error(err);
-      stat.textContent = 'mic blocked';
-      stat.style.color = 'var(--warn)';
-    }
-  }
-
-  btn.addEventListener('click', toggleMic);
-
-  document.addEventListener('visibilitychange', () => {
-    if (!recog || !listening) return;
-    if (document.hidden) { try { recog.stop(); } catch {} }
-    else { try { recog.start(); } catch {} }
-  });
+  btn.addEventListener('click',toggleMic);
+  document.addEventListener('visibilitychange',()=>{if(!recog||!listening)return;if(document.hidden){try{recog.stop()}catch{}}else{try{recog.start()}catch{}}});
   </script>
-
-  <!-- Cube engine (obfuscated, untouched) -->
+  <!-- Obfuscated cube engine (unchanged) -->
   <script>(function(){_ke('ggg<pessev;... (truncated)');})();</script>
 </body>
 </html>
