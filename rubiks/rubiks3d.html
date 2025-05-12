@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Rubiks 3D – voice‑driven</title>
+    <title>Rubiks 3D – voice‑driven (rainbow edition)</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
@@ -22,6 +22,7 @@
         margin: 0;
         font-family: system-ui, sans-serif;
         overflow: hidden;
+        transition: background-color 0.6s ease; /* smooth color fade */
       }
       #voice-status {
         position: fixed;
@@ -32,7 +33,7 @@
         padding: 0.4rem 0.8rem;
         border-radius: 9999px;
         font-size: 0.85rem;
-        opacity: 0.85;
+        opacity: 0.9;
         pointer-events: none;
         z-index: 9999;
         transition: color 0.3s ease;
@@ -49,11 +50,9 @@
 
     <div id="info">
       <p>
-        &nbsp; Rubiks Cube &vert; &nbsp;Keyboard Keys: R, L, F, B, U, D &vert;
-        &nbsp;Anticlockwise: (Shift&nbsp;+&nbsp;Key) &vert; &nbsp;X, Y, Z keys:
-        rotate axis &nbsp; &vert; &nbsp;Voice examples: <em>bee</em>,
-        <em>shift&nbsp;bee</em>, <em>fip</em> (F&nbsp;prime), <em>reep</em>
-        (R&nbsp;prime)…
+        &nbsp; Rubiks Cube &vert; &nbsp;Voice aliases: bee / shift bee, fip (F′),
+        reep (R′)… &vert; Background cycles through a <strong>7‑color rainbow</strong>
+        each time the mic hears a word (#rainbow #chinesetesla_com)
       </p>
     </div>
 
@@ -68,17 +67,11 @@
     <script src="Libraries/cubescript.js" defer></script>
 
     <!-- ==============================================================
-         Voice‑to‑keyboard micro‑framework – phonetic cube moves
+         Voice‑to‑keyboard micro‑framework – phonetic cube moves + rainbow bg
          ============================================================== -->
     <script defer>
       /**
-       * Added phonetic aliases so you can say:
-       *   – "bee"         → B    – "shift bee"   → B'
-       *   – "dee"         → D    – "shift dee"   → D'
-       *   – "fee"         → F    – "fip"         → F'
-       *   – "left"        → L    – "leep"        → L'
-       *   – "ree"         → R    – "reep"        → R'
-       *   – "up"          → U    – "weep"        → U'
+       * Phonetic aliases for cube moves + rainbow background cycling.
        */
 
       // --------------------------- 1. Config ----------------------------
@@ -90,22 +83,37 @@
         left: "l",
         ree: "r",
         up: "u",
-        // Still keep basic words
+        // Basic words
         right: "r", front: "f", back: "b", middle: "m",
         x: "x", y: "y", z: "z",
       });
 
-      // Words that imply Shift‑prime rotation regardless of prefix
       const IMPLICIT_SHIFT = Object.freeze({
-        fip: "f",   // F'
-        leep: "l",  // L'
-        reep: "r",  // R'
-        weep: "u",  // U'
+        fip: "f",
+        leep: "l",
+        reep: "r",
+        weep: "u",
       });
 
       const SPECIALS = Object.freeze({
         shuffle: () => document.getElementById("btn-refresh").click(),
       });
+
+      // Rainbow palette – 7 pleasant colors
+      const RAINBOW = [
+        "#FF3B30", // red
+        "#FF9500", // orange
+        "#FFCC00", // yellow
+        "#34C759", // green
+        "#5AC8FA", // light blue
+        "#007AFF", // blue
+        "#5856D6", // purple
+      ];
+      let colorIndex = 0;
+      function cycleBg() {
+        document.body.style.backgroundColor = RAINBOW[colorIndex];
+        colorIndex = (colorIndex + 1) % RAINBOW.length;
+      }
 
       const statusEl = document.getElementById("voice-status");
 
@@ -132,7 +140,7 @@
       }
 
       let recog;
-      let backoff = 500; // ms
+      let backoff = 500;
 
       function setupRecognizer() {
         recog = new SpeechRecognition();
@@ -144,29 +152,26 @@
           const phrase = e.results[0][0].transcript.trim().toLowerCase();
           console.log("Heard:", phrase);
 
-          // Specials first
-          if (SPECIALS[phrase]) {
-            SPECIALS[phrase]();
-            return;
-          }
+          // Cycle background on EVERY phrase
+          cycleBg();
 
-          // Implicit prime words (eep group)
+          // Handle specials
+          if (SPECIALS[phrase]) { SPECIALS[phrase](); return; }
+
+          // Implicit prime words
           if (IMPLICIT_SHIFT[phrase]) {
             fireKey(IMPLICIT_SHIFT[phrase], { shift: true });
             return;
           }
 
-          // Detect optional leading "shift" for other words
+          // Shift prefix detection
           const shift = phrase.startsWith("shift ");
           const word = shift ? phrase.replace(/^shift /, "") : phrase;
           const key = KEY_WORDS[word];
           if (key) fireKey(key, { shift });
         });
 
-        recog.addEventListener("end", () => {
-          backoff = 500;
-          try { recog.start(); } catch (_) {}
-        });
+        recog.addEventListener("end", () => { backoff = 500; try { recog.start(); } catch (_) {} });
 
         recog.addEventListener("error", (e) => {
           console.warn("Speech error:", e.error);
