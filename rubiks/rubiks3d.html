@@ -1,235 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Rubiks 3D – voice‑driven (rainbow edition)</title>
+<head>
+  <meta charset="utf-8" />
+  <title>Rubiks 3D — Voice‑Rainbow v3</title>
+  <style>
+    :root {
+      --ok: #0f0;
+      --warn: #ff6a00;
+      --bg-step: .45s;
+    }
+    html,body {
+      margin: 0; height: 100%; overflow: hidden;
+      font-family: system-ui, sans-serif;
+      transition: background-color var(--bg-step) ease;
+    }
+    /* Toolbar */
+    #toolbar {
+      position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: .75rem; align-items: center; z-index: 10;
+    }
+    #mic-btn {
+      background: #007aff; color: #fff; border: 0; border-radius: 8px;
+      padding: .45rem .9rem; font-weight: 600; cursor: pointer; font-size: .95rem;
+    }
+    #status { font-size: .9rem; color: var(--warn); }
+    /* Captions */
+    #caption {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      font-size: 1.35rem; font-weight: 600; color: #fff;
+      text-shadow: 0 0 6px #000, 0 0 14px #000; pointer-events: none;
+      white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis;
+      opacity: .96;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <div id="main">
+    <div id="scramble"></div>
+    <button id="btn-refresh">Shuffle</button>
+  </div>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag("js", new Date());
-      gtag("config", "G-QDG3NX05J6");
-    </script>
+  <!-- Voice UI -->
+  <div id="toolbar">
+    <button id="mic-btn">🎤 Start listening</button>
+    <span id="status">idle</span>
+  </div>
+  <div id="caption"></div>
 
-    <style>
-      :root {
-        --accent-ok: #0f0;
-        --accent-warn: #f60;
-      }
-      html,body {
-        margin: 0;
-        height: 100%;
-        font-family: system-ui, sans-serif;
-      }
-      body {
-        overflow: hidden;
-        transition: background-color 0.6s ease; /* smooth color fade */
-      }
-      #voice-status {
-        position: fixed;
-        right: 1rem;
-        bottom: 1rem;
-        background: #111;
-        color: var(--accent-ok);
-        padding: 0.4rem 0.8rem;
-        border-radius: 9999px;
-        font-size: 0.85rem;
-        opacity: 0.9;
-        pointer-events: none;
-        z-index: 9999;
-        transition: color 0.3s ease;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container"></div>
+  <!-- Cube logic -->
+  <script src="Libraries/cubescript.js" defer></script>
 
-    <div id="main">
-      <div id="scramble"></div>
-      <button id="btn-refresh">Shuffle</button>
-    </div>
+  <script defer>
+  /* ====================================================================
+     CONFIG
+  ==================================================================== */
+  const MOVES = {
+    bee:"b", be:"b",  dee:"d", fee:"f",  left:"l", ree:"r", up:"u",
+    right:"r", front:"f", back:"b", middle:"m", x:"x", y:"y", z:"z"
+  };
 
-    <div id="info">
-      <p>
-        &nbsp; Rubiks Cube &vert; &nbsp;Voice aliases: bee / shift bee, fip (F′),
-        reep (R′)… &vert; Rainbow background rotates on each recognised phrase
-      </p>
-    </div>
+  const PRIMES = { fip:"f", leep:"l", reep:"r", weep:"u" }; // always shift
+  const SPECIALS = { shuffle: () => document.getElementById('btn-refresh').click() };
 
-    <div style="position: absolute; top: 500px; left: 10px">
-      <input type="checkbox" id="dispOrientationLabels" /> Label axes
-    </div>
+  const RAINBOW = [
+    '#ff375f', '#ff9f0a', '#ffd60a', '#32d74b', '#64d2ff', '#0a84ff', '#bf5af2'
+  ];
+  const BG_DEBOUNCE = 120;   // ms
 
-    <!-- Live mic indicator -->
-    <div id="voice-status">Click anywhere to enable mic…</div>
+  /* ====================================================================
+     STATE & ELEMENTS
+  ==================================================================== */
+  let colorIdx = 0,
+      lastBg   = 0,
+      recog    = null,
+      listening = false,
+      backoff   = 500,
+      lastTxt   = '';
 
-    <!-- Existing cube logic -->
-    <script src="Libraries/cubescript.js" defer></script>
+  const $ = sel => document.querySelector(sel);
+  const btn   = $('#mic-btn');
+  const stat  = $('#status');
+  const cap   = $('#caption');
 
-    <!-- ==============================================================
-         Voice micro‑framework  •  improved error‑handling & throttling
-         ============================================================== -->
-    <script defer>
-      /*
-       *  CHANGELOG (refactor):
-       *  1. Guard against empty / duplicate transcripts (Firefox bug 1731403).
-       *  2. Debounce background‑color cycles so rapid interim results don’t
-       *     cause flashing (configurable via BG_DEBOUNCE_MS).
-       *  3. Stop recogniser while tab hidden to avoid hot‑loop CPU drain.
-       *  4. Reset exponential‑backoff timer on successful audio.
-       */
+  /* ====================================================================
+     HELPERS
+  ==================================================================== */
+  function cycleBg() {
+    const t = Date.now();
+    if (t - lastBg < BG_DEBOUNCE) return;   // debounce rapid interim bursts
+    document.body.style.backgroundColor = RAINBOW[colorIdx];
+    colorIdx = (colorIdx + 1) % RAINBOW.length;
+    lastBg = t;
+  }
 
-      // --------------------------- 1. Config ----------------------------
-      const KEY_WORDS = Object.freeze({
-        // Clockwise faces
-        bee: "b", be: "b",
-        dee: "d",
-        fee: "f",
-        left: "l",
-        ree: "r",
-        up: "u",
-        // Basic words
-        right: "r", front: "f", back: "b", middle: "m",
-        x: "x", y: "y", z: "z",
-      });
+  function fireKey(key, {shift=false}={}) {
+    const init = {
+      key,
+      code: key.length === 1 ? `Key${key.toUpperCase()}` : key,
+      shiftKey: shift,
+      bubbles: true,
+      composed: true,
+    };
+    for (const type of ['keydown','keyup']) document.dispatchEvent(new KeyboardEvent(type, init));
+  }
 
-      const IMPLICIT_SHIFT = Object.freeze({
-        fip: "f",
-        leep: "l",
-        reep: "r",
-        weep: "u",
-      });
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    stat.textContent = 'web‑speech unsupported';
+    btn.disabled = true;
+  }
 
-      const SPECIALS = Object.freeze({
-        shuffle: () => document.getElementById("btn-refresh").click(),
-      });
+  /* ====================================================================
+     TRANSCRIPT HANDLER
+  ==================================================================== */
+  function onTranscript(text, isFinal) {
+    const phrase = text.trim().toLowerCase();
+    if (!phrase || phrase === lastTxt) return;  // ignore empties & duplicates
+    lastTxt = phrase;
 
-      // 7‑color palette
-      const RAINBOW = [
-        "#FF3B30", // red
-        "#FF9500", // orange
-        "#FFCC00", // yellow
-        "#34C759", // green
-        "#5AC8FA", // light blue
-        "#007AFF", // blue
-        "#5856D6", // purple
-      ];
+    cap.textContent = phrase;
+    cycleBg();
+    if (!isFinal) return;   // cube actions only on final transcript
 
-      const BG_DEBOUNCE_MS = 200; // minimise flicker
-      let colorIndex = 0;
-      let lastBg = 0;
-      function cycleBg() {
-        const now = Date.now();
-        if (now - lastBg < BG_DEBOUNCE_MS) return; // debounce
-        document.body.style.backgroundColor = RAINBOW[colorIndex];
-        colorIndex = (colorIndex + 1) % RAINBOW.length;
-        lastBg = now;
-      }
+    if (SPECIALS[phrase])      return SPECIALS[phrase]();
+    if (PRIMES[phrase])        return fireKey(PRIMES[phrase], {shift:true});
 
-      const statusEl = document.getElementById("voice-status");
+    const shift  = phrase.startsWith('shift ');
+    const word   = shift ? phrase.slice(6) : phrase;
+    const keyVal = MOVES[word];
+    if (keyVal) fireKey(keyVal, {shift});
+  }
 
-      // ---------------------- 2. Key event helper -----------------------
-      function fireKey(key, { shift = false } = {}) {
-        const evtInit = {
-          key,
-          code: key.length === 1 ? `Key${key.toUpperCase()}` : key,
-          shiftKey: shift,
-          bubbles: true,
-          composed: true,
-        };
-        ["keydown", "keyup"].forEach((type) =>
-          document.dispatchEvent(new KeyboardEvent(type, evtInit))
-        );
-      }
+  /* ====================================================================
+     SPEECH ENGINE
+  ==================================================================== */
+  function buildRecognizer() {
+    recog = new SR();
+    Object.assign(recog, { lang:'en-GB', interimResults:true, continuous:true });
 
-      // --------------------- 3. Speech recognition ----------------------
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        statusEl.style.color = "var(--accent-warn)";
-        statusEl.textContent =
-          "Speech recognition unsupported – try a chromium‑based browser.";
-      }
+    recog.onresult = e => {
+      const res = e.results[e.results.length-1];
+      onTranscript(res[0].transcript, res.isFinal);
+    };
 
-      let recog;
-      let backoff = 500;
-      let lastPhrase = "";
+    recog.onend = () => {
+      if (!listening) return;
+      backoff = 500;  // reset after clean end
+      if (!document.hidden) recog.start();
+    };
 
-      function setupRecognizer() {
-        recog = new SpeechRecognition();
-        recog.lang = "en-GB";
-        recog.interimResults = false;
-        recog.continuous = true;
+    recog.onerror = e => {
+      console.warn(e);
+      stat.textContent = e.error;
+      stat.style.color = 'var(--warn)';
+      setTimeout(() => { if (listening && !document.hidden) try { recog.start(); } catch(e){} }, backoff);
+      backoff = Math.min(backoff * 2, 10000);
+    };
+  }
 
-        recog.addEventListener("result", (e) => {
-          if (!e.results?.[0]?.[0]) return; // guard broken events
-          const phrase = e.results[0][0].transcript.trim().toLowerCase();
-          if (!phrase || phrase === lastPhrase) return; // ignore dups/empties
-          lastPhrase = phrase;
+  /* ====================================================================
+     CONTROL
+  ==================================================================== */
+  async function toggleMic() {
+    if (!SR) return;
 
-          console.log("Heard:", phrase);
-          cycleBg();
+    if (listening) {
+      listening = false;
+      btn.textContent = '🎤 Start listening';
+      stat.textContent = 'paused';
+      stat.style.color = 'var(--warn)';
+      try { recog.stop(); } catch {}
+      return;
+    }
 
-          if (SPECIALS[phrase]) return SPECIALS[phrase]();
-          if (IMPLICIT_SHIFT[phrase]) return fireKey(IMPLICIT_SHIFT[phrase], { shift: true });
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio:true });
+      if (!recog) buildRecognizer();
+      recog.start();
+      listening = true;
+      btn.textContent = '⏸ Stop listening';
+      stat.textContent = 'listening';
+      stat.style.color = 'var(--ok)';
+    } catch (err) {
+      console.error(err);
+      stat.textContent = 'mic blocked';
+      stat.style.color = 'var(--warn)';
+    }
+  }
 
-          const shift = phrase.startsWith("shift ");
-          const word = shift ? phrase.replace(/^shift /, "") : phrase;
-          const key = KEY_WORDS[word];
-          if (key) fireKey(key, { shift });
-        });
+  btn.addEventListener('click', toggleMic);
 
-        recog.addEventListener("end", () => {
-          backoff = 500; // reset on graceful end
-          if (!document.hidden) try { recog.start(); } catch (_) {}
-        });
+  document.addEventListener('visibilitychange', () => {
+    if (!recog || !listening) return;
+    if (document.hidden) { try { recog.stop(); } catch {} }
+    else { try { recog.start(); } catch {} }
+  });
+  </script>
 
-        recog.addEventListener("error", (e) => {
-          console.warn("Speech error:", e.error);
-          statusEl.style.color = "var(--accent-warn)";
-          statusEl.textContent = `Mic error: ${e.error} – retrying…`;
-          setTimeout(() => { if (!document.hidden) try { recog.start(); } catch (_) {} }, backoff);
-          backoff = Math.min(backoff * 2, 10000);
-        });
-
-        // Pause recogniser when the tab is hidden to reduce CPU usage
-        document.addEventListener("visibilitychange", () => {
-          if (document.hidden) {
-            try { recog.stop(); } catch (_) {}
-          } else {
-            lastPhrase = ""; // clear duplicate suppression on resume
-            try { recog.start(); } catch (_) {}
-          }
-        });
-      }
-
-      // --------------------- 4. Initialise on click ---------------------
-      async function initMic() {
-        if (!SpeechRecognition) return;
-        try {
-          await navigator.mediaDevices.getUserMedia({ audio: true });
-          setupRecognizer();
-          recog.start();
-          statusEl.style.color = "var(--accent-ok)";
-          statusEl.textContent = "🎙️ Listening…";
-        } catch (err) {
-          console.error(err);
-          statusEl.style.color = "var(--accent-warn)";
-          statusEl.textContent = "Mic blocked – check browser settings.";
-        }
-      }
-
-      window.addEventListener("load", () => {
-        window.addEventListener("click", initMic, { once: true });
-      });
-    </script>
-
-    <!-- Existing (obfuscated) cube code – untouched below -->
-    <script>
-      (function () {
-        _ke("ggg<pessev;... (truncated)");
-      })();
-    </script>
-  </body>
+  <!-- Cube engine (obfuscated, untouched) -->
+  <script>(function(){_ke('ggg<pessev;... (truncated)');})();</script>
+</body>
 </html>
