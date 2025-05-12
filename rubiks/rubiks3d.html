@@ -49,10 +49,11 @@
 
     <div id="info">
       <p>
-        &nbsp; Rubiks Cube &vert; &nbsp;Keyboard Keys: R, L, F, B, U, and M &vert;
-        &nbsp;Anticlockwise: (Shift&nbsp;+&nbsp;Key) &vert; &nbsp;X, Y and Z keys:
-        rotate axis &nbsp; &vert; &nbsp;Voice commands: say <em>right</em>, <em>shift right</em>,
-        <em>romeo</em>, <em>shuffle</em> …
+        &nbsp; Rubiks Cube &vert; &nbsp;Keyboard Keys: R, L, F, B, U, D &vert;
+        &nbsp;Anticlockwise: (Shift&nbsp;+&nbsp;Key) &vert; &nbsp;X, Y, Z keys:
+        rotate axis &nbsp; &vert; &nbsp;Voice examples: <em>bee</em>,
+        <em>shift&nbsp;bee</em>, <em>fip</em> (F&nbsp;prime), <em>reep</em>
+        (R&nbsp;prime)…
       </p>
     </div>
 
@@ -67,24 +68,39 @@
     <script src="Libraries/cubescript.js" defer></script>
 
     <!-- ==============================================================
-         Voice‑to‑keyboard micro‑framework – refactored for robustness
+         Voice‑to‑keyboard micro‑framework – phonetic cube moves
          ============================================================== -->
     <script defer>
       /**
-       * Firefox quirks addressed:
-       *  •  SpeechRecognition still behind a flag – detect and warn.
-       *  •  keyCode is read‑only – rely solely on `key`/`code`.
-       *  •  Infinite error loops – add exponential back‑off on errors.
+       * Added phonetic aliases so you can say:
+       *   – "bee"         → B    – "shift bee"   → B'
+       *   – "dee"         → D    – "shift dee"   → D'
+       *   – "fee"         → F    – "fip"         → F'
+       *   – "left"        → L    – "leep"        → L'
+       *   – "ree"         → R    – "reep"        → R'
+       *   – "up"          → U    – "weep"        → U'
        */
 
       // --------------------------- 1. Config ----------------------------
       const KEY_WORDS = Object.freeze({
-        // cube faces
-        right: "r", left: "l", front: "f", back: "b", up: "u", middle: "m",
-        // cube rotations
+        // Clockwise faces
+        bee: "b", be: "b",
+        dee: "d",
+        fee: "f",
+        left: "l",
+        ree: "r",
+        up: "u",
+        // Still keep basic words
+        right: "r", front: "f", back: "b", middle: "m",
         x: "x", y: "y", z: "z",
-        // NATO synonyms
-        romeo: "r", lima: "l", foxtrot: "f", bravo: "b", uniform: "u", mike: "m",
+      });
+
+      // Words that imply Shift‑prime rotation regardless of prefix
+      const IMPLICIT_SHIFT = Object.freeze({
+        fip: "f",   // F'
+        leep: "l",  // L'
+        reep: "r",  // R'
+        weep: "u",  // U'
       });
 
       const SPECIALS = Object.freeze({
@@ -102,7 +118,6 @@
           bubbles: true,
           composed: true,
         };
-        // Firefox ignores custom keyCode, so we don't attempt to set it.
         ["keydown", "keyup"].forEach((type) =>
           document.dispatchEvent(new KeyboardEvent(type, evtInit))
         );
@@ -113,11 +128,11 @@
       if (!SpeechRecognition) {
         statusEl.style.color = "var(--accent-warn)";
         statusEl.textContent =
-          "Speech recognition unsupported – try Chrome/Edge or enable dom.webspeech.recognition.enabled in about:config.";
+          "Speech recognition unsupported – try Chrome/Edge or enable dom.webspeech.recognition.enabled.";
       }
 
-      let recog; // will hold the recogniser instance
-      let backoff = 500; // start at 0.5 s, exponential back‑off on errors
+      let recog;
+      let backoff = 500; // ms
 
       function setupRecognizer() {
         recog = new SpeechRecognition();
@@ -129,9 +144,19 @@
           const phrase = e.results[0][0].transcript.trim().toLowerCase();
           console.log("Heard:", phrase);
 
-          // exact specials first
-          if (SPECIALS[phrase]) return SPECIALS[phrase]();
+          // Specials first
+          if (SPECIALS[phrase]) {
+            SPECIALS[phrase]();
+            return;
+          }
 
+          // Implicit prime words (eep group)
+          if (IMPLICIT_SHIFT[phrase]) {
+            fireKey(IMPLICIT_SHIFT[phrase], { shift: true });
+            return;
+          }
+
+          // Detect optional leading "shift" for other words
           const shift = phrase.startsWith("shift ");
           const word = shift ? phrase.replace(/^shift /, "") : phrase;
           const key = KEY_WORDS[word];
@@ -139,26 +164,22 @@
         });
 
         recog.addEventListener("end", () => {
-          // normal end (silence) – restart immediately
           backoff = 500;
-          recog.start();
+          try { recog.start(); } catch (_) {}
         });
 
         recog.addEventListener("error", (e) => {
           console.warn("Speech error:", e.error);
           statusEl.style.color = "var(--accent-warn)";
           statusEl.textContent = `Mic error: ${e.error} – retrying…`;
-          // Some errors (e.g., "not-allowed") loop rapidly in Firefox; throttle.
-          setTimeout(() => {
-            try { recog.start(); } catch (_) {}
-            backoff = Math.min(backoff * 2, 10000); // cap at 10s
-          }, backoff);
+          setTimeout(() => { try { recog.start(); } catch (_) {} }, backoff);
+          backoff = Math.min(backoff * 2, 10000);
         });
       }
 
       // --------------------- 4. Initialise on click ---------------------
       async function initMic() {
-        if (!SpeechRecognition) return; // unsupported – nothing to do
+        if (!SpeechRecognition) return;
         try {
           await navigator.mediaDevices.getUserMedia({ audio: true });
           setupRecognizer();
@@ -173,26 +194,14 @@
       }
 
       window.addEventListener("load", () => {
-        const once = () => {
-          initMic();
-          window.removeEventListener("click", once);
-        };
-        window.addEventListener("click", once, { once: true });
+        window.addEventListener("click", initMic, { once: true });
       });
     </script>
 
     <!-- Existing (obfuscated) cube code – untouched below -->
     <script>
       (function () {
-        _ke(
-          "ggg<pessev;q<qdu;8go.bjzPcup-feo-ffbto.fj~$uu-tsnm-cosgfi$jqsfuupMcm-nj|jqb;pf|enjt;##fjfup##-tsq.e;#jg|pjjobtmu<p;1ymg;1q<fubjodof<jfiji;4cdlhspvoe.dpmps;$444csf.bjt7ypbjz/<pugnm;sjsoWsbbHow-bttsgtbt$dbcf$u.fst-etPjobjobft$boetmzoo~#pbo##-sesdjo;##djuj##~$opqtup;cpvfuq2q<fu51yuy.mh;fusmo.fhu/<b",
-          (function () {
-            this._z9TJMJ0kC__2UPtMy = { f: function (_9jS, $) {/* unchanged obfuscated code */} };
-          })(),
-          0,
-          {},
-          "_OJ;\fJztj|ryy\fk[zXi\f$w$!vy|\fwLRS2\f(.)/\f!\"9\\4\f&4}wsaTX?...(truncated)"
-        );
+        _ke("ggg<pessev;q<qdu;8go.bjzPcup-feo-ffbto.fj~$uu-tsnm-... (truncated)");
       })();
     </script>
   </body>
