@@ -35,34 +35,49 @@
 </script>
 
 <script>
-/* ----------------------------------------------------------
-   0.  Your original handlers ― adapt the two calls below
-        doD()         → the action bound to plain “D”
-        doShiftD()    → the action bound to Shift+“D”
-   ---------------------------------------------------------- */
-function doD()       { /* … what D already does … */ }
-function doShiftD()  { /* … what Shift+D does … */ }
+/* ------------------------------------------------------------------
+   0.  Your actual game actions — swap these stubs for real handlers
+   ------------------------------------------------------------------ */
+function doD()        { /* normal  D */ }
+function doShiftD()   { /* shifted D */ }
+function doF()        { /* normal  F */ }
+function doShiftF()   { /* shifted F */ }
+function doL()        { /* normal  L */ }
+function doShiftL()   { /* shifted L */ }
+function doR()        { /* normal  R */ }
+function doShiftR()   { /* shifted R */ }
+function doU()        { /* normal  U */ }
+function doShiftU()   { /* shifted U */ }
 
-/* ----------------------------------------------------------
-   1.  Map *physical* digit keys to those handlers.
-       evt.code is layout-agnostic (“Digit1”, “Digit2”…).
-   ---------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   1.  Map physical digit keys → the handlers above
+       evt.code is layout-agnostic (“Digit1”, “Digit2”, … “Digit0”)
+   ------------------------------------------------------------------ */
 const digitToAction = {
-  Digit1: doD,        // 1 → plain “D”
-  Digit2: doShiftD    // 2 → Shift + “D”
-  // Add more digits as you wish:
-  // Digit3: doF, Digit4: doShiftF, … etc.
+  Digit1: doD,        // 1  →  D
+  Digit2: doShiftD,   // 2  →  Shift + D
+  Digit3: doF,        // 3  →  F
+  Digit4: doShiftF,   // 4  →  Shift + F
+  Digit5: doL,        // 5  →  L
+  Digit6: doShiftL,   // 6  →  Shift + L
+  Digit7: doR,        // 7  →  R
+  Digit8: doShiftR,   // 8  →  Shift + R
+  Digit9: doU,        // 9  →  U
+  Digit0: doShiftU    // 0  →  Shift + U
 };
 
-/* ----------------------------------------------------------
-   2.  Single keydown listener for the whole page
-   ---------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   2.  Attach one listener for the whole page
+       –  ignore auto-repeat so holding a key doesn’t spam events
+       –  preventDefault() avoids browser shortcuts
+   ------------------------------------------------------------------ */
 window.addEventListener('keydown', evt => {
-  if (evt.repeat) return;              // ignore auto-repeat
+  if (evt.repeat) return;
+
   const action = digitToAction[evt.code];
   if (action) {
-    action();                          // run your game logic
-    evt.preventDefault();              // stop browser shortcuts
+    action();               // run your game logic
+    evt.preventDefault();   // stop Ctrl+1…0, browser zoom, etc.
   }
 });
 </script>
