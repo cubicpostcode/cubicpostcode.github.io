@@ -35,51 +35,46 @@
 </script>
 
 <script>
-/* ------------------------------------------------------------------
-   0.  Your actual game actions — swap these stubs for real handlers
-   ------------------------------------------------------------------ */
-function doD()        { /* normal  D */ }
-function doShiftD()   { /* shifted D */ }
-function doF()        { /* normal  F */ }
-function doShiftF()   { /* shifted F */ }
-function doL()        { /* normal  L */ }
-function doShiftL()   { /* shifted L */ }
-function doR()        { /* normal  R */ }
-function doShiftR()   { /* shifted R */ }
-function doU()        { /* normal  U */ }
-function doShiftU()   { /* shifted U */ }
+/* ──────────────────────────────────────────────────────────────
+   Remap the row-1 digits so they behave like D/F/L/R/U (+Shift)
+   ────────────────────────────────────────────────────────────── */
+(function () {
+  /** map Digit* → synthetic event description */
+  const map = {
+    Digit1: { key: 'd', code: 'KeyD', shiftKey: false }, // D
+    Digit2: { key: 'D', code: 'KeyD', shiftKey: true  }, // Shift+D
+    Digit3: { key: 'f', code: 'KeyF', shiftKey: false }, // F
+    Digit4: { key: 'F', code: 'KeyF', shiftKey: true  }, // Shift+F
+    Digit5: { key: 'l', code: 'KeyL', shiftKey: false }, // L
+    Digit6: { key: 'L', code: 'KeyL', shiftKey: true  }, // Shift+L
+    Digit7: { key: 'r', code: 'KeyR', shiftKey: false }, // R
+    Digit8: { key: 'R', code: 'KeyR', shiftKey: true  }, // Shift+R
+    Digit9: { key: 'u', code: 'KeyU', shiftKey: false }, // U
+    Digit0: { key: 'U', code: 'KeyU', shiftKey: true  }  // Shift+U
+  };
 
-/* ------------------------------------------------------------------
-   1.  Map physical digit keys → the handlers above
-       evt.code is layout-agnostic (“Digit1”, “Digit2”, … “Digit0”)
-   ------------------------------------------------------------------ */
-const digitToAction = {
-  Digit1: doD,        // 1  →  D
-  Digit2: doShiftD,   // 2  →  Shift + D
-  Digit3: doF,        // 3  →  F
-  Digit4: doShiftF,   // 4  →  Shift + F
-  Digit5: doL,        // 5  →  L
-  Digit6: doShiftL,   // 6  →  Shift + L
-  Digit7: doR,        // 7  →  R
-  Digit8: doShiftR,   // 8  →  Shift + R
-  Digit9: doU,        // 9  →  U
-  Digit0: doShiftU    // 0  →  Shift + U
-};
+  /** forward 1 … 0 to the cube’s existing key handler */
+  window.addEventListener('keydown', e => {
+    if (e.repeat) return;                 // ignore key-repeat
+    if (e.synthetic) return;              // avoid loops
 
-/* ------------------------------------------------------------------
-   2.  Attach one listener for the whole page
-       –  ignore auto-repeat so holding a key doesn’t spam events
-       –  preventDefault() avoids browser shortcuts
-   ------------------------------------------------------------------ */
-window.addEventListener('keydown', evt => {
-  if (evt.repeat) return;
+    const m = map[e.code];
+    if (!m) return;                       // not a digit we care about
 
-  const action = digitToAction[evt.code];
-  if (action) {
-    action();               // run your game logic
-    evt.preventDefault();   // stop Ctrl+1…0, browser zoom, etc.
-  }
-});
+    e.preventDefault();                   // stop browser shortcuts
+
+    /* Re-dispatch a *real* keydown that looks like D/F/L/R/U */
+    const evt = new KeyboardEvent('keydown', {
+      key       : m.key,                  // 'd' … 'U'
+      code      : m.code,                 // KeyD … KeyU
+      shiftKey  : m.shiftKey,
+      bubbles   : true,
+      cancelable: true
+    });
+    Object.defineProperty(evt, 'synthetic', { value: true }); // flag it
+    window.dispatchEvent(evt);
+  }, { capture: true });                  // capture = run even if other
+})();                                      // listeners stop propagation
 </script>
 	
 </html>
