@@ -277,24 +277,25 @@
       selectedVoice = voices[voiceSelect.value];
     });
 
-    // Helper: collect current words
-    function collectWords() {
-      return {
-        '1': document.getElementById('key1').value.trim() || 'one',
-        '2': document.getElementById('key2').value.trim() || 'two',
-        '3': document.getElementById('key3').value.trim() || 'three',
-        '4': document.getElementById('key4').value.trim() || 'four',
-        '5': document.getElementById('key5').value.trim() || 'five',
-        '6': document.getElementById('key6').value.trim() || 'six',
-        '7': document.getElementById('key7').value.trim() || 'seven',
-        '8': document.getElementById('key8').value.trim() || 'eight',
-        '9': document.getElementById('key9').value.trim() || 'nine',
-        '0': document.getElementById('key0').value.trim() || 'zero',
-         collectWords.l = collectWords["5"];  
-         collectWords.L = collectWords["6"];  
-      };
-    }
+      function collectWords () {
+	    const words = {
+	      '1': document.getElementById('key1').value.trim() || 'one',
+	      '2': document.getElementById('key2').value.trim() || 'two',
+	      '3': document.getElementById('key3').value.trim() || 'three',
+	      '4': document.getElementById('key4').value.trim() || 'four',
+	      '5': document.getElementById('key5').value.trim() || 'five',
+	      '6': document.getElementById('key6').value.trim() || 'six',
+	      '7': document.getElementById('key7').value.trim() || 'seven',
+	      '8': document.getElementById('key8').value.trim() || 'eight',
+	      '9': document.getElementById('key9').value.trim() || 'nine',
+	      '0': document.getElementById('key0').value.trim() || 'zero'
+	    };
 
+	    words['l'] = words['5'];   
+	    words['L'] = words['6'];  
+	    return words;
+	  }
+	  
     // Speak on keydown
     document.addEventListener('keydown', (event) => {
       if (event.repeat) return; // avoid stutter on held key
