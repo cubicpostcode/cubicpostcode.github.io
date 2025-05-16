@@ -189,5 +189,120 @@
 })();
 </script>
 <!-- 🔺 end macro-panel 🔺 -->
-	
+
+ <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+
+    .row { display: flex; align-items: center; margin-bottom: 0.4rem; gap: 0.6rem; }
+    .key-label { width: 1.2rem; font-weight: 600; text-align: right; }
+    .word-input {
+      flex: 1 1 8rem;
+      padding: 0.3rem 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 0.4rem;
+      font-size: 1rem;
+    }
+
+    .hint { margin-top: 1.2rem; font-size: 0.9rem; color: #555; }
+    .voice-select { margin-bottom: 1rem; padding: 0.3rem 0.4rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h2>Choose a word for each number key (1 – 0)</h2>
+
+  <!-- Voice selector -->
+  <label>
+    Voice:
+    <select id="voiceSelect" class="voice-select"></select>
+  </label>
+
+  <div id="inputs">
+    <div class="row"><span class="key-label">1</span><input class="word-input" id="key1" value="apple" /></div>
+    <div class="row"><span class="key-label">2</span><input class="word-input" id="key2" value="banana" /></div>
+    <div class="row"><span class="key-label">3</span><input class="word-input" id="key3" value="cat" /></div>
+    <div class="row"><span class="key-label">4</span><input class="word-input" id="key4" value="dog" /></div>
+    <div class="row"><span class="key-label">5</span><input class="word-input" id="key5" value="elephant" /></div>
+    <div class="row"><span class="key-label">6</span><input class="word-input" id="key6" value="fish" /></div>
+    <div class="row"><span class="key-label">7</span><input class="word-input" id="key7" value="grape" /></div>
+    <div class="row"><span class="key-label">8</span><input class="word-input" id="key8" value="hat" /></div>
+    <div class="row"><span class="key-label">9</span><input class="word-input" id="key9" value="ice" /></div>
+    <div class="row"><span class="key-label">0</span><input class="word-input" id="key0" value="jungle" /></div>
+  </div>
+
+  <p class="hint">Press any number key (1–0) on the <em>top row</em> of your keyboard and the browser will speak the word you assigned. Pick a different voice in the dropdown for a different accent or gender.</p>
+
+  <script>
+    // Voice handling
+    const voiceSelect = document.getElementById('voiceSelect');
+    let voices = [];
+    let selectedVoice = null;
+
+    function populateVoiceList() {
+      voices = speechSynthesis.getVoices();
+
+      // Keep only English voices for a cleaner list. Remove this filter if you want all voices.
+      voices = voices.filter(v => v.lang.startsWith('en'));
+
+      // Clear and rebuild the <select>
+      voiceSelect.innerHTML = '';
+      voices.forEach((voice, i) => {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' — default' : ''}`;
+        voiceSelect.appendChild(option);
+      });
+
+      // Choose the first female‑sounding English voice, if one exists
+      const femaleIndex = voices.findIndex(v => /female|woman|girl|samantha|victoria|serena|alice/i.test(v.name));
+      const defaultIndex = femaleIndex >= 0 ? femaleIndex : 0;
+      voiceSelect.selectedIndex = defaultIndex;
+      selectedVoice = voices[voiceSelect.value] || null;
+    }
+
+    // Initial population (may return empty) and update when voices load/refresh
+    populateVoiceList();
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+
+    // Change handler
+    voiceSelect.addEventListener('change', () => {
+      selectedVoice = voices[voiceSelect.value];
+    });
+
+    // Helper: collect current words
+    function collectWords() {
+      return {
+        '1': document.getElementById('key1').value.trim() || 'one',
+        '2': document.getElementById('key2').value.trim() || 'two',
+        '3': document.getElementById('key3').value.trim() || 'three',
+        '4': document.getElementById('key4').value.trim() || 'four',
+        '5': document.getElementById('key5').value.trim() || 'five',
+        '6': document.getElementById('key6').value.trim() || 'six',
+        '7': document.getElementById('key7').value.trim() || 'seven',
+        '8': document.getElementById('key8').value.trim() || 'eight',
+        '9': document.getElementById('key9').value.trim() || 'nine',
+        '0': document.getElementById('key0').value.trim() || 'zero',
+      };
+    }
+
+    // Speak on keydown
+    document.addEventListener('keydown', (event) => {
+      if (event.repeat) return; // avoid stutter on held key
+
+      const wordMap = collectWords();
+      const { key } = event;
+
+      if (wordMap.hasOwnProperty(key)) {
+        const utterance = new SpeechSynthesisUtterance(wordMap[key]);
+        utterance.lang = selectedVoice?.lang || 'en-EN';
+        if (selectedVoice) utterance.voice = selectedVoice;
+
+        speechSynthesis.cancel(); // prevent overlap if another utterance is speaking
+        speechSynthesis.speak(utterance);
+      }
+    });
+  </script>
 </html>
