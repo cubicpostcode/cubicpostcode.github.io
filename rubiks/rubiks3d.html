@@ -133,7 +133,7 @@
 <div id="macroPanel">
   <div><strong>Key loop macro</strong></div>
   <textarea id="macroSeq"
-            placeholder="3 0 7 9 8 2 7 1 9 7 0 8 0 4 9 3 0 6 9 5 9 3 0 4 3 7 9 8 0 4 3 9 7 0 8 4 7 9 8 9 7 9 9 8 9 9 7 0 6 9 8 0 5">3 0 7 9 8 2 7 1 9 7 0 8 0 4 9 3 0 6 9 5 9 3 0 4 3 7 9 8 9 4 3 9 7 0 8 4 7 9 8 9 7 9 9 8 9 9 7 0 6 9 8 0 5</textarea><br>
+            placeholder="Q 3 0 7 9 8 2 7 1 9 7 0 8 0 4 9 3 0 6 9 5 9 3 0 4 3 7 9 8 0 4 3 9 7 0 8 4 7 9 8 9 7 9 9 8 9 9 7 0 6 9 8 0 5">3 0 7 9 8 2 7 1 9 7 0 8 0 4 9 3 0 6 9 5 9 3 0 4 3 7 9 8 9 4 3 9 7 0 8 4 7 9 8 9 7 9 9 8 9 9 7 0 6 9 8 0 5</textarea><br>
   <label>Interval (ms):
     <input id="macroDelay" type="number" value="1000" min="10">
   </label><br>
@@ -143,64 +143,90 @@
 
 <script>
 (function(){
-  let timer=null, index=0, sequence=[];
+  let timer=null, index=0, sequence=[];
 
-  const $seq   = document.getElementById('macroSeq');
-  const $delay = document.getElementById('macroDelay');
-  const $start = document.getElementById('macroStart');
-  const $stop  = document.getElementById('macroStop');
+  const $seq   = document.getElementById('macroSeq');
+  const $delay = document.getElementById('macroDelay');
+  const $start = document.getElementById('macroStart');
+  const $stop  = document.getElementById('macroStop');
 
-  /*---------- utility: dispatch ONE synthetic key ---------------------*/
-  function fireKey(token){
-    /* 1) if token is a single digit 0-9, send Digit# (remapper converts) */
-    if (/^[0-9]$/.test(token)){
-      const kc = token.charCodeAt(0);            // 48–57
-      document.dispatchEvent(new KeyboardEvent('keydown',{
-        key:token, code:'Digit'+token, keyCode:kc, which:kc,
-        bubbles:true, cancelable:true
-      }));
+  // ✨ NEW: Map for your special words
+  const specialWords = {
+    'Q': 'first',
+    'W': 'second',
+    'E': 'third',
+    'A': 'fourth',
+    'S': 'fifth',
+    'G': 'sixth',
+    'H': 'seventh',
+    'J': 'eighth'
+  };
+  // ✨ END NEW
+
+  /*---------- utility: dispatch ONE synthetic key or custom command -----*/
+  function fireKey(token){
+    const upperToken = token.toUpperCase();
+
+    // ✨ NEW: Check for special commands first
+    if (specialWords.hasOwnProperty(upperToken)) {
+      const wordToSpeak = specialWords[upperToken];
+      // Use the browser's speech system to say the word
+      speechSynthesis.cancel(); // Stop any other speaking
+      speechSynthesis.speak(new SpeechSynthesisUtterance(wordToSpeak));
+      // Return now to create a "void movement" and not trigger the cube
       return;
     }
-    /* 2) single letter → send directly (uppercase ⇒ shiftKey) */
-    if (/^[a-z]$/i.test(token)){
-      const upper = token.toUpperCase();
-      const kc    = upper.charCodeAt(0);
-      document.dispatchEvent(new KeyboardEvent('keydown',{
-        key:token, code:'Key'+upper,
-        keyCode:kc, which:kc,
-        shiftKey: token===upper,          // uppercase means shifted
-        bubbles:true, cancelable:true
-      }));
-    }
-    /* 3) ignore anything else (commas, blanks, …) */
-  }
+    // ✨ END NEW
 
-  /*---------- start the repeating loop --------------------------------*/
-  $start.addEventListener('click',()=>{
-    sequence = $seq.value.trim().split(/\s+/).filter(Boolean);
-    if (!sequence.length) return alert('Enter at least one key.');
-    const delay = Math.max(10, (+$delay.value||500));
+    /* 1) if token is a single digit 0-9, send Digit# (remapper converts) */
+    if (/^[0-9]$/.test(token)){
+      const kc = token.charCodeAt(0);
+      document.dispatchEvent(new KeyboardEvent('keydown',{
+        key:token, code:'Digit'+token, keyCode:kc, which:kc,
+        bubbles:true, cancelable:true
+      }));
+      return;
+    }
+    /* 2) single letter → send directly (uppercase ⇒ shiftKey) */
+    if (/^[a-z]$/i.test(token)){
+      const upper = token.toUpperCase();
+      const kc    = upper.charCodeAt(0);
+      document.dispatchEvent(new KeyboardEvent('keydown',{
+        key:token, code:'Key'+upper,
+        keyCode:kc, which:kc,
+        shiftKey: token===upper,
+        bubbles:true, cancelable:true
+      }));
+    }
+    /* 3) ignore anything else (commas, blanks, …) */
+  }
 
-    index = 0;
-    timer = setInterval(()=>{
-      fireKey(sequence[index]);
-      index = (index+1)%sequence.length;     // wrap round – infinite loop
-    }, delay);
+  /*---------- start the repeating loop --------------------------------*/
+  $start.addEventListener('click',()=>{
+    sequence = $seq.value.trim().split(/\s+/).filter(Boolean);
+    if (!sequence.length) return alert('Enter at least one key.');
+    const delay = Math.max(10, (+$delay.value||500));
 
-    $start.disabled = true;
-    $stop.disabled  = false;
-  });
+    index = 0;
+    timer = setInterval(()=>{
+      fireKey(sequence[index]);
+      index = (index+1)%sequence.length;
+    }, delay);
 
-  /*---------- stop the loop -------------------------------------------*/
-  $stop.addEventListener('click',()=>{
-    clearInterval(timer);
-    timer = null;
-    $start.disabled = false;
-    $stop.disabled  = true;
-  });
+    $start.disabled = true;
+    $stop.disabled  = false;
+  });
 
-  /*---------- clean up on page unload ---------------------------------*/
-  window.addEventListener('beforeunload',()=>timer&&clearInterval(timer));
+  /*---------- stop the loop -------------------------------------------*/
+  $stop.addEventListener('click',()=>{
+    clearInterval(timer);
+    timer = null;
+    $start.disabled = false;
+    $stop.disabled  = true;
+  });
+
+  /*---------- clean up on page unload ---------------------------------*/
+  window.addEventListener('beforeunload',()=>timer&&clearInterval(timer));
 })();
 </script>
 <!-- 🔺 end macro-panel 🔺 -->
