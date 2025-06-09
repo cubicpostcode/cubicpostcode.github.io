@@ -37,13 +37,14 @@
 <!-- 🔻 put this AFTER every other script on the page 🔻 -->
 <script>
 /*=========================================================================
-  Rubik’s 3D — digit-key remapper (FIXED)
+  Rubik’s 3D — digit-key remapper (FIXED & 통합)
   ------------------------------------------------------------------------
-  Now ignores key presses when typing in an input field.
+  Now handles BOTH sound AND cube control without conflict.
+  Ignores key presses when typing in an input field.
   ----------------------------------------------------------------------*/
 (function () {
 
-  /*--- 1.  What each digit should look like to the cube’s key handler ---*/
+  /*--- What each digit should look like to the cube’s key handler ---*/
   const map = {
     /* row-1 digits */
     Digit1 : {key:'d', code:'KeyD', shift:false, kc:68},
@@ -74,42 +75,46 @@
     KeyB   : {key:'L', code:'KeyL', shift:true , kc:76}   
   };
 
-  /*--- 2.  Intercept digits, cancel the browser shortcut,                *
-   *        and re-emit a synthetic keydown that the cube already eats.    */
+  /*--- Intercept digits, play sound, and re-emit a synthetic keydown ---*/
   window.addEventListener('keydown', function (e) {
-    //
-    // ✨ THE FIX IS HERE ✨
     // If we are currently focused on an INPUT or TEXTAREA, do nothing.
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
         return;
     }
-    // ✨ END FIX ✨
-    //
 
-    if (e.repeat || e.synthetic) return;          // ignore key-repeat & loops
+    if (e.repeat || e.synthetic) return;
 
     const m = map[e.code];
-    if (!m) return;                              // not one of the digits we map
-    e.preventDefault();                          // stop page-zoom etc.
+    if (!m) return;
+    
+    // ✨ NEW: Sound logic is now here ✨
+    // This code is copied from your original sound script.
+    try {
+        const wordMap = collectWords(); // This function is in your other script
+        const keyForSound = e.key;
+        if (wordMap.hasOwnProperty(keyForSound)) {
+            const utterance = new SpeechSynthesisUtterance(wordMap[keyForSound]);
+            const selectedVoice = voices[voiceSelect.value] || null; // 'voices' and 'voiceSelect' are from the other script
+            utterance.lang = selectedVoice?.lang || 'en-EN';
+            if (selectedVoice) utterance.voice = selectedVoice;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(utterance);
+        }
+    } catch (err) {
+        console.error("Could not play sound:", err);
+    }
+    // ✨ END of new sound logic ✨
+
+    e.preventDefault(); // Stop the original key press
 
     const fake = new KeyboardEvent('keydown', {
-      key        : m.key,                        // 'd', 'D', 'f', …
-      code       : m.code,                       // 'KeyD', 'KeyF', …
-      keyCode    : m.kc,                         // deprecated but some libs use it
-      which      : m.kc,
-      shiftKey   : m.shift,
-      bubbles    : true,
-      cancelable : true
+      key: m.key, code: m.code, keyCode: m.kc, which: m.kc,
+      shiftKey: m.shift, bubbles: true, cancelable: true
     });
-
-    /* mark so OUR listener won’t re-catch it */
     Object.defineProperty(fake, 'synthetic', {value:true});
-
-    /* IMPORTANT: dispatch on *document* so any listener (window, document,
-       or element) gets it exactly like a real press.                      */
     document.dispatchEvent(fake);
-  }, {capture:true});                            // run before cube cancels
+  }, {capture:true});
 
 })();
 </script>
@@ -300,22 +305,6 @@
 	    words['L'] = words['6'];  
 	    return words;
 	  }
-	  
-    // Speak on keydown
-    document.addEventListener('keydown', (event) => {
-      if (event.repeat) return; // avoid stutter on held key
-
-      const wordMap = collectWords();
-      const { key } = event;
-
-      if (wordMap.hasOwnProperty(key)) {
-        const utterance = new SpeechSynthesisUtterance(wordMap[key]);
-        utterance.lang = selectedVoice?.lang || 'en-EN';
-        if (selectedVoice) utterance.voice = selectedVoice;
-
-        speechSynthesis.cancel(); // prevent overlap if another utterance is speaking
-        speechSynthesis.speak(utterance);
-      }
     });
   </script>
 </html>
