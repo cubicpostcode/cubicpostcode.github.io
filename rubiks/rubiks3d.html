@@ -37,37 +37,38 @@
 <!-- 🔻 put this AFTER every other script on the page 🔻 -->
 <script>
 /*=========================================================================
-  Rubik’s 3D — digit-key remapper (Final Version)
+  Rubik’s 3D — digit-key remapper (Final, Corrected Version)
   ----------------------------------------------------------------------*/
 (function () {
-  const map = { Digit1:{key:'d',code:'KeyD',shift:false,kc:68},Digit2:{key:'D',code:'KeyD',shift:true,kc:68},Digit3:{key:'f',code:'KeyF',shift:false,kc:70},Digit4:{key:'F',code:'KeyF',shift:true,kc:70},Digit5:{key:'l',code:'KeyL',shift:false,kc:76},Digit6:{key:'L',code:'KeyL',shift:true,kc:76},Digit7:{key:'r',code:'KeyR',shift:false,kc:82},Digit8:{key:'R',code:'KeyR',shift:true,kc:82},Digit9:{key:'u',code:'KeyU',shift:false,kc:85},Digit0:{key:'U',code:'KeyU',shift:true,kc:85},Numpad1:{key:'d',code:'KeyD',shift:false,kc:68},Numpad2:{key:'D',code:'KeyD',shift:true,kc:68},Numpad3:{key:'f',code:'KeyF',shift:false,kc:70},Numpad4:{key:'F',code:'KeyF',shift:true,kc:70},Numpad5:{key:'l',code:'KeyL',shift:false,kc:76},Numpad6:{key:'L',code:'KeyL',shift:true,kc:76},Numpad7:{key:'r',code:'KeyR',shift:false,kc:82},Numpad8:{key:'R',code:'KeyR',shift:true,kc:82},Numpad9:{key:'u',code:'KeyU',shift:false,kc:85},Numpad0:{key:'U',code:'KeyU',shift:true,kc:85},KeyC:{key:'l',code:'KeyL',shift:false,kc:76},KeyB:{key:'L',code:'KeyL',shift:true,kc:76}};
+  // ✨ CHANGED: 'const map' is now 'window.CUBE_KEY_MAP' to be globally accessible
+  window.CUBE_KEY_MAP = { Digit1:{key:'d',code:'KeyD',shift:false,kc:68},Digit2:{key:'D',code:'KeyD',shift:true,kc:68},Digit3:{key:'f',code:'KeyF',shift:false,kc:70},Digit4:{key:'F',code:'KeyF',shift:true,kc:70},Digit5:{key:'l',code:'KeyL',shift:false,kc:76},Digit6:{key:'L',code:'KeyL',shift:true,kc:76},Digit7:{key:'r',code:'KeyR',shift:false,kc:82},Digit8:{key:'R',code:'KeyR',shift:true,kc:82},Digit9:{key:'u',code:'KeyU',shift:false,kc:85},Digit0:{key:'U',code:'KeyU',shift:true,kc:85},Numpad1:{key:'d',code:'KeyD',shift:false,kc:68},Numpad2:{key:'D',code:'KeyD',shift:true,kc:68},Numpad3:{key:'f',code:'KeyF',shift:false,kc:70},Numpad4:{key:'F',code:'KeyF',shift:true,kc:70},Numpad5:{key:'l',code:'KeyL',shift:false,kc:76},Numpad6:{key:'L',code:'KeyL',shift:true,kc:76},Numpad7:{key:'r',code:'KeyR',shift:false,kc:82},Numpad8:{key:'R',code:'KeyR',shift:true,kc:82},Numpad9:{key:'u',code:'KeyU',shift:false,kc:85},Numpad0:{key:'U',code:'KeyU',shift:true,kc:85},KeyC:{key:'l',code:'KeyL',shift:false,kc:76},KeyB:{key:'L',code:'KeyL',shift:true,kc:76}};
 
   window.addEventListener('keydown', function (e) {
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return;
-    
-    // This line now correctly blocks the macro's events from causing sound here
-    if (e.repeat || e.synthetic) return; 
+    if (e.repeat || e.synthetic) return;
 
-    const m = map[e.code];
+    const m = window.CUBE_KEY_MAP[e.code]; // Use the new global name
     if (!m) return;
     
+    // This sound logic now ONLY runs for manual key presses.
     try {
       const wordMap = window.collectWords(); 
       if (wordMap && wordMap.hasOwnProperty(e.key)) {
-            const utterance = new SpeechSynthesisUtterance(wordMap[e.key]);
-            if (window.voices && window.voiceSelect) {
-                const selectedVoice = window.voices[window.voiceSelect.value] || null;
-                utterance.lang = selectedVoice?.lang || 'en-US';
-                if (selectedVoice) utterance.voice = selectedVoice;
-            }
-            speechSynthesis.cancel();
-            speechSynthesis.speak(utterance);
-        }
+        const utterance = new SpeechSynthesisUtterance(wordMap[e.key]);
+        if (window.voices && window.voiceSelect) {
+            const selectedVoice = window.voices[window.voiceSelect.value] || null;
+            utterance.lang = selectedVoice?.lang || 'en-US';
+            if (selectedVoice) utterance.voice = selectedVoice;
+        }
+          speechSynthesis.cancel();
+          speechSynthesis.speak(utterance);
+      }
     } catch (err) { /* Fail gracefully */ }
 
     e.preventDefault(); 
-    const fake = new KeyboardEvent('keydown', { key: m.key, code: m.code, keyCode: m.kc, which: m.kc, shiftKey: m.shift, bubbles: true, cancelable: true });
+    // This dispatches the remapped event that the cube engine listens for.
+    const fake = new KeyboardEvent('keydown', { key: m.key, code: m.code, shiftKey: m.shift });
     document.dispatchEvent(fake);
   }, {capture:true});
 })();
@@ -112,58 +113,53 @@
     const token = sequence[currentIndex];
     currentIndex = (currentIndex + 1) % sequence.length;
     const upperToken = token.toUpperCase();
-    
-    // ✨ NEW: This function now fires the cube move and contains the synthetic flag
-    const fireCubeMove = (keyEvent) => {
-        // Mark the event as synthetic so the remapper script can ignore it
-        Object.defineProperty(keyEvent, 'synthetic', {value:true});
-        document.dispatchEvent(keyEvent);
-    }
-    
-    // --- Process the token ---
+    const nextStepCallback = () => runNextMacroStep();
+
     if (specialWords.hasOwnProperty(upperToken)) {
-      // It's a SPECIAL command
+      // It's a SPEECH command
       const utterance = new SpeechSynthesisUtterance(specialWords[upperToken]);
-      utterance.onend = () => runNextMacroStep();
-      utterance.onerror = () => runNextMacroStep(); // Proceed even on error
+      utterance.onend = nextStepCallback;
+      utterance.onerror = nextStepCallback;
       speechSynthesis.cancel();
       speechSynthesis.speak(utterance);
 
     } else if (/^[0-9]$/.test(token)) {
-      // ✨ IT'S A DIGIT - THIS IS THE MAJOR FIX ✨
-      // The macro now handles the sound for numbers directly.
+      // ✨ IT'S A DIGIT - THIS IS THE FINAL FIX ✨
       try {
-          const wordMap = window.collectWords(); // Get words like "Down", "Front", etc.
-          const wordToSpeak = wordMap[token];
-          
-          fireCubeMove(new KeyboardEvent('keydown',{ key:token, code:'Digit'+token }));
+        // 1. Look up the move directly from the global map
+        const move = window.CUBE_KEY_MAP['Digit' + token];
+        if (move) {
+          // 2. Dispatch the FINAL cube move event directly. Bypasses the remapper.
+          document.dispatchEvent(new KeyboardEvent('keydown', {
+            key: move.key,
+            code: move.code,
+            shiftKey: move.shift
+          }));
+        }
 
-          if (wordToSpeak) {
-              const utterance = new SpeechSynthesisUtterance(wordToSpeak);
-              utterance.onend = () => runNextMacroStep();
-              utterance.onerror = () => runNextMacroStep();
-              speechSynthesis.cancel();
-              speechSynthesis.speak(utterance);
-          } else {
-              // If no word is defined, just wait the normal delay
-              setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
-          }
+        // 3. Handle the sound, just like we did before.
+        const wordMap = window.collectWords();
+        const wordToSpeak = wordMap[token];
+        if (wordToSpeak) {
+            const utterance = new SpeechSynthesisUtterance(wordToSpeak);
+            utterance.onend = nextStepCallback;
+            utterance.onerror = nextStepCallback;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(utterance);
+        } else {
+            setTimeout(nextStepCallback, (+$delay.value || 500));
+        }
       } catch (e) {
-          console.error("Could not process digit sound, proceeding after delay.", e);
-          setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
+        console.error("Could not process digit.", e);
+        setTimeout(nextStepCallback, (+$delay.value || 500));
       }
-
-    } else if (/^[a-z]$/i.test(token)) {
-        // It's a LETTER (cube move)
-        const upper = token.toUpperCase();
-        fireCubeMove(new KeyboardEvent('keydown',{ key:token, code:'Key'+upper, shiftKey: token===upper }));
-        setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
     } else {
-        // It's an unknown command, just wait and proceed
-        setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
+      // Handle other unknown tokens by just waiting
+      setTimeout(nextStepCallback, (+$delay.value || 500));
     }
   }
   
+  // --- Start/Stop functions remain the same ---
   function startMacro() {
     sequence = $seq.value.trim().split(/\s+/).filter(Boolean);
     if (!sequence.length) return alert('Enter at least one key.');
@@ -173,14 +169,12 @@
     $stop.disabled  = false;
     runNextMacroStep();
   }
-
   function stopMacro() {
     isMacroRunning = false;
     speechSynthesis.cancel();
     $start.disabled = false;
     $stop.disabled  = true;
   }
-
   $start.addEventListener('click', startMacro);
   $stop.addEventListener('click', stopMacro);
   window.addEventListener('beforeunload', stopMacro);
