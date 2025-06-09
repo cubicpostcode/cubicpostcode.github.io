@@ -37,37 +37,37 @@
 <!-- 🔻 put this AFTER every other script on the page 🔻 -->
 <script>
 /*=========================================================================
-  Rubik’s 3D — digit-key remapper (FIXED & 통합)
+  Rubik’s 3D — digit-key remapper (Final Version)
   ----------------------------------------------------------------------*/
 (function () {
-  /* ... (const map = {...} remains the same, not shown for brevity) ... */
   const map = { Digit1:{key:'d',code:'KeyD',shift:false,kc:68},Digit2:{key:'D',code:'KeyD',shift:true,kc:68},Digit3:{key:'f',code:'KeyF',shift:false,kc:70},Digit4:{key:'F',code:'KeyF',shift:true,kc:70},Digit5:{key:'l',code:'KeyL',shift:false,kc:76},Digit6:{key:'L',code:'KeyL',shift:true,kc:76},Digit7:{key:'r',code:'KeyR',shift:false,kc:82},Digit8:{key:'R',code:'KeyR',shift:true,kc:82},Digit9:{key:'u',code:'KeyU',shift:false,kc:85},Digit0:{key:'U',code:'KeyU',shift:true,kc:85},Numpad1:{key:'d',code:'KeyD',shift:false,kc:68},Numpad2:{key:'D',code:'KeyD',shift:true,kc:68},Numpad3:{key:'f',code:'KeyF',shift:false,kc:70},Numpad4:{key:'F',code:'KeyF',shift:true,kc:70},Numpad5:{key:'l',code:'KeyL',shift:false,kc:76},Numpad6:{key:'L',code:'KeyL',shift:true,kc:76},Numpad7:{key:'r',code:'KeyR',shift:false,kc:82},Numpad8:{key:'R',code:'KeyR',shift:true,kc:82},Numpad9:{key:'u',code:'KeyU',shift:false,kc:85},Numpad0:{key:'U',code:'KeyU',shift:true,kc:85},KeyC:{key:'l',code:'KeyL',shift:false,kc:76},KeyB:{key:'L',code:'KeyL',shift:true,kc:76}};
 
   window.addEventListener('keydown', function (e) {
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return;
-    if (e.repeat || e.synthetic) return;
+    
+    // This line now correctly blocks the macro's events from causing sound here
+    if (e.repeat || e.synthetic) return; 
+
     const m = map[e.code];
     if (!m) return;
     
     try {
-      // This now safely finds the functions/variables from the other script
-        const wordMap = window.collectWords(); 
-        if (wordMap && wordMap.hasOwnProperty(e.key)) {
+      const wordMap = window.collectWords(); 
+      if (wordMap && wordMap.hasOwnProperty(e.key)) {
             const utterance = new SpeechSynthesisUtterance(wordMap[e.key]);
             if (window.voices && window.voiceSelect) {
                 const selectedVoice = window.voices[window.voiceSelect.value] || null;
-                utterance.lang = selectedVoice?.lang || 'en-EN';
+                utterance.lang = selectedVoice?.lang || 'en-US';
                 if (selectedVoice) utterance.voice = selectedVoice;
             }
             speechSynthesis.cancel();
             speechSynthesis.speak(utterance);
         }
-    } catch (err) { /* Fail gracefully if other scripts not loaded */ }
+    } catch (err) { /* Fail gracefully */ }
 
     e.preventDefault(); 
     const fake = new KeyboardEvent('keydown', { key: m.key, code: m.code, keyCode: m.kc, which: m.kc, shiftKey: m.shift, bubbles: true, cancelable: true });
-    Object.defineProperty(fake, 'synthetic', {value:true});
     document.dispatchEvent(fake);
   }, {capture:true});
 })();
@@ -83,7 +83,7 @@
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div id="macroPanel">
   <div><strong>Key loop macro</strong></div>
-  <textarea id="macroSeq" placeholder="Q 3 0 7..."></textarea><br>
+  <textarea id="macroSeq" placeholder="Q 3 0 7...">Q 3 0 7</textarea><br>
   <label>Interval (ms):
     <input id="macroDelay" type="number" value="1000" min="10">
   </label><br>
@@ -106,73 +106,84 @@
 
   function runNextMacroStep() {
     if (!isMacroRunning || !sequence.length) {
-        stopMacro(); // Ensure clean stop
+        stopMacro();
         return;
     }
-
-    // Get the current command and advance the index for the next loop
     const token = sequence[currentIndex];
     currentIndex = (currentIndex + 1) % sequence.length;
     const upperToken = token.toUpperCase();
     
-    // --- Define the callback for what to do after a step is complete ---
-    const nextStepCallback = () => runNextMacroStep();
-    const delay = Math.max(10, (+$delay.value || 500));
-
+    // ✨ NEW: This function now fires the cube move and contains the synthetic flag
+    const fireCubeMove = (keyEvent) => {
+        // Mark the event as synthetic so the remapper script can ignore it
+        Object.defineProperty(keyEvent, 'synthetic', {value:true});
+        document.dispatchEvent(keyEvent);
+    }
+    
     // --- Process the token ---
     if (specialWords.hasOwnProperty(upperToken)) {
-      // It's a SPEECH command
+      // It's a SPECIAL command
       const utterance = new SpeechSynthesisUtterance(specialWords[upperToken]);
-      
-      // THIS IS THE KEY: We wait for the sound to finish before proceeding.
-      utterance.onend = nextStepCallback;
-      utterance.onerror = nextStepCallback; // Also proceed if there's a speech error
-
-      speechSynthesis.cancel(); // Cancel any previous sound
+      utterance.onend = () => runNextMacroStep();
+      utterance.onerror = () => runNextMacroStep(); // Proceed even on error
+      speechSynthesis.cancel();
       speechSynthesis.speak(utterance);
 
     } else if (/^[0-9]$/.test(token)) {
-      // It's a DIGIT (cube move)
-      const kc = token.charCodeAt(0);
-      document.dispatchEvent(new KeyboardEvent('keydown',{ key:token, code:'Digit'+token, keyCode:kc, which:kc, bubbles:true, cancelable:true }));
-      // Wait for the specified delay before the next step
-      setTimeout(nextStepCallback, delay);
+      // ✨ IT'S A DIGIT - THIS IS THE MAJOR FIX ✨
+      // The macro now handles the sound for numbers directly.
+      try {
+          const wordMap = window.collectWords(); // Get words like "Down", "Front", etc.
+          const wordToSpeak = wordMap[token];
+          
+          fireCubeMove(new KeyboardEvent('keydown',{ key:token, code:'Digit'+token }));
+
+          if (wordToSpeak) {
+              const utterance = new SpeechSynthesisUtterance(wordToSpeak);
+              utterance.onend = () => runNextMacroStep();
+              utterance.onerror = () => runNextMacroStep();
+              speechSynthesis.cancel();
+              speechSynthesis.speak(utterance);
+          } else {
+              // If no word is defined, just wait the normal delay
+              setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
+          }
+      } catch (e) {
+          console.error("Could not process digit sound, proceeding after delay.", e);
+          setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
+      }
 
     } else if (/^[a-z]$/i.test(token)) {
         // It's a LETTER (cube move)
         const upper = token.toUpperCase();
-        const kc    = upper.charCodeAt(0);
-        document.dispatchEvent(new KeyboardEvent('keydown',{ key:token, code:'Key'+upper, keyCode:kc, which:kc, shiftKey: token===upper, bubbles:true, cancelable:true }));
-        // Wait for the specified delay before the next step
-        setTimeout(nextStepCallback, delay);
+        fireCubeMove(new KeyboardEvent('keydown',{ key:token, code:'Key'+upper, shiftKey: token===upper }));
+        setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
     } else {
         // It's an unknown command, just wait and proceed
-        setTimeout(nextStepCallback, delay);
+        setTimeout(() => runNextMacroStep(), (+$delay.value || 500));
     }
   }
   
   function startMacro() {
     sequence = $seq.value.trim().split(/\s+/).filter(Boolean);
     if (!sequence.length) return alert('Enter at least one key.');
-    
     isMacroRunning = true;
     currentIndex = 0;
     $start.disabled = true;
     $stop.disabled  = false;
-    
-    runNextMacroStep(); // Start the first step
+    runNextMacroStep();
   }
 
   function stopMacro() {
     isMacroRunning = false;
-    speechSynthesis.cancel(); // Stop any currently playing sound
+    speechSynthesis.cancel();
     $start.disabled = false;
     $stop.disabled  = true;
   }
 
   $start.addEventListener('click', startMacro);
   $stop.addEventListener('click', stopMacro);
-  window.addEventListener('beforeunload', stopMacro); // Cleanup
+  window.addEventListener('beforeunload', stopMacro);
 })();
 </script>
 <!-- 🔺 end macro-panel 🔺 -->
