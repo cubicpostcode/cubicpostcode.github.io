@@ -332,4 +332,31 @@
       }
     });
   </script>
+	<script>
+      // Wait for the whole page to be loaded before running the code
+      window.addEventListener('DOMContentLoaded', (event) => {
+        
+        // Find the floating menu container you created
+        const floatingMenu = document.getElementById('floating-macros-container');
+
+        // Check if the menu exists to prevent errors
+        if (floatingMenu) {
+          
+          // Listen for any key being pressed down
+          document.addEventListener('keydown', (e) => {
+            
+            // Check if the key pressed was 'v' or 'V'
+            if (e.key === 'v' || e.key === 'V') {
+              
+              // If the menu is currently visible, hide it. Otherwise, show it.
+              if (floatingMenu.style.display === 'none') {
+                floatingMenu.style.display = 'block';
+              } else {
+                floatingMenu.style.display = 'none';
+              }
+            }
+          });
+        }
+      });
+    </script>
 </html>
