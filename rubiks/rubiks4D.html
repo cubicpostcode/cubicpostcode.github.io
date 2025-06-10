@@ -7,6 +7,19 @@
       body {
         filter: grayscale(100%);
       }
+
+        #floating-macros-container {
+            position: fixed; /* This is the key property that makes it float */
+            top: 20px;
+            left: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            z-index: 1000; /* This keeps it on top of other page content */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
     </style>
 	        <!-- Google tag (gtag.js) -->
 		    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
@@ -125,6 +138,7 @@
 #macroPanel button{margin-top:4px;margin-right:4px}
 </style>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div id="floating-macros-container">	
 <div id="macroPanel">
   <div><strong>Key loop macro</strong></div>
   <textarea id="macroSeq"
@@ -135,7 +149,7 @@
   <button id="macroStart">Start loop</button>
   <button id="macroStop"  disabled>Stop</button>
 </div>
-
+</div>
 <script>
 (function(){
   let timer=null, index=0, sequence=[];
