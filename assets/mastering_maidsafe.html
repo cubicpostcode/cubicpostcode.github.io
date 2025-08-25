@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="An unofficial, educational online book inspired by the pedagogy of Andreas M. Antonopoulos. Not affiliated with Andreas, O’Reilly Media, or MaidSafe." />
+  <title>Mastering MaidSafe (Unofficial) — Online Book</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #12151a;
+      --muted: #9aa4b2;
+      --text: #e8edf2;
+      --accent: #7cd1ff;
+      --accent-2: #a0ffa8;
+      --danger: #ff7c7c;
+      --shadow: 0 10px 30px rgba(0,0,0,.5);
+      --radius: 16px;
+      --code-bg: #0f1318;
+      --code-border: #1b222b;
+      --ring: 0 0 0 2px color-mix(in oklab, var(--accent) 40%, transparent);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fb;
+        --panel: #ffffff;
+        --muted: #5b6776;
+        --text: #1a202c;
+        --accent: #0066ff;
+        --accent-2: #0aa84f;
+        --danger: #d93939;
+        --shadow: 0 10px 30px rgba(0,0,0,.08);
+        --code-bg: #0b1220;
+        --code-border: #dfe6ee;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 90% -10%, color-mix(in oklab, var(--accent) 12%, transparent), transparent) no-repeat,
+                  radial-gradient(800px 500px at -10% 110%, color-mix(in oklab, var(--accent-2) 10%, transparent), transparent) no-repeat,
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout */
+    .wrap { display: grid; grid-template-columns: 320px 1fr; gap: 24px; min-height: 100dvh; }
+    aside {
+      position: sticky; top: 0; align-self: start; height: 100dvh; overflow: auto;
+      padding: 20px; background: color-mix(in oklab, var(--panel) 92%, transparent);
+      box-shadow: var(--shadow);
+      border-right: 1px solid color-mix(in oklab, var(--panel) 80%, transparent);
+    }
+    main { padding: 28px 32px 80px; }
+
+    header.site {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .logo { width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, var(--accent), transparent 60%),
+              radial-gradient(circle at 70% 70%, var(--accent-2), transparent 60%),
+              linear-gradient(135deg, color-mix(in oklab, var(--panel) 90%, transparent), transparent);
+              box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 20%, transparent), 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .title { font-size: 1.1rem; font-weight: 700; letter-spacing: .2px; }
+    .subtitle { font-size: .88rem; color: var(--muted); }
+
+    .search { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin: 14px 0 10px; }
+    .search input {
+      width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--panel) 60%, transparent);
+      background: color-mix(in oklab, var(--panel) 92%, transparent); color: var(--text);
+      box-shadow: inset var(--shadow);
+    }
+    .search button, .btn {
+      border: none; padding: 10px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; color: var(--text);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 40%, var(--panel)), color-mix(in oklab, var(--accent) 15%, var(--panel)));
+      box-shadow: var(--shadow);
+    }
+    .search button:hover, .btn:hover { filter: saturate(1.1); }
+
+    nav.toc { margin-top: 10px; }
+    nav.toc details { border-radius: 12px; overflow: hidden; margin-bottom: 8px; border: 1px solid color-mix(in oklab, var(--panel) 70%, transparent); }
+    nav.toc summary { cursor: pointer; padding: 10px 12px; font-weight: 700; background: color-mix(in oklab, var(--panel) 95%, transparent); }
+    nav.toc ul { list-style: none; margin: 0; padding: 0; }
+    nav.toc li a { display: block; padding: 8px 12px; color: var(--text); border-top: 1px solid color-mix(in oklab, var(--panel) 78%, transparent); }
+    nav.toc li a:hover { background: color-mix(in oklab, var(--panel) 90%, transparent); }
+
+    .notice {
+      margin-bottom: 20px; padding: 12px 14px; border-radius: 12px; background: color-mix(in oklab, var(--danger) 20%, var(--panel));
+      border: 1px solid color-mix(in oklab, var(--danger) 40%, transparent); color: color-mix(in oklab, var(--text) 85%, white);
+    }
+
+    /* Content */
+    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: center; margin-bottom: 28px; }
+    .hero h1 { font-size: clamp(2rem, 2.6vw + .5rem, 3rem); margin: 0 0 6px; }
+    .hero p.lead { font-size: 1.05rem; color: var(--muted); margin: 0; }
+
+    .card { background: color-mix(in oklab, var(--panel) 94%, transparent); border: 1px solid color-mix(in oklab, var(--panel) 70%, transparent); padding: 16px; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+    h2, h3, h4 { scroll-margin-top: 90px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .callout { border-left: 4px solid var(--accent); padding: 10px 14px; background: color-mix(in oklab, var(--panel) 92%, transparent); border-radius: 8px; }
+    .callout.danger { border-left-color: var(--danger); }
+    .callout.lab { border-left-color: var(--accent-2); }
+
+    pre { background: var(--code-bg); color: #e6f3ff; border: 1px solid var(--code-border); padding: 12px 14px; border-radius: 12px; overflow: auto; position: relative; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .9rem; }
+    .copy { position: absolute; top: 8px; right: 8px; font-size: .8rem; padding: 6px 10px; border-radius: 8px; border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--panel)); background: color-mix(in oklab, var(--panel) 85%, transparent); cursor: pointer; }
+
+    .foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid color-mix(in oklab, var(--panel) 70%, transparent); color: var(--muted); }
+    .pager { display: flex; gap: 8px; }
+
+    .tag { display: inline-block; font-size: .75rem; padding: 4px 8px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--panel) 65%, transparent); background: color-mix(in oklab, var(--panel) 90%, transparent); color: var(--muted); }
+
+    .toolbar { display: flex; gap: 10px; align-items: center; }
+    .toggle { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--panel) 70%, transparent); background: color-mix(in oklab, var(--panel) 90%, transparent); cursor: pointer; }
+
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85rem; padding: 2px 6px; border-radius: 6px; border: 1px solid color-mix(in oklab, var(--panel) 60%, transparent); background: color-mix(in oklab, var(--panel) 90%, transparent); }
+
+    .fig { border: 1px dashed color-mix(in oklab, var(--panel) 65%, transparent); border-radius: 12px; padding: 12px; font-size: .92rem; }
+
+    @media (max-width: 980px) {
+      .wrap { grid-template-columns: 1fr; }
+      aside { height: auto; position: static; }
+      .hero { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      aside, .toolbar, .notice { display: none !important; }
+      body { background: white; color: #000; }
+      main { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside>
+      <header class="site">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="title">Mastering MaidSafe</div>
+          <div class="subtitle">Unofficial · Online Book</div>
+        </div>
+      </header>
+
+      <div class="notice" role="note">
+        <strong>Disclaimer:</strong> This is an <em>unofficial</em>, educational prototype inspired by the teaching style often associated with Andreas M. Antonopoulos. <strong>Not</strong> authored by or affiliated with Andreas, O’Reilly Media, or MaidSafe.
+      </div>
+
+      <div class="search">
+        <input id="q" type="search" placeholder="Search chapters… (e.g. XOR)" aria-label="Search" />
+        <button id="clear">Clear</button>
+      </div>
+
+      <nav class="toc" id="toc" aria-label="Table of Contents">
+        <!-- The TOC is generated from the sections below by JS; fallback static links provided -->
+        <details open>
+          <summary>Part I — Foundations</summary>
+          <ul>
+            <li><a href="#ch1">1. The Problem of Centralization</a></li>
+            <li><a href="#ch2">2. From MaidSafe to the SAFE Network</a></li>
+            <li><a href="#ch3">3. Cryptographic Building Blocks</a></li>
+            <li><a href="#ch4">4. XOR Space & Routing</a></li>
+            <li><a href="#ch5">5. Data Model</a></li>
+          </ul>
+        </details>
+        <details>
+          <summary>Part II — Running the Network</summary>
+          <ul>
+            <li><a href="#ch6">6. Bootstrapping & Nodes</a></li>
+            <li><a href="#ch7">7. Incentives & Economics</a></li>
+            <li><a href="#ch8">8. Privacy & Security</a></li>
+            <li><a href="#ch9">9. Reliability & Healing</a></li>
+          </ul>
+        </details>
+        <details>
+          <summary>Part III — Building Applications</summary>
+          <ul>
+            <li><a href="#ch10">10. SDK Tour</a></li>
+            <li><a href="#ch11">11. Files & Self‑Encryption</a></li>
+            <li><a href="#ch12">12. Identity & Auth</a></li>
+            <li><a href="#ch13">13. Messaging & Data Flows</a></li>
+            <li><a href="#ch14">14. Hosting Sites without Servers</a></li>
+            <li><a href="#ch15">15. Gateways & Bridges</a></li>
+          </ul>
+        </details>
+        <details>
+          <summary>Part IV — Under the Hood</summary>
+          <ul>
+            <li><a href="#ch16">16. Vault Internals</a></li>
+            <li><a href="#ch17">17. Routing & Consensus Evolution</a></li>
+            <li><a href="#ch18">18. Performance & Tuning</a></li>
+            <li><a href="#ch19">19. Security Audits</a></li>
+          </ul>
+        </details>
+        <details>
+          <summary>Part V — Case Studies & Labs</summary>
+          <ul>
+            <li><a href="#ch20">20. Decentralized Dropbox</a></li>
+            <li><a href="#ch21">21. Encrypted Photo Sharing</a></li>
+            <li><a href="#ch22">22. Tamper‑evident Wiki</a></li>
+            <li><a href="#ch23">23. IoT Data Logger</a></li>
+            <li><a href="#ch24">24. Multi‑user Collaboration with CRDTs</a></li>
+          </ul>
+        </details>
+        <details>
+          <summary>Appendices</summary>
+          <ul>
+            <li><a href="#apx-cli">CLI & SDK Reference</a></li>
+            <li><a href="#apx-keys">Key Management Checklists</a></li>
+            <li><a href="#apx-glossary">Glossary</a></li>
+            <li><a href="#apx-reading">Further Reading</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <div class="toolbar" style="margin-top:12px">
+        <button class="toggle" id="themeToggle" aria-pressed="false">🌓 Theme</button>
+        <button class="toggle" onclick="window.print()">🖨️ Print / PDF</button>
+      </div>
+    </aside>
+
+    <main id="content">
+      <section class="hero">
+        <div>
+          <h1>Mastering MaidSafe <span class="tag">Unofficial</span></h1>
+          <p class="lead">A concept‑first, code‑rich guide to building on the SAFE Network — with mental models, diagrams, and hands‑on labs. This prototype mirrors a pedagogical style popularized by renowned crypto educator <em>(not affiliated)</em>.</p>
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
+            <span class="tag">Cryptography</span>
+            <span class="tag">XOR Routing</span>
+            <span class="tag">Self‑Encryption</span>
+            <span class="tag">Rust & JS</span>
+            <span class="tag">Privacy</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">What’s inside</h3>
+          <ul>
+            <li>Clear analogies → formal definitions</li>
+            <li>"Try it" labs with CLI, JS, and Rust</li>
+            <li>Threat‑model sidebars on real risks</li>
+            <li>Case studies: from file storage to CRDT collab</li>
+          </ul>
+          <p style="margin:0; color:var(--muted)">Last update: <span id="lastUpdated"></span></p>
+        </div>
+      </section>
+
+      <!-- PART I -->
+      <section id="ch1" data-chapter="1" class="card">
+        <h2>1. The Problem of Centralization</h2>
+        <p><strong>Analogy:</strong> The web’s data sits in castles with drawbridges — DNS, CDNs, and cloud accounts — each a control lever. MaidSafe’s vision is to dissolve the drawbridges by addressing <em>data</em> directly in a self‑healing, encrypted network.</p>
+        <div class="callout">
+          <strong>Key takeaways</strong>
+          <ul>
+            <li>Address <em>content</em>, not servers.</li>
+            <li>Users own keys; the network handles location and replication.</li>
+            <li>Economics (storage, bandwidth) emerge from protocol incentives.</li>
+          </ul>
+        </div>
+        <div class="foot"><div></div><div class="pager"><a class="btn" href="#ch2">Next →</a></div></div>
+      </section>
+
+      <section id="ch2" data-chapter="2" class="card">
+        <h2>2. From MaidSafe to the SAFE Network</h2>
+        <p>The SAFE Network aims for privacy, security, and freedom by default. Nodes form a topology in <strong>XOR space</strong> and replicate data near its address. Client capability tokens authorize actions without revealing identities.</p>
+        <div class="callout danger"><strong>Threat model:</strong> Sybil and eclipse attacks attempt to bias routing tables. Countermeasures include identity costs, diversity of peers, and periodic reshuffling.</div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch1">← Prev</a></div><div class="pager"><a class="btn" href="#ch3">Next →</a></div></div>
+      </section>
+
+      <section id="ch3" data-chapter="3" class="card">
+        <h2>3. Cryptographic Building Blocks</h2>
+        <div class="grid-2">
+          <div>
+            <h3>Hashes & addresses</h3>
+            <p>Immutable data is addressed by the hash of its content. That hash doubles as a coordinate in XOR space.</p>
+            <h3>Keys & signatures</h3>
+            <p>Clients sign requests with private keys. Nodes verify signatures and capability tokens.</p>
+          </div>
+          <div>
+            <div class="fig">
+              <strong>Figure:</strong> Content → <code>hash</code> → Address → Replication near address. Capabilities limit actions to the minimum required.
+            </div>
+          </div>
+        </div>
+        <pre><button class="copy" aria-label="Copy">Copy</button><code># Generate a keypair (illustrative CLI)
+safe keypair new --out alice.key
+safe keypair show alice.key
+</code></pre>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch2">← Prev</a></div><div class="pager"><a class="btn" href="#ch4">Next →</a></div></div>
+      </section>
+
+      <section id="ch4" data-chapter="4" class="card">
+        <h2>4. XOR Space & Routing</h2>
+        <p><strong>Mental model:</strong> Distances are bitwise: <code>dist(a,b) = a XOR b</code>. Each hop forwards to a neighbor closer to the target address, monotonically decreasing the XOR distance.</p>
+        <div class="grid-2">
+          <div>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code class="language-js">// JavaScript — compute XOR distance (illustrative)
+function xorDistance(hexA, hexB){
+  const a = Buffer.from(hexA.replace(/^0x/, ''), 'hex');
+  const b = Buffer.from(hexB.replace(/^0x/, ''), 'hex');
+  const len = Math.max(a.length, b.length);
+  const A = Buffer.concat([Buffer.alloc(len - a.length), a]);
+  const B = Buffer.concat([Buffer.alloc(len - b.length), b]);
+  const out = Buffer.alloc(len);
+  for (let i=0;i<len;i++) out[i] = A[i]^B[i];
+  return BigInt('0x'+out.toString('hex'));
+}
+</code></pre>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code class="language-rust">// Rust — closest-of-k (illustrative)
+use num_bigint::BigUint;
+fn xor_distance(a: &[u8], b: &[u8]) -> BigUint {
+    let v: Vec<u8> = a.iter().zip(b.iter()).map(|(x,y)| x ^ y).collect();
+    BigUint::from_bytes_be(&v)
+}
+</code></pre>
+          </div>
+          <div>
+            <div class="callout lab">
+              <strong>Try it — XOR distance calculator</strong>
+              <div style="display:grid; gap:8px; margin-top:8px">
+                <label>Address A <input id="xa" placeholder="0x8f0c…" style="width:100%"></label>
+                <label>Address B <input id="xb" placeholder="0x45ab…" style="width:100%"></label>
+                <button class="btn" id="xbtn">Compute</button>
+                <div id="xout" class="fig" aria-live="polite">Enter two hex addresses and compute <code>A XOR B</code> as a BigInt; lower is closer.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch3">← Prev</a></div><div class="pager"><a class="btn" href="#ch5">Next →</a></div></div>
+      </section>
+
+      <section id="ch5" data-chapter="5" class="card">
+        <h2>5. Data Model</h2>
+        <ul>
+          <li><strong>Immutable:</strong> address = hash(content). Perfect for versioned snapshots.</li>
+          <li><strong>Mutable:</strong> pointers that can change under signed authority.</li>
+          <li><strong>Append‑only:</strong> logs for messaging and event streams.</li>
+        </ul>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch4">← Prev</a></div><div class="pager"><a class="btn" href="#ch6">Next →</a></div></div>
+      </section>
+
+      <!-- PART II -->
+      <section id="ch6" data-chapter="6" class="card">
+        <h2>6. Bootstrapping & Nodes</h2>
+        <p>Start a local testnet, join a public one, and inspect routing tables. Prefer diverse bootstrap peers and rotate periodically to resist eclipses.</p>
+        <pre><button class="copy" aria-label="Copy">Copy</button><code># Illustrative workflow
+safe net up --profile local
+safe node join --peer 203.0.113.42:12000
+safe net peers --json | jq '.[] | {addr, age, rtt}'
+</code></pre>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch5">← Prev</a></div><div class="pager"><a class="btn" href="#ch7">Next →</a></div></div>
+      </section>
+
+      <section id="ch7" data-chapter="7" class="card">
+        <h2>7. Incentives & Economics</h2>
+        <p>Resource pricing balances supply (storage, bandwidth, uptime) and demand (uploads, retrievals). Reward mechanisms should resist gaming and align with long‑term reliability.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch6">← Prev</a></div><div class="pager"><a class="btn" href="#ch8">Next →</a></div></div>
+      </section>
+
+      <section id="ch8" data-chapter="8" class="card">
+        <h2>8. Privacy & Security</h2>
+        <p>End‑to‑end encryption, capability tokens, and minimal metadata exposure form the privacy baseline. Avoid correlatable patterns, e.g., fixed request sizes, predictable timing.</p>
+        <div class="callout danger"><strong>Design pitfall:</strong> Client telemetry that “phones home” can re‑centralize trust and leak user behavior.</div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch7">← Prev</a></div><div class="pager"><a class="btn" href="#ch9">Next →</a></div></div>
+      </section>
+
+      <section id="ch9" data-chapter="9" class="card">
+        <h2>9. Reliability & Healing</h2>
+        <p>Nodes churn; the network heals. Replication near the address, opportunistic caching, and periodic audits maintain durability and availability.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch8">← Prev</a></div><div class="pager"><a class="btn" href="#ch10">Next →</a></div></div>
+      </section>
+
+      <!-- PART III -->
+      <section id="ch10" data-chapter="10" class="card">
+        <h2>10. SDK Tour</h2>
+        <p>Bindings exist for multiple languages. This book uses JavaScript for quick iteration and Rust for performance and control.</p>
+        <div class="grid-2">
+          <div>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code class="language-js">// JS — upload a file (illustrative)
+import { connect, files } from "@safe/sdk";
+const client = await connect();
+const id = await files.put("./notes.md");
+console.log("safe://"+id);
+</code></pre>
+          </div>
+          <div>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code class="language-rust">// Rust — list peers (illustrative)
+fn main(){
+    let peers = safe::net::peers();
+    for p in peers { println!("{} {}ms", p.addr, p.rtt_ms); }
+}
+</code></pre>
+          </div>
+        </div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch9">← Prev</a></div><div class="pager"><a class="btn" href="#ch11">Next →</a></div></div>
+      </section>
+
+      <section id="ch11" data-chapter="11" class="card">
+        <h2>11. Files & Self‑Encryption</h2>
+        <p>Self‑encryption shards and mixes your data so that no single chunk reveals plaintext. A <em>data map</em> records how to reconstruct the file.</p>
+        <div class="grid-2">
+          <div>
+            <ol>
+              <li>Split file into fixed‑size chunks.</li>
+              <li>Hash chunks → derive addresses.</li>
+              <li>Encrypt each chunk using keys derived from other chunks’ hashes.</li>
+              <li>Upload; the network replicates near each address.</li>
+            </ol>
+          </div>
+          <div class="fig">
+            <strong>Figure:</strong> C0..Cn → E0..En + data‑map. Without the map and set of chunks, plaintext is unrecoverable.
+          </div>
+        </div>
+        <pre><button class="copy" aria-label="Copy">Copy</button><code># Inspect a pipeline (illustrative)
+safe file put ./photos/vacation.zip --progress --verify
+safe file stat safe://&lt;address&gt; --explain
+</code></pre>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch10">← Prev</a></div><div class="pager"><a class="btn" href="#ch12">Next →</a></div></div>
+      </section>
+
+      <section id="ch12" data-chapter="12" class="card">
+        <h2>12. Identity & Auth</h2>
+        <p>Use capability tokens with least privilege: scope by resource, operation, and lifetime. Store keys client‑side in hardware‑backed keystores when available.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch11">← Prev</a></div><div class="pager"><a class="btn" href="#ch13">Next →</a></div></div>
+      </section>
+
+      <section id="ch13" data-chapter="13" class="card">
+        <h2>13. Messaging & Data Flows</h2>
+        <p>Append‑only logs enable pub/sub patterns and tamper‑evident histories. CRDTs allow conflict‑free collaboration at the edge.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch12">← Prev</a></div><div class="pager"><a class="btn" href="#ch14">Next →</a></div></div>
+      </section>
+
+      <section id="ch14" data-chapter="14" class="card">
+        <h2>14. Hosting Sites without Servers</h2>
+        <p>Host static assets under immutable addresses; point a mutable name to the latest version. For dynamic behavior, push computation to clients and coordinate via append‑only data.</p>
+        <div class="callout"><strong>Pattern:</strong> <em>Mutable alias</em> → current release; <em>immutable</em> → audit‑ready snapshot.</div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch13">← Prev</a></div><div class="pager"><a class="btn" href="#ch15">Next →</a></div></div>
+      </section>
+
+      <section id="ch15" data-chapter="15" class="card">
+        <h2>15. Gateways & Bridges</h2>
+        <p>Bridge worlds cautiously: minimize trusted gateways and avoid leaking user identifiers when crossing to Web2 or other networks.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch14">← Prev</a></div><div class="pager"><a class="btn" href="#ch16">Next →</a></div></div>
+      </section>
+
+      <!-- PART IV -->
+      <section id="ch16" data-chapter="16" class="card">
+        <h2>16. Vault Internals</h2>
+        <p>Storage, caching, and replication decisions vary with network conditions. Nodes aim to optimize proximity in XOR space while balancing load.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch15">← Prev</a></div><div class="pager"><a class="btn" href="#ch17">Next →</a></div></div>
+      </section>
+
+      <section id="ch17" data-chapter="17" class="card">
+        <h2>17. Routing & Consensus Evolution</h2>
+        <p>SAFE’s routing ideas have iterated across prototypes. Anti‑Sybil approaches combine identity costs, diversity requirements, and topology management.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch16">← Prev</a></div><div class="pager"><a class="btn" href="#ch18">Next →</a></div></div>
+      </section>
+
+      <section id="ch18" data-chapter="18" class="card">
+        <h2>18. Performance & Tuning</h2>
+        <p>Measure before you tune. Capture latency distributions, chunk upload success rates, and tail behavior under churn.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch17">← Prev</a></div><div class="pager"><a class="btn" href="#ch19">Next →</a></div></div>
+      </section>
+
+      <section id="ch19" data-chapter="19" class="card">
+        <h2>19. Security Audits</h2>
+        <p>Threat‑model your app: enumerate assets, adversaries, and trust boundaries. Verify cryptographic assumptions and check for side channels.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch18">← Prev</a></div><div class="pager"><a class="btn" href="#ch20">Next →</a></div></div>
+      </section>
+
+      <!-- PART V -->
+      <section id="ch20" data-chapter="20" class="card">
+        <h2>20. Case Study — Decentralized Dropbox</h2>
+        <ol>
+          <li>CLI: add, list, get.</li>
+          <li>JS front‑end: progress bars, resumable uploads.</li>
+          <li>Rust worker: integrity verification and retry logic.</li>
+          <li>Mutable alias for the current folder head.</li>
+        </ol>
+        <div class="callout lab">
+          <strong>Lab goals</strong>
+          <ul>
+            <li>Upload a 100MB file; capture chunk map.</li>
+            <li>Verify retrieval after simulated node churn.</li>
+            <li>Rotate alias to a new version and roll back.</li>
+          </ul>
+        </div>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch19">← Prev</a></div><div class="pager"><a class="btn" href="#ch21">Next →</a></div></div>
+      </section>
+
+      <section id="ch21" data-chapter="21" class="card">
+        <h2>21. Encrypted Photo Sharing</h2>
+        <p>Share via capability links with expiry and revocation. Thumbnails can be generated client‑side to avoid leaking originals.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch20">← Prev</a></div><div class="pager"><a class="btn" href="#ch22">Next →</a></div></div>
+      </section>
+
+      <section id="ch22" data-chapter="22" class="card">
+        <h2>22. Tamper‑evident Wiki</h2>
+        <p>Each edit appends an entry; readers verify the log head. Moderation = capability rotation and view filters.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch21">← Prev</a></div><div class="pager"><a class="btn" href="#ch23">Next →</a></div></div>
+      </section>
+
+      <section id="ch23" data-chapter="23" class="card">
+        <h2>23. IoT Data Logger</h2>
+        <p>Constrained devices batch samples, encrypt, and upload opportunistically. Gateways validate and forward with backpressure.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch22">← Prev</a></div><div class="pager"><a class="btn" href="#ch24">Next →</a></div></div>
+      </section>
+
+      <section id="ch24" data-chapter="24" class="card">
+        <h2>24. Multi‑user Collaboration with CRDTs</h2>
+        <p>Use CRDTs for text and shapes; store snapshots immutably and stream edits append‑only for replayable timelines.</p>
+        <div class="foot"><div class="pager"><a class="btn" href="#ch23">← Prev</a></div><div></div></div>
+      </section>
+
+      <!-- Appendices -->
+      <section id="apx-cli" class="card">
+        <h2>Appendix A — CLI & SDK Quick Reference</h2>
+        <div class="grid-2">
+          <div>
+            <h3>CLI</h3>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code># Keys
+safe keypair new --out KEY
+safe keypair show KEY
+
+# Files
+safe file put ./path
+safe file get safe://ADDR ./out
+</code></pre>
+          </div>
+          <div>
+            <h3>JavaScript</h3>
+            <pre><button class="copy" aria-label="Copy">Copy</button><code>import { connect } from "@safe/sdk";
+const client = await connect();
+// ...
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="apx-keys" class="card">
+        <h2>Appendix B — Key Management Checklists</h2>
+        <ul>
+          <li>Hardware‑backed keys where possible</li>
+          <li>Short‑lived capabilities; rotate regularly</li>
+          <li>Offline backups; test recovery</li>
+        </ul>
+      </section>
+
+      <section id="apx-glossary" class="card">
+        <h2>Appendix C — Glossary</h2>
+        <dl>
+          <dt>XOR Space</dt>
+          <dd>Address space where distance is computed via bitwise XOR.</dd>
+          <dt>Self‑Encryption</dt>
+          <dd>Chunk encryption using keys derived from other chunks’ hashes.</dd>
+          <dt>Capability Token</dt>
+          <dd>Signed grant allowing specific actions for a limited time.</dd>
+        </dl>
+      </section>
+
+      <section id="apx-reading" class="card">
+        <h2>Appendix D — Further Reading</h2>
+        <p>Project documentation, academic papers on DHTs, CRDTs, and privacy‑preserving storage. (Add your org’s canonical links here.)</p>
+      </section>
+
+      <footer class="foot">
+        <div>© 2025 • Educational prototype • CC BY‑NC 4.0</div>
+        <div>Made with ♥ for builders who value privacy.</div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Last updated
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'});
+
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    const setTheme = (mode) => {
+      document.documentElement.dataset.theme = mode;
+      localStorage.setItem('theme', mode);
+    };
+    const saved = localStorage.getItem('theme');
+    if (saved) setTheme(saved);
+    toggle.addEventListener('click', () => {
+      const next = (document.documentElement.dataset.theme === 'light') ? 'dark' : 'light';
+      setTheme(next);
+      toggle.setAttribute('aria-pressed', next === 'dark');
+    });
+
+    // Copy buttons for code blocks
+    for (const pre of document.querySelectorAll('pre')) {
+      const btn = pre.querySelector('.copy');
+      if (!btn) continue;
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try { await navigator.clipboard.writeText(code); btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy', 1200); }
+        catch { btn.textContent = 'Failed'; setTimeout(()=>btn.textContent='Copy', 1200); }
+      });
+    }
+
+    // Simple TOC search (filters links)
+    const q = document.getElementById('q');
+    const clearBtn = document.getElementById('clear');
+    const toc = document.getElementById('toc');
+    const allLinks = [...toc.querySelectorAll('a')];
+    const filter = () => {
+      const term = q.value.trim().toLowerCase();
+      allLinks.forEach(a => {
+        const hit = a.textContent.toLowerCase().includes(term);
+        a.parentElement.style.display = hit ? '' : 'none';
+      });
+      // Expand sections with hits
+      toc.querySelectorAll('details').forEach(d => {
+        const anyHit = [...d.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        d.open = anyHit || term === '';
+      });
+    };
+    q.addEventListener('input', filter);
+    clearBtn.addEventListener('click', () => { q.value=''; filter(); q.focus(); });
+
+    // XOR calculator
+    const xa = document.getElementById('xa');
+    const xb = document.getElementById('xb');
+    const xbtn = document.getElementById('xbtn');
+    const xout = document.getElementById('xout');
+    function normalizeHex(s){ return s ? s.toLowerCase().replace(/\s+/g,'').replace(/^0x/,'') : ''; }
+    xbtn?.addEventListener('click', () => {
+      try {
+        const A = normalizeHex(xa.value); const B = normalizeHex(xb.value);
+        if (!A || !B) throw new Error('Provide both addresses');
+        const len = Math.max(A.length, B.length);
+        const a = A.padStart(len, '0'); const b = B.padStart(len, '0');
+        let outHex = '';
+        for (let i=0;i<len;i+=2){
+          const ai = parseInt(a.slice(i,i+2),16);
+          const bi = parseInt(b.slice(i,i+2),16);
+          const xi = (ai ^ bi).toString(16).padStart(2,'0');
+          outHex += xi;
+        }
+        const big = BigInt('0x'+outHex).toString();
+        xout.innerHTML = `<strong>Result:</strong> 0x${outHex}<br/><strong>BigInt distance:</strong> ${big}`;
+      } catch (e) {
+        xout.textContent = 'Error: ' + e.message;
+      }
+    });
+
+    // Keyboard: quick search with '/'
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/') { e.preventDefault(); q.focus(); }
+    });
+  </script>
+</body>
+</html>
