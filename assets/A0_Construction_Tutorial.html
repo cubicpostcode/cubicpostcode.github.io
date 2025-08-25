@@ -1,0 +1,222 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construção Geométrica de um Retângulo A0: A Elegância de Tales</title>
+    <meta name="author" content="Cubic Postcode">
+    <meta name="description" content="Tutorial para construir um retângulo A0 (1 m², proporção √2:1) usando réguas e geometria de Tales, publicado no Bom Dia.">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif', serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+        h1 {
+            font-size: 2.2em;
+            color: #1a3c5e;
+        }
+        h2 {
+            font-size: 1.8em;
+            color: #2a5a8e;
+            margin-top: 1.5em;
+        }
+        h3 {
+            font-size: 1.4em;
+            color: #3a6a9e;
+        }
+        p {
+            margin: 1em 0;
+        }
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        .abstract {
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 1em;
+            border-left: 4px solid #2a5a8e;
+            margin-bottom: 2em;
+        }
+        .math {
+            font-style: italic;
+            font-family: 'Noto Serif', serif;
+        }
+        a {
+            color: #1a3c5e;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3em;
+            font-size: 0.9em;
+            color: #666;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Construção Geométrica de um Retângulo A0: A Elegância de Tales</h1>
+        <p>Por <strong>Cubic Postcode</strong><br>
+        Publicado em <a href="https://bomdia.eu/" target="_blank">Bom Dia</a>, 25 de Agosto de 2025</p>
+    </header>
+
+    <section class="abstract">
+        <p>O formato A0 da série ISO é uma joia matemática: 1 metro quadrado com proporção &radic;2:1. Dividido ao meio, gera dois A1 idênticos em forma, uma característica que define a série A. Como construir esse retângulo com uma régua de 1 metro e um segmento &radic;2 metros? Usando os teoremas de Tales, combinamos semicírculos e proporções para criar o A0 com precisão. Este tutorial, escrito para o <a href="https://bomdia.eu/">Bom Dia</a>, guia você com clareza científica e um toque de narrativa envolvente, exigindo apenas réguas, lápis e curiosidade geométrica.</p>
+    </section>
+
+    <section>
+        <h2>A Base Matemática</h2>
+        <p>Seja <span class="math">s</span> o lado menor e <span class="math">L</span> o lado maior. As condições são:</p>
+        <ul>
+            <li>Proporção: <span class="math">L / s = &radic;2</span></li>
+            <li>Área: <span class="math">s &cdot; L = 1 m²</span></li>
+        </ul>
+        <p>Resolvendo, temos <span class="math">L = 2<sup>1/4</sup> &asymp; 1,189207115 m</span> e <span class="math">s = 2<sup>-1/4</sup> &asymp; 0,840896415 m</span>. O padrão ISO arredonda para 1189 mm &times; 841 mm.</p>
+        <p>Por que &radic;2? Cortar um A0 ao meio paralelamente ao lado menor produz dois A1 com proporção <span class="math">(L/2)/s = &radic;2/2</span>. Rotacionado, mantém similaridade, uma propriedade fractal ideal para impressão e design.</p>
+        <p>Usaremos:</p>
+        <ol>
+            <li><strong>Teorema de Tales (Semicírculo)</strong>: Um triângulo inscrito em um semicírculo com diâmetro como lado é retângulo.</li>
+            <li><strong>Teorema de Interceptação</strong>: Linhas paralelas criam segmentos proporcionais.</li>
+        </ol>
+        <p>Construiremos <span class="math">L = &radic;(1 &cdot; &radic;2) = 2<sup>1/4</sup></span> e <span class="math">s = 1/L</span>, garantindo <span class="math">L &cdot; s = 1</span>.</p>
+    </section>
+
+    <section>
+        <h2>Ferramentas Necessárias</h2>
+        <ul>
+            <li>Régua de 1 metro.</li>
+            <li>Segmento de &radic;2 metros (diagonal de um quadrado 1 m &times; 1 m: <span class="math">&radic;(1² + 1²) = &radic;2 &asymp; 1,414213562 m</span>).</li>
+            <li>Lápis, papel ou prancheta.</li>
+            <li>Opcional: Compasso (ou corda com alfinetes), esquadro.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Passo a Passo</h2>
+        <h3>Passo 1: Quadrado e Diagonal &radic;2</h3>
+        <p>Construa um quadrado 1 m &times; 1 m:</p>
+        <ol>
+            <li>Marque <span class="math">O</span> e <span class="math">A</span>, a 1 m.</li>
+            <li>Erga perpendiculares em <span class="math">O</span> e <span class="math">A</span>, com 1 m, até <span class="math">C</span> e <span class="math">D</span>.</li>
+            <li>Forme o quadrado <span class="math">OACD</span>.</li>
+        </ol>
+        <p>A diagonal <span class="math">O</span> ao canto oposto mede &radic;2 m. Marque-a na régua de &radic;2.</p>
+
+        <h3>Passo 2: Semicírculo para <span class="math">L</span></h3>
+        <p>Construa <span class="math">L = 2<sup>1/4</sup></span>:</p>
+        <ol>
+            <li>Trace <span class="math">DE = 1 + &radic;2</span> m: de <span class="math">D</span>, marque <span class="math">P</span> a 1 m, depois &radic;2 m até <span class="math">E</span>.</li>
+            <li>Desenhe um semicírculo com diâmetro <span class="math">DE</span> (centro no meio).</li>
+            <li>De <span class="math">P</span>, trace uma perpendicular a <span class="math">DE</span>, intersectando o semicírculo em <span class="math">H</span>.</li>
+        </ol>
+        <p><span class="math">PH = L &asymp; 1,189 m</span>. Pelo teorema de Tales, <span class="math">PH = &radic;(1 &cdot; &radic;2)</span>.</p>
+
+        <h3>Passo 3: Interceptação para <span class="math">s</span></h3>
+        <p>Construa <span class="math">s = 1/L</span>:</p>
+        <ol>
+            <li>De <span class="math">O</span>, trace raio horizontal <span class="math">OA = 1 m</span> e vertical para cima.</li>
+            <li>Marque <span class="math">B</span> no vertical a altura <span class="math">L</span> (de <span class="math">PH</span>).</li>
+            <li>Conecte <span class="math">A</span> a <span class="math">B</span>.</li>
+            <li>De <span class="math">C</span>, 1 m acima de <span class="math">O</span>, trace uma paralela a <span class="math">AB</span>, intersectando <span class="math">OA</span> em <span class="math">X</span>.</li>
+        </ol>
+        <p><span class="math">OX = s &asymp; 0,841 m</span>. Pelo teorema de interceptação, <span class="math">OX / 1 = 1 / L</span>.</p>
+
+        <h3>Passo 4: Montagem do A0</h3>
+        <p>Desenhe um retângulo com lados <span class="math">L</span> e <span class="math">s</span>. Verifique ângulos retos.</p>
+    </section>
+
+    <section>
+        <h2>Verificação</h2>
+        <ul>
+            <li><strong>Medidas</strong>: <span class="math">L &asymp; 1,189 m</span>, <span class="math">s &asymp; 0,841 m</span>.</li>
+            <li><strong>Proporção</strong>: <span class="math">L/s &asymp; &radic;2 &asymp; 1,414</span>.</li>
+            <li><strong>Área</strong>: <span class="math">L &cdot; s = 1 m²</span>.</li>
+            <li><strong>Similaridade</strong>: Divida <span class="math">L</span> ao meio; <span class="math">s &times; L/2</span>, rotacionado, mantém a proporção.</li>
+        </ul>
+        <p>Use um esquadro para ângulos. Erros? Verifique alinhamentos.</p>
+    </section>
+
+    <section>
+        <h2>Variações</h2>
+        <ul>
+            <li><strong>Sem régua de &radic;2?</strong> Use a diagonal do quadrado.</li>
+            <li><strong>Sem compasso?</strong> Use corda.</li>
+            <li><strong>Escala</strong>: Use unidade <span class="math">U</span> (ex., 10 cm) para <span class="math">L = 2<sup>1/4</sup> U</span>, <span class="math">s = 2<sup>-1/4</sup> U</span>.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Por Que Isso Importa</h2>
+        <p>Tales de Mileto (séc. VI a.C.) moldou a geometria moderna. Para o <a href="https://bomdia.eu/">Bom Dia</a>, esta construção revela como números irracionais ganham vida em papel, unindo matemática e design.</p>
+        <p><strong>Apêndice: Série A</strong>: A0 (1 m²), A1 (A0/2), até A10, com proporção &radic;2.</p>
+        <p>Construa e compartilhe no <a href="https://bomdia.eu/">Bom Dia</a>!</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Cubic Postcode. Publicado em <a href="https://bomdia.eu/">Bom Dia</a>.</p>
+    </footer>
+</body>
+</html>
