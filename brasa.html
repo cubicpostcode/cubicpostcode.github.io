@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Culinária da Brasa e da Fumaça — Poemas Bilíngues</title>
+  <meta name="description" content="Do Fogo, da Brasa e da Fumaça — dois poemas em Português e Inglês, com design artístico e assinatura do autor, Cubic Postcode."/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --ink: #f2f3f5;
+      --muted: #b8c1cc;
+      --accent: #ff7a59;  /* flame */
+      --accent-2: #6ec1ff; /* ether */
+      --card: #121317;
+      --card-2: #0f141a;
+      --border: #1d2230;
+      --shadow: 0 10px 40px rgba(0,0,0,.45), 0 2px 10px rgba(0,0,0,.4);
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--ink);
+      background: radial-gradient(1200px 700px at 10% -10%, rgba(255, 122, 89, .10), transparent 60%),
+                  radial-gradient(1000px 600px at 110% 10%, rgba(110, 193, 255, .10), transparent 60%),
+                  linear-gradient(180deg, #0b0c10, #0a0a0b 30%, #0a0a0b 70%, #0b0c10);
+    }
+
+    .site { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    header.site-header {
+      position: relative;
+      padding: 32px 24px 56px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    header.site-header::before {
+      content: "";
+      position: absolute; inset: -10% -10% auto auto; height: 220px; width: 220px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,122,89,.35), rgba(255,122,89,0) 60%);
+      filter: blur(10px); z-index: -1;
+      transform: rotate(15deg);
+    }
+    header.site-header::after {
+      content: "";
+      position: absolute; inset: auto auto -20% -10%; height: 320px; width: 320px;
+      background: radial-gradient(circle at 60% 60%, rgba(110,193,255,.25), rgba(110,193,255,0) 60%);
+      filter: blur(12px); z-index: -1;
+      transform: rotate(-8deg);
+    }
+
+    .title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(28px, 4.5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: .3px;
+      margin: 0 0 10px;
+      text-shadow: 0 6px 24px rgba(0,0,0,.35);
+    }
+    .lead { color: var(--muted); font-size: clamp(14px, 1.6vw, 18px); max-width: 70ch; margin: 8px 0 20px; }
+
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 0;
+    }
+    .btn {
+      appearance: none; border: 1px solid var(--border); color: var(--ink); background: var(--card);
+      border-radius: 999px; padding: 10px 16px; font-weight: 600; letter-spacing: .2px; cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: #151923; }
+    .btn.is-active { background: #1b2330; border-color: rgba(255,255,255,.30); }
+
+    .section {
+      margin-top: 32px; padding: 28px; border-radius: 24px; border: 1px solid var(--border);
+      box-shadow: var(--shadow); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+    }
+
+    .hero {
+      position: relative; border-radius: 18px; overflow: hidden; border: 1px solid var(--border);
+      background: var(--card-2); min-height: 260px;
+    }
+
+    /* FIRE CANVAS */
+    .hero.fire { background:
+      radial-gradient(1200px 240px at -30% 110%, rgba(255,122,89,.40), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, #160d0b 0%, #0d0c10 100%);
+    }
+    .hero.fire .flames {
+      position: absolute; inset: auto 0 0 0; height: 240px; pointer-events: none; opacity: .9;
+      background: conic-gradient(from 220deg at 20% 80%, rgba(255,174,0,.45), rgba(255,110,0,.3), rgba(255,0,0,.18), rgba(255,174,0,.45));
+      filter: blur(32px);
+      mask: radial-gradient(100% 80% at 50% 100%, #000 55%, transparent 70%);
+      animation: lick 6s ease-in-out infinite alternate;
+    }
+    @keyframes lick { from { transform: translateY(10px) scaleY(1); } to { transform: translateY(-18px) scaleY(1.08); } }
+
+    /* ETHER CANVAS */
+    .hero.ether { background:
+      radial-gradient(1200px 240px at 120% -20%, rgba(110,193,255,.35), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, #0a0f14 0%, #0c0d12 100%);
+    }
+    .hero.ether .aura {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(120px 80px at 20% 60%, rgba(130,180,255,.22), transparent 60%),
+                  radial-gradient(160px 100px at 60% 30%, rgba(120,210,255,.20), transparent 60%),
+                  radial-gradient(140px 90px at 85% 70%, rgba(170,220,255,.18), transparent 60%);
+      filter: blur(8px);
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+    @keyframes drift { from { transform: translateY(8px); } to { transform: translateY(-8px); } }
+
+    .poem-card {
+      margin-top: 18px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid var(--border); border-radius: 18px; overflow: hidden; display: grid; gap: 0;
+    }
+
+    .poem-grid { display: grid; grid-template-columns: 1fr; }
+    @media (min-width: 880px) { .poem-grid { grid-template-columns: 1fr 1fr; } }
+
+    .col { padding: 22px 24px 26px; }
+    .col + .col { border-top: 1px solid var(--border); }
+    @media (min-width: 880px) { .col + .col { border-left: 1px solid var(--border); border-top: none; } }
+
+    h2.poem-title { font-family: "Playfair Display", serif; font-weight: 800; letter-spacing: .2px; margin: 18px 24px 10px; }
+    .subtitle { margin: 0 24px 16px; color: var(--muted); }
+
+    .lang-tag { display: inline-block; font-weight: 700; font-size: 12px; letter-spacing: .6px; text-transform: uppercase; opacity: .85; }
+    .lang-pt { color: #ffb18f; }
+    .lang-en { color: #9bd2ff; }
+
+    .poem { font-size: 18px; line-height: 1.9; letter-spacing: .2px; }
+    .poem p { margin: 0 0 14px; }
+
+    /* Dropcap first stanza */
+    .poem p:first-child::first-letter { font-family: "Playfair Display", serif; font-weight: 800; float: left; font-size: 3.2em; line-height: .9; padding-right: .12em; margin-top: .08em; color: var(--accent); }
+    .poem.en p:first-child::first-letter { color: var(--accent-2); }
+
+    /* Language toggle */
+    body[data-mode="pt"] .col.en { display: none; }
+    body[data-mode="en"] .col.pt { display: none; }
+
+    /* Signature */
+    .signature {
+      margin-top: 28px; padding: 22px 24px; border-radius: 16px; border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .sig-name { font-family: "Dancing Script", cursive; font-size: clamp(28px, 3.8vw, 44px); color: rgba(255,255,255,.92); text-shadow: 0 6px 24px rgba(0,0,0,.45); }
+    .sig-caption { color: var(--muted); }
+
+    /* Print layout: stack columns and show both languages */
+    @media print {
+      body { background: #ffffff; color: #222; }
+      header.site-header, .section { box-shadow: none; border-color: #ddd; background: #fff; }
+      .poem { color: #111; }
+      body[data-mode] .col { display: block !important; border: none !important; }
+      .hero { display: none; }
+      .signature { border-color: #ccc; }
+    }
+  </style>
+</head>
+<body data-mode="both">
+  <div class="site">
+    <header class="site-header">
+      <h1 class="title">Culinária da Brasa e da Fumaça</h1>
+      <p class="lead">Dois poemas que celebram a tradição do fogo — e anunciam uma nova era sem chamas. Edição bilíngue (Português &amp; English), com design artesanal e assinatura do autor.</p>
+      <div class="toolbar" role="toolbar" aria-label="Language and actions">
+        <button class="btn is-active" data-mode="both" aria-pressed="true">🇧🇷 + 🇬🇧 Ver lado a lado</button>
+        <button class="btn" data-mode="pt">🇧🇷 Português</button>
+        <button class="btn" data-mode="en">🇬🇧 English</button>
+        <button class="btn" id="printBtn" title="Imprimir / Guardar em PDF">🖨️ Imprimir</button>
+      </div>
+    </header>
+
+    <!-- Poem 1: Fire / Brasa -->
+    <section class="section" id="poem1">
+      <div class="hero fire" aria-hidden="true">
+        <div class="flames"></div>
+      </div>
+
+      <h2 class="poem-title">Do Fogo, da Brasa e da Fumaça</h2>
+      <p class="subtitle">O Banquete Antigo do Mundo</p>
+
+      <div class="poem-card poem-grid">
+        <div class="col pt">
+          <span class="lang-tag lang-pt">Português</span>
+          <div class="poem">
+            <p>Do fogo, da brasa e da fumaça<br>
+            nasce o banquete antigo do mundo,<br>
+            um canto de lenha estalando<br>
+            que atravessa séculos e mesas.</p>
+
+            <p>Na chama se guardam segredos,<br>
+            na brasa repousa a paciência,<br>
+            na fumaça viajam memórias<br>
+            que temperam o ar com lembranças.</p>
+
+            <p>Cada faísca é uma história,<br>
+            cada labareda, um gesto humano:<br>
+            o de juntar, o de partilhar,<br>
+            o de transformar fome em festa.</p>
+
+            <p>E quando a fumaça se eleva,<br>
+            dançando no vento como reza,<br>
+            é como se o próprio tempo<br>
+            se ajoelhasse diante do sabor.</p>
+
+            <p>Do fogo, da brasa e da fumaça<br>
+            a vida encontra o seu condimento:<br>
+            somos todos cozinheiros da terra,<br>
+            misturando calor com esperança.</p>
+          </div>
+        </div>
+        <div class="col en">
+          <span class="lang-tag lang-en">English</span>
+          <div class="poem en">
+            <p>From fire, from ember and from smoke<br>
+            is born the ancient banquet of the world,<br>
+            a song of crackling wood<br>
+            that crosses centuries and tables.</p>
+
+            <p>In the flame are secrets kept,<br>
+            in the ember rests patience,<br>
+            in the smoke memories travel<br>
+            seasoning the air with remembrance.</p>
+
+            <p>Each spark is a story,<br>
+            each flame a human gesture:<br>
+            to gather, to share,<br>
+            to turn hunger into feast.</p>
+
+            <p>And when the smoke rises,<br>
+            dancing in the wind like prayer,<br>
+            it is as if time itself<br>
+            bowed before flavor.</p>
+
+            <p>From fire, from ember and from smoke<br>
+            life finds its seasoning:<br>
+            we are all cooks of the earth,<br>
+            mixing warmth with hope.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="signature" aria-label="Assinatura do autor">
+        <div class="sig-name">Cubic Postcode</div>
+        <div class="sig-caption">Assinado pelo autor • Signed by the author</div>
+      </div>
+    </section>
+
+    <!-- Poem 2: New era without fire / Ether -->
+    <section class="section" id="poem2">
+      <div class="hero ether" aria-hidden="true">
+        <div class="aura"></div>
+      </div>
+
+      <h2 class="poem-title">Do Fogo, da Brasa e da Fumaça</h2>
+      <p class="subtitle">A Era Sem Fogo</p>
+
+      <div class="poem-card poem-grid">
+        <div class="col pt">
+          <span class="lang-tag lang-pt">Português</span>
+          <div class="poem">
+            <p>Do fogo, da brasa e da fumaça<br>
+            ergueu-se a história do homem,<br>
+            entre caçadas, festas e guerras,<br>
+            entre o pão, a carne e o ferro.</p>
+
+            <p>Foi chama que aqueceu o medo,<br>
+            foi brasa que guardou a noite,<br>
+            foi fumaça que falou aos deuses,<br>
+            como língua antiga no vento.</p>
+
+            <p>Mas o mundo mudou,<br>
+            e das cinzas nascem outras luzes.<br>
+            Agora é o tempo do silêncio claro,<br>
+            da cozinha sem labareda,<br>
+            da energia que não queima,<br>
+            que não fere, que não consome.</p>
+
+            <p>Do fogo, da brasa e da fumaça<br>
+            ficará apenas a memória,<br>
+            como mito, como canção remota,<br>
+            pois a nova era é pura e limpa,<br>
+            sem fumo, sem cinza, sem dor.</p>
+
+            <p>E os povos dirão um dia:<br>
+            “Ali terminou a idade do fogo,<br>
+            e começou a idade da vida,<br>
+            onde o calor vinha da paz<br>
+            e o sabor nascia sem ferir a terra.”</p>
+          </div>
+        </div>
+        <div class="col en">
+          <span class="lang-tag lang-en">English</span>
+          <div class="poem en">
+            <p>From fire, from ember and from smoke<br>
+            rose the history of man,<br>
+            between hunts, feasts and wars,<br>
+            between bread, meat and iron.</p>
+
+            <p>It was flame that warmed fear,<br>
+            it was ember that guarded the night,<br>
+            it was smoke that spoke to the gods,<br>
+            like an ancient tongue in the wind.</p>
+
+            <p>But the world has changed,<br>
+            and from the ashes new lights are born.<br>
+            Now is the time of clear silence,<br>
+            of cooking without flame,<br>
+            of energy that does not burn,<br>
+            that does not wound, that does not consume.</p>
+
+            <p>From fire, from ember and from smoke<br>
+            only memory will remain,<br>
+            like myth, like distant song,<br>
+            for the new era is pure and clean,<br>
+            without smoke, without ash, without pain.</p>
+
+            <p>And the peoples will one day say:<br>
+            “There ended the age of fire,<br>
+            and began the age of life,<br>
+            where warmth came from peace<br>
+            and flavor was born without harming the earth.”</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="signature" aria-label="Assinatura do autor">
+        <div class="sig-name">Cubic Postcode</div>
+        <div class="sig-caption">Assinado pelo autor • Signed by the author</div>
+      </div>
+    </section>
+
+    <footer class="section" style="text-align:center; margin-top: 40px;">
+      <p class="subtitle">© <span id="year"></span> Cubic Postcode — Edição artística HTML5. Para guardar, use <em>Imprimir</em> → "Guardar em PDF".</p>
+    </footer>
+  </div>
+
+  <script>
+    const setMode = (mode) => {
+      document.body.setAttribute('data-mode', mode);
+      document.querySelectorAll('.btn[data-mode]').forEach(b => b.classList.toggle('is-active', b.dataset.mode === mode));
+      if (mode === 'both') document.querySelector('.btn[data-mode="both"]').classList.add('is-active');
+    };
+
+    document.querySelectorAll('.btn[data-mode]').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    // Default year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
