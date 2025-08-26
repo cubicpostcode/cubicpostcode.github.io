@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sound of Speech: A Guide to Phonetics</title>
+    <style>
+        /* --- Guardian/Observer Inspired Typography & Base Styles --- */
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lato:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Merriweather', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fdfdfd;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            color: #121212;
+            line-height: 1.2;
+            margin-bottom: 0.5em;
+        }
+
+        h1 { font-size: 3.5em; }
+        h2 { font-size: 2.5em; border-bottom: 3px solid #c70000; padding-bottom: 10px; margin-top: 1.5em; }
+        h3 { font-size: 1.8em; font-weight: 700; }
+        h4 { font-size: 1.2em; font-weight: 700; color: #555; }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        a {
+            color: #005689;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .ipa {
+            font-family: "Doulos SIL", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif;
+            font-size: 1.1em;
+            color: #c70000;
+        }
+
+        /* --- Layout & Magazine Components --- */
+        .cover-page {
+            text-align: center;
+            padding: 80px 40px;
+            border: 1px solid #ddd;
+            background-color: #f5f5f5;
+            margin-bottom: 40px;
+        }
+        .cover-page .subtitle {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.5em;
+            color: #555;
+            margin-top: 10px;
+        }
+        .cover-page .author {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            font-size: 1.1em;
+            margin-top: 30px;
+            color: #333;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .pull-quote {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.6em;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #c70000;
+            border-left: 5px solid #c70000;
+            padding-left: 20px;
+            margin: 20px 0 20px 20px;
+            grid-column: 1 / -1; /* Span across columns if inside grid */
+        }
+
+        .sidebar {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-top: 3px solid #555;
+            margin: 20px 0;
+        }
+        .sidebar h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .fact-box {
+            background-color: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .fact-box h4 {
+            margin-top: 0;
+            color: #0d47a1;
+        }
+
+        .exercise-box {
+            border: 2px dashed #777;
+            padding: 20px;
+            margin: 30px 0;
+            background-color: #fffbe5;
+        }
+        .exercise-box h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .exercise-box ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .exercise-box li {
+            margin-bottom: 10px;
+        }
+        .exercise-box .question {
+            font-weight: bold;
+        }
+
+        /* --- Infographics & Charts --- */
+        .infographic-full {
+            padding: 20px;
+            margin: 30px 0;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+        .infographic-full h3 {
+            text-align: center;
+        }
+
+        .ipa-chart {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .ipa-chart th, .ipa-chart td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .ipa-chart th {
+            background-color: #333;
+            color: white;
+            font-weight: 700;
+        }
+        .ipa-chart .header-place {
+            background-color: #555;
+        }
+        .ipa-chart .header-manner {
+            background-color: #777;
+            text-align: left;
+        }
+        .ipa-chart .symbol {
+            font-family: "Doulos SIL", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .ipa-chart .example {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .ipa-chart .empty {
+            background-color: #f0f0f0;
+        }
+
+        .vowel-chart-container {
+            position: relative;
+            max-width: 500px;
+            margin: 30px auto;
+            aspect-ratio: 4/3;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><path d="M50 50 L350 50 L300 250 L100 250 Z" fill="none" stroke="%23cccccc" stroke-width="2"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+        .vowel {
+            position: absolute;
+            text-align: center;
+        }
+
+        .vowel .symbol { font-size: 1.4em; }
+        .vowel .example { font-size: 0.8em; display: block; font-style: italic; }
+
+        /* Vowel positions (approximate percentages) */
+        .v-i { top: 15%; left: 10%; }
+        .v-y { top: 15%; left: 20%; }
+        .v-u { top: 15%; right: 10%; }
+        .v-ɪ { top: 30%; left: 20%; }
+        .v-ʊ { top: 30%; right: 20%; }
+        .v-e { top: 45%; left: 15%; }
+        .v-o { top: 45%; right: 15%; }
+        .v-ə { top: 50%; left: 48%; transform: translateX(-50%); }
+        .v-ɛ { top: 65%; left: 25%; }
+        .v-ɔ { top: 65%; right: 25%; }
+        .v-æ { top: 80%; left: 20%; }
+        .v-a { top: 80%; left: 35%; }
+        .v-ɒ { top: 80%; right: 35%; }
+        .v-ɑ { top: 80%; right: 20%; }
+
+        .timeline {
+            position: relative;
+            list-style: none;
+            padding: 20px 0;
+        }
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            height: 100%;
+            width: 4px;
+            background: #e3e3e3;
+        }
+        .timeline-item {
+            margin-bottom: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 13px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #c70000;
+        }
+        .timeline-item .year {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            font-size: 1.5em;
+            color: #c70000;
+        }
+        .timeline-item p {
+            margin: 5px 0 0 0;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .flowchart-step {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            width: 80%;
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .flowchart-arrow {
+            font-size: 2em;
+            color: #c70000;
+            margin-bottom: 15px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="cover-page">
+            <h1>The Sound of Speech</h1>
+            <p class="subtitle">A Modern Guide to Phonetics and the International Phonetic Alphabet</p>
+            <p class="author">By Gemini Learning</p>
+        </header>
+
+        <main>
+            <section>
+                <h3>Welcome to the World of Sound</h3>
+                <div class="two-column">
+                    <p>Every day, we produce and perceive an astonishing array of sounds to communicate. We ask questions, tell stories, and share ideas, often without considering the intricate mechanics behind the words we use. But what if you could see speech? What if you could write down not just the letters of a word, but the precise sounds that form it, regardless of language?</p>
+                    <p>This is the power of phonetics, the science of speech sounds. This guide is your passport into that world. It’s designed for students, language learners, and the endlessly curious. We'll demystify the symbols you see in dictionaries, explore how your phone understands your voice, and journey from the ancient origins of linguistics to its future in artificial intelligence.</p>
+                </div>
+                <p>Prepare to look at language not just as a set of letters, but as a vibrant, structured system of sound.</p>
+            </section>
+
+            <section>
+                <h2>1. From Ancient India to AI: A Brief History</h2>
+                <div class="two-column">
+                    <p>The quest to understand and codify speech is as old as civilization itself. Long before the first modern dictionary, scholars were systematically deconstructing language into its component sounds. The earliest known phonetician was the 4th century BCE Indian grammarian <strong>Pāṇini</strong>. His work on Sanskrit, the <em>Aṣṭādhyāyī</em>, provided a highly sophisticated analysis of its phonology and morphology. He classified sounds based on their place of articulation (where in the mouth they are made) and manner (how they are made)—principles that remain foundational to phonetics today.</p>
+                    <p>For centuries, however, phonetic study was largely isolated within specific languages. The real breakthrough came in the 19th century, a boom time for science and classification. European linguists like Alexander Melville Bell (father of the inventor) and Henry Sweet (a model for George Bernard Shaw's Professor Henry Higgins) developed systems to transcribe speech sounds accurately. They recognized a critical problem: a single letter, like ‘a’, could represent wildly different sounds (as in <em>cat</em>, <em>father</em>, and <em>cake</em>). A universal system was needed.</p>
+                </div>
+                <pull-quote>The IPA isn't just a set of symbols; it's a passport to understanding the sound of any language on Earth.</pull-quote>
+                <div class="two-column">
+                    <p>This need culminated in the 1886 creation of the International Phonetic Alphabet (IPA) by a group of French language teachers. Their goal was simple but revolutionary: one symbol for every distinct sound. The IPA has since become the undisputed global standard for phoneticians, linguists, and dictionary-makers.</p>
+                    <p>Today, the journey continues. The principles of phonetics are no longer confined to academic halls or dictionary pages. They are the bedrock of the digital age. When you ask Siri for the weather or use Google Translate, you are interacting with systems built on a deep understanding of phonetics, powered by artificial intelligence that can parse soundwaves into phonemes with remarkable accuracy.</p>
+                </div>
+            </section>
+
+            <section class="infographic-full">
+                <h3>Key Milestones in Phonetics</h3>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="year">c. 4th Century BCE</div>
+                        <p><strong>Pāṇini</strong> composes the <em>Aṣṭādhyāyī</em>, a detailed phonetic and grammatical analysis of Sanskrit.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="year">1867</div>
+                        <p><strong>Alexander Melville Bell</strong> publishes "Visible Speech," a system of symbols to represent speech sounds.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="year">1886</div>
+                        <p>The <strong>International Phonetic Association</strong> is formed in Paris, leading to the first version of the IPA.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="year">1949</div>
+                        <p>The IPA releases its official chart, "The Principles of the International Phonetic Association," standardising the symbols used today.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="year">1952</div>
+                        <p>Bell Labs develops "Audrey," the first system capable of recognising spoken digits.</p>
+                    </li>
+                     <li class="timeline-item">
+                        <div class="year">2011</div>
+                        <p>Apple integrates <strong>Siri</strong> into the iPhone, bringing phonetic-based voice recognition to the mainstream public.</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>Feature: How the IPA Became Universal</h3>
+                <div class="two-column">
+                    <p>Imagine trying to describe the colour red to someone who has never seen it. You could use metaphors—"it's the colour of fire," "the colour of a ripe apple"—but you could never convey the precise shade. This was the problem facing linguists before the International Phonetic Alphabet (IPA). How could you accurately describe the pronunciation of a word in a little-known language to someone across the world?</p>
+                    <p>The genius of the IPA lies in its core principle: one-to-one mapping. One sound, one symbol. Always. This principle of unambiguity severed the messy, unreliable link between traditional spelling (orthography) and actual pronunciation. The English word "enough" might look chaotic, but its phonetic transcription, <span class="ipa">/ɪˈnʌf/</span>, is perfectly logical and replicable.</p>
+                    <p>Adoption wasn't immediate. It took decades of revisions and advocacy by the International Phonetic Association. Its success hinged on its utility. Anthropologists could record endangered languages with precision. Language teachers could clearly explain the difference between the French 'u' <span class="ipa">/y/</span> and 'ou' <span class="ipa">/u/</span>. Speech therapists could pinpoint articulation errors. Most visibly, dictionary publishers like Oxford University Press adopted the IPA, making it the standard for pronunciation guides worldwide.</p>
+                </div>
+                <fact-box>
+                    <h4>Did you know?</h4>
+                    <p>The IPA is based primarily on the Latin alphabet, but it borrows symbols from other scripts, like the Greek alphabet (e.g., theta <span class="ipa">/θ/</span> for the 'th' in "thin"). Some symbols were even invented specifically for the chart.</p>
+                </fact-box>
+                <p>The IPA's universality is not just about a shared set of symbols; it’s about a shared understanding of the human vocal tract. Every symbol is defined by physical actions: where the tongue is, whether the vocal cords are vibrating, if air is flowing through the nose. This makes it a true science, testable and verifiable, and is why it remains the gold standard over 130 years after its creation.</p>
+            </section>
+
+            <section>
+                <h2>2. Learning the Symbols: Your Phonetic Toolkit</h2>
+                <p>The IPA chart can look intimidating, but it's organised with scientific elegance. Sounds are grouped by how and where they are produced in the mouth. We'll start with the two main categories: vowels and consonants.</p>
+
+                <div class="infographic-full">
+                    <h3>IPA Vowel Chart (Standard English)</h3>
+                    <p>Vowels are made with an open vocal tract. Their sound is shaped by the position of the tongue (high/low, front/back) and the shape of the lips (rounded/unrounded).</p>
+                    <div class="vowel-chart-container">
+                        <div class="vowel v-i"><span class="symbol">iː</span><span class="example">sheep</span></div>
+                        <div class="vowel v-u"><span class="symbol">uː</span><span class="example">goose</span></div>
+                        <div class="vowel v-ɪ"><span class="symbol">ɪ</span><span class="example">ship</span></div>
+                        <div class="vowel v-ʊ"><span class="symbol">ʊ</span><span class="example">foot</span></div>
+                        <div class="vowel v-e"><span class="symbol">e</span><span class="example">dress*</span></div>
+                        <div class="vowel v-o"><span class="symbol">ɔː</span><span class="example">thought</span></div>
+                        <div class="vowel v-ə"><span class="symbol">ə</span><span class="example"><u>a</u>bout</span></div>
+                        <div class="vowel v-ɛ"><span class="symbol">ɛ</span><span class="example">dress</span></div>
+                        <div class="vowel v-ɔ"><span class="symbol">ɒ</span><span class="example">lot</span></div>
+                        <div class="vowel v-æ"><span class="symbol">æ</span><span class="example">trap</span></div>
+                        <div class="vowel v-ɑ"><span class="symbol">ɑː</span><span class="example">f<u>a</u>ther</span></div>
+                    </div>
+                    <p><small>*Note: Vowel symbols can vary slightly by dialect. This chart shows common vowels in British (RP) and American English.</small></p>
+                </div>
+                
+                <div class="infographic-full">
+                    <h3>IPA Consonant Chart (English)</h3>
+                    <p>Consonants involve some obstruction of the vocal tract. They are classified by their <strong>place</strong> of articulation (lips, teeth, etc.) and <strong>manner</strong> of articulation (stopping the air, creating friction, etc.).</p>
+                    <table class="ipa-chart">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th colspan="2" class="header-place">Bilabial</th>
+                                <th colspan="2" class="header-place">Labiodental</th>
+                                <th colspan="2" class="header-place">Dental</th>
+                                <th colspan="2" class="header-place">Alveolar</th>
+                                <th colspan="2" class="header-place">Post-alveolar</th>
+                                <th colspan="2" class="header-place">Palatal</th>
+                                <th colspan="2" class="header-place">Velar</th>
+                                <th colspan="2" class="header-place">Glottal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="header-manner">Plosive</th>
+                                <td class="symbol">p<br><span class="example"><u>p</u>in</span></td>
+                                <td class="symbol">b<br><span class="example"><u>b</u>in</span></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol">t<br><span class="example"><u>t</u>in</span></td>
+                                <td class="symbol">d<br><span class="example"><u>d</u>in</span></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol">k<br><span class="example"><u>c</u>at</span></td>
+                                <td class="symbol">ɡ<br><span class="example"><u>g</u>o</span></td>
+                                <td class="empty" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th class="header-manner">Fricative</th>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol">f<br><span class="example"><u>f</u>an</span></td>
+                                <td class="symbol">v<br><span class="example"><u>v</u>an</span></td>
+                                <td class="symbol">θ<br><span class="example"><u>th</u>in</span></td>
+                                <td class="symbol">ð<br><span class="example"><u>th</u>is</span></td>
+                                <td class="symbol">s<br><span class="example"><u>s</u>ip</span></td>
+                                <td class="symbol">z<br><span class="example"><u>z</u>ip</span></td>
+                                <td class="symbol">ʃ<br><span class="example"><u>sh</u>e</span></td>
+                                <td class="symbol">ʒ<br><span class="example">mea<u>s</u>ure</span></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol">h<br><span class="example"><u>h</u>at</span></td>
+                                <td class="empty"></td>
+                            </tr>
+                            <tr>
+                                <th class="header-manner">Affricate</th>
+                                <td class="empty" colspan="6"></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol">tʃ<br><span class="example"><u>ch</u>in</span></td>
+                                <td class="symbol">dʒ<br><span class="example"><u>j</u>in</span></td>
+                                <td class="empty" colspan="6"></td>
+                            </tr>
+                             <tr>
+                                <th class="header-manner">Nasal</th>
+                                <td class="symbol" colspan="2">m<br><span class="example"><u>m</u>ap</span></td>
+                                <td class="empty" colspan="4"></td>
+                                <td class="symbol" colspan="2">n<br><span class="example"><u>n</u>ap</span></td>
+                                <td class="empty" colspan="4"></td>
+                                <td class="symbol" colspan="2">ŋ<br><span class="example">si<u>ng</u></span></td>
+                                <td class="empty" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th class="header-manner">Approximant</th>
+                                <td class="empty" colspan="6"></td>
+                                <td class="symbol" colspan="2">ɹ<br><span class="example"><u>r</u>un</span></td>
+                                <td class="empty" colspan="2"></td>
+                                <td class="symbol" colspan="2">j<br><span class="example"><u>y</u>es</span></td>
+                                <td class="symbol" colspan="2">w<br><span class="example"><u>w</u>et</span></td>
+                                <td class="empty" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th class="header-manner">Lateral Approximant</th>
+                                <td class="empty" colspan="6"></td>
+                                <td class="symbol" colspan="2">l<br><span class="example"><u>l</u>eft</span></td>
+                                <td class="empty" colspan="8"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="two-column">
+                    <div>
+                        <h3>Beyond the Symbols: Suprasegmentals</h3>
+                        <p>Phonetics isn't just about individual sounds (segments). It also covers features that apply across sounds, known as <strong>suprasegmentals</strong>.</p>
+                        <h4>Stress</h4>
+                        <p>This is the emphasis placed on a syllable. In English, stress can change a word's meaning or function. The symbol <span class="ipa">/ˈ/</span> marks the primary stress, and <span class="ipa">/ˌ/</span> marks secondary stress. Compare:</p>
+                        <ul>
+                            <li><strong>rec</strong>ord (noun): <span class="ipa">/ˈɹɛkɔːd/</span></li>
+                            <li>re<strong>cord</strong> (verb): <span class="ipa">/ɹɪˈkɔːd/</span></li>
+                        </ul>
+                        <h4>Intonation and Rhythm</h4>
+                        <p>Intonation is the "melody" of speech—the rise and fall of pitch. It's how we know a statement ("You're going.") from a question ("You're going?"). Rhythm is the pattern of stressed and unstressed syllables that gives a language its characteristic beat.</p>
+                    </div>
+                    <aside class="sidebar">
+                        <h3>Unusual Sounds</h3>
+                        <p>The IPA can describe every sound humans can make, including those not found in English:</p>
+                        <ul>
+                            <li><strong>Clicks:</strong> Consonants found in some Southern African languages, like Xhosa. Symbol: <span class="ipa">/ǀ/</span>, <span class="ipa">/!/</span>, <span class="ipa">/ǁ/</span>.</li>
+                            <li><strong>Tones:</strong> In languages like Mandarin Chinese, the pitch of a vowel changes the word's meaning. For example, <em>mā</em> (mother), <em>má</em> (hemp), <em>mǎ</em> (horse), <em>mà</em> (to scold).</li>
+                            <li><strong>Retroflexes:</strong> Consonants made by curling the tip of the tongue back, common in languages of India. Symbol: <span class="ipa">/ʈ/</span>, <span class="ipa">/ɖ/</span>.</li>
+                        </ul>
+                    </aside>
+                </div>
+            </section>
+
+            <section>
+                <h2>3. Decoding the Dictionary: Practical Applications</h2>
+                <p>The most common place you'll encounter the IPA is in a dictionary entry. Learning to read these transcriptions unlocks the correct pronunciation of any word.</p>
+                
+                <h3>How to Read a Dictionary Entry</h3>
+                <p>Let's look at the word "phonetics":</p>
+                <div class="exercise-box">
+                    <strong>pho·net·ics</strong> <span style="color: #555;">|</span> <span class="ipa">/fəˈnɛtɪks/</span>
+                    <p><em>noun</em>: the study and classification of speech sounds.</p>
+                </div>
+                <ol>
+                    <li><strong>Slashes <span class="ipa">/.../</span>:</strong> These brackets indicate a broad phonetic transcription.</li>
+                    <li><strong>Stress Mark <span class="ipa">/ˈ/</span>:</strong> The small vertical line appears <em>before</em> the syllable that receives the primary stress. Here, it's on the "ne" syllable (<span class="ipa">/-ˈnɛ-/</span>).</li>
+                    <li><strong>Symbols:</strong> You can now decode the word sound-by-sound:
+                        <ul>
+                            <li><span class="ipa">/f/</span> - as in '<u>f</u>an'</li>
+                            <li><span class="ipa">/ə/</span> - the 'schwa' sound, as in '<u>a</u>bout'</li>
+                            <li><span class="ipa">/n/</span> - as in '<u>n</u>ap'</li>
+                            <li><span class="ipa">/ɛ/</span> - as in 'dr<u>e</u>ss'</li>
+                            <li><span class="ipa">/t/</span> - as in '<u>t</u>in'</li>
+                            <li><span class="ipa">/ɪ/</span> - as in 'sh<u>i</u>p'</li>
+                            <li><span class="ipa">/k/</span> - as in '<u>c</u>at'</li>
+                            <li><span class="ipa">/s/</span> - as in '<u>s</u>ip'</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="two-column">
+                    <div>
+                        <h3>The Power of Stress Shift</h3>
+                        <p>Notice how adding suffixes can change which syllable is stressed, altering the entire rhythm of a word.</p>
+                        <ul>
+                            <li><strong>pho</strong>tograph: <span class="ipa">/ˈfəʊtəɡɹɑːf/</span></li>
+                            <li>pho<strong>to</strong>graphy: <span class="ipa">/fəˈtɒɡɹəfi/</span></li>
+                            <li>photo<strong>graph</strong>ic: <span class="ipa">/ˌfəʊtəˈɡɹæfɪk/</span></li>
+                        </ul>
+                        <p>The IPA makes these shifts crystal clear.</p>
+                    </div>
+                    <div>
+                        <h3>Cross-Linguistic Examples</h3>
+                        <p>The IPA shows how different languages use similar sounds, and how they use sounds that don't exist in English.</p>
+                        <ul>
+                            <li><strong>Portuguese 'r':</strong> The word <em>carro</em> (car) is <span class="ipa">/ˈkaʁu/</span>. The symbol <span class="ipa">/ʁ/</span> represents a uvular fricative, a sound made in the back of the throat, very different from the English 'r' <span class="ipa">/ɹ/</span>.</li>
+                            <li><strong>Mandarin tones:</strong> The syllable 'ma' can have four meanings based on tone, which is marked with diacritics: <span class="ipa">/mā/</span>, <span class="ipa">/má/</span>, <span class="ipa">/mǎ/</span>, <span class="ipa">/mà/</span>.</li>
+                            <li><strong>Arabic 'ayn':</strong> The name 'Ali' begins with the letter ع, a voiced pharyngeal fricative <span class="ipa">/ʕ/</span>, a sound produced by constricting the throat that has no English equivalent.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2>4. Workshop: Test Your Skills</h2>
+
+                <div class="exercise-box">
+                    <h3>Quiz: Match the Sound to the Word</h3>
+                    <p>Which word contains the given sound? (Answers at bottom of section)</p>
+                    <ol>
+                        <li><span class="question">Sound: <span class="ipa">/ʃ/</span></span>
+                            <br>a) Cheese b) Vision c) Sugar d) Yes
+                        </li>
+                        <li><span class="question">Sound: <span class="ipa">/dʒ/</span></span>
+                            <br>a) Yell b) Gentle c) Measure d) Cat
+                        </li>
+                         <li><span class="question">Sound: <span class="ipa">/æ/</span></span>
+                            <br>a) Father b) Cat c) Cot d) About
+                        </li>
+                         <li><span class="question">Sound: <span class="ipa">/ð/</span></span>
+                            <br>a) Thigh b) Ether c) Then d) Foot
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="two-column">
+                    <div class="exercise-box">
+                        <h3>Minimal Pairs</h3>
+                        <p>Minimal pairs are words that differ by only one sound. Transcribe them to see the difference.</p>
+                        <ul>
+                            <li>ship vs. sheep
+                                <br><span class="ipa">/ʃɪp/</span> vs. <span class="ipa">/ʃiːp/</span>
+                            </li>
+                            <li>bit vs. beat
+                                <br><span class="ipa">/bɪt/</span> vs. <span class="ipa">/biːt/</span>
+                            </li>
+                             <li>lack vs. lake
+                                <br><span class="ipa">/læk/</span> vs. <span class="ipa">/leɪk/</span>
+                            </li>
+                             <li>sin vs. sing
+                                <br><span class="ipa">/sɪn/</span> vs. <span class="ipa">/sɪŋ/</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="exercise-box">
+                        <h3>Tongue Twisters with IPA</h3>
+                        <p>See how phonetics clarifies these tricky phrases.</p>
+                        <ul>
+                            <li>She sells seashells by the seashore.
+                                <br><span class="ipa">/ʃiː sɛlz ˈsiːʃɛlz baɪ ðə ˈsiːʃɔː/</span>
+                            </li>
+                            <li>Peter Piper picked a peck of pickled peppers.
+                                <br><span class="ipa">/ˈpiːtə ˈpaɪpə pɪkt ə pɛk əv ˈpɪkld ˈpɛpəz/</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p><em>Quiz Answers: 1-c, 2-b, 3-b, 4-c</em></p>
+            </section>
+
+            <section>
+                <h2>5. The Future is Spoken: Phonetics in the Digital Age</h2>
+                <div class="two-column">
+                    <p>The principles laid out by Pāṇini and the creators of the IPA are now more relevant than ever. Phonetics is the engine driving the voice revolution, from the smart speaker in your kitchen to the language app on your phone.</p>
+                    <p>When you say, "Hey Siri, what's the weather?" your device isn't hearing words. It hears a soundwave. Automatic Speech Recognition (ASR) software instantly breaks that wave down into tiny acoustic components. It then uses statistical models to determine the most likely sequence of phonemes represented by those components. For example, it decides whether you said "weather" <span class="ipa">/ˈwɛðə/</span> or "whether" <span class="ipa">/ˈwɛðə/</span> based on probability and context. This phonetic sequence is then matched to words in its vast dictionary.</p>
+                </div>
+
+                <sidebar class="sidebar">
+                    <h3>Phonetics in Your Pocket: Language Apps</h3>
+                    <p>Apps like Duolingo and Memrise use phonetic principles to teach pronunciation. When you speak into the microphone, their software analyzes the sounds you produce, comparing your vowels, consonants, and stress patterns to those of a native speaker. This allows for targeted feedback that would have been impossible just a generation ago.</p>
+                </sidebar>
+
+                <div class="infographic-full">
+                    <h3>Infographic: From Soundwave to Dictionary Entry</h3>
+                    <div class="flowchart">
+                        <div class="flowchart-step"><strong>1. Soundwave Input</strong><br>User speaks: "phonetics"</div>
+                        <div class="flowchart-arrow">⬇</div>
+                        <div class="flowchart-step"><strong>2. Acoustic Analysis</strong><br>Software analyzes frequencies and amplitudes of the sound.</div>
+                         <div class="flowchart-arrow">⬇</div>
+                        <div class="flowchart-step"><strong>3. Phoneme Recognition</strong><br>AI model identifies the most likely sequence of phonemes: <span class="ipa">/f/ + /ə/ + /n/ + /ɛ/ + /t/ + /ɪ/ + /k/ + /s/</span></div>
+                         <div class="flowchart-arrow">⬇</div>
+                        <div class="flowchart-step"><strong>4. Word Matching</strong><br>The phoneme string <span class="ipa">/fəˈnɛtɪks/</span> is matched to a word in the digital lexicon.</div>
+                         <div class="flowchart-arrow">⬇</div>
+                        <div class="flowchart-step"><strong>5. Output</strong><br>The device understands and displays the word "phonetics".</div>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div>
+                        <h3>The Next Frontier: VR/AR Classrooms</h3>
+                        <p>Imagine a virtual reality language class where you don't just see your teacher's face, but a dynamic 3D model of their vocal tract. As they produce a difficult sound like the French 'r' <span class="ipa">/ʁ/</span>, you can see exactly where their tongue is and how the uvula vibrates. Augmented reality apps could overlay phonetic symbols on text in real-time. This immersive, multi-sensory approach to learning pronunciation is the next logical step, all of it built on the timeless science of phonetics.</p>
+                    </div>
+                    <aside class="sidebar">
+                        <h3>Expert Opinion: Phonetics and AI</h3>
+                        <p><em>By Dr. Aris Thorne, University of Cambridge</em></p>
+                        <p>"The relationship between phonetics and AI is symbiotic. For decades, AI has relied on phonetic data to learn. Now, AI is helping us understand phonetics better than ever before. Machine learning models can analyze thousands of hours of speech data to detect subtle dialectal variations and sound changes happening in real-time—a task that would take a human researcher a lifetime. The future isn't about AI replacing linguists, but about AI becoming an incredibly powerful tool for linguistic discovery."</p>
+                    </aside>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Glossary of Common IPA Symbols</h2>
+                <table class="ipa-chart">
+                     <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="symbol">iː</span></td><td>High front vowel</td><td>sh<u>ee</u>p, b<u>ea</u>t</td></tr>
+                        <tr><td><span class="symbol">ɪ</span></td><td>Lower-high front vowel</td><td>sh<u>i</u>p, b<u>i</u>t</td></tr>
+                        <tr><td><span class="symbol">æ</span></td><td>Low front vowel</td><td>c<u>a</u>t, tr<u>a</u>p</td></tr>
+                        <tr><td><span class="symbol">ə</span></td><td>Schwa (mid central vowel)</td><td><u>a</u>bout, sof<u>a</u></td></tr>
+                        <tr><td><span class="symbol">ʌ</span></td><td>Low-mid back unrounded vowel</td><td>c<u>u</u>t, b<u>u</u>s</td></tr>
+                        <tr><td><span class="symbol">uː</span></td><td>High back rounded vowel</td><td>g<u>oo</u>se, bl<u>ue</u></td></tr>
+                        <tr><td><span class="symbol">ʊ</span></td><td>Lower-high back rounded vowel</td><td>f<u>oo</u>t, p<u>u</u>t</td></tr>
+                        <tr><td><span class="symbol">ɑː</span></td><td>Low back vowel</td><td>f<u>a</u>ther, c<u>a</u>r</td></tr>
+                        <tr><td><span class="symbol">p</span></td><td>Voiceless bilabial plosive</td><td><u>p</u>in</td></tr>
+                        <tr><td><span class="symbol">b</span></td><td>Voiced bilabial plosive</td><td><u>b</u>in</td></tr>
+                        <tr><td><span class="symbol">t</span></td><td>Voiceless alveolar plosive</td><td><u>t</u>in</td></tr>
+                        <tr><td><span class="symbol">d</span></td><td>Voiced alveolar plosive</td><td><u>d</u>in</td></tr>
+                        <tr><td><span class="symbol">k</span></td><td>Voiceless velar plosive</td><td><u>k</u>ick, <u>c</u>at</td></tr>
+                        <tr><td><span class="symbol">ɡ</span></td><td>Voiced velar plosive</td><td><u>g</u>o</td></tr>
+                        <tr><td><span class="symbol">f</span></td><td>Voiceless labiodental fricative</td><td><u>f</u>an</td></tr>
+                        <tr><td><span class="symbol">v</span></td><td>Voiced labiodental fricative</td><td><u>v</u>an</td></tr>
+                        <tr><td><span class="symbol">θ</span></td><td>Voiceless dental fricative</td><td><u>th</u>in</td></tr>
+                        <tr><td><span class="symbol">ð</span></td><td>Voiced dental fricative</td><td><u>th</u>is</td></tr>
+                        <tr><td><span class="symbol">s</span></td><td>Voiceless alveolar fricative</td><td><u>s</u>ip</td></tr>
+                        <tr><td><span class="symbol">z</span></td><td>Voiced alveolar fricative</td><td><u>z</u>ip</td></tr>
+                        <tr><td><span class="symbol">ʃ</span></td><td>Voiceless post-alveolar fricative</td><td><u>sh</u>e</td></tr>
+                        <tr><td><span class="symbol">ʒ</span></td><td>Voiced post-alveolar fricative</td><td>mea<u>s</u>ure</td></tr>
+                        <tr><td><span class="symbol">tʃ</span></td><td>Voiceless post-alveolar affricate</td><td><u>ch</u>in</td></tr>
+                        <tr><td><span class="symbol">dʒ</span></td><td>Voiced post-alveolar affricate</td><td><u>j</u>in, <u>g</u>entle</td></tr>
+                        <tr><td><span class="symbol">m</span></td><td>Bilabial nasal</td><td><u>m</u>ap</td></tr>
+                        <tr><td><span class="symbol">n</span></td><td>Alveolar nasal</td><td><u>n</u>ap</td></tr>
+                        <tr><td><span class="symbol">ŋ</span></td><td>Velar nasal</td><td>si<u>ng</u></td></tr>
+                        <tr><td><span class="symbol">l</span></td><td>Alveolar lateral approximant</td><td><u>l</u>eft</td></tr>
+                        <tr><td><span class="symbol">ɹ</span></td><td>Alveolar approximant</td><td><u>r</u>un</td></tr>
+                        <tr><td><span class="symbol">w</span></td><td>Voiced labial-velar approximant</td><td><u>w</u>et</td></tr>
+                        <tr><td><span class="symbol">j</span></td><td>Palatal approximant</td><td><u>y</u>es</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <footer>
+            <p>The Sound of Speech: A Guide to Phonetics &copy; 2025. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
