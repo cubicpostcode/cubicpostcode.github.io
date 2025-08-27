@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google One Takeout → Torrent Bootstrap (Filecoin) — Pricing & Declaration</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,0.08);
+      --text: #e8eefc;
+      --muted: #a9b2cc;
+      --accent: #7cf3ff;
+      --accent-2: #ffd166;
+      --ok: #74f0a7;
+      --bad: #ff6b6b;
+      --ring: rgba(124,243,255,.45);
+    }
+    [data-theme="light"]{
+      --bg: #f7f9ff;
+      --panel: rgba(10,20,40,0.06);
+      --text: #0f172a;
+      --muted: #334155;
+      --accent: #007acc;
+      --accent-2: #7c3aed;
+      --ok: #059669;
+      --bad: #dc2626;
+      --ring: rgba(0,122,204,.25);
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0; color: var(--text); background: radial-gradient(1200px 600px at 10% 0%, rgba(124,243,255,.12), transparent 60%),
+                  radial-gradient(800px 600px at 100% 0%, rgba(255,209,102,.12), transparent 60%),
+                  var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.45; letter-spacing: .2px;
+    }
+
+    /* Animated gradient ribbon */
+    .hero {
+      position: relative;
+      padding: clamp(32px, 6vw, 80px) 16px 32px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .hero h1{ font-size: clamp(28px, 4.6vw, 56px); margin: 0 0 12px; }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 4px 16px rgba(124,243,255,.25));
+    }
+    .hero p { color: var(--muted); max-width: 900px; margin: 8px auto 0; font-size: clamp(14px, 1.8vw, 18px); }
+
+    .floating-orbs::before, .floating-orbs::after{
+      content:""; position:absolute; inset:auto; width: 60vmax; height: 60vmax; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(124,243,255,.15), transparent 60%);
+      filter: blur(40px); z-index: -1; animation: float 18s ease-in-out infinite;
+      top:-30vmax; left:-10vmax; transform: translateZ(0);
+    }
+    .floating-orbs::after{
+      background: radial-gradient(circle at 70% 70%, rgba(255,209,102,.15), transparent 60%);
+      top:-20vmax; right:-20vmax; left:auto; animation-duration: 22s;
+    }
+    @keyframes float { 0%,100%{ transform: translate3d(0,0,0);} 50%{ transform: translate3d(0, -18px, 0);} }
+
+    .toolbar { display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:16px; }
+    .chip { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid var(--ring); color:var(--text);
+            background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+            padding:10px 14px; border-radius:999px; cursor:pointer; transition:.2s transform, .3s box-shadow;
+            box-shadow: 0 6px 20px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .chip[aria-pressed="true"], .chip:focus-visible{ outline:none; box-shadow: 0 0 0 3px var(--ring); }
+    .chip:hover{ transform: translateY(-2px); }
+    .right { display:flex; gap:8px; align-items:center; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+
+    .card { grid-column: span 12; background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius: 16px; padding: clamp(16px, 2vw, 24px);
+            box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    }
+    .card h2{ margin:0 0 8px; font-size: clamp(20px, 2.8vw, 28px); }
+    .sub { color:var(--muted); margin-top:4px; }
+
+    @media (min-width: 900px){ .span-6 { grid-column: span 6; } .span-8{ grid-column: span 8;} .span-4{ grid-column: span 4;} }
+
+    /* Table / heatmap */
+    table { width:100%; border-collapse: collapse; overflow: hidden; border-radius: 12px; }
+    thead th { position: sticky; top:0; background: rgba(255,255,255,.06); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+               text-align:left; padding:12px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    tbody td, tbody th { padding: 10px 12px; border-bottom:1px dashed rgba(255,255,255,.08); }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody td.price { text-align:center; font-variant-numeric: tabular-nums; border-radius:10px; transition:.25s transform, .25s box-shadow; position:relative; overflow:hidden; }
+    tbody td.price:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.2); }
+    td.price small{ position:absolute; inset:auto 8px 6px auto; opacity:.8; font-size:11px; }
+
+    .controls { display:flex; flex-wrap:wrap; gap: 10px; align-items:center; }
+    .controls .select { display:flex; gap:6px; flex-wrap:wrap; }
+    .btn { border:1px solid rgba(255,255,255,.1); background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+           padding:10px 14px; border-radius: 12px; color: var(--text); cursor:pointer; transition:.2s transform, .2s box-shadow; }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn[aria-pressed="true"]{ box-shadow: 0 0 0 3px var(--ring); }
+
+    .calc { display:flex; gap:14px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+    .calc input[type="number"]{ width:120px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.15); background:rgba(0,0,0,.25); color:var(--text); }
+    .big { font-size: clamp(20px, 3vw, 34px); font-weight:700; }
+
+    .badge { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background: rgba(124,243,255,.12); border:1px solid var(--ring); font-size: 12px; }
+
+    /* Language visibility */
+    .lang { display:none; }
+    body[data-lang="en"] .lang.en { display:block; }
+    body[data-lang="pt"] .lang.pt { display:block; }
+
+    /* Footer */
+    footer { text-align:center; color:var(--muted); margin: 28px 0 60px; }
+    .ticker { width:100%; overflow:hidden; white-space:nowrap; opacity:.85; border-top:1px dashed rgba(255,255,255,.15); padding-top:10px; }
+    .ticker span{ display:inline-block; padding-right: 40px; animation: ticker 22s linear infinite; }
+    @keyframes ticker { 0%{ transform: translateX(0);} 100%{ transform: translateX(-50%);} }
+
+    .switch { position:relative; width:54px; height:30px; }
+    .switch input { display:none; }
+    .slider { position:absolute; cursor:pointer; inset:0; background: rgba(255,255,255,.12); border-radius:999px; border:1px solid rgba(255,255,255,.2); transition:.25s; }
+    .slider:before { content:""; position:absolute; left:3px; top:3px; width:24px; height:24px; border-radius:50%; background:white; transition:.25s; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    input:checked + .slider { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    input:checked + .slider:before{ transform: translateX(24px); }
+
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body data-lang="en">
+  <header class="hero floating-orbs">
+    <h1 class="gradient-text">Google One Takeout → Torrent Bootstrap (Filecoin)</h1>
+    <p class="lang en">Redundant, sovereign data exports for everyone. Transparent pricing. Human‑rights framing.</p>
+    <p class="lang pt">Exportações de dados soberanas e redundantes para todos. Preços transparentes. Enquadramento de direitos humanos.</p>
+
+    <div class="toolbar">
+      <button class="chip" id="langEn" aria-pressed="true">English</button>
+      <button class="chip" id="langPt" aria-pressed="false">Português</button>
+      <div class="right">
+        <span class="chip" title="Toggle light/dark">
+          <label class="switch" aria-label="Theme toggle">
+            <input id="themeToggle" type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </span>
+        <span class="badge"><span>⚡</span><span class="lang en">Animated CSS3 UI</span><span class="lang pt">UI com animações CSS3</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <!-- Declaration / Manifesto -->
+      <article class="card span-8">
+        <h2 class="lang en">Declaration & Appeal to the United Nations</h2>
+        <h2 class="lang pt">Declaração & Apelo às Nações Unidas</h2>
+        <p class="sub lang en">
+          A policy vision delivered as a UN‑style address by <strong>His Majesty Cubic Postcode</strong>: an ecumenic call for
+          universal, non‑discriminatory access to strong personal data exports—durable, affordable, and verifiable.
+        </p>
+        <p class="sub lang pt">
+          Uma visão de política pública, apresentada como um discurso à ONU por <strong>Sua Majestade Cubic Postcode</strong>:
+          um apelo ecuménico para acesso universal e não‑discriminatório a exportações robustas de dados pessoais—duráveis,
+          acessíveis e verificáveis.
+        </p>
+        <div class="lang en">
+          <p>
+            Let it be affirmed: every person has the right to obtain, carry, and preserve their complete digital record. We
+            advocate a <em>Torrent‑backed Takeout</em> that guarantees resilient seeding (via Filecoin‑distributed peers) for
+            a defined duration. This is not merely convenience; it is <strong>data self‑determination</strong>—supporting
+            due process, migration between services, disaster recovery, and the historian’s archive. It serves the dignity of
+            women and men alike, with no discrimination by gender or any condition. In the spirit of brotherhood and
+            sisterhood, mindful of diverse faiths and traditions, and honoring the conscience taught by Christ and all who
+            shepherd goodness, we proclaim: resilient exports are a universal safeguard.
+          </p>
+          <p>
+            Therefore, by symbolic decree of His Majesty—invoking the best of human cooperation—we commend the following
+            transparent schedule of <strong>per‑GB</strong> pricing for peer & duration guarantees. May this framework help
+            governments, companies, and citizens align on a practical, rights‑respecting standard.
+          </p>
+        </div>
+        <div class="lang pt">
+          <p>
+            Fique afirmado: toda pessoa tem o direito de obter, transportar e preservar o seu registo digital completo.
+            Defendemos um <em>Takeout com Torrent</em> que garanta <strong>seeding</strong> resiliente (via pares distribuídos no
+            Filecoin) por um período definido. Não é apenas conveniência; é <strong>autodeterminação de dados</strong>—
+            suporte ao devido processo, migração entre serviços, recuperação de desastres e arquivo histórico. Serve a dignidade
+            de mulheres e homens por igual, sem discriminação de género ou de qualquer natureza. No espírito de fraternidade,
+            respeitando diferentes crenças e tradições, e honrando a consciência ensinada por Cristo e por todos os que
+            orientam o bem, proclamamos: exportações resilientes são uma salvaguarda universal.
+          </p>
+          <p>
+            Assim, por decreto simbólico de Sua Majestade—invocando o melhor da cooperação humana—apresentamos o seguinte
+            quadro transparente de preços <strong>por GB</strong> para garantias de pares e duração. Que este modelo ajude
+            governos, empresas e cidadãos a alinharem‑se num padrão prático e respeitador de direitos.
+          </p>
+        </div>
+      </article>
+
+      <!-- Calculator -->
+      <aside class="card span-4">
+        <h2 class="lang en">Interactive Calculator</h2>
+        <h2 class="lang pt">Calculadora Interactiva</h2>
+        <div class="controls">
+          <div>
+            <div class="sub lang en">Peers (worldwide / Filecoin)</div>
+            <div class="sub lang pt">Pares (globais / Filecoin)</div>
+            <div id="peerBtns" class="select"></div>
+          </div>
+          <div>
+            <div class="sub lang en">Duration</div>
+            <div class="sub lang pt">Duração</div>
+            <div id="durBtns" class="select"></div>
+          </div>
+        </div>
+        <div class="calc">
+          <label class="lang en" for="gb">Archive Size (GB)</label>
+          <label class="lang pt" for="gb">Tamanho do Arquivo (GB)</label>
+          <input type="number" id="gb" min="1" step="1" value="100" />
+        </div>
+        <div style="margin-top:10px">
+          <div class="lang en">Per‑GB price: <span class="big mono" id="perGb">$—</span></div>
+          <div class="lang pt">Preço por GB: <span class="big mono" id="perGbPt">$—</span></div>
+          <div class="lang en">Total for <span class="mono" id="gbEcho">100</span> GB: <span class="big mono" id="total">$—</span></div>
+          <div class="lang pt">Total para <span class="mono" id="gbEchoPt">100</span> GB: <span class="big mono" id="totalPt">$—</span></div>
+        </div>
+        <p class="sub lang en">Minimum price baseline is <strong>$10 per GB</strong>, scaling with peers × duration tier.</p>
+        <p class="sub lang pt">O preço mínimo base é <strong>$10 por GB</strong>, escalando com a combinação pares × duração.</p>
+      </aside>
+
+      <!-- Matrix -->
+      <section class="card span-12">
+        <h2 class="lang en">Pricing Matrix (USD per GB)</h2>
+        <h2 class="lang pt">Matriz de Preços (USD por GB)</h2>
+        <div class="sub lang en">Hover cells to highlight. Higher prices show deeper color.</div>
+        <div class="sub lang pt">Passe o rato sobre as células. Preços mais altos têm cor mais intensa.</div>
+        <div style="overflow:auto">
+          <table id="priceTable" aria-describedby="matrix-caption">
+            <caption id="matrix-caption" class="sr-only">25 combinations of peers and duration with price per GB</caption>
+            <thead>
+              <tr>
+                <th>Peers / Duration</th>
+                <th><span class="lang en">10 days</span><span class="lang pt">10 dias</span></th>
+                <th><span class="lang en">100 days</span><span class="lang pt">100 dias</span></th>
+                <th><span class="lang en">1000 days</span><span class="lang pt">1000 dias</span></th>
+                <th><span class="lang en">10 years+</span><span class="lang pt">10 anos+</span></th>
+                <th><span class="lang en">Lifetime</span><span class="lang pt">Vitalício</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <p class="sub">
+          <span class="lang en">Legend: values denote the guaranteed seeding contract price per GB for the chosen peer tier and duration.</span>
+          <span class="lang pt">Legenda: os valores indicam o preço por GB do contrato de seeding garantido para o nível de pares e duração.</span>
+        </p>
+      </section>
+
+      <!-- Why this matters -->
+      <section class="card span-12">
+        <h2 class="lang en">Why this matters</h2>
+        <h2 class="lang pt">Porque isto importa</h2>
+        <ul class="lang en">
+          <li><strong>Continuity & resilience:</strong> fire, floods, political upheaval, or account lockouts shouldn’t erase a life’s work.</li>
+          <li><strong>Interoperability:</strong> meaningful portability grows competitive, user‑centric ecosystems.</li>
+          <li><strong>Auditability:</strong> verifiable exports enable due process and independent oversight.</li>
+          <li><strong>Global equity:</strong> a transparent schedule prevents opaque, exploitative pricing.</li>
+        </ul>
+        <ul class="lang pt">
+          <li><strong>Continuidade & resiliência:</strong> incêndios, inundações, convulsões políticas ou bloqueios de conta não devem apagar uma vida inteira de trabalho.</li>
+          <li><strong>Interoperabilidade:</strong> portabilidade real promove ecossistemas competitivos e centrados no utilizador.</li>
+          <li><strong>Auditabilidade:</strong> exportações verificáveis permitem devido processo e supervisão independente.</li>
+          <li><strong>Equidade global:</strong> um tarifário transparente evita preços opacos e abusivos.</li>
+        </ul>
+      </section>
+
+      <!-- Decree block -->
+      <section class="card span-12">
+        <h2 class="lang en">Decree of His Majesty Cubic Postcode</h2>
+        <h2 class="lang pt">Decreto de Sua Majestade Cubic Postcode</h2>
+        <p class="lang en">
+          By this <em>symbolic decree</em>, for the glory of peace, the good of peoples, and the stewardship of knowledge, we
+          call upon companies and nations to honor <strong>universal, resilient Takeout</strong> as a practical expression of
+          human dignity—extended to all, without discrimination of gender or any kind, in fraternity among women and men, and
+          in friendship among faiths. May this framework guide implementation in the spirit of service to God, the Kingdom of
+          Heaven, and all communities, including the people of Israel, toward a more conscious and excellent humanity.
+        </p>
+        <p class="lang pt">
+          Por este <em>decreto simbólico</em>, para a glória da paz, o bem dos povos e a tutela do conhecimento, apelamos a que
+          empresas e nações honrem o <strong>Takeout resiliente e universal</strong> como expressão prática da dignidade humana—
+          estendida a todos, sem discriminação de género ou de qualquer natureza, na fraternidade entre mulheres e homens e na
+          amizade entre crenças. Que este modelo oriente a implementação no espírito de serviço a Deus, ao Reino dos Céus e a
+          todas as comunidades, incluindo o povo de Israel, rumo a uma humanidade mais consciente e excelente.
+        </p>
+      </section>
+    </section>
+
+    <footer>
+      <div class="ticker mono">
+        <span>10 peers → $10–$50/GB · 100 peers → $20–$100/GB · 1,000 peers → $30–$150/GB · 10,000 peers → $40–$200/GB · 100,000 peers → $50–$250/GB ·</span>
+        <span>10 peers → $10–$50/GB · 100 peers → $20–$100/GB · 1,000 peers → $30–$150/GB · 10,000 peers → $40–$200/GB · 100,000 peers → $50–$250/GB ·</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const peers = [10, 100, 1000, 10000, 100000];
+    const durationsEn = ["10 days","100 days","1000 days","10 years+","Lifetime"]; 
+    const durationsPt = ["10 dias","100 dias","1000 dias","10 anos+","Vitalício"]; 
+    const prices = [
+      [10, 20, 30, 40, 50],
+      [20, 40, 60, 80, 100],
+      [30, 60, 90, 120, 150],
+      [40, 80, 120, 160, 200],
+      [50, 100, 150, 200, 250]
+    ];
+
+    const body = document.body;
+
+    // Language toggle
+    const langEnBtn = document.getElementById('langEn');
+    const langPtBtn = document.getElementById('langPt');
+    function setLang(lang){
+      body.setAttribute('data-lang', lang);
+      langEnBtn.setAttribute('aria-pressed', lang==='en');
+      langPtBtn.setAttribute('aria-pressed', lang==='pt');
+    }
+    langEnBtn.addEventListener('click', ()=> setLang('en'));
+    langPtBtn.addEventListener('click', ()=> setLang('pt'));
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('change', (e)=>{
+      document.documentElement.setAttribute('data-theme', e.target.checked ? 'light':'dark');
+    });
+
+    // Build peer & duration buttons
+    const peerBtns = document.getElementById('peerBtns');
+    const durBtns = document.getElementById('durBtns');
+
+    let selectedPeerIdx = 0; // default 10 peers
+    let selectedDurIdx = 0; // default 10 days
+
+    peers.forEach((p, i)=>{
+      const b = document.createElement('button');
+      b.className = 'btn'; b.textContent = p.toLocaleString();
+      b.setAttribute('aria-pressed', i===selectedPeerIdx);
+      b.addEventListener('click', ()=>{ selectedPeerIdx = i; refreshButtons(); updateCalc(); highlightTable(); });
+      peerBtns.appendChild(b);
+    });
+
+    durationsEn.forEach((d, i)=>{
+      const b = document.createElement('button'); b.className = 'btn';
+      const spanEn = document.createElement('span'); spanEn.className='lang en'; spanEn.textContent = durationsEn[i];
+      const spanPt = document.createElement('span'); spanPt.className='lang pt'; spanPt.textContent = durationsPt[i];
+      b.appendChild(spanEn); b.appendChild(spanPt);
+      b.setAttribute('aria-pressed', i===selectedDurIdx);
+      b.addEventListener('click', ()=>{ selectedDurIdx = i; refreshButtons(); updateCalc(); highlightTable(); });
+      durBtns.appendChild(b);
+    });
+
+    function refreshButtons(){
+      [...peerBtns.children].forEach((el, idx)=> el.setAttribute('aria-pressed', idx===selectedPeerIdx));
+      [...durBtns.children].forEach((el, idx)=> el.setAttribute('aria-pressed', idx===selectedDurIdx));
+    }
+
+    // Build matrix table
+    const tbody = document.querySelector('#priceTable tbody');
+    function hslForPrice(price){
+      // Map $10..$250 → lightness 88..45 (lower price = lighter)
+      const min=10, max=250; const t=(price-min)/(max-min);
+      const light = 88 - (88-45)*t; // 88→45
+      const hue = 37; // warm amber
+      const sat = 90;
+      return `hsl(${hue} ${sat}% ${light}%)`;
+    }
+
+    peers.forEach((p, i)=>{
+      const tr = document.createElement('tr');
+      const th = document.createElement('th'); th.textContent = p.toLocaleString(); tr.appendChild(th);
+      prices[i].forEach((usd, j)=>{
+        const td = document.createElement('td'); td.className = 'price mono'; td.tabIndex = 0;
+        td.style.background = hslForPrice(usd);
+        td.innerHTML = `$${usd}<small>/GB</small>`;
+        td.dataset.peerIndex = i; td.dataset.durIndex = j;
+        td.addEventListener('mouseenter', ()=>{ selectedPeerIdx=i; selectedDurIdx=j; refreshButtons(); updateCalc(); highlightTable(); });
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    function highlightTable(){
+      document.querySelectorAll('#priceTable td.price').forEach(td=>{
+        const active = (+td.dataset.peerIndex===selectedPeerIdx) && (+td.dataset.durIndex===selectedDurIdx);
+        td.style.outline = active ? '3px solid var(--ring)' : 'none';
+      });
+    }
+
+    // Calculator logic
+    const perGb = document.getElementById('perGb');
+    const perGbPt = document.getElementById('perGbPt');
+    const total = document.getElementById('total');
+    const totalPt = document.getElementById('totalPt');
+    const gb = document.getElementById('gb');
+    const gbEcho = document.getElementById('gbEcho');
+    const gbEchoPt = document.getElementById('gbEchoPt');
+
+    gb.addEventListener('input', ()=>{ updateCalc(); });
+
+    function usd(n){ return `$${n.toLocaleString(undefined,{maximumFractionDigits:0})}`; }
+
+    function updateCalc(){
+      const price = prices[selectedPeerIdx][selectedDurIdx];
+      const size = Math.max(1, parseInt(gb.value||'1', 10));
+      gb.value = size; gbEcho.textContent = size; gbEchoPt.textContent = size;
+      const tot = price * size;
+      perGb.textContent = usd(price) + "/GB";
+      perGbPt.textContent = usd(price) + "/GB";
+      total.textContent = usd(tot);
+      totalPt.textContent = usd(tot);
+    }
+
+    updateCalc();
+    highlightTable();
+  </script>
+</body>
+</html>
