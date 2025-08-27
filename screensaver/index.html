@@ -1,316 +1,243 @@
 <!doctype html>
-<html>
-<head> 	
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
-    <title>(3,4,5) Pattern </title> 
-    <style> 
-        body { 
-            background: #000000; 
-        }
-        body.hide-cursor {
-            cursor: none;
-        }
-        #fullscreenButton {
-            background-color: #F1F3F4;
-            border: 2px solid #F1F3F4;	
-            border: none;
-            color: black;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 15px;	
-        }
-        #fullscreenButton2 {
-            background-color: #F1F3F4;
-            border: 2px solid #F1F3F4;	
-            border: none;
-            color: black;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 15px;	
-        }
-    </style> 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-QDG3NX05J6');
-    </script>
-</head> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>(3,4,5) Pattern — polished</title>
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --bg-light: #ffffff;
+      --btn-bg: #F1F3F4;
+      --btn-fg: #000000;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg-dark);
+      color: #ffffff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.4;
+    }
+    body.hide-cursor { cursor: none; }
+    body.light { background: var(--bg-light); color: #000; }
 
-<body>  
-    <br>	
-    <button id="fullscreenButton" onclick="toggleFullScreen()">Full Screen</button>
-    <br><br>
-    <button id="fullscreenButton" onclick="toggleFullScreen100()">Clear Screen: 100% [⌨️ Esc]
-</button>
-    <br><br>
-    <audio id="audioElement" controls autoplay></audio>	
-    <br><br>
+    .controls {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    button {
+      background-color: var(--btn-bg);
+      color: var(--btn-fg);
+      border: 2px solid var(--btn-bg);
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    button:active { transform: translateY(1px); }
+
+    .stage {
+      max-width: 1200px;
+      margin: 120px auto 64px; /* leave space for fixed controls */
+      padding: 0 16px;
+      display: grid;
+      justify-items: center;
+      gap: 32px;
+    }
+    .videos { display: grid; gap: 28px; justify-items: center; }
+    iframe { max-width: 100%; aspect-ratio: 16/9; }
+
+    audio { width: min(720px, 92vw); }
+
+    .footer {
+      position: fixed;
+      bottom: 8px;
+      left: 8px;
+      z-index: 900;
+      font-size: 12px;
+    }
+    .footer span { background: #fff; color: #000; padding: 0 6px; border-radius: 4px; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: grid;
+      place-items: center;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 24px;
+      font-size: clamp(16px, 3.5vw, 28px);
+    }
+    .overlay p { max-width: 60ch; opacity: .9; }
+
+    .hidden { display: none !important; }
+
+    /* Hide UI in fullscreen, but keep overlay when in "clear" mode */
+    body.fs .controls,
+    body.fs audio { display: none !important; }
+
+    /* Clear-screen mode hides everything except overlay */
+    body.cleared .controls,
+    body.cleared audio,
+    body.cleared .stage,
+    body.cleared .footer,
+    body.cleared img[alt="corner-gif"] { display: none !important; }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} gtag('js', new Date());
+    gtag('config', 'G-QDG3NX05J6');
+  </script>
+</head>
+
+<body>
+  <!-- Controls -->
+  <div class="controls" aria-label="screen controls">
+    <button id="btnFullscreen" title="Toggle fullscreen (F)">Full Screen</button>
+    <button id="btnClear" title="Clear screen 100% (C / Esc)">Clear Screen: 100% [⌨️ Esc]</button>
+  </div>
+
+  <main class="stage" id="content-root">
+    <audio id="audio" controls autoplay preload="auto" playsinline></audio>
+
+    <div class="videos" aria-label="looping videos">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/kyql5p7qiUg?version=3&loop=1&playlist=kyql5p7qiUg" title="YouTube video player 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HZ6L_6a7RcQ?version=3&loop=1&playlist=HZ6L_6a7RcQ" title="YouTube video player 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </main>
+
+  <!-- Clear-screen overlay (shown only in cleared mode) -->
+  <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-live="polite">
     <div>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/kyql5p7qiUg?version=3&loop=1&playlist=kyql5p7qiUg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>	
-    <br><br>
-    <div>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/HZ6L_6a7RcQ?version=3&loop=1&playlist=HZ6L_6a7RcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>	
- 	<br><br>
- 	
-    <script>
-        let mouseTimeout;
+      <p>Clear Screen mode is active.</p>
+      <p>Press <strong>Esc</strong> to restore. Shortcuts: <strong>F</strong> fullscreen, <strong>C</strong> clear, <strong>Space</strong> play/pause audio, <strong>M</strong> mute.</p>
+    </div>
+  </div>
 
-        function hideCursor() {
-            document.body.classList.add('hide-cursor');
+  <!-- Footer -->
+  <div class="footer"><span>&copy; made by humans: https://generated.photos/humans 2023–24</span></div>
+  <img src="gif.gif" alt="corner-gif" style="position: fixed; bottom: 0; right: 0; margin: 10px; z-index: 800;" />
+
+  <script>
+    // Keep your original anchor/hash behavior
+    location.hash = "PYTHAGOREAN_TRIPLE_PATTERN_3__4__5_Dyson_sphere_#feedback@cubicpostcode.com";
+  </script>
+
+  <script>
+    // --- Cursor auto-hide after inactivity ----------------------------------
+    (function cursorAutoHide(){
+      let timer;
+      const reset = () => { document.body.classList.remove('hide-cursor'); clearTimeout(timer); timer = setTimeout(() => document.body.classList.add('hide-cursor'), 5000); };
+      ['mousemove','keydown','pointerdown','touchstart'].forEach(ev => document.addEventListener(ev, reset, { passive: true }));
+      reset();
+    })();
+
+    // --- Fullscreen helpers ---------------------------------------------------
+    const isFullscreen = () => !!document.fullscreenElement;
+    const enterFullscreen = () => document.documentElement.requestFullscreen();
+    const exitFullscreen  = () => document.exitFullscreen();
+
+    function toggleFullscreen(){
+      if (isFullscreen()) { exitFullscreen().catch(()=>{}); }
+      else { enterFullscreen().catch(()=>{}); }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      if (isFullscreen()) {
+        document.body.classList.add('fs');
+      } else {
+        document.body.classList.remove('fs');
+        // Leaving fullscreen also exits clear mode and restores UI
+        document.body.classList.remove('cleared');
+        overlay.classList.add('hidden');
+      }
+    });
+
+    // --- Clear Screen (100%) --------------------------------------------------
+    const overlay = document.getElementById('overlay');
+    const btnClear = document.getElementById('btnClear');
+    btnClear.addEventListener('click', async () => {
+      if (!isFullscreen()) { try { await enterFullscreen(); } catch(e){} }
+      document.body.classList.add('cleared');
+      overlay.classList.remove('hidden');
+    });
+
+    // --- Buttons & keyboard shortcuts ----------------------------------------
+    const btnFS = document.getElementById('btnFullscreen');
+    btnFS.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+      else if (e.key === 'c' || e.key === 'C') btnClear.click();
+      else if (e.key === 'm' || e.key === 'M') audio.muted = !audio.muted;
+      else if (e.key === ' ') { // Space: play/pause
+        e.preventDefault();
+        if (audio.paused) audio.play().catch(()=>{}); else audio.pause();
+      } else if (e.key === 'Escape') {
+        // If user presses Esc while not in fullscreen, still restore from clear mode
+        if (!isFullscreen() && document.body.classList.contains('cleared')) {
+          document.body.classList.remove('cleared');
+          overlay.classList.add('hidden');
         }
+      }
+    });
 
-        function showCursor() {
-            document.body.classList.remove('hide-cursor');
-            clearTimeout(mouseTimeout);
-            mouseTimeout = setTimeout(hideCursor, 5000); // Hide cursor after 5 seconds of inactivity
-        }
+    // --- Audio: random notes playlist ----------------------------------------
+    const audio = document.getElementById('audio');
+    const audioFiles = Array.from({length: 12}, (_,i) => `note${40+i}.mp3`); // note40..note51
 
-        document.addEventListener('mousemove', showCursor);
+    function pickRandomFile(){ return audioFiles[Math.floor(Math.random()*audioFiles.length)]; }
+    function queueRandom(){ audio.src = pickRandomFile(); }
 
-        // Initially hide the cursor after 5 seconds of page load
-        mouseTimeout = setTimeout(hideCursor, 5000);
+    function playRandom(){
+      queueRandom();
+      const p = audio.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => { /* Likely blocked by autoplay policy; will try again on first user gesture */ });
+      }
+    }
 
-        function toggleFullScreen() {
-            var doc = window.document;
-            var docEl = doc.documentElement;
+    audio.addEventListener('ended', () => { queueRandom(); audio.play().catch(()=>{}); });
 
-            var requestFullScreen =
-                docEl.requestFullscreen ||
-                docEl.mozRequestFullScreen ||
-                docEl.webkitRequestFullScreen ||
-                docEl.msRequestFullscreen;
-            var cancelFullScreen =
-                doc.exitFullscreen ||
-                doc.mozCancelFullScreen ||
-                doc.webkitExitFullscreen ||
-                doc.msExitFullscreen;
+    // Ensure playback starts after first gesture if autoplay is blocked
+    let started = false;
+    function ensureStart(){ if (!started) { started = true; playRandom(); } }
+    ['click','keydown','touchstart'].forEach(ev => document.addEventListener(ev, ensureStart, { once: true, passive: true }));
 
-            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                document.getElementById('audioElement').style.display = 'none';
-                document.getElementById('fullscreenButton').style.display = 'none';      
-                // Entering full screen mode
-                if (docEl.requestFullscreen) {
-                    docEl.requestFullscreen();
-                } else if (docEl.mozRequestFullScreen) {
-                    docEl.mozRequestFullScreen();
-                } else if (docEl.webkitRequestFullScreen) {
-                    docEl.webkitRequestFullScreen();
-                } else if (docEl.msRequestFullScreen) {
-                    docEl.msRequestFullScreen();
-                }
+    // Try immediately as well (may be blocked)
+    playRandom();
 
-                // Hide audio elements
-                var audioElements = document.getElementsByTagName('audio');
-                for (var i = 0; i < audioElements.length; i++) {
-                    audioElements[i].classList.add('hidden-audio');
-                }
-
-                // Hide the buttons
-                var button = document.getElementById('fullscreenButton');
-                button.classList.add('hidden-button');
-                var button2 = document.getElementById('fullscreenButton2');
-                button2.classList.add('hidden-button');
-            } else {
-                // Exiting full screen mode
-                if (cancelFullScreen) {
-                    cancelFullScreen.call(doc);
-                } else if (doc.mozCancelFullScreen) {
-                    doc.mozCancelFullScreen();
-                } else if (doc.webkitExitFullscreen) {
-                    doc.webkitExitFullscreen();
-                } else if (doc.msExitFullscreen) {
-                    doc.msExitFullscreen();
-                }
-
-                // Show audio elements
-                var audioElements = document.getElementsByTagName('audio');
-                for (var i = 0; i < audioElements.length; i++) {
-                    audioElements[i].classList.remove('hidden-audio');
-                }
-            }
-        }
-
-        function toggleFullScreen100() {
-            var doc = window.document;
-            var docEl = doc.documentElement;
-
-            var requestFullScreen =
-                docEl.requestFullscreen ||
-                docEl.mozRequestFullScreen ||
-                docEl.webkitRequestFullScreen ||
-                docEl.msRequestFullscreen;
-            var cancelFullScreen =
-                doc.exitFullscreen ||
-                doc.mozCancelFullScreen ||
-                doc.webkitExitFullscreen ||
-                doc.msExitFullscreen;
-
-            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                // Entering full screen mode
-                if (docEl.requestFullscreen) {
-                    docEl.requestFullscreen();
-                } else if (docEl.mozRequestFullScreen) {
-                    docEl.mozRequestFullScreen();
-                } else if (docEl.webkitRequestFullScreen) {
-                    docEl.webkitRequestFullScreen();
-                } else if (docEl.msRequestFullscreen) {
-                    docEl.msRequestFullscreen();
-                }
-
-                // Hide all elements
-                var elements = document.body.children;
-                for (var i = 0; i < elements.length; i++) {
-                    elements[i].style.display = 'none';
-                }      
-
-            } else {
-                // Exiting full screen mode
-                if (cancelFullScreen) {
-                    cancelFullScreen.call(doc);
-                } else if (doc.mozCancelFullScreen) {
-                    doc.mozCancelFullScreen();
-                } else if (doc.webkitExitFullscreen) {
-                    doc.webkitExitFullscreen();
-                } else if (doc.msExitFullscreen) {
-                    doc.msExitFullscreen();
-                }
-
-                // Show all elements
-                var elements = document.body.children;
-                for (var i = 0; i < elements.length; i++) {
-                    elements[i].style.display = '';
-                }
-            }
-        }
-
-        var audioFiles = [
-            'note40.mp3',
-            'note41.mp3',
-            'note42.mp3',
-            'note43.mp3',
-            'note44.mp3',
-            'note45.mp3',
-            'note46.mp3',
-            'note47.mp3',
-            'note48.mp3',
-            'note49.mp3',
-            'note50.mp3',
-            'note51.mp3'
-        ];
-
-        function playRandomAudio() {
-            var audioIndex = Math.floor(Math.random() * audioFiles.length);
-            var audioElement = document.getElementById('audioElement');
-            audioElement.src = audioFiles[audioIndex];
-            audioElement.play();
-        }
-
-        // Attach event listener once when the page loads
-        document.getElementById('audioElement').addEventListener('ended', playRandomAudio);
-
-        playRandomAudio();
-
-        display_c7();
-
-        function display_ct7() {
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-            var x = new Date();
-            var dateoffset = new Date();
-            dateoffset = dateoffset.getTimezoneOffset();
-            dateoffset = (dateoffset * 60); // in seconds
-            var b = new Date();
-            var SinceMidnight = b.getTime() - b.setHours(0,0,0,0);
-            SinceMidnight = SinceMidnight.toString();
-            SinceMidnight = SinceMidnight.slice(0, -3);
-            SinceMidnight = parseInt(SinceMidnight); 
-            if ((SinceMidnight + dateoffset) < 0){SinceMidnight = 86400+(SinceMidnight + dateoffset);}
-            else {SinceMidnight = SinceMidnight + dateoffset };
-            
-            var booloffON = 0;
-            if ((SinceMidnight % 27 == 0)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 1)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 2)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 3)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 4)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 5)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 6)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 7)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 8)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 9)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 10)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 11)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 12)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 13)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 14)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 15)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 16)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 17)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 18)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 19)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 20)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 21)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 22)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 23)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 24)) {booloffON = 0;};
-            if ((SinceMidnight % 27 == 25)) {booloffON = 1;};
-            if ((SinceMidnight % 27 == 26)) {booloffON = 0;};
-
-            var ampm = x.getHours( ) >= 12 ? ' PM' : ' AM';
-            hours = x.getHours( ) % 12;
-            hours = hours ? hours : 12;
-            hours=hours.toString().length==1? 0+hours.toString() : hours;
-
-            var minutes=x.getMinutes().toString();
-            minutes=minutes.length==1 ? 0+minutes : minutes;
-
-            var seconds=x.getSeconds().toString();
-            seconds=seconds.length==1 ? 0+seconds : seconds;
-
-            var month=monthNames[x.getMonth()];
-
-            var dt=x.getDate().toString();
-            dt=dt.length==1 ? 0+dt : dt;
-
-            var x1="Date: " + dt + "/" + month + "/" + x.getFullYear(); 
-            x1 = x1 + " - Time: " +  hours + ":" +  minutes + ":" +  seconds + " " + ampm ;
-            
-
-            if (booloffON == 1) {
-                document.body.style.background = "white";
-            }
-            else {
-                document.body.style.background = "black";
-            };
-
-            display_c7();
-        } // ends display_ct7()
-
-        function display_c7(){
-            var refresh=1; 
-            mytime=setTimeout('display_ct7()',refresh)
-        }
-        display_c7();
-    </script>
-
-    <!-- Footer -->
-    <div class="footer"><span style="background-color: white;"> &copy; made by humans: https://generated.photos/humans 2023-24</span></div>
-    <script>
-        location.hash = "PYTHAGOREAN_TRIPLE_PATTERN_3__4__5_Dyson_sphere_#feedback@cubicpostcode.com";
-    </script>
-    <img src="gif.gif" style="position: absolute; bottom: 0; right: 0; margin: 10px;">
-</body> 
+    // --- Background toggler (27-second cycle) --------------------------------
+    (function backgroundCycle(){
+      const ON = new Set([1,3,5,8,10,12,14,17,19,21,23,25]); // preserve your pattern
+      function secondsSinceUTCMidnight(){
+        const now = new Date();
+        const sinceLocalMidnight = now.getTime() - new Date(now).setHours(0,0,0,0);
+        let s = Math.floor(sinceLocalMidnight / 1000) + now.getTimezoneOffset() * 60;
+        if (s < 0) s += 86400; // wrap
+        return s;
+      }
+      function tick(){
+        const mod = secondsSinceUTCMidnight() % 27;
+        const light = ON.has(mod);
+        document.body.classList.toggle('light', light);
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
 </html>
