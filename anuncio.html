@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Procura‑se Estudante/Júnior — Legendas TDT → IRC (Avença Mensal)</title>
+  <style>
+    :root{
+      --bg:#0f172a; /* slate-900 */
+      --card:#111827; /* gray-900 */
+      --ink:#e5e7eb; /* gray-200 */
+      --accent:#22d3ee; /* cyan-400 */
+      --muted:#a1a1aa; /* zinc-400 */
+      --ok:#10b981; /* emerald-500 */
+      --warn:#f59e0b; /* amber-500 */
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:System-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+    .wrap{max-width:920px;margin:40px auto;padding:24px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 40px rgba(0,0,0,.35);border-radius:16px;padding:28px}
+    h1{font-size:clamp(28px,4vw,40px);margin:0 0 8px}
+    h2{font-size:clamp(20px,3vw,26px);margin:28px 0 10px}
+    p{margin:10px 0}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.35);color:#b5f0f7;font-weight:600;margin:6px 6px 0 0}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    ul{margin:8px 0 0 20px}
+    li{margin:6px 0}
+    code,pre{background:#0b1220;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;display:block;color:#d1e7ff;overflow:auto}
+    .muted{color:var(--muted)}
+    .line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:18px 0}
+    .cta{display:inline-block;background:var(--accent);color:#05242a;text-decoration:none;font-weight:800;padding:10px 16px;border-radius:10px;margin-top:6px}
+    .small{font-size:.92rem}
+    .warn{color:var(--warn)}
+    .ok{color:var(--ok)}
+    .copybox{width:100%;min-height:180px;border-radius:12px;border:1px dashed rgba(255,255,255,.2);background:#0a1324;color:#e6f0ff;padding:12px}
+  </style>
+  <style>
+    /* SPA add-ons */
+    .cta.alt{background:var(--ok);color:#062b1b;margin-left:8px}
+    .devpack{display:none;margin-top:18px}
+    .devpack.show{display:block}
+    .codecard{background:#0b1220;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;margin:12px 0}
+    .codehdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .copybtn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#dbeafe;font-weight:700;border-radius:10px;padding:6px 10px;cursor:pointer}
+    .copybtn:active{transform:translateY(1px)}
+    .tips{font-size:.92rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Procura‑se Estudante/Júnior — Legendas da TDT &rarr; IRC</h1>
+      <p class="muted">Projeto técnico simples e contínuo. Remuneração por <strong>avença mensal</strong> com <strong>pagamento via PayPal</strong>. Local: <strong>Portugal</strong> (em zona coberta por TDT).</p>
+      <div>
+        <span class="badge">Teletexto 888</span>
+        <span class="badge">DVB‑T (TDT PT)</span>
+        <span class="badge">Linux / Raspberry Pi</span>
+        <span class="badge">FFmpeg / CCExtractor</span>
+        <span class="badge">IRC</span>
+        <span class="badge">PayPal</span>
+      </div>
+
+      <h2>Resumo</h2>
+      <p>Procuro estudante/jovem com facilidade em informática para montar e manter um pequeno sistema que <strong>capta as legendas do teletexto (pág. 888)</strong> dos 4 canais generalistas em Portugal (RTP1, RTP2, SIC, TVI) via <strong>TDT</strong> e as publica em tempo‑real em <strong>canais IRC</strong> do meu servidor <code>irc.cubicpostcode.com:6667</code> (<code>#rtp1</code>, <code>#rtp2</code>, <code>#sic</code>, <code>#tvi</code>).</p>
+
+      <div class="line"></div>
+
+      <h2>O que vais fazer</h2>
+      <ul>
+        <li>Instalar uma <strong>antena UHF TDT</strong> e um <strong>sintonizador DVB‑T USB</strong> (pode ser num <em>mini‑PC</em> ou Raspberry Pi).</li>
+        <li>Configurar Linux com <strong>dvbv5-zap</strong> (ou Tvheadend), <strong>FFmpeg</strong> ou <strong>CCExtractor</strong>, e um <strong>bot IRC</strong> simples (Python).</li>
+        <li>Bloquear o sintonizador no <strong>MUX A</strong> (onde estão RTP1/2/SIC/TVI), extrair a página <strong>888</strong> de cada canal e enviar cada linha para um canal IRC.</li>
+        <li>Garantir que o sistema arranca sozinho (systemd) e se mantém estável (monitorização básica).</li>
+      </ul>
+
+      <h2>Requisitos mínimos</h2>
+      <ul>
+        <li>Viver em <strong>Portugal</strong> numa zona com cobertura TDT ou possibilidade de colocar antena UHF.</li>
+        <li>Conforto com Linux básico (linha de comandos) e redes.</li>
+        <li>Ligação à internet estável.</li>
+      </ul>
+
+      <h2>Valorizado (bónus)</h2>
+      <ul>
+        <li>Experiência com Raspberry Pi, Tvheadend, FFmpeg/CCExtractor.</li>
+        <li>Noções de <strong>DVB‑T</strong> (multiplex/TS, PIDs, <em>program numbers</em>).</li>
+        <li>Conhecimentos de IRC/NickServ/TLS.</li>
+      </ul>
+
+      <h2>Remuneração &amp; disponibilidade</h2>
+      <ul>
+        <li><strong>Avença mensal</strong> paga por <strong>PayPal</strong> (fatura‑recibo ou recibo verde, se aplicável).</li>
+        <li><strong>Proposta justa para juventude</strong> (dependendo de sinal/cobertura):
+          <ul>
+            <li><em>Avença</em>: <strong>€70–€120/mês</strong> após arranque (manutenção leve e monitorização).</li>
+            <li><em>Setup inicial</em> (único): <strong>€120–€180</strong> para instalação/configuração in loco.</li>
+          </ul>
+          Valores negociáveis conforme deslocações, qualidade de sinal e hardware já existente.
+        </li>
+        <li>Trabalho muito leve após a instalação (manutenção preventiva e eventuais ajustes).</li>
+      </ul>
+
+      <h2>Local</h2>
+      <p>Qualquer distrito em <strong>Portugal</strong> com receção TDT. Trabalho remoto no dia‑a‑dia, mas com acesso físico ao local onde fica a antena/recetor.</p>
+
+      <div class="line"></div>
+
+      <h2>Hardware e Software (referência)</h2>
+      <div class="grid">
+        <div>
+          <p><strong>Hardware</strong></p>
+          <ul>
+            <li>Antena UHF para TDT (interior ou exterior consoante sinal).</li>
+            <li>Sintonizador DVB‑T USB (ex.: Hauppauge WinTV‑soloHD ou equivalente).</li>
+            <li>Raspberry Pi 4 (ou mini‑PC/PC com Linux).</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Software</strong></p>
+          <ul>
+            <li>Linux (Debian/Ubuntu/Raspberry Pi OS).</li>
+            <li><code>dvbv5-utils</code>, <code>ffmpeg</code>, <code>ccextractor</code>, <code>python3</code>.</li>
+            <li>(Opcional) Tvheadend para gestão via Web.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>Notas técnicas (curto‑circuito)</h2>
+      <p class="small">Os 4 generalistas estão no mesmo <strong>MUX A</strong>. Um único tuner a debitar <code>/dev/dvb/adapter0/dvr0</code> fornece o <strong>Transport Stream</strong> completo. O teletexto (pág. 888) vem como <em>stream</em> embebida em cada <em>program</em>; convertemos para texto temporizado.</p>
+      <pre><code># instalar
+sudo apt update && sudo apt install -y dvbv5-utils ffmpeg ccextractor python3
+
+# travar o MUX A (ex.: sintonizando RTP1) e expor TS em /dev/dvb/.../dvr0
+sudo dvbv5-zap -a 0 -c /etc/dvb/channels.conf -r "RTP 1" &
+
+# descobrir program numbers
+ffprobe -hide_banner -loglevel error -show_programs /dev/dvb/adapter0/dvr0 | grep -E "program_id|service_name"
+
+# pipeline por canal (ex.: RTP1) -> envia 888 para IRC
+ccextractor /dev/dvb/adapter0/dvr0 \
+  --program-number &lt;PROG_RTP1&gt; \
+  --teletext-page 888 --out=srt --stdout | \
+  python3 irc_subs_bot.py  # bot simples que publica no IRC
+
+# servidor IRC de destino
+irc.cubicpostcode.com:6667  (#rtp1, #rtp2, #sic, #tvi)
+</code></pre>
+
+      <h2>Legal &amp; ética</h2>
+      <p class="small">O objetivo é <strong>apenas</strong> publicar <strong>legendas</strong> de acessibilidade (teletexto 888). <span class="warn">Não há retransmissão de áudio/vídeo</span>. Respeitamos direitos de transmissão e privacidade.</p>
+
+      <h2>Como candidatar‑te</h2>
+      <p>Envia mensagem pelo <strong>OLX/CustoJusto</strong> ou por e‑mail com o assunto <em>“TDT → IRC (Avença)”</em> com:</p>
+      <ul>
+        <li>Breve apresentação + localização (concelho).</li>
+        <li>Experiência relevante (se houver) e disponibilidade.</li>
+        <li>Valor mensal pretendido/intervalo.</li>
+        <li>Contacto (telemóvel/Telegram, opcional).</li>
+      </ul>
+      <p><strong>Contacto direto (substituir antes de publicar):</strong> <code>[o_teu_email@dominio.pt]</code> · <code>[telemóvel]</code> · <strong>Recebo via PayPal:</strong> <code>[o.teu.paypal@exemplo.com]</code></p>
+
+      <div class="line"></div>
+
+      <h2>Versão texto simples (para copiar/colar caso a plataforma remova HTML)</h2>
+      <textarea class="copybox" readonly>
+PROCURA-SE ESTUDANTE/JÚNIOR — LEGENDAS DA TDT → IRC (AVENÇA MENSAL)
+
+Resumo: preciso de alguém em Portugal (zona com TDT) para montar e manter um sistema que capta as legendas do teletexto (pág. 888) dos canais RTP1, RTP2, SIC e TVI via TDT e publica essas legendas, em tempo-real, em canais IRC do meu servidor: irc.cubicpostcode.com:6667 (#rtp1, #rtp2, #sic, #tvi).
+
+O que vais fazer:
+• Instalar antena UHF TDT e sintonizador DVB-T USB (em Raspberry Pi/mini-PC).
+• Configurar Linux + dvbv5-zap (ou Tvheadend), FFmpeg/CCExtractor e bot IRC (Python).
+• Bloquear o MUX A, extrair página 888 de cada canal e enviar para IRC.
+• Garantir arranque automático (systemd) e estabilidade.
+
+Requisitos:
+• Viver em Portugal com receção TDT; internet estável.
+• À-vontade com Linux e linha de comandos.
+
+Valorizado: Raspberry Pi, Tvheadend, FFmpeg/CCExtractor, noções DVB-T e IRC.
+
+Remuneração: avença mensal (a combinar). Trabalho leve após instalação.
+
+Legal/Ética: apenas legendas (teletexto 888). Não há retransmissão de áudio/vídeo.
+
+Como candidatar-te: mensagem pelo OLX/CustoJusto ou e-mail com assunto “TDT → IRC (Avença)” indicando apresentação, localização, disponibilidade, valor pretendido e contacto.
+Contacto direto (substituir antes de publicar): [o_teu_email@dominio.pt] · [telemóvel]
+      </textarea>
+
+      <p class="muted small">Dúvidas técnicas? Posso partilhar o bot IRC em Python e os <em>unit files</em> do systemd já prontos.</p>
+      <div>
+        <a class="cta" id="btnPublish" href="#publicar">Pronto para publicar</a>
+        <a class="cta alt" id="btnDevpack" href="#devpack">Ver bot &amp; systemd</a>
+      </div>
+
+      <section id="devpack" class="devpack">
+        <h2>Pacote técnico: Bot IRC + serviços systemd</h2>
+        <p class="tips">Clica em <em>Copiar</em> para levar o ficheiro. Podes colar diretamente no servidor. Ajusta &lt;PROG_...&gt; e canais/credenciais antes de ativar.</p>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/opt/irc_subs_bot.py</strong><button class="copybtn" data-copy="code-bot">Copiar</button></div>
+          <pre><code id="code-bot">#!/usr/bin/env python3
+# Bot IRC para publicar legendas (SRT pela stdin) em canal IRC
+# Env vars: IRC_HOST, IRC_PORT, IRC_NICK, IRC_USER, IRC_PASS, IRC_CHAN,
+#           RATE_DELAY (s), PREFIX (ex: [RTP1]), TIMESTAMP (1/0), IRC_TLS (1/0)
+import os, sys, socket, time, datetime
+
+IRC_HOST=os.getenv("IRC_HOST","irc.cubicpostcode.com")
+IRC_PORT=int(os.getenv("IRC_PORT","6667"))
+IRC_TLS=os.getenv("IRC_TLS","0")=="1"
+IRC_NICK=os.getenv("IRC_NICK","subsbot")
+IRC_USER=os.getenv("IRC_USER","subsbot")
+IRC_PASS=os.getenv("IRC_PASS","")
+IRC_CHAN=os.getenv("IRC_CHAN","#subs")
+RATE_DELAY=float(os.getenv("RATE_DELAY","0.8"))
+ADD_PREFIX=os.getenv("PREFIX","")
+ADD_TS=os.getenv("TIMESTAMP","1")=="1"
+
+def irc_send(sock,msg):
+    sock.send((msg+"
+").encode("utf-8",errors="ignore"))
+
+def connect():
+    s=socket.socket()
+    if IRC_TLS:
+        import ssl
+        ctx=ssl.create_default_context()
+        s=ctx.wrap_socket(s,server_hostname=IRC_HOST)
+    s.connect((IRC_HOST,IRC_PORT))
+    if IRC_PASS:
+        irc_send(s,f"PASS {IRC_PASS}")
+    irc_send(s,f"NICK {IRC_NICK}")
+    irc_send(s,f"USER {IRC_USER} 0 * :{IRC_USER}")
+    # Handshake + JOIN
+    buf=b""; joined=False
+    s.settimeout(300)
+    while not joined:
+        chunk=s.recv(2048)
+        if not chunk: raise ConnectionError("disconnected during handshake")
+        buf+=chunk
+        for line in buf.split(b"
+"):
+            if not line: continue
+            if line.startswith(b"PING"):
+                irc_send(s,"PONG "+line.split()[1].decode())
+            if b" 001 " in line: # welcome
+                irc_send(s,f"JOIN {IRC_CHAN}")
+                joined=True
+        buf=b""
+    return s
+
+def srt_text_lines(stream):
+    last=""
+    for raw in stream:
+        t=raw.strip()
+        if not t or t.isdigit() or "-->" in t: # ignora índices e timestamps
+            continue
+        if t==last: # evita duplicados consecutivos
+            continue
+        last=t
+        yield t
+
+def main():
+    while True:
+        try:
+            s=connect()
+            for line in srt_text_lines(sys.stdin):
+                msg=line[:400]+("…" if len(line)>400 else "")
+                if ADD_TS:
+                    ts=datetime.datetime.now().strftime("[%H:%M:%S]")
+                    msg=(f"{ADD_PREFIX} " if ADD_PREFIX else "")+ts+" "+msg
+                elif ADD_PREFIX:
+                    msg=f"{ADD_PREFIX} "+msg
+                irc_send(s,f"PRIVMSG {IRC_CHAN} :{msg}")
+                time.sleep(RATE_DELAY)
+        except Exception:
+            time.sleep(3)
+            continue
+
+if __name__=="__main__":
+    main()</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/etc/systemd/system/tdt-mux.service</strong><button class="copybtn" data-copy="code-tdt">Copiar</button></div>
+          <pre><code id="code-tdt">[Unit]
+Description=TDT MUX lock (dvbv5-zap -r)
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/dvbv5-zap -a 0 -c /etc/dvb/channels.conf -r "RTP 1"
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/etc/systemd/system/rtp1-subs.service</strong><button class="copybtn" data-copy="code-rtp1">Copiar</button></div>
+          <pre><code id="code-rtp1">[Unit]
+Description=Legendas RTP1 -> IRC #rtp1
+After=tdt-mux.service
+
+[Service]
+Environment=IRC_HOST=irc.cubicpostcode.com
+Environment=IRC_PORT=6667
+Environment=IRC_NICK=rtp1_subs
+Environment=IRC_USER=rtp1_subs
+Environment=IRC_CHAN=#rtp1
+Environment=PREFIX=[RTP1]
+Environment=TIMESTAMP=1
+ExecStart=/bin/sh -c 'ccextractor /dev/dvb/adapter0/dvr0 --program-number &lt;PROG_RTP1&gt; --teletext-page 888 --out=srt --stdout | /opt/irc_subs_bot.py'
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/etc/systemd/system/rtp2-subs.service</strong><button class="copybtn" data-copy="code-rtp2">Copiar</button></div>
+          <pre><code id="code-rtp2">[Unit]
+Description=Legendas RTP2 -> IRC #rtp2
+After=tdt-mux.service
+
+[Service]
+Environment=IRC_HOST=irc.cubicpostcode.com
+Environment=IRC_PORT=6667
+Environment=IRC_NICK=rtp2_subs
+Environment=IRC_USER=rtp2_subs
+Environment=IRC_CHAN=#rtp2
+Environment=PREFIX=[RTP2]
+Environment=TIMESTAMP=1
+ExecStart=/bin/sh -c 'ccextractor /dev/dvb/adapter0/dvr0 --program-number &lt;PROG_RTP2&gt; --teletext-page 888 --out=srt --stdout | /opt/irc_subs_bot.py'
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/etc/systemd/system/sic-subs.service</strong><button class="copybtn" data-copy="code-sic">Copiar</button></div>
+          <pre><code id="code-sic">[Unit]
+Description=Legendas SIC -> IRC #sic
+After=tdt-mux.service
+
+[Service]
+Environment=IRC_HOST=irc.cubicpostcode.com
+Environment=IRC_PORT=6667
+Environment=IRC_NICK=sic_subs
+Environment=IRC_USER=sic_subs
+Environment=IRC_CHAN=#sic
+Environment=PREFIX=[SIC]
+Environment=TIMESTAMP=1
+ExecStart=/bin/sh -c 'ccextractor /dev/dvb/adapter0/dvr0 --program-number &lt;PROG_SIC&gt; --teletext-page 888 --out=srt --stdout | /opt/irc_subs_bot.py'
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>/etc/systemd/system/tvi-subs.service</strong><button class="copybtn" data-copy="code-tvi">Copiar</button></div>
+          <pre><code id="code-tvi">[Unit]
+Description=Legendas TVI -> IRC #tvi
+After=tdt-mux.service
+
+[Service]
+Environment=IRC_HOST=irc.cubicpostcode.com
+Environment=IRC_PORT=6667
+Environment=IRC_NICK=tvi_subs
+Environment=IRC_USER=tvi_subs
+Environment=IRC_CHAN=#tvi
+Environment=PREFIX=[TVI]
+Environment=TIMESTAMP=1
+ExecStart=/bin/sh -c 'ccextractor /dev/dvb/adapter0/dvr0 --program-number &lt;PROG_TVI&gt; --teletext-page 888 --out=srt --stdout | /opt/irc_subs_bot.py'
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+
+        <div class="codecard">
+          <div class="codehdr"><strong>Setup rápido (comandos)</strong><button class="copybtn" data-copy="code-install">Copiar</button></div>
+          <pre><code id="code-install"># pacotes
+sudo apt update && sudo apt install -y dvbv5-utils ffmpeg ccextractor python3
+
+# bot
+sudo install -m 0755 -D /tmp/irc_subs_bot.py /opt/irc_subs_bot.py  # cola o ficheiro em /tmp antes
+
+# sintonizar MUX A
+sudo tee /etc/systemd/system/tdt-mux.service >/dev/null <<'EOF'
+[Unit]
+Description=TDT MUX lock (dvbv5-zap -r)
+After=network-online.target
+[Service]
+ExecStart=/usr/bin/dvbv5-zap -a 0 -c /etc/dvb/channels.conf -r "RTP 1"
+Restart=always
+RestartSec=2
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now tdt-mux.service
+
+# descobrir PROGRAM_NUMBER por canal (sem sed/backrefs)
+ffprobe -hide_banner -loglevel error -show_programs /dev/dvb/adapter0/dvr0 \
+  | awk -F= '/^program_id=/{print "PROGRAM "$2} /^tags=service_name=/{sub(/^tags=service_name=/,""); print "NAME "$0}'
+
+# criar os serviços de cada canal (usa os ficheiros acima)
+sudo systemctl enable --now rtp1-subs.service rtp2-subs.service sic-subs.service tvi-subs.service</code></pre>
+        </div>
+
+        <p class="tips">TLS: define <code>IRC_TLS=1</code> e usa a porta TLS do teu servidor (ex.: 6697).</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- SPA scripts -->
+  <script>
+    const devBtn = document.getElementById('btnDevpack');
+    const devPack = document.getElementById('devpack');
+    if (devBtn && devPack){
+      devBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        devPack.classList.toggle('show');
+        devBtn.textContent = devPack.classList.contains('show') ? 'Ocultar bot & systemd' : 'Ver bot & systemd';
+        if (devPack.classList.contains('show')) location.hash = '#devpack';
+      });
+    }
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-copy');
+        const el = document.getElementById(id);
+        if (!el) return;
+        const txt = el.textContent;
+        navigator.clipboard.writeText(txt).then(() => {
+          const old = btn.textContent; btn.textContent='Copiado!';
+          setTimeout(()=>btn.textContent=old, 1200);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
