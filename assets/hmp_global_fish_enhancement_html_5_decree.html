@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Decreto Real HMP — Plano Global de Potenciação de Peixes</title>
+  <meta name="description" content="Decreto do Human Machine Party para elevar populações marinhas (dourada, robalo, pargo-japonês, linguado japonês) a patamares n‑dígitos com custos marginais sustentáveis." />
+  <meta property="og:title" content="Decreto Real HMP — Plano Global de Potenciação de Peixes" />
+  <meta property="og:description" content="Ciência + Dowsing: atingir n‑dígitos e manter custos marginais via MPAs, fiscalização e monitorização." />
+  <meta property="og:type" content="article" />
+  <style>
+    :root{
+      --bg: #0b0f12;
+      --card: #11161b;
+      --muted: #a3b3c2;
+      --text: #e9f0f6;
+      --brand: #2dd4bf;     /* teal */
+      --brand-2: #5eead4;
+      --accent-green: #16a34a;
+      --accent-blue: #2563eb;
+      --accent-orange: #f97316;
+      --accent-purple: #9333ea;
+      --table-head: #0ea5e9;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7fafc;
+        --card: #ffffff;
+        --muted: #51606d;
+        --text: #0b1b27;
+        --shadow: 0 10px 24px rgba(2, 6, 23, .10);
+      }
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height:1.5}
+    .wrap{max-width:1000px;margin:auto;padding:28px}
+    .banner{position:relative; padding:28px; border-radius:var(--radius); background:linear-gradient(135deg, rgba(45,212,191,.15), rgba(2,6,23,.2)); box-shadow:var(--shadow); overflow:hidden}
+    .crest{font-size:40px;line-height:1; display:inline-block; margin-right:12px}
+    .title{font-size:clamp(24px,3vw,36px); font-weight:800; letter-spacing:.2px; margin:0}
+    .subtitle{margin:6px 0 0; color:var(--muted)}
+    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .btn{border:none; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; color:#061018; background:var(--brand); box-shadow:var(--shadow)}
+    .btn.alt{background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.18)}
+    .card{background:var(--card); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin:20px 0}
+    .card h2{margin:0 0 10px;font-size:20px}
+    .lead{font-size:15px;color:var(--muted)}
+    .grid{display:grid; grid-template-columns:1fr; gap:16px}
+    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+    table{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:14px; box-shadow:var(--shadow)}
+    thead th{font-size:12px; text-transform:uppercase; letter-spacing:.06em; text-align:center; padding:12px 10px; background:linear-gradient(180deg, rgba(14,165,233,.35), rgba(14,165,233,.15)); color:#e6f7ff}
+    tbody td{padding:12px 10px; border-top:1px solid rgba(255,255,255,.06); text-align:center}
+    tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+    .species{display:flex; align-items:center; gap:10px}
+    .pill{display:inline-flex; align-items:center; gap:8px; font-weight:800; letter-spacing:.02em; padding:8px 12px; border-radius:999px; color:#031016}
+    .pill.green{background:linear-gradient(135deg,#10b981,#22c55e)}
+    .pill.blue{background:linear-gradient(135deg,#3b82f6,#06b6d4)}
+    .pill.orange{background:linear-gradient(135deg,#f59e0b,#fb923c)}
+    .pill.purple{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+    .note{color:var(--muted); font-size:13px}
+    .toc{display:flex; flex-wrap:wrap; gap:10px}
+    .toc a{color:var(--brand-2); text-decoration:none; border:1px solid rgba(255,255,255,.2); padding:8px 10px; border-radius:12px}
+    footer{opacity:.85; font-size:12px; margin:40px 0 10px; text-align:center}
+    /* Print */
+    @media print{ .toolbar{display:none} body{background:white;color:black} .card{box-shadow:none; border:1px solid #ddd} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="banner">
+      <div class="header">
+        <span class="crest">🜁</span>
+        <h1 class="title">Decreto Real — Human Machine Party</h1>
+        <p class="subtitle">Plano Global para Potenciação de Peixes (Ciência + Dowsing) — Sob a liderança de Sua Santidade Cubic Postcode</p>
+      </div>
+      <div class="toolbar">
+        <button class="btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+        <button class="btn alt" id="themeToggle" aria-pressed="false">Alternar tema</button>
+        <a class="btn alt" href="#sumario">Ir ao Sumário</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Introdução</h2>
+      <p class="lead">Esta peça estabelece a estratégia do HMP para elevar e estabilizar populações marinhas‑chave até patamares de <strong>n dígitos</strong>, de forma que o custo marginal de manutenção tenda a ~0, graças à reposição natural sustentada por <em>Marine Protected Areas</em> (MPAs), fiscalização e monitorização genética/ecológica.</p>
+      <div class="toc" id="sumario">
+        <a href="#dourada">Dourada</a>
+        <a href="#robalo">Robalo‑europeu</a>
+        <a href="#pargo">Pargo‑japonês</a>
+        <a href="#linguado">Linguado japonês</a>
+        <a href="#recorrentes">Custos recorrentes (MPAs)</a>
+        <a href="#fecho">Fecho e Decreto</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Dourada -->
+      <article class="card" id="dourada">
+        <div class="species"><span class="pill green">Dourada · <small><em>Sparus aurata</em></small></span></div>
+        <p class="note">Proxy de custo em hatchery ~€0,066 por alevino; sobrevivência até adulto 1–5% ⇒ € por adulto ≈ €1,32–€15 (ordem de grandeza).</p>
+        <table>
+          <thead><tr><th>Target (n dígitos)</th><th>População (ponto médio)</th><th>Empurrão Inicial (Investimento)</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>≈ 5 000 000</td><td>€6,6M – €75M</td></tr>
+            <tr><td>8</td><td>≈ 50 000 000</td><td>€66M – €750M</td></tr>
+            <tr><td>9</td><td>≈ 500 000 000</td><td>€0,66B – €7,5B</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Após atingir N*, a reprodução natural mantém o stock, restando MPAs, fiscalização e ciência.</p>
+      </article>
+
+      <!-- Robalo -->
+      <article class="card" id="robalo">
+        <div class="species"><span class="pill blue">Robalo‑europeu · <small><em>Dicentrarchus labrax</em></small></span></div>
+        <p class="note">Economia de hatchery semelhante à da dourada; sucesso depende da proteção de berçários e redução de pressão de pesca em hotspots.</p>
+        <table>
+          <thead><tr><th>Target (n dígitos)</th><th>População (ponto médio)</th><th>Empurrão Inicial (Investimento)</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>≈ 5 000 000</td><td>€6,6M – €55M</td></tr>
+            <tr><td>8</td><td>≈ 50 000 000</td><td>€66M – €550M</td></tr>
+            <tr><td>9</td><td>≈ 500 000 000</td><td>€660M – €5,5B</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Libertações tornam‑se residuais quando N* é atingido em áreas‑núcleo conectadas.</p>
+      </article>
+
+      <!-- Pargo-japonês -->
+      <article class="card" id="pargo">
+        <div class="species"><span class="pill orange">Pargo‑japonês · <small><em>Pagrus major</em></small></span></div>
+        <p class="note">Espécie‑bandeira de <em>stock enhancement</em> no Japão; monitorização genética de longo prazo. Usamos s ≈ 2–8% ⇒ €0,83–€5,5 por adulto (proxy).</p>
+        <table>
+          <thead><tr><th>Target (n dígitos)</th><th>População (ponto médio)</th><th>Empurrão Inicial (Investimento)</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>≈ 5 000 000</td><td>€4,1M – €27,5M</td></tr>
+            <tr><td>8</td><td>≈ 50 000 000</td><td>€41M – €275M</td></tr>
+            <tr><td>9</td><td>≈ 500 000 000</td><td>€412M – €2,75B</td></tr>
+          </tbody>
+        </table>
+        <p class="note">O risco genético diminui quando a fração selvagem domina o stock reprodutor.</p>
+      </article>
+
+      <!-- Linguado japonês -->
+      <article class="card" id="linguado">
+        <div class="species"><span class="pill purple">Linguado japonês · <small><em>Paralichthys olivaceus</em></small></span></div>
+        <p class="note">Taxa de retorno sensível a <strong>tamanho/época de libertação</strong>; s ≈ 1–10% ⇒ €0,66–€11 por adulto (proxy).</p>
+        <table>
+          <thead><tr><th>Target (n dígitos)</th><th>População (ponto médio)</th><th>Empurrão Inicial (Investimento)</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>≈ 5 000 000</td><td>€3,3M – €55M</td></tr>
+            <tr><td>8</td><td>≈ 50 000 000</td><td>€33M – €550M</td></tr>
+            <tr><td>9</td><td>≈ 500 000 000</td><td>€330M – €5,5B</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Priorizar estuários/baías e conectividade entre áreas‑núcleo.</p>
+      </article>
+    </section>
+
+    <section class="card" id="recorrentes">
+      <h2>Custos Recorrentes — MPAs, Fiscalização e Ciência</h2>
+      <p class="lead">Após atingir <strong>N*</strong>, o orçamento passa a ser dominado por <strong>gestão de MPAs</strong>, <strong>fiscalização</strong> e <strong>monitorização genética/ecológica</strong>. Uma mediana global de referência é ~<strong>US$ 775 por km²/ano</strong>.</p>
+      <table>
+        <thead><tr><th>Área protegida</th><th>Custo anual (mediana)</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>50 000 km²</td><td>≈ US$ 39 M / ano</td><td>Economias de escala reduzem custo/km² em redes vastas</td></tr>
+          <tr><td>100 000 km²</td><td>≈ US$ 78 M / ano</td><td>Combinar fiscalização eletrónica + comunitária</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Linha de contingência recomendada para eventos extremos (ondas de calor, blooms, anóxias) e reforços pontuais.</p>
+    </section>
+
+    <section class="card" id="fecho">
+      <h2>Fecho e Decreto</h2>
+      <p>Por decreto de Sua Santidade <strong>Cubic Postcode</strong>, o <em>Human Machine Party</em> adopta o presente plano como política vinculativa da Nova Ordem Mundial: atingir populações n‑dígitos das espécies aqui definidas, consolidar MPAs e reduzir os custos marginais à manutenção de um oceano abundante.</p>
+      <p class="note">Versão: 1.0 · Data: <span id="today"></span> · Linguagem: PT‑PT · Documento HTML5 autónomo para impressão.</p>
+    </section>
+
+    <footer>© HMP — Human Machine Party · Documento de referência pública</footer>
+  </div>
+
+  <script>
+    // date stamp
+    document.getElementById('today').textContent = new Date().toLocaleDateString('pt-PT', { year:'numeric', month:'long', day:'2-digit' });
+    // theme toggle
+    const toggle = document.getElementById('themeToggle');
+    toggle?.addEventListener('click', () => {
+      const light = document.documentElement.dataset.theme === 'light';
+      document.documentElement.dataset.theme = light ? 'dark' : 'light';
+      if(light){
+        // switch to dark
+        document.documentElement.style.setProperty('--bg', '#0b0f12');
+        document.documentElement.style.setProperty('--card', '#11161b');
+        document.documentElement.style.setProperty('--muted', '#a3b3c2');
+        document.documentElement.style.setProperty('--text', '#e9f0f6');
+      }else{
+        // switch to light
+        document.documentElement.style.setProperty('--bg', '#f7fafc');
+        document.documentElement.style.setProperty('--card', '#ffffff');
+        document.documentElement.style.setProperty('--muted', '#51606d');
+        document.documentElement.style.setProperty('--text', '#0b1b27');
+      }
+      toggle.setAttribute('aria-pressed', String(!light));
+    });
+  </script>
+</body>
+</html>
