@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Berberine → Nitric Oxide Pathways</title>
+  <style>
+    :root{
+      --bg:#0b0f14;--fg:#e6f0ff;--muted:#9fb3c8;--card:#121823;--accent:#7cc1ff;--good:#7ae37a;--bad:#ff8e8e;--warn:#ffd37a;--link:#9ad0ff;--edge:#2a3a4e;
+    }
+    @media (prefers-color-scheme: light){
+      :root{--bg:#f7fbff;--fg:#0d1b2a;--muted:#44576a;--card:#ffffff;--accent:#106ba3;--good:#1a7f37;--bad:#b42318;--warn:#9a6a00;--link:#0b6aa8;--edge:#c7d7ea}
+    }
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#0d1219 40%,var(--bg));color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Inter,Arial;}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px;}
+    header{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+    h1{font-size:clamp(22px,2.6vw,34px);margin:0;letter-spacing:.2px}
+    .sub{color:var(--muted);font-size:14px}
+    .card{background:var(--card);border:1px solid var(--edge);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+    .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .legend{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.02)}
+    .pill.good{border-color:rgba(122,227,122,.4)}
+    .pill.bad{border-color:rgba(255,142,142,.4)}
+    .pill.warn{border-color:rgba(255,211,122,.4)}
+    a{color:var(--link);text-decoration:none}
+    a:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
+    .sr{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+
+    /* Diagram */
+    .diagram{position:relative;min-height:620px}
+    svg{width:100%;height:100%;display:block}
+    .node{filter:drop-shadow(0 6px 14px rgba(0,0,0,.25))}
+    .node rect{rx:14;ry:14;stroke:var(--edge);fill:var(--card)}
+    .node text{font-size:14px;fill:var(--fg)}
+    .node .title{font-weight:700}
+    .node.good rect{stroke:rgba(122,227,122,.6)}
+    .node.good .title{fill:var(--good)}
+    .node.bad rect{stroke:rgba(255,142,142,.6)}
+    .node.bad .title{fill:var(--bad)}
+    .node.warn rect{stroke:rgba(255,211,122,.6)}
+    .node.warn .title{fill:var(--warn)}
+    .edge path{stroke:var(--edge);stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+    .edge.good path{stroke:rgba(122,227,122,.85)}
+    .edge.bad path{stroke:rgba(255,142,142,.9)}
+    .edge.dash path{stroke-dasharray:6 6}
+    .edge text{font-size:12px;fill:var(--muted);}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .note{margin-top:10px}
+    .controls{display:flex;gap:10px;align-items:center}
+    .toggle{appearance:none;border:1px solid var(--edge);background:var(--card);color:var(--fg);padding:8px 12px;border-radius:10px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Berberine → Nitric Oxide (NO) Pathways</h1>
+        <div class="sub">Dual modulation: ↑ eNOS & NO bioavailability • ↓ iNOS & inflammatory NO</div>
+      </div>
+      <div class="controls" role="group" aria-label="view controls">
+        <button class="toggle" id="switchTheme" title="Toggle light/dark">🌓 Theme</button>
+        <button class="toggle" id="exportPNG" title="Export diagram as PNG">⬇️ Export PNG</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card diagram" aria-label="Flow diagram of berberine effects on nitric oxide pathways">
+        <svg viewBox="0 0 1100 640" role="img" aria-labelledby="ttl desc">
+          <title id="ttl">Berberine and NO pathway diagram</title>
+          <desc id="desc">Berberine activates AMPK, upregulates eNOS and NO leading to vasodilation, while downregulating NF-κB/iNOS to reduce inflammatory NO and ROS, lowering peroxynitrite formation.</desc>
+
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L10,3 L0,6 Z" fill="currentColor" />
+            </marker>
+          </defs>
+
+          <!-- Nodes -->
+          <g class="node" transform="translate(60,40)">
+            <rect width="200" height="72"/>
+            <text x="16" y="28" class="title">Berberine</text>
+            <text x="16" y="50">Plant alkaloid • AMPK activator</text>
+          </g>
+
+          <g class="node" transform="translate(340,30)">
+            <rect width="220" height="90"/>
+            <text x="16" y="28" class="title">↑ AMPK</text>
+            <text x="16" y="50">Energy-sensing kinase</text>
+            <text x="16" y="70">↑ eNOS transcription/activity</text>
+          </g>
+
+          <g class="node good" transform="translate(640,30)">
+            <rect width="200" height="90"/>
+            <text x="16" y="28" class="title">↑ eNOS</text>
+            <text x="16" y="50">Endothelial NO synthase</text>
+            <text x="16" y="70">↑ NO (vascular)</text>
+          </g>
+
+          <g class="node good" transform="translate(900,30)">
+            <rect width="180" height="90"/>
+            <text x="16" y="28" class="title">↑ NO</text>
+            <text x="16" y="50">Vasodilation • Flow</text>
+            <text x="16" y="70">Endothelial function</text>
+          </g>
+
+          <g class="node bad" transform="translate(340,190)">
+            <rect width="220" height="90"/>
+            <text x="16" y="28" class="title">↓ NF-κB</text>
+            <text x="16" y="50">Inflammatory transcription factor</text>
+            <text x="16" y="70">↓ iNOS expression</text>
+          </g>
+
+          <g class="node bad" transform="translate(640,190)">
+            <rect width="200" height="90"/>
+            <text x="16" y="28" class="title">↓ iNOS</text>
+            <text x="16" y="50">Inducible NO synthase</text>
+            <text x="16" y="70">↓ Excess NO (inflammation)</text>
+          </g>
+
+          <g class="node" transform="translate(900,190)">
+            <rect width="180" height="110"/>
+            <text x="16" y="28" class="title">Balanced NO</text>
+            <text x="16" y="50">↓ Oxidative stress</text>
+            <text x="16" y="70">↓ Endothelial injury</text>
+            <text x="16" y="90">Cardiometabolic benefit</text>
+          </g>
+
+          <g class="node warn" transform="translate(340,360)">
+            <rect width="260" height="110"/>
+            <text x="16" y="28" class="title">↓ ROS / Superoxide</text>
+            <text x="16" y="50">Mitochondrial efficiency ↑</text>
+            <text x="16" y="70">Antioxidant enzymes ↑</text>
+            <text x="16" y="90">Less NO scavenging</text>
+          </g>
+
+          <g class="node good" transform="translate(660,360)">
+            <rect width="240" height="110"/>
+            <text x="16" y="28" class="title">↓ Peroxynitrite (ONOO⁻)</text>
+            <text x="16" y="50">NO + O₂⁻ coupling ↓</text>
+            <text x="16" y="70">Protein nitration ↓</text>
+            <text x="16" y="90">Endothelial protection</text>
+          </g>
+
+          <!-- Edges -->
+          <g class="edge good">
+            <path d="M260,76 C300,76 300,76 340,76"/>
+          </g>
+          <g class="edge good">
+            <path d="M560,76 C600,76 600,76 640,76"/>
+          </g>
+          <g class="edge good">
+            <path d="M840,76 C870,76 870,76 900,76"/>
+          </g>
+
+          <g class="edge bad">
+            <path d="M260,76 C300,160 300,190 340,235"/>
+          </g>
+          <g class="edge bad">
+            <path d="M560,235 C600,235 600,235 640,235"/>
+          </g>
+          <g class="edge good">
+            <path d="M840,235 C870,235 870,235 900,235"/>
+          </g>
+
+          <g class="edge dash">
+            <path d="M450,280 C470,340 520,360 600,390"/>
+            <text x="520" y="350">anti-inflammatory milieu</text>
+          </g>
+          <g class="edge good">
+            <path d="M600,415 C630,415 630,415 660,415"/>
+          </g>
+          <g class="edge good">
+            <path d="M600,110 C620,160 620,200 640,235"/>
+          </g>
+          <g class="edge good">
+            <path d="M780,120 C800,170 800,200 900,235"/>
+          </g>
+          <g class="edge good">
+            <path d="M470,140 C520,180 520,200 640,235"/>
+          </g>
+        </svg>
+      </section>
+
+      <aside class="card" aria-label="Notes and quick facts">
+        <h2 style="margin-top:0">Quick facts</h2>
+        <ul>
+          <li><strong>Berberine → AMPK ↑</strong> → promotes <em>eNOS</em> activity → ↑ NO for vasodilation & endothelial function.</li>
+          <li><strong>Berberine → NF-κB ↓</strong> → <em>iNOS</em> expression ↓ → less inflammatory NO bursts.</li>
+          <li><strong>Oxidative stress ↓</strong> → less NO scavenging and <em>peroxynitrite</em> (ONOO⁻) formation.</li>
+          <li>Net effect: improved vascular tone, anti-atherogenic profile, and cardiometabolic support.</li>
+        </ul>
+
+        <div class="legend" aria-label="legend">
+          <span class="pill good">Beneficial ↑</span>
+          <span class="pill bad">Suppresses ↓</span>
+          <span class="pill warn">Context dependent</span>
+        </div>
+
+        <div class="note">
+          <strong>Disclaimer:</strong> Educational schematic only; not medical advice. Berberine can interact with medications (e.g., cytochrome P450, P-gp). Consult a clinician for individual use.
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Built for rapid understanding of dual NO modulation by berberine. Keyboard: press <kbd>E</kbd> to export.
+    </footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    const btn = document.getElementById('switchTheme');
+    btn?.addEventListener('click',()=>{
+      const light = document.documentElement.dataset.theme === 'light';
+      document.documentElement.dataset.theme = light ? '' : 'light';
+      if(!light){
+        // swap vars for light
+        document.documentElement.style.setProperty('--bg','#f7fbff');
+        document.documentElement.style.setProperty('--fg','#0d1b2a');
+        document.documentElement.style.setProperty('--muted','#44576a');
+        document.documentElement.style.setProperty('--card','#ffffff');
+        document.documentElement.style.setProperty('--accent','#106ba3');
+        document.documentElement.style.setProperty('--good','#1a7f37');
+        document.documentElement.style.setProperty('--bad','#b42318');
+        document.documentElement.style.setProperty('--warn','#9a6a00');
+        document.documentElement.style.setProperty('--link','#0b6aa8');
+        document.documentElement.style.setProperty('--edge','#c7d7ea');
+      } else {
+        // revert to dark
+        document.documentElement.style.removeProperty('--bg');
+        document.documentElement.style.removeProperty('--fg');
+        document.documentElement.style.removeProperty('--muted');
+        document.documentElement.style.removeProperty('--card');
+        document.documentElement.style.removeProperty('--accent');
+        document.documentElement.style.removeProperty('--good');
+        document.documentElement.style.removeProperty('--bad');
+        document.documentElement.style.removeProperty('--warn');
+        document.documentElement.style.removeProperty('--link');
+        document.documentElement.style.removeProperty('--edge');
+      }
+    });
+
+    // Export SVG to PNG
+    function exportPNG(){
+      const svg = document.querySelector('svg');
+      const s = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([s], {type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = function(){
+        const canvas = document.createElement('canvas');
+        canvas.width = svg.viewBox.baseVal.width;
+        canvas.height = svg.viewBox.baseVal.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = getComputedStyle(document.body).backgroundImage.includes('linear-gradient') ? '#0b0f14' : getComputedStyle(document.body).backgroundColor;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0);
+        const a = document.createElement('a');
+        a.download = 'berberine-no-pathways.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    }
+    document.getElementById('exportPNG')?.addEventListener('click', exportPNG);
+    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='e') exportPNG(); });
+  </script>
+</body>
+</html>
