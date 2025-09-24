@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mathpunk COEX — Álcool (Etanol) • Versão Contratual</title>
+  <style>
+    :root{
+      --bg:#0b0f14;--card:#111826;--ink:#e6eef9;--muted:#9db0c9;--accent:#62d0ff;--ok:#46d48c;--warn:#ffd166;--bad:#ff6b6b;--border:#223047;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:linear-gradient(180deg,#0a0e14,#0b1220 25%,#0b0f14);color:var(--ink)}
+    header{padding:24px 16px;max-width:1100px;margin:0 auto}
+    h1{margin:0;font-size:28px;letter-spacing:.3px}
+    h2{font-size:18px;color:var(--muted);font-weight:600;margin:6px 0 0 0}
+    main{max-width:1100px;margin:0 auto;padding:8px 16px 80px}
+    .grid{display:grid;gap:16px}
+    @media(min-width:1000px){.grid-cols-3{grid-template-columns:1.1fr 1fr 1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.3)}
+    .card h3{margin:0 0 8px 0;font-size:18px}
+    label{display:block;font-size:13px;color:var(--muted);margin:8px 0 6px}
+    input[type="number"], input[type="text"], input[type="date"], select, textarea{
+      width:100%;background:#0c1422;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:10px;outline:none
+    }
+    input[type="range"]{width:100%}
+    .row{display:flex;gap:12px}
+    .row>*{flex:1}
+    small{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#0d1a2b;color:var(--muted);font-size:12px}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#00141f;border:none;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer}
+    .btn.secondary{background:#16263c;color:var(--ink);border:1px solid var(--border)}
+    .btn.ghost{background:transparent;border:1px dashed var(--border);color:var(--muted)}
+    .score{font-size:56px;font-weight:800;letter-spacing:1px}
+    .badge{display:inline-block;padding:4px 8px;border-radius:8px;font-weight:700}
+    .badge.green{background:rgba(70,212,140,.15);color:#b5ffd9;border:1px solid rgba(70,212,140,.3)}
+    .badge.amber{background:rgba(255,209,102,.12);color:#ffe6a8;border:1px solid rgba(255,209,102,.28)}
+    .badge.red{background:rgba(255,107,107,.15);color:#ffc3c3;border:1px solid rgba(255,107,107,.33)}
+    .meter{height:14px;border-radius:999px;background:#0f1a2b;border:1px solid var(--border);position:relative;overflow:hidden}
+    .meter>i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#46d48c,#ffd166,#ff6b6b);transition:width .25s ease}
+    .kv{display:grid;grid-template-columns:160px 1fr;gap:10px 16px}
+    .kv div:nth-child(odd){color:var(--muted)}
+    .hr{height:1px;background:var(--border);margin:12px 0}
+    textarea.contract{min-height:340px;white-space:pre-wrap}
+    footer{max-width:1100px;margin:20px auto 60px;color:var(--muted);padding:0 16px}
+    .mark{color:var(--accent)}
+  .spa-nav{max-width:1100px;margin:0 auto;padding:0 16px 12px}
+    .spa-nav a{display:inline-block;margin-right:12px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0d1a2b;color:var(--ink);text-decoration:none;font-weight:600}
+    .spa-nav a.active{outline:2px solid var(--accent)}
+    .route{display:none}
+    .route.active{display:block}
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <h1>Mathpunk COEX — Álcool (Etanol)</h1>
+        <h2>Modelo de decisão e minuta contratual para abstinência (uso forense/segurador)</h2>
+      </div>
+      <div class="pill">v2.0 • 24 Set 2025 • <span class="mark">Cubic Postcode</span></div>
+    </div>
+  </header>
+  <nav class="spa-nav">
+    <a href="#/score" id="link-score" class="active">📊 Índice & Minuta</a>
+    <a href="#/abstinencia" id="link-abstinencia">🛡️ Secção Forense/Securitária</a>
+  </nav>
+
+  <main id="route-score" class="grid grid-cols-3 route active">
+    <!-- COL 1: Biomarkers & Score -->
+    <section class="card">
+      <h3>Biomarcadores (preencher resultados laboratoriais)</h3>
+      <div class="row">
+        <div>
+          <label>PEth (ng/mL) <small>janela ≈ 2–3 semanas</small></label>
+          <input id="peth" type="number" min="0" step="1" placeholder="0" value="0">
+        </div>
+        <div>
+          <label>EtG no cabelo (pg/mg) <small>janela ≈ 3–6 meses</small></label>
+          <input id="etg" type="number" min="0" step="0.1" placeholder="0" value="0">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>CDT (%) <small>apoio; 2–3 meses</small></label>
+          <input id="cdt" type="number" min="0" step="0.1" placeholder="2.0" value="2.0">
+        </div>
+        <div>
+          <label>Peso dos marcadores</label>
+          <div class="row">
+            <input id="w1" type="range" min="0" max="100" value="50" title="Peso PEth">
+            <input id="w2" type="range" min="0" max="100" value="40" title="Peso EtG">
+            <input id="w3" type="range" min="0" max="100" value="10" title="Peso CDT">
+          </div>
+          <small id="wlabel" class="muted">w1=0.50 • w2=0.40 • w3=0.10</small>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="row" style="align-items:center">
+        <div style="flex:0 0 160px">
+          <div class="score" id="score">100</div>
+          <div id="badge" class="badge green">VERDE</div>
+        </div>
+        <div style="flex:1">
+          <div class="kv">
+            <div>Semáforo (regras):</div>
+            <div><span class="badge green">PEth &lt; 20</span> & <span class="badge green">EtG &lt; 7</span> & <span class="badge green">CDT &lt; 2.6</span>
+            </div>
+            <div>Âmbar:</div>
+            <div>PEth 20–200 • EtG 7–30 • CDT 2.6–3.0</div>
+            <div>Vermelho:</div>
+            <div>PEth ≥ 200 • EtG ≥ 30 • CDT ≥ 3.0</div>
+          </div>
+          <div class="meter" style="margin-top:10px"><i id="bar"></i></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="calc()">Calcular</button>
+        <button class="btn secondary" onclick="resetForm()">Limpar</button>
+      </div>
+      <small class="muted">Fórmula do índice (0–100):
+        AI = 100·(w1·S<sub>PEth</sub> + w2·S<sub>EtG</sub> + w3·S<sub>CDT</sub>)
+        com S<sub>PEth</sub>=max(0,1−PEth/200), S<sub>EtG</sub>=max(0,1−EtG/30), S<sub>CDT</sub>=max(0,1−(CDT−1.5)/1.5), w normalizados.
+      </small>
+    </section>
+
+    <!-- COL 2: Parties & Schedule -->
+    <section class="card">
+      <h3>Partes e calendário</h3>
+      <label>Seguradora/Entidade</label>
+      <input id="partyA" type="text" placeholder="Nome da Seguradora / Entidade" />
+      <label>Indivíduo (Contratante)</label>
+      <input id="partyB" type="text" placeholder="Nome completo do indivíduo" />
+      <div class="row">
+        <div>
+          <label>Jurisdicção</label>
+          <select id="jur">
+            <option>England & Wales</option>
+            <option>Scotland</option>
+            <option>Northern Ireland</option>
+            <option>Portugal</option>
+            <option>Brasil</option>
+          </select>
+        </div>
+        <div>
+          <label>Data de início</label>
+          <input id="start" type="date" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Frequência PEth</label>
+          <select id="freqPeth">
+            <option value="Mensal">Mensal</option>
+            <option value="Bimestral">Bimestral</option>
+            <option value="Trimestral">Trimestral</option>
+          </select>
+        </div>
+        <div>
+          <label>Frequência EtG (cabelo)</label>
+          <select id="freqEtg">
+            <option value="Trimestral">Trimestral</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Anual">Anual</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Incentivo/Desconto (máx. %)</label>
+          <input id="discount" type="number" min="0" max="50" value="15">
+        </div>
+        <div>
+          <label>Prazo contratual (meses)</label>
+          <input id="term" type="number" min="3" max="60" value="12">
+        </div>
+      </div>
+      <div class="hr"></div>
+      <h3>Conformidade & Proteção de Dados</h3>
+      <label><input id="custody" type="checkbox"> Cadeia de custódia observada (ID com fotografia, selagem, rastreio, laboratório ISO 17025)</label>
+      <label><input id="consent" type="checkbox"> Consentimento explícito e informado para tratamento de dados biomédicos (GDPR/UK GDPR)</label>
+      <label><input id="treat" type="checkbox"> Declaração sobre tratamentos capilares (descoloração/alisa/tinge); laboratório informado</label>
+      <label><input id="retest" type="checkbox" checked> Reteste confirmatório obrigatório em resultados Âmbar/Vermelho</label>
+      <small class="muted">Dica: ative todos para maior força contratual/forense.</small>
+    </section>
+
+    <!-- COL 3: Contract Generator -->
+    <section class="card">
+      <h3>Gerador de Minuta Contratual</h3>
+      <div class="row">
+        <div>
+          <label>Decisão automática (semáforo + AI)</label>
+          <input id="decision" type="text" readonly value="VERDE (AI=100)">
+        </div>
+        <div>
+          <label>Referência/ID do caso</label>
+          <input id="ref" type="text" placeholder="Ex.: HMP-ALC-2025-001">
+        </div>
+      </div>
+      <label>Minuta</label>
+      <textarea id="contract" class="contract" placeholder="Clique em 'Gerar Contrato' para preencher ..."></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn" onclick="generateContract()">Gerar Contrato</button>
+        <button class="btn secondary" onclick="copyContract()">Copiar</button>
+        <button class="btn ghost" onclick="window.print()">Imprimir / Guardar em PDF</button>
+      </div>
+      <small class="muted">Aviso: Conteúdo informativo. <b>Não constitui aconselhamento jurídico.</b> Valide com advogado local antes de uso em tribunal.</small>
+    </section>
+  </main>
+
+  <footer>
+    Conceitos: marcadores específicos (PEth; EtG cabelo) + suporte (CDT); cut-offs amplamente utilizados; combinação de semáforo e índice auditável. Proposto por <span class="mark">Cubic Postcode</span> (Human Machine Party), otimizado para transparência contratual.
+  </footer>
+
+<!-- ===== Add-on Section (para incorporar em página existente) ===== -->
+<section id="route-abstinencia" class="route" style="max-width:1100px;margin:40px auto 80px;padding:16px">
+  <h2 style="margin:0 0 12px 0;font:600 20px/1.3 system-ui, -apple-system, Segoe UI, Roboto; color:#e6eef9">Abstinência (uso forense/segurador) — Secção pronta a colar</h2>
+  <p style="margin:0 0 16px 0;color:#9db0c9">Copiar e colar este bloco em <code>mathpunk_coex.html</code>. É auto-contido e evita colisões com CSS/JS existentes.</p>
+  <div id="abstinencia-widget" style="background:#111826;border:1px solid #223047;border-radius:16px;padding:16px">
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:260px">
+        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">PEth (ng/mL)</label>
+        <input id="ab_peth" type="number" min="0" step="1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+      </div>
+      <div style="flex:1;min-width:260px">
+        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">EtG cabelo (pg/mg)</label>
+        <input id="ab_etg" type="number" min="0" step="0.1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+      </div>
+      <div style="flex:1;min-width:200px">
+        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">CDT (%)</label>
+        <input id="ab_cdt" type="number" min="0" step="0.1" value="2.0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+      </div>
+      <div style="flex:0 0 160px;text-align:center">
+        <div id="ab_ai" style="font:800 40px/1 system-ui;color:#e6eef9">100</div>
+        <div id="ab_badge" style="display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid rgba(70,212,140,.3);background:rgba(70,212,140,.15);color:#b5ffd9;font-weight:700">VERDE</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" onclick="ab_calc()" style="background:#62d0ff;color:#00141f;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Calcular</button>
+      <button type="button" onclick="ab_fillContract()" style="background:#16263c;color:#e6eef9;border:1px solid #223047;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Gerar Minuta</button>
+    </div>
+
+    <textarea id="ab_contract" placeholder="Minuta gerada aqui…" style="margin-top:12px;width:100%;min-height:240px;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px;white-space:pre-wrap"></textarea>
+    <small style="color:#9db0c9;display:block;margin-top:6px">Fórmula: AI = 100·(w1·SPEth + w2·SEtG + w3·SCDT) com w=(0.5, 0.4, 0.1).</small>
+  </div>
+</section>
+
+<script>
+(function(){
+  function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+  function $ab(id){ return document.getElementById(id); }
+
+  window.ab_calc = function(){
+    const p = parseFloat($ab('ab_peth').value)||0;
+    const e = parseFloat($ab('ab_etg').value)||0;
+    const c = parseFloat($ab('ab_cdt').value)||0;
+    const Sp = clamp01(1 - p/200), Se = clamp01(1 - e/30), Sc = clamp01(1 - (c-1.5)/1.5);
+    const AI = 100*(0.5*Sp + 0.4*Se + 0.1*Sc);
+
+    $ab('ab_ai').textContent = Math.round(AI);
+    let traffic = 'VERDE', badgeStyle = 'rgba(70,212,140,.15)', border='rgba(70,212,140,.3)', color='#b5ffd9';
+    if(p>=200||e>=30||c>=3.0){ traffic='VERMELHO'; badgeStyle='rgba(255,107,107,.15)'; border='rgba(255,107,107,.33)'; color='#ffc3c3'; }
+    else if((p>=20&&p<200)||(e>=7&&e<30)||(c>=2.6&&c<3.0)){ traffic='ÂMBAR'; badgeStyle='rgba(255,209,102,.12)'; border='rgba(255,209,102,.28)'; color='#ffe6a8'; }
+    const b=$ab('ab_badge'); b.textContent=traffic; b.style.background=badgeStyle; b.style.borderColor=border; b.style.color=color;
+    return {AI,traffic,p,e,c};
+  }
+
+  function today(){ const d=new Date(); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; }
+
+  window.ab_fillContract = function(){
+    const r = ab_calc();
+    const terms = `CONTRATO DE ABSTINÊNCIA DE ÁLCOOL (ETANOL)
+
+1. OBJETO — Compromisso de abstinência com verificação por PEth (2–3 semanas), EtG cabelo (3–6 meses) e CDT (2–3 meses).
+2. CUT-OFFS — Verde: PEth < 20 ng/mL; EtG < 7 pg/mg; CDT < 2.6%. Âmbar: PEth 20–200; EtG 7–30; CDT 2.6–3.0%. Vermelho: PEth ≥ 200; EtG ≥ 30; CDT ≥ 3.0%.
+3. ÍNDICE (AI) — AI calculado = ${Math.round(r.AI)} (semáforo: ${r.traffic}).
+4. PROCEDIMENTOS — Cadeia de custódia, consentimento RGPD/UK GDPR, reteste confirmatório se Âmbar/Vermelho.
+5. BENEFÍCIOS/CONSEQUÊNCIAS — Verde e AI ≥ 90: benefícios; Âmbar: vigilância; Vermelho: suspensão de benefícios.
+6. LEI APLICÁVEL — Definir conforme jurisdição do contrato.
+
+ASSINATURAS
+Entidade: __________________  Data: _______
+Indivíduo: _________________  Data: _______`;
+    $ab('ab_contract').value = terms;
+  }
+
+  // cálculo inicial
+  ab_calc();
+})();
+</script>
+<!-- ===== Fim da secção (SPA ready) ===== -->
+
+  <script>
+    const $ = (id)=>document.getElementById(id);
+
+    function weights(){
+      const w1 = parseInt($("w1").value)||0;
+      const w2 = parseInt($("w2").value)||0;
+      const w3 = parseInt($("w3").value)||0;
+      const s = Math.max(1, w1+w2+w3);
+      const W1 = w1/s, W2 = w2/s, W3 = w3/s;
+      $("wlabel").textContent = `w1=${W1.toFixed(2)} • w2=${W2.toFixed(2)} • w3=${W3.toFixed(2)}`;
+      return {W1, W2, W3};
+    }
+
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function calc(){
+      const peth = parseFloat($("peth").value)||0;
+      const etg  = parseFloat($("etg").value)||0;
+      const cdt  = parseFloat($("cdt").value)||0;
+      const {W1,W2,W3} = weights();
+
+      const S_peth = clamp01(1 - (peth/200));
+      const S_etg  = clamp01(1 - (etg/30));
+      const S_cdt  = clamp01(1 - ((cdt-1.5)/1.5));
+      const AI = 100 * (W1*S_peth + W2*S_etg + W3*S_cdt);
+
+      $("score").textContent = Math.round(AI);
+      $("bar").style.width = Math.max(0, Math.min(100, AI)) + "%";
+
+      // traffic light decision
+      let traffic = "VERDE";
+      if (peth >= 200 || etg >= 30 || cdt >= 3.0) traffic = "VERMELHO";
+      else if ( (peth >= 20 && peth < 200) || (etg >= 7 && etg < 30) || (cdt >= 2.6 && cdt < 3.0) ) traffic = "ÂMBAR";
+
+      const badge = $("badge");
+      badge.className = "badge " + (traffic==="VERDE"?"green":traffic==="ÂMBAR"?"amber":"red");
+      badge.textContent = traffic;
+
+      $("decision").value = `${traffic} (AI=${Math.round(AI)})`;
+      return {AI, traffic, peth, etg, cdt, W1, W2, W3};
+    }
+
+    function resetForm(){
+      $("peth").value = 0; $("etg").value = 0; $("cdt").value = 2.0;
+      $("w1").value = 50; $("w2").value = 40; $("w3").value = 10; weights();
+      calc();
+      $("contract").value = ""; $("decision").value = "VERDE (AI=100)";
+    }
+
+    function todayISO(){
+      const d = new Date();
+      const z = (n)=>String(n).padStart(2,'0');
+      return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+    }
+
+    function generateContract(){
+      const r = calc();
+      const partyA = $("partyA").value||"[Seguradora/Entidade]";
+      const partyB = $("partyB").value||"[Nome do Indivíduo]";
+      const jur = $("jur").value||"England & Wales";
+      const start = $("start").value || todayISO();
+      const freqPeth = $("freqPeth").value;
+      const freqEtg = $("freqEtg").value;
+      const discount = parseFloat($("discount").value)||0;
+      const term = parseInt($("term").value)||12;
+      const ref = $("ref").value||"[REF]";
+
+      const custody = $("custody").checked;
+      const consent = $("consent").checked;
+      const treat = $("treat").checked;
+      const retest = $("retest").checked;
+
+      const cutoffs = {
+        green: { peth:"<20 ng/mL", etg:"<7 pg/mg", cdt:"<2.6%" },
+        amber: { peth:"20–200 ng/mL", etg:"7–30 pg/mg", cdt:"2.6–3.0%" },
+        red:   { peth:"≥200 ng/mL", etg:"≥30 pg/mg", cdt:"≥3.0%" }
+      };
+
+      const terms = `
+CONTRATO DE ABSTINÊNCIA DE ÁLCOOL (ETANOL)
+Referência: ${ref}
+
+Entre ${partyA} ("Entidade") e ${partyB} ("Indivíduo").
+
+1. OBJETO. O Indivíduo compromete-se à abstinência de consumo de álcool (etanol) durante o prazo deste contrato, mediante verificação laboratorial periódica conforme cláusulas seguintes. A Entidade poderá aplicar benefícios, descontos ou condições contratuais diferenciadas condicionadas à conformidade.
+
+2. DEFINIÇÕES E CUT-OFFS. Para efeitos deste contrato:
+  2.1. PEth: fosfatidiletanol em sangue. Verde: ${cutoffs.green.peth}; Âmbar: ${cutoffs.amber.peth}; Vermelho: ${cutoffs.red.peth}.
+  2.2. EtG (cabelo): etilglucuronídeo em matriz capilar. Verde: ${cutoffs.green.etg}; Âmbar: ${cutoffs.amber.etg}; Vermelho: ${cutoffs.red.etg}.
+  2.3. CDT: transferrina deficiente em carboidratos. Verde: ${cutoffs.green.cdt}; Âmbar: ${cutoffs.amber.cdt}; Vermelho: ${cutoffs.red.cdt}.
+  2.4. Índice AI: AI = 100·(w1·S_PEth + w2·S_EtG + w3·S_CDT), com S e pesos conforme Anexo Técnico (w1=${r.W1.toFixed(2)}, w2=${r.W2.toFixed(2)}, w3=${r.W3.toFixed(2)}).
+
+3. JANELAS TEMPORAIS. PEth reflete consumo nas últimas ≈2–3 semanas; EtG cabelo reflete ≈3–6 meses (dependendo do comprimento do cabelo); CDT indica consumo crónico recente (≈2–3 meses). O contrato reconhece limitações científicas dessas janelas.
+
+4. CALENDÁRIO DE TESTES. A partir de ${start}:
+  4.1. PEth: frequência ${freqPeth}.
+  4.2. EtG (cabelo): frequência ${freqEtg}.
+  4.3. CDT: quando clinicamente indicado e/ou para suporte.
+
+5. LABORATÓRIOS E CADEIA DE CUSTÓDIA.${custody?" Obrigatória cadeia de custódia observada (verificação de identidade com fotografia, colheita observada, selagem inviolável, rastreio de amostra, laboratório acreditado ISO 17025).":" Laboratórios certificados serão preferidos e procedimentos de identificação serão seguidos."}
+
+6. CONSENTIMENTO E PROTEÇÃO DE DADOS.${consent?" O Indivíduo presta consentimento explícito e informado para o tratamento de dados biomédicos, nos termos do GDPR/UK GDPR, com finalidade exclusiva de verificação contratual; retenção mínima; acesso restrito; e direitos de acesso/retificação garantidos.":" As partes reconhecem a aplicação do GDPR/UK GDPR e comprometem-se a cumprir a legislação aplicável."}
+
+7. TRATAMENTOS CAPILARES.${treat?" O Indivíduo declara previamente quaisquer tratamentos capilares (descoloração, alisamento, tintura). Se aplicável, poderá ser efetuada segmentação capilar ou utilização de matrizes alternativas (unhas) combinadas com PEth.":" Caso haja tratamentos capilares, as partes ajustam metodologia (segmentação capilar, matrizes alternativas) para robustez."}
+
+8. RETESTE CONFIRMATÓRIO.${retest?" Resultados Âmbar ou Vermelho exigem reteste confirmatório em amostra independente, preferencialmente por método/lote distintos, antes de medidas adversas.":" É recomendado reteste confirmatório antes de medidas adversas."}
+
+9. DECISÃO AUTOMÁTICA E REVISÃO HUMANA. A decisão automática utiliza semáforo e o AI calculado. Situação atual: ${r.traffic} (AI=${Math.round(r.AI)}). Sempre haverá possibilidade de revisão humana e apresentação de justificativos clínicos.
+
+10. BENEFÍCIOS E CONSEQUÊNCIAS. Se Verde e AI ≥ 90, aplica-se desconto até ${discount}% nas condições definidas pela Entidade. Zona Âmbar poderá implicar vigilância, plano de acompanhamento e/ou redução de benefício. Zona Vermelha poderá implicar suspensão de benefícios e/ou alteração de condições conforme previsto.
+
+11. EXCLUSÕES MÉDICAS. Condições médicas que possam alterar biomarcadores (p. ex., doença hepática significativa) devem ser documentadas; a decisão considerará parecer clínico.
+
+12. DURAÇÃO E RESCISÃO. Prazo contratual: ${term} meses, renovável por acordo. Rescisão por incumprimento material, fraude, ou impossibilidade superveniente.
+
+13. LEI APLICÁVEL E FORO. Este contrato é regido pelas leis de ${jur}. Quaisquer litígios serão submetidos aos tribunais competentes de ${jur}.
+
+14. INTEGRALIDADE, SEPARABILIDADE E FORÇA MAIOR. Cláusulas padrão aplicáveis; eventual nulidade parcial não afeta o restante contrato.
+
+ANEXO TÉCNICO — Fórmula, Pesos e Regras
+  A. S_PEth = max(0, 1 − PEth/200); S_EtG = max(0, 1 − EtG/30); S_CDT = max(0, 1 − (CDT−1.5)/1.5). Pesos w1,w2,w3 normalizados (soma=1).
+  B. Semáforo: Verde se todos os biomarcadores em faixa verde; Vermelho se qualquer um em vermelho; caso contrário, Âmbar.
+  C. Procedimentos operacionais: agendamento, identificação, selagem, transporte e reporte conforme manual interno.
+
+ASSINATURAS
+  Entidade: __________________________  Data: __________
+  Indivíduo: _________________________  Data: __________
+`;
+      $("contract").value = terms.trim();
+    }
+
+    function copyContract(){
+      const ta = $("contract");
+      ta.select(); ta.setSelectionRange(0, ta.value.length);
+      document.execCommand('copy');
+      alert('Minuta copiada para a área de transferência.');
+    }
+
+    // init
+    weights();
+    calc();
+  </script>
+</body>
+</html>
