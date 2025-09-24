@@ -1,12 +1,11 @@
 <!doctype html>
+<html lang="pt">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mathpunk COEX — Álcool (Etanol) • Versão Contratual</title>
   <style>
-    :root{
-      --bg:#0b0f14;--card:#111826;--ink:#e6eef9;--muted:#9db0c9;--accent:#62d0ff;--ok:#46d48c;--warn:#ffd166;--bad:#ff6b6b;--border:#223047;
-    }
+    :root{--bg:#0b0f14;--card:#111826;--ink:#e6eef9;--muted:#9db0c9;--accent:#62d0ff;--ok:#46d48c;--warn:#ffd166;--bad:#ff6b6b;--border:#223047}
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:linear-gradient(180deg,#0a0e14,#0b1220 25%,#0b0f14);color:var(--ink)}
     header{padding:24px 16px;max-width:1100px;margin:0 auto}
@@ -18,9 +17,7 @@
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.3)}
     .card h3{margin:0 0 8px 0;font-size:18px}
     label{display:block;font-size:13px;color:var(--muted);margin:8px 0 6px}
-    input[type="number"], input[type="text"], input[type="date"], select, textarea{
-      width:100%;background:#0c1422;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:10px;outline:none
-    }
+    input[type="number"],input[type="text"],input[type="date"],select,textarea{width:100%;background:#0c1422;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:10px;outline:none}
     input[type="range"]{width:100%}
     .row{display:flex;gap:12px}
     .row>*{flex:1}
@@ -43,7 +40,7 @@
     textarea.contract{min-height:340px;white-space:pre-wrap}
     footer{max-width:1100px;margin:20px auto 60px;color:var(--muted);padding:0 16px}
     .mark{color:var(--accent)}
-  .spa-nav{max-width:1100px;margin:0 auto;padding:0 16px 12px}
+    .spa-nav{max-width:1100px;margin:0 auto;padding:0 16px 12px}
     .spa-nav a{display:inline-block;margin-right:12px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0d1a2b;color:var(--ink);text-decoration:none;font-weight:600}
     .spa-nav a.active{outline:2px solid var(--accent)}
     .route{display:none}
@@ -57,36 +54,37 @@
         <h1>Mathpunk COEX — Álcool (Etanol)</h1>
         <h2>Modelo de decisão e minuta contratual para abstinência (uso forense/segurador)</h2>
       </div>
-      <div class="pill">v2.0 • 24 Set 2025 • <span class="mark">Cubic Postcode</span></div>
+      <div class="pill" aria-label="versão">v2.0 • 24 Set 2025 • <span class="mark">Cubic Postcode</span></div>
     </div>
   </header>
-  <nav class="spa-nav">
-    <a href="#/score" id="link-score" class="active">📊 Índice & Minuta</a>
+
+  <nav class="spa-nav" aria-label="Navegação">
+    <a href="#/score" id="link-score" class="active">📊 Índice &amp; Minuta</a>
     <a href="#/abstinencia" id="link-abstinencia">🛡️ Secção Forense/Securitária</a>
   </nav>
 
-  <main id="route-score" class="grid grid-cols-3 route active">
+  <main id="route-score" class="grid grid-cols-3 route active" role="region" aria-labelledby="link-score">
     <!-- COL 1: Biomarkers & Score -->
     <section class="card">
       <h3>Biomarcadores (preencher resultados laboratoriais)</h3>
       <div class="row">
         <div>
-          <label>PEth (ng/mL) <small>janela ≈ 2–3 semanas</small></label>
-          <input id="peth" type="number" min="0" step="1" placeholder="0" value="0">
+          <label for="peth">PEth (ng/mL) <small>janela ≈ 2–3 semanas</small></label>
+          <input id="peth" type="number" min="0" step="1" placeholder="0" value="0" inputmode="decimal">
         </div>
         <div>
-          <label>EtG no cabelo (pg/mg) <small>janela ≈ 3–6 meses</small></label>
-          <input id="etg" type="number" min="0" step="0.1" placeholder="0" value="0">
+          <label for="etg">EtG no cabelo (pg/mg) <small>janela ≈ 3–6 meses</small></label>
+          <input id="etg" type="number" min="0" step="0.1" placeholder="0" value="0" inputmode="decimal">
         </div>
       </div>
       <div class="row">
         <div>
-          <label>CDT (%) <small>apoio; 2–3 meses</small></label>
-          <input id="cdt" type="number" min="0" step="0.1" placeholder="2.0" value="2.0">
+          <label for="cdt">CDT (%) <small>apoio; 2–3 meses</small></label>
+          <input id="cdt" type="number" min="0" step="0.1" placeholder="2.0" value="2.0" inputmode="decimal">
         </div>
         <div>
           <label>Peso dos marcadores</label>
-          <div class="row">
+          <div class="row" aria-label="Pesos">
             <input id="w1" type="range" min="0" max="100" value="50" title="Peso PEth">
             <input id="w2" type="range" min="0" max="100" value="40" title="Peso EtG">
             <input id="w3" type="range" min="0" max="100" value="10" title="Peso CDT">
@@ -104,8 +102,7 @@
         <div style="flex:1">
           <div class="kv">
             <div>Semáforo (regras):</div>
-            <div><span class="badge green">PEth &lt; 20</span> & <span class="badge green">EtG &lt; 7</span> & <span class="badge green">CDT &lt; 2.6</span>
-            </div>
+            <div><span class="badge green">PEth &lt; 20</span> &amp; <span class="badge green">EtG &lt; 7</span> &amp; <span class="badge green">CDT &lt; 2.6</span></div>
             <div>Âmbar:</div>
             <div>PEth 20–200 • EtG 7–30 • CDT 2.6–3.0</div>
             <div>Vermelho:</div>
@@ -115,8 +112,8 @@
         </div>
       </div>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" onclick="calc()">Calcular</button>
-        <button class="btn secondary" onclick="resetForm()">Limpar</button>
+        <button class="btn" type="button" id="btn-calc">Calcular</button>
+        <button class="btn secondary" type="button" id="btn-reset">Limpar</button>
       </div>
       <small class="muted">Fórmula do índice (0–100):
         AI = 100·(w1·S<sub>PEth</sub> + w2·S<sub>EtG</sub> + w3·S<sub>CDT</sub>)
@@ -127,15 +124,15 @@
     <!-- COL 2: Parties & Schedule -->
     <section class="card">
       <h3>Partes e calendário</h3>
-      <label>Seguradora/Entidade</label>
+      <label for="partyA">Seguradora/Entidade</label>
       <input id="partyA" type="text" placeholder="Nome da Seguradora / Entidade" />
-      <label>Indivíduo (Contratante)</label>
+      <label for="partyB">Indivíduo (Contratante)</label>
       <input id="partyB" type="text" placeholder="Nome completo do indivíduo" />
       <div class="row">
         <div>
-          <label>Jurisdicção</label>
+          <label for="jur">Jurisdicção</label>
           <select id="jur">
-            <option>England & Wales</option>
+            <option>England &amp; Wales</option>
             <option>Scotland</option>
             <option>Northern Ireland</option>
             <option>Portugal</option>
@@ -143,13 +140,13 @@
           </select>
         </div>
         <div>
-          <label>Data de início</label>
+          <label for="start">Data de início</label>
           <input id="start" type="date" />
         </div>
       </div>
       <div class="row">
         <div>
-          <label>Frequência PEth</label>
+          <label for="freqPeth">Frequência PEth</label>
           <select id="freqPeth">
             <option value="Mensal">Mensal</option>
             <option value="Bimestral">Bimestral</option>
@@ -157,7 +154,7 @@
           </select>
         </div>
         <div>
-          <label>Frequência EtG (cabelo)</label>
+          <label for="freqEtg">Frequência EtG (cabelo)</label>
           <select id="freqEtg">
             <option value="Trimestral">Trimestral</option>
             <option value="Semestral">Semestral</option>
@@ -167,16 +164,16 @@
       </div>
       <div class="row">
         <div>
-          <label>Incentivo/Desconto (máx. %)</label>
+          <label for="discount">Incentivo/Desconto (máx. %)</label>
           <input id="discount" type="number" min="0" max="50" value="15">
         </div>
         <div>
-          <label>Prazo contratual (meses)</label>
+          <label for="term">Prazo contratual (meses)</label>
           <input id="term" type="number" min="3" max="60" value="12">
         </div>
       </div>
       <div class="hr"></div>
-      <h3>Conformidade & Proteção de Dados</h3>
+      <h3>Conformidade &amp; Proteção de Dados</h3>
       <label><input id="custody" type="checkbox"> Cadeia de custódia observada (ID com fotografia, selagem, rastreio, laboratório ISO 17025)</label>
       <label><input id="consent" type="checkbox"> Consentimento explícito e informado para tratamento de dados biomédicos (GDPR/UK GDPR)</label>
       <label><input id="treat" type="checkbox"> Declaração sobre tratamentos capilares (descoloração/alisa/tinge); laboratório informado</label>
@@ -189,20 +186,20 @@
       <h3>Gerador de Minuta Contratual</h3>
       <div class="row">
         <div>
-          <label>Decisão automática (semáforo + AI)</label>
+          <label for="decision">Decisão automática (semáforo + AI)</label>
           <input id="decision" type="text" readonly value="VERDE (AI=100)">
         </div>
         <div>
-          <label>Referência/ID do caso</label>
+          <label for="ref">Referência/ID do caso</label>
           <input id="ref" type="text" placeholder="Ex.: HMP-ALC-2025-001">
         </div>
       </div>
-      <label>Minuta</label>
-      <textarea id="contract" class="contract" placeholder="Clique em 'Gerar Contrato' para preencher ..."></textarea>
+      <label for="contract">Minuta</label>
+      <textarea id="contract" class="contract" placeholder="Clique em 'Gerar Contrato' para preencher …" aria-label="Minuta Contratual"></textarea>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn" onclick="generateContract()">Gerar Contrato</button>
-        <button class="btn secondary" onclick="copyContract()">Copiar</button>
-        <button class="btn ghost" onclick="window.print()">Imprimir / Guardar em PDF</button>
+        <button class="btn" type="button" id="btn-gen">Gerar Contrato</button>
+        <button class="btn secondary" type="button" id="btn-copy">Copiar</button>
+        <button class="btn ghost" type="button" onclick="window.print()">Imprimir / Guardar em PDF</button>
       </div>
       <small class="muted">Aviso: Conteúdo informativo. <b>Não constitui aconselhamento jurídico.</b> Valide com advogado local antes de uso em tribunal.</small>
     </section>
@@ -212,65 +209,65 @@
     Conceitos: marcadores específicos (PEth; EtG cabelo) + suporte (CDT); cut-offs amplamente utilizados; combinação de semáforo e índice auditável. Proposto por <span class="mark">Cubic Postcode</span> (Human Machine Party), otimizado para transparência contratual.
   </footer>
 
-<!-- ===== Add-on Section (para incorporar em página existente) ===== -->
-<section id="route-abstinencia" class="route" style="max-width:1100px;margin:40px auto 80px;padding:16px">
-  <h2 style="margin:0 0 12px 0;font:600 20px/1.3 system-ui, -apple-system, Segoe UI, Roboto; color:#e6eef9">Abstinência (uso forense/segurador) — Secção pronta a colar</h2>
-  <p style="margin:0 0 16px 0;color:#9db0c9">Copiar e colar este bloco em <code>mathpunk_coex.html</code>. É auto-contido e evita colisões com CSS/JS existentes.</p>
-  <div id="abstinencia-widget" style="background:#111826;border:1px solid #223047;border-radius:16px;padding:16px">
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <div style="flex:1;min-width:260px">
-        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">PEth (ng/mL)</label>
-        <input id="ab_peth" type="number" min="0" step="1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+  <!-- ===== Add-on Section (para incorporar em página existente) ===== -->
+  <section id="route-abstinencia" class="route" style="max-width:1100px;margin:40px auto 80px;padding:16px" role="region" aria-labelledby="link-abstinencia">
+    <h2 style="margin:0 0 12px 0;font:600 20px/1.3 system-ui, -apple-system, Segoe UI, Roboto; color:#e6eef9">Abstinência (uso forense/segurador) — Secção pronta a colar</h2>
+    <p style="margin:0 0 16px 0;color:#9db0c9">Copiar e colar este bloco em <code>mathpunk_coex.html</code>. É auto-contido e evita colisões com CSS/JS existentes.</p>
+    <div id="abstinencia-widget" style="background:#111826;border:1px solid #223047;border-radius:16px;padding:16px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px" for="ab_peth">PEth (ng/mL)</label>
+          <input id="ab_peth" type="number" min="0" step="1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+        </div>
+        <div style="flex:1;min-width:260px">
+          <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px" for="ab_etg">EtG cabelo (pg/mg)</label>
+          <input id="ab_etg" type="number" min="0" step="0.1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+        </div>
+        <div style="flex:1;min-width:200px">
+          <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px" for="ab_cdt">CDT (%)</label>
+          <input id="ab_cdt" type="number" min="0" step="0.1" value="2.0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+        </div>
+        <div style="flex:0 0 160px;text-align:center">
+          <div id="ab_ai" style="font:800 40px/1 system-ui;color:#e6eef9">100</div>
+          <div id="ab_badge" style="display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid rgba(70,212,140,.3);background:rgba(70,212,140,.15);color:#b5ffd9;font-weight:700">VERDE</div>
+        </div>
       </div>
-      <div style="flex:1;min-width:260px">
-        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">EtG cabelo (pg/mg)</label>
-        <input id="ab_etg" type="number" min="0" step="0.1" value="0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
+
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" onclick="ab_calc()" style="background:#62d0ff;color:#00141f;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Calcular</button>
+        <button type="button" onclick="ab_fillContract()" style="background:#16263c;color:#e6eef9;border:1px solid #223047;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Gerar Minuta</button>
       </div>
-      <div style="flex:1;min-width:200px">
-        <label style="display:block;color:#9db0c9;font-size:13px;margin-bottom:6px">CDT (%)</label>
-        <input id="ab_cdt" type="number" min="0" step="0.1" value="2.0" style="width:100%;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px">
-      </div>
-      <div style="flex:0 0 160px;text-align:center">
-        <div id="ab_ai" style="font:800 40px/1 system-ui;color:#e6eef9">100</div>
-        <div id="ab_badge" style="display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid rgba(70,212,140,.3);background:rgba(70,212,140,.15);color:#b5ffd9;font-weight:700">VERDE</div>
-      </div>
+
+      <textarea id="ab_contract" placeholder="Minuta gerada aqui…" style="margin-top:12px;width:100%;min-height:240px;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px;white-space:pre-wrap"></textarea>
+      <small style="color:#9db0c9;display:block;margin-top:6px">Fórmula: AI = 100·(w1·SPEth + w2·SEtG + w3·SCDT) com w=(0.5, 0.4, 0.1).</small>
     </div>
+  </section>
 
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" onclick="ab_calc()" style="background:#62d0ff;color:#00141f;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Calcular</button>
-      <button type="button" onclick="ab_fillContract()" style="background:#16263c;color:#e6eef9;border:1px solid #223047;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer">Gerar Minuta</button>
-    </div>
+  <script>
+  // ----- Helpers -----
+  const $ = (id)=>document.getElementById(id);
+  const clamp01 = (x)=>Math.max(0, Math.min(1, x));
+  const todayISO = ()=>{ const d=new Date(); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; };
 
-    <textarea id="ab_contract" placeholder="Minuta gerada aqui…" style="margin-top:12px;width:100%;min-height:240px;background:#0c1422;border:1px solid #223047;color:#e6eef9;padding:10px;border-radius:10px;white-space:pre-wrap"></textarea>
-    <small style="color:#9db0c9;display:block;margin-top:6px">Fórmula: AI = 100·(w1·SPEth + w2·SEtG + w3·SCDT) com w=(0.5, 0.4, 0.1).</small>
-  </div>
-</section>
-
-<script>
-(function(){
-  function clamp01(x){ return Math.max(0, Math.min(1, x)); }
-  function $ab(id){ return document.getElementById(id); }
-
-  window.ab_calc = function(){
-    const p = parseFloat($ab('ab_peth').value)||0;
-    const e = parseFloat($ab('ab_etg').value)||0;
-    const c = parseFloat($ab('ab_cdt').value)||0;
-    const Sp = clamp01(1 - p/200), Se = clamp01(1 - e/30), Sc = clamp01(1 - (c-1.5)/1.5);
-    const AI = 100*(0.5*Sp + 0.4*Se + 0.1*Sc);
-
-    $ab('ab_ai').textContent = Math.round(AI);
-    let traffic = 'VERDE', badgeStyle = 'rgba(70,212,140,.15)', border='rgba(70,212,140,.3)', color='#b5ffd9';
-    if(p>=200||e>=30||c>=3.0){ traffic='VERMELHO'; badgeStyle='rgba(255,107,107,.15)'; border='rgba(255,107,107,.33)'; color='#ffc3c3'; }
-    else if((p>=20&&p<200)||(e>=7&&e<30)||(c>=2.6&&c<3.0)){ traffic='ÂMBAR'; badgeStyle='rgba(255,209,102,.12)'; border='rgba(255,209,102,.28)'; color='#ffe6a8'; }
-    const b=$ab('ab_badge'); b.textContent=traffic; b.style.background=badgeStyle; b.style.borderColor=border; b.style.color=color;
-    return {AI,traffic,p,e,c};
-  }
-
-  function today(){ const d=new Date(); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; }
-
-  window.ab_fillContract = function(){
-    const r = ab_calc();
-    const terms = `CONTRATO DE ABSTINÊNCIA DE ÁLCOOL (ETANOL)
+  // ----- Add-on mini-calculator -----
+  (function(){
+    function $ab(id){ return document.getElementById(id); }
+    window.ab_calc = function(){
+      const p = parseFloat($ab('ab_peth').value)||0;
+      const e = parseFloat($ab('ab_etg').value)||0;
+      const c = parseFloat($ab('ab_cdt').value)||0;
+      const Sp = clamp01(1 - p/200), Se = clamp01(1 - e/30), Sc = clamp01(1 - (c-1.5)/1.5);
+      const AI = 100*(0.5*Sp + 0.4*Se + 0.1*Sc);
+      $ab('ab_ai').textContent = Math.round(AI);
+      let traffic='VERDE', bg='rgba(70,212,140,.15)', border='rgba(70,212,140,.3)', color='#b5ffd9';
+      if(p>=200||e>=30||c>=3.0){ traffic='VERMELHO'; bg='rgba(255,107,107,.15)'; border='rgba(255,107,107,.33)'; color='#ffc3c3'; }
+      else if((p>=20&&p<200)||(e>=7&&e<30)||(c>=2.6&&c<3.0)){ traffic='ÂMBAR'; bg='rgba(255,209,102,.12)'; border='rgba(255,209,102,.28)'; color='#ffe6a8'; }
+      const b=$ab('ab_badge'); b.textContent=traffic; b.style.background=bg; b.style.borderColor=border; b.style.color=color;
+      return {AI,traffic,p,e,c};
+    };
+    window.ab_fillContract = function(){
+      const r = ab_calc();
+      const terms = `CONTRATO DE ABSTINÊNCIA DE ÁLCOOL (ETANOL)
 
 1. OBJETO — Compromisso de abstinência com verificação por PEth (2–3 semanas), EtG cabelo (3–6 meses) e CDT (2–3 meses).
 2. CUT-OFFS — Verde: PEth < 20 ng/mL; EtG < 7 pg/mg; CDT < 2.6%. Âmbar: PEth 20–200; EtG 7–30; CDT 2.6–3.0%. Vermelho: PEth ≥ 200; EtG ≥ 30; CDT ≥ 3.0%.
@@ -282,94 +279,80 @@
 ASSINATURAS
 Entidade: __________________  Data: _______
 Indivíduo: _________________  Data: _______`;
-    $ab('ab_contract').value = terms;
+      $ab('ab_contract').value = terms;
+    };
+    // initial compute
+    ab_calc();
+  })();
+
+  // ----- Main calculator -----
+  function weights(){
+    const w1 = parseInt($("w1").value)||0;
+    const w2 = parseInt($("w2").value)||0;
+    const w3 = parseInt($("w3").value)||0;
+    const s = Math.max(1, w1+w2+w3);
+    const W1 = w1/s, W2 = w2/s, W3 = w3/s;
+    $("wlabel").textContent = `w1=${W1.toFixed(2)} • w2=${W2.toFixed(2)} • w3=${W3.toFixed(2)}`;
+    return {W1, W2, W3};
   }
 
-  // cálculo inicial
-  ab_calc();
-})();
-</script>
-<!-- ===== Fim da secção (SPA ready) ===== -->
+  function calc(){
+    const peth = parseFloat($("peth").value)||0;
+    const etg  = parseFloat($("etg").value)||0;
+    const cdt  = parseFloat($("cdt").value)||0;
+    const {W1,W2,W3} = weights();
 
-  <script>
-    const $ = (id)=>document.getElementById(id);
+    const S_peth = clamp01(1 - (peth/200));
+    const S_etg  = clamp01(1 - (etg/30));
+    const S_cdt  = clamp01(1 - ((cdt-1.5)/1.5));
+    const AI = 100 * (W1*S_peth + W2*S_etg + W3*S_cdt);
 
-    function weights(){
-      const w1 = parseInt($("w1").value)||0;
-      const w2 = parseInt($("w2").value)||0;
-      const w3 = parseInt($("w3").value)||0;
-      const s = Math.max(1, w1+w2+w3);
-      const W1 = w1/s, W2 = w2/s, W3 = w3/s;
-      $("wlabel").textContent = `w1=${W1.toFixed(2)} • w2=${W2.toFixed(2)} • w3=${W3.toFixed(2)}`;
-      return {W1, W2, W3};
-    }
+    $("score").textContent = Math.round(AI);
+    $("bar").style.width = Math.max(0, Math.min(100, AI)) + "%";
 
-    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+    let traffic = "VERDE";
+    if (peth >= 200 || etg >= 30 || cdt >= 3.0) traffic = "VERMELHO";
+    else if ( (peth >= 20 && peth < 200) || (etg >= 7 && etg < 30) || (cdt >= 2.6 && cdt < 3.0) ) traffic = "ÂMBAR";
 
-    function calc(){
-      const peth = parseFloat($("peth").value)||0;
-      const etg  = parseFloat($("etg").value)||0;
-      const cdt  = parseFloat($("cdt").value)||0;
-      const {W1,W2,W3} = weights();
+    const badge = $("badge");
+    badge.className = "badge " + (traffic==="VERDE"?"green":traffic==="ÂMBAR"?"amber":"red");
+    badge.textContent = traffic;
 
-      const S_peth = clamp01(1 - (peth/200));
-      const S_etg  = clamp01(1 - (etg/30));
-      const S_cdt  = clamp01(1 - ((cdt-1.5)/1.5));
-      const AI = 100 * (W1*S_peth + W2*S_etg + W3*S_cdt);
+    $("decision").value = `${traffic} (AI=${Math.round(AI)})`;
+    return {AI, traffic, peth, etg, cdt, W1, W2, W3};
+  }
 
-      $("score").textContent = Math.round(AI);
-      $("bar").style.width = Math.max(0, Math.min(100, AI)) + "%";
+  function resetForm(){
+    $("peth").value = 0; $("etg").value = 0; $("cdt").value = 2.0;
+    $("w1").value = 50; $("w2").value = 40; $("w3").value = 10; weights();
+    calc();
+    $("contract").value = ""; $("decision").value = "VERDE (AI=100)";
+  }
 
-      // traffic light decision
-      let traffic = "VERDE";
-      if (peth >= 200 || etg >= 30 || cdt >= 3.0) traffic = "VERMELHO";
-      else if ( (peth >= 20 && peth < 200) || (etg >= 7 && etg < 30) || (cdt >= 2.6 && cdt < 3.0) ) traffic = "ÂMBAR";
+  function generateContract(){
+    const r = calc();
+    const partyA = $("partyA").value||"[Seguradora/Entidade]";
+    const partyB = $("partyB").value||"[Nome do Indivíduo]";
+    const jur = $("jur").value||"England & Wales";
+    const start = $("start").value || todayISO();
+    const freqPeth = $("freqPeth").value;
+    const freqEtg = $("freqEtg").value;
+    const discount = parseFloat($("discount").value)||0;
+    const term = parseInt($("term").value)||12;
+    const ref = $("ref").value||"[REF]";
 
-      const badge = $("badge");
-      badge.className = "badge " + (traffic==="VERDE"?"green":traffic==="ÂMBAR"?"amber":"red");
-      badge.textContent = traffic;
+    const custody = $("custody").checked;
+    const consent = $("consent").checked;
+    const treat = $("treat").checked;
+    const retest = $("retest").checked;
 
-      $("decision").value = `${traffic} (AI=${Math.round(AI)})`;
-      return {AI, traffic, peth, etg, cdt, W1, W2, W3};
-    }
+    const cutoffs = {
+      green: { peth:"<20 ng/mL", etg:"<7 pg/mg", cdt:"<2.6%" },
+      amber: { peth:"20–200 ng/mL", etg:"7–30 pg/mg", cdt:"2.6–3.0%" },
+      red:   { peth:"≥200 ng/mL", etg:"≥30 pg/mg", cdt:"≥3.0%" }
+    };
 
-    function resetForm(){
-      $("peth").value = 0; $("etg").value = 0; $("cdt").value = 2.0;
-      $("w1").value = 50; $("w2").value = 40; $("w3").value = 10; weights();
-      calc();
-      $("contract").value = ""; $("decision").value = "VERDE (AI=100)";
-    }
-
-    function todayISO(){
-      const d = new Date();
-      const z = (n)=>String(n).padStart(2,'0');
-      return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
-    }
-
-    function generateContract(){
-      const r = calc();
-      const partyA = $("partyA").value||"[Seguradora/Entidade]";
-      const partyB = $("partyB").value||"[Nome do Indivíduo]";
-      const jur = $("jur").value||"England & Wales";
-      const start = $("start").value || todayISO();
-      const freqPeth = $("freqPeth").value;
-      const freqEtg = $("freqEtg").value;
-      const discount = parseFloat($("discount").value)||0;
-      const term = parseInt($("term").value)||12;
-      const ref = $("ref").value||"[REF]";
-
-      const custody = $("custody").checked;
-      const consent = $("consent").checked;
-      const treat = $("treat").checked;
-      const retest = $("retest").checked;
-
-      const cutoffs = {
-        green: { peth:"<20 ng/mL", etg:"<7 pg/mg", cdt:"<2.6%" },
-        amber: { peth:"20–200 ng/mL", etg:"7–30 pg/mg", cdt:"2.6–3.0%" },
-        red:   { peth:"≥200 ng/mL", etg:"≥30 pg/mg", cdt:"≥3.0%" }
-      };
-
-      const terms = `
+    const terms = `
 CONTRATO DE ABSTINÊNCIA DE ÁLCOOL (ETANOL)
 Referência: ${ref}
 
@@ -383,7 +366,7 @@ Entre ${partyA} ("Entidade") e ${partyB} ("Indivíduo").
   2.3. CDT: transferrina deficiente em carboidratos. Verde: ${cutoffs.green.cdt}; Âmbar: ${cutoffs.amber.cdt}; Vermelho: ${cutoffs.red.cdt}.
   2.4. Índice AI: AI = 100·(w1·S_PEth + w2·S_EtG + w3·S_CDT), com S e pesos conforme Anexo Técnico (w1=${r.W1.toFixed(2)}, w2=${r.W2.toFixed(2)}, w3=${r.W3.toFixed(2)}).
 
-3. JANELAS TEMPORAIS. PEth reflete consumo nas últimas ≈2–3 semanas; EtG cabelo reflete ≈3–6 meses (dependendo do comprimento do cabelo); CDT indica consumo crónico recente (≈2–3 meses). O contrato reconhece limitações científicas dessas janelas.
+3. JANELAS TEMPORAIS. PEth reflete consumo nas últimas ≈2–3 semanas; EtG cabelo reflete ≈3–6 meses; CDT indica consumo crónico recente (≈2–3 meses). O contrato reconhece limitações científicas dessas janelas.
 
 4. CALENDÁRIO DE TESTES. A partir de ${start}:
   4.1. PEth: frequência ${freqPeth}.
@@ -418,20 +401,64 @@ ANEXO TÉCNICO — Fórmula, Pesos e Regras
 ASSINATURAS
   Entidade: __________________________  Data: __________
   Indivíduo: _________________________  Data: __________
-`;
-      $("contract").value = terms.trim();
-    }
+`.trim();
+    $("contract").value = terms;
+  }
 
-    function copyContract(){
-      const ta = $("contract");
+  async function copyContract(){
+    const ta = $("contract");
+    try{
+      await navigator.clipboard.writeText(ta.value);
+      alert('Minuta copiada para a área de transferência.');
+    }catch(e){
+      // fallback
       ta.select(); ta.setSelectionRange(0, ta.value.length);
       document.execCommand('copy');
-      alert('Minuta copiada para a área de transferência.');
+      alert('Minuta copiada (fallback).');
     }
+  }
 
-    // init
-    weights();
-    calc();
+  // ----- SPA router -----
+  function setActiveRoute(){
+    const hash = location.hash || "#/score";
+    const isScore = hash.startsWith("#/score");
+    const scoreEl = $("route-score");
+    const abstEl  = $("route-abstinencia");
+    scoreEl.classList.toggle("active", isScore);
+    abstEl.classList.toggle("active", !isScore);
+    $("link-score").classList.toggle("active", isScore);
+    $("link-abstinencia").classList.toggle("active", !isScore);
+  }
+
+  // ----- Wire up -----
+  function init(){
+    // Buttons
+    $("btn-calc").addEventListener("click", calc);
+    $("btn-reset").addEventListener("click", resetForm);
+    $("btn-gen").addEventListener("click", generateContract);
+    $("btn-copy").addEventListener("click", copyContract);
+
+    // Recalculate on input
+    ["peth","etg","cdt"].forEach(id=>$(id).addEventListener("input", calc));
+    ["w1","w2","w3"].forEach(id=>$(id).addEventListener("input", ()=>{weights(); calc();}));
+
+    // Default date today if blank when focusing
+    $("start").addEventListener("focus", ()=>{ if(!$("start").value) $("start").value=todayISO(); });
+
+    // Router
+    window.addEventListener("hashchange", setActiveRoute);
+    setActiveRoute();
+
+    // First draw
+    weights(); calc();
+  }
+
+  // DOM ready
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  }else{
+    init();
+  }
   </script>
 </body>
 </html>
