@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0f1a" />
+  <title>#MathPunk — COex, Pontos & Fórmula (Responsive)</title>
+  <meta name="description" content="#MathPunk: usar o teste do monóxido de carbono expirado (COex) para criar incentivos económicos, pontos e uma fórmula inversa ao tempo sem fumar." />
+  <style>
+    /* =============================
+       BASE / RESET (mobile-first)
+    ==============================*/
+    *,*::before,*::after{box-sizing:border-box}
+    html:focus-within{scroll-behavior:smooth}
+    html,body{height:100%}
+    body{
+      margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.5; color:#ecf6ff;
+      background: radial-gradient(1200px 800px at 20% 10%, #0e1b2e 0%, #070a13 55%, #05070c 100%);
+    }
+    :root{
+      --bg:#070a13; --fg:#ecf6ff; --muted:#b9c7d9; --card:rgba(255,255,255,.06);
+      --accent:#00ffff; --accent-2:#8a7dff; --ok:#bbff6b; --warn:#ffc34d; --hot:#ff2d55;
+      --radius:18px; --shadow:0 20px 60px rgba(0,0,0,.5);
+      /* Fluid type scale */
+      --step--1: clamp(0.83rem, 0.81rem + 0.09vw, 0.90rem);
+      --step-0: clamp(1.00rem, 0.95rem + 0.26vw, 1.13rem);
+      --step-1: clamp(1.20rem, 1.11rem + 0.45vw, 1.41rem);
+      --step-2: clamp(1.44rem, 1.30rem + 0.70vw, 1.76rem);
+      --step-3: clamp(1.73rem, 1.52rem + 1.02vw, 2.20rem);
+      --step-4: clamp(2.07rem, 1.76rem + 1.45vw, 2.75rem);
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important}
+    }
+
+    /* =============================
+       UTILITIES
+    ==============================*/
+    .wrap{width:min(100%,1100px); margin-inline:auto; padding-inline:clamp(16px,2.2vw,20px)}
+    .muted{color:var(--muted)}
+    .tag{display:inline-block; padding:.4rem .7rem; border-radius:999px; background:var(--accent); color:#001317; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:var(--step--1)}
+    .btn{display:inline-flex; align-items:center; gap:.5rem; padding:.75rem 1rem; border-radius:12px; text-decoration:none; font-weight:800; border:1px solid rgba(255,255,255,.16); background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06))}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#001317; border:none; background-size:200% 200%}
+
+    /* =============================
+       LAYERED BACKGROUND
+    ==============================*/
+    .orb{position:fixed; inset:auto auto -110px -110px; width:60vmin; aspect-ratio:1; border-radius:50%; pointer-events:none; filter:blur(22px) saturate(130%); opacity:.5}
+    .orb--a{background:radial-gradient(circle at 30% 30%, rgba(0,255,255,.22), rgba(0,255,255,0))}
+    .orb--b{left:auto; right:-20vmin; bottom:-10vmin; width:55vmin; background:radial-gradient(circle at 70% 30%, rgba(138,125,255,.25), rgba(138,125,255,0))}
+    .orb--c{left:50%; top:-18vmin; bottom:auto; transform:translateX(-50%); width:70vmin; background:radial-gradient(circle at 50% 50%, rgba(255,45,85,.18), rgba(255,45,85,0))}
+
+    /* =============================
+       HEADER (sticky)
+    ==============================*/
+    header{position:sticky; top:0; z-index:10; backdrop-filter:blur(8px) saturate(120%); background:linear-gradient(180deg, rgba(7,10,19,.9), rgba(7,10,19,.4)); border-bottom:1px solid rgba(255,255,255,.08)}
+    .brand{display:flex; align-items:center; gap:.75rem; padding-block:.9rem}
+    .brand-badge{inline-size:40px; block-size:40px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); font-weight:900; color:#001317}
+    .brand-title{font-size:var(--step-0); font-weight:800; letter-spacing:.4px; text-transform:uppercase}
+
+    /* =============================
+       HERO
+    ==============================*/
+    .hero{isolation:isolate}
+    .hero__inner{padding-block:clamp(42px,6.2vw,86px) clamp(24px,3.5vw,40px)}
+    .kicker{color:var(--accent); font-weight:800; letter-spacing:.18em; text-transform:uppercase; font-size:var(--step--1)}
+    h1{font-size:var(--step-4); line-height:1.05; margin:0; text-wrap:balance}
+    .subtitle{font-size:var(--step-0); max-width:70ch}
+
+    .hero-card{margin-top:12px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); border-radius:20px; padding:clamp(14px,2.2vw,18px); box-shadow:var(--shadow)}
+
+    /* Cards Grid — fully fluid with container queries */
+    .grid{display:grid; gap:clamp(12px,2vw,18px)}
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:clamp(14px,2.2vw,20px); transition:transform .25s ease, box-shadow .25s ease}
+    .card:hover{transform:translateY(-4px); box-shadow:0 30px 80px rgba(0,0,0,.6)}
+    .emoji{inline-size:42px; block-size:42px; display:grid; place-items:center; border-radius:12px; font-size:22px; background:linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05)); border:1px solid rgba(255,255,255,.12)}
+    .card h3{margin:.4rem 0 .25rem 0; font-size:var(--step-1)}
+
+    /* =============================
+       SECTIONS
+    ==============================*/
+    section{padding-block:clamp(34px,5.5vw,60px)}
+    h2{font-size:var(--step-3); margin:0 0 .5rem 0}
+
+    /* Equation showcase */
+    .eq{display:grid; gap:clamp(14px,2.2vw,20px)}
+    .eq__box{background:linear-gradient(180deg, rgba(0,255,255,.08), rgba(138,125,255,.08)); border:1px solid rgba(0,255,255,.25); border-radius:var(--radius); padding:clamp(16px,2.4vw,22px)}
+    .equation{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size:var(--step-0); padding:.8rem 1rem; border-radius:14px; background:rgba(0,0,0,.35); border:1px dashed rgba(0,255,255,.35)}
+
+    .eq__alt{border-color:rgba(187,255,107,.35); background:linear-gradient(180deg, rgba(187,255,107,.12), rgba(0,0,0,.18))}
+    .prices{display:grid; gap:clamp(10px,2vw,16px); grid-template-columns:repeat(auto-fit, minmax(180px,1fr))}
+    .price{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:clamp(12px,2vw,16px)}
+    .years{font-weight:800; font-size:var(--step--1); color:#bfeaff}
+    .amount{font-size:var(--step-2); font-weight:900; letter-spacing:.3px; margin-top:.25rem}
+    .small{font-size:var(--step--1)}
+
+    /* CTA */
+    .cta{text-align:center; padding-block:clamp(48px,7vw,80px)}
+    .cta p{max-width:70ch; margin-inline:auto}
+    .btns{display:flex; flex-wrap:wrap; justify-content:center; gap:.75rem; margin-top:.75rem}
+
+    /* Container queries to adapt grids inside narrow parents */
+    .container{container-type:inline-size; container-name:content}
+    @container content (min-width:560px){
+      .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    }
+    @container content (min-width:780px){
+      .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+      .eq{grid-template-columns:1.2fr 1fr}
+    }
+
+    /* Light mode (opt-in via prefers-color-scheme) */
+    @media (prefers-color-scheme:light){
+      body{color:#0b1320; background:radial-gradient(1200px 800px at 20% 10%, #e9f6ff 0%, #eaf0ff 55%, #f7fbff 100%)}
+      :root{--fg:#0b1320; --card:rgba(0,0,0,.04)}
+      header{background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.55)); border-bottom:1px solid rgba(0,0,0,.08)}
+    }
+
+    /* Print */
+    @media print{
+      body{background:#fff; color:#111}
+      .orb{display:none}
+      .btn, header{display:none}
+      .card, .eq__box, .price{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Layered Orbs -->
+  <div class="orb orb--a" aria-hidden="true"></div>
+  <div class="orb orb--b" aria-hidden="true"></div>
+  <div class="orb orb--c" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap">
+      <div class="brand" aria-label="#MathPunk brand">
+        <div class="brand-badge" aria-hidden="true">#Mp</div>
+        <div class="brand-title">#MathPunk • COex, Pontos & Fórmula</div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="wrap container">
+    <!-- HERO -->
+    <section class="hero" role="banner">
+      <div class="hero__inner">
+        <div class="kicker">Manifesto Visual</div>
+        <h1>Usa a matemática para hackear hábitos: <span style="color:var(--accent)">sopro</span>, pontos e mensalidade a descer.</h1>
+        <p class="subtitle">Imagina o teste do <strong>monóxido de carbono expirado (COex)</strong> a registar leituras no teu cartão — e a <strong>Medicare</strong> a trocar sinais de abstinência por <em>pontos</em> e <em>desconto</em> direto. #MathPunk</p>
+
+        <div class="hero-card container">
+          <div class="grid cols-2 cols-3">
+            <article class="card" aria-label="Dentista">
+              <div class="emoji" aria-hidden="true">🦷</div>
+              <h3>Dentista</h3>
+              <p class="muted">Sopro rápido antes da higienização — leitura COex vinculada ao cartão.</p>
+            </article>
+            <article class="card" aria-label="MultiOpticas">
+              <div class="emoji" aria-hidden="true">👓</div>
+              <h3>MultiOpticas</h3>
+              <p class="muted">Check-up ocular com registo anti-tabaco = pontos extra.</p>
+            </article>
+            <article class="card" aria-label="Bombas de Gasolina">
+              <div class="emoji" aria-hidden="true">⛽</div>
+              <h3>Bombas de Gasolina</h3>
+              <p class="muted">Quiosques com COex: sopras, recebes micro-recompensas.</p>
+            </article>
+            <article class="card" aria-label="Médico de Família">
+              <div class="emoji" aria-hidden="true">🩺</div>
+              <h3>Médico de Família</h3>
+              <p class="muted">Leitura recente comprova abstinência — melhor tarifário.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULA -->
+    <section aria-labelledby="formula" class="container">
+      <h2 id="formula">A fórmula inversa que transforma tempo em desconto</h2>
+      <p class="muted" style="margin-top:0; max-width:70ch">Quanto mais tempo sem fumar, menos pagas. Simples, transparente, matemático.</p>
+
+      <div class="eq">
+        <div class="eq__box">
+          <span class="tag">#MathPunk</span>
+          <h3 style="margin:.6rem 0">Mensalidade proporcional ao inverso do tempo sem fumar</h3>
+          <div class="equation">Mensalidade = Base × \(\dfrac{1}{\text{anos\_sem\_fumar} + 1}\)</div>
+          <p class="muted" style="margin:.6rem 0 0">O termo “+1” evita divisão por zero e garante um ponto de partida justo para quem acabou de parar.</p>
+        </div>
+
+        <div class="eq__box eq__alt">
+          <h3 style="margin:.2rem 0 .6rem">Exemplos visuais (Base = 100 €)</h3>
+          <div class="prices" role="list">
+            <div class="price" role="listitem">
+              <div class="years">0 anos</div>
+              <div class="amount">100 €</div>
+              <div class="small muted">Acabaste de deixar.</div>
+            </div>
+            <div class="price" role="listitem">
+              <div class="years">1 ano</div>
+              <div class="amount">50 €</div>
+              <div class="small muted">Metade do custo.</div>
+            </div>
+            <div class="price" role="listitem">
+              <div class="years">5 anos</div>
+              <div class="amount">≈ 16,67 €</div>
+              <div class="small muted">Recompensa cumulativa.</div>
+            </div>
+            <div class="price" role="listitem">
+              <div class="years">10 anos</div>
+              <div class="amount">≈ 9,09 €</div>
+              <div class="small muted">Quase residual.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DADOS / ÉTICA -->
+    <section aria-labelledby="dados" class="container">
+      <h2 id="dados">Dados, pontos, motivação</h2>
+      <div class="grid cols-2 cols-3">
+        <article class="card">
+          <div class="emoji" aria-hidden="true">💳</div>
+          <h3>Cartão & Pontos</h3>
+          <p class="muted">Cada leitura COex confirmada credita pontos no teu cartão Medicare. Bons hábitos tornam-se valor imediato.</p>
+        </article>
+        <article class="card">
+          <div class="emoji" aria-hidden="true">📉</div>
+          <h3>Feedback Matemático</h3>
+          <p class="muted">A fórmula inversa cria um <em>loop</em> de reforço — quanto mais tempo sem fumar, mais vês a fatura a baixar.</p>
+        </article>
+        <article class="card">
+          <div class="emoji" aria-hidden="true">🔐</div>
+          <h3>Privacidade por Design</h3>
+          <p class="muted">Consentimento explícito, dados minimizados e criptografia ponta-a-ponta. Transparência no uso e partilha.</p>
+        </article>
+        <article class="card">
+          <div class="emoji" aria-hidden="true">⚖️</div>
+          <h3>Ética & Equidade</h3>
+          <p class="muted">Sem discriminação: os benefícios são opt-in e focados em saúde preventiva, não em penalização.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section aria-labelledby="manifesto" class="container">
+      <h2 id="manifesto">Manifesto #MathPunk</h2>
+      <div class="eq__box" style="border-color:rgba(187,255,107,.35); background:linear-gradient(135deg, rgba(187,255,107,.09), rgba(0,255,255,.06))">
+        <p><strong>Quebra o vício com álgebra.</strong> Se podemos medir, podemos modelar. Se podemos modelar, podemos motivar. Equações simples, impacto real.</p>
+        <p class="muted">“Usar equações para mexer nos comportamentos humanos, transformar hábitos em variáveis, e saúde em matemática aplicada.”</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <h2>Partilha o hack</h2>
+      <p>Leva esta página para X/Instagram, ou incorpora no teu site. #MathPunk #COex #SaúdeMatemática</p>
+      <div class="btns" role="group" aria-label="Ações">
+        <a class="btn btn-primary" href="#top" onclick="navigator.share && navigator.share({title:'#MathPunk — COex', text:'COex + pontos + fórmula inversa ao tempo sem fumar', url: location.href}); return false;">Partilhar</a>
+        <a class="btn" href="#formula">Ver a fórmula</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap" style="text-align:center; padding-block:28px 60px; opacity:.75; font-size:var(--step--1)">
+    Feito com ♥ para <strong>#MathPunk</strong>. Design CSS3 100% responsivo, sem dependências externas.
+  </footer>
+</body>
+</html>
