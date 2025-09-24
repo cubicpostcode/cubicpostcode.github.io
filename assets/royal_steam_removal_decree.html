@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Royal Decree — Immediate Removal of Harmful Shooters from Steam | His Majesty Cubic Postcode</title>
+<meta name="color-scheme" content="dark light" />
+<meta name="description" content="Royal Decree by His Majesty Cubic Postcode demanding the removal of certain harmful video games from Steam/Valve. Single-file HTML poster letter." />
+
+<style>
+  :root{
+    --bg:#0b0f14; --ink:#e6eef9; --muted:#9db0c9;
+    --card:#111826; --accent:#62d0ff; --gold:#ffd166; --ok:#46d48c; --bad:#ff6b6b;
+    --border:#223047; --shadow: 0 10px 40px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Helvetica Neue", "Noto Sans", sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #13203a66 0%, #0b0f1400 60%),
+      radial-gradient(1200px 600px at 110% 110%, #1b2d4f66 0%, #0b0f1400 60%),
+      linear-gradient(180deg,#0a0e14, #0b1220 25%, #0b0f14 60%);
+    color:var(--ink);
+  }
+
+  /* Page shell reminiscent of a poster */
+  .wrap{
+    max-width: 980px; margin: 0 auto; padding: 24px;
+  }
+  header{
+    display:grid; grid-template-columns:1fr auto; gap:16px;
+    align-items:center; padding: 20px 0 8px 0;
+  }
+  .brand{
+    display:flex; align-items:center; gap:14px;
+  }
+  .seal{
+    width:64px; height:64px; border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 30%, #ffffff26 0 30%, transparent 31%),
+      conic-gradient(from 200deg, #ffd166 0 25%, #ffb703 0 55%, #ffc84d 0 100%);
+    box-shadow: inset 0 0 0 2px #00000040, 0 6px 20px #00000060;
+    border: 2px solid #d4961b;
+  }
+  h1{
+    font-size: clamp(1.6rem, 2.6vw + 1rem, 2.6rem);
+    line-height:1.15; margin:0;
+    letter-spacing:.2px;
+  }
+  .subtitle{
+    color:var(--muted); font-size: .98rem; margin-top:6px;
+  }
+  .actions{
+    display:flex; gap:8px; align-items:center; justify-self:end; flex-wrap: wrap;
+  }
+  .btn{
+    appearance:none; border:1px solid var(--border); background:linear-gradient(180deg,#1a2436,#121a28);
+    color:var(--ink); padding:10px 14px; border-radius:12px; cursor:pointer;
+    box-shadow: var(--shadow); font-weight:600; font-size:.95rem;
+  }
+  .btn:hover{ border-color:#2f4366; transform:translateY(-1px)}
+  .btn:active{ transform:translateY(0)}
+  .btn-accent{ border-color:#3d78a6; background: linear-gradient(180deg,#183a56,#0f2a42); color:#dff3ff}
+  .tagline{
+    margin:18px 0 8px 0; font-size:.95rem; color:#cfe1ff;
+  }
+
+  /* Letter card */
+  .card{
+    background: linear-gradient(180deg, #0d1625, #0c111b);
+    border:1px solid var(--border); border-radius:18px; padding: 22px 20px;
+    box-shadow: var(--shadow);
+  }
+  .letter{
+    background:linear-gradient(180deg, #0f1829, #0b1019);
+    border:1px solid #1d2940; border-radius:16px; padding: clamp(16px, 2.5vw, 26px);
+  }
+  .letter h2{
+    font-size: clamp(1.2rem, 1.4vw + 1rem, 1.6rem);
+    margin:0 0 12px 0;
+  }
+  .meta{
+    display:flex; gap:16px; flex-wrap:wrap; font-size:.95rem; color:#d3e3ff;
+    border-bottom:1px dashed #264161; padding-bottom:10px; margin-bottom:16px;
+  }
+  .meta .pill{
+    background:#0f1a2c; border:1px solid #263a5a; padding:6px 10px; border-radius:999px;
+  }
+
+  .body{
+    line-height:1.65; font-size:1.05rem; color:#eaf2ff;
+  }
+  .body p{ margin: 0 0 1rem 0}
+  .body ul{ margin:.2rem 0 1rem 1.1rem}
+  .body li{ margin:.35rem 0}
+  .callout{
+    margin: 1rem 0; padding:.9rem 1rem; border-left:4px solid var(--gold);
+    background: #101a2b; border-radius:12px;
+  }
+  .list-head{
+    font-weight:700; color:#ffe9b6; margin-bottom:.5rem
+  }
+
+  /* Footer/signature */
+  .sig{
+    margin-top: 1.2rem; border-top:1px dashed #2b4266; padding-top:1rem;
+  }
+  .sig .name{
+    font-size:1.05rem; font-weight:800; letter-spacing:.3px;
+  }
+  .sig small{ color:var(--muted)}
+
+  /* Sidebar facts */
+  .grid{
+    display:grid; grid-template-columns: 1fr; gap:16px; margin-top:14px;
+  }
+  @media (min-width: 900px){
+    .grid{ grid-template-columns: 3fr 1.25fr; }
+    .side{ position: sticky; top: 12px; align-self:start }
+  }
+  .pane{
+    background: linear-gradient(180deg,#0e1727,#0b121e);
+    border:1px solid #1f3251; border-radius:14px; padding:14px;
+  }
+  .pane h3{ margin: 0 0 8px 0; font-size:1rem; color:#d7ecff}
+  .pane ul{ margin:.2rem 0 0 1rem; color:#cfe1ff; font-size:.95rem}
+  .pane li{ margin:.35rem 0}
+  .badge{
+    display:inline-flex; gap:8px; align-items:center; font-weight:700; font-size:.85rem;
+    padding:6px 10px; border-radius:999px; border:1px solid #33547d; background:#0f1b2e; color:#dff3ff;
+  }
+
+  /* Print */
+  @media print{
+    body{ background:#fff; color:#000 }
+    .wrap{ max-width:none; padding:0 }
+    header, .actions, .pane, .badge, .tagline{ display:none !important }
+    .card, .letter{ box-shadow:none; border:0; background:#fff; color:#000 }
+    .letter{ padding:0 }
+    a{ color:#000; text-decoration:underline }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="seal" aria-hidden="true"></div>
+        <div>
+          <h1>Royal Decree — Immediate Removal of Harmful Shooters from Steam</h1>
+          <div class="subtitle">In defense of human dignity, public safety, mothers, educators, families and children.</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-accent" onclick="copyLetter()">Copy Letter</button>
+        <button class="btn" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <div class="tagline">
+      Issued by <strong>His Majesty Cubic Postcode</strong> • <span id="today"></span>
+    </div>
+
+    <div class="grid">
+      <main class="card">
+        <article id="letter" class="letter" tabindex="0" aria-label="Royal Decree letter body">
+          <div class="meta">
+            <span class="pill">To: Valve Corporation / Steam Platform (Attn: Gabe Newell, CEO)</span>
+            <span class="pill">Subject: Removal of games violating human dignity &amp; public safety</span>
+            <span class="pill">Jurisdiction: Moral Authority &amp; Public Interest</span>
+          </div>
+
+          <h2>Re: Immediate Removal of Games Which Violate Human Dignity and Public Safety — By Royal Decree</h2>
+
+          <div class="body">
+            <p>Dear Mr. Newell and Valve Leadership,</p>
+            <p>By the authority vested in me as <strong>His Majesty Cubic Postcode</strong>, and in the name of conscience, human dignity and the moral well-being of society — and acting for the protection of mothers, educators, families and children everywhere — I hereby demand the immediate and permanent removal from the Steam storefront and all Valve-run distribution channels of a class of videogames and interactive experiences that serve no legitimate artistic, educational or social purpose and that instead glorify, normalize or trivialize grave harms.</p>
+
+            <div class="callout">
+              <div class="list-head">The games and game types at issue include, but are not limited to:</div>
+              <ul>
+                <li>Titles that simulate or enable <strong>school shootings, mass shootings or massacres</strong> (e.g., <em>Active Shooter</em> and obvious clones/derivatives).</li>
+                <li>Titles whose core mechanics or narrative <strong>celebrate indiscriminate murder of civilians</strong> (e.g., <em>Hatred</em> and similar “mass slaughter” shooters).</li>
+                <li>Titles that exist primarily to showcase <strong>extreme gore, torture, mutilation</strong> or sexualized violence (e.g., <em>Blood Trail</em> and analogous VR/desktop releases).</li>
+                <li>Titles that <strong>trivialize or eroticize sexual violence, incest, pedophilia</strong> or other forms of sexual exploitation.</li>
+                <li>Titles that promote or glorify <strong>terrorism, extremist ideology, hate crimes</strong> or provide role-play tools for such acts.</li>
+                <li>Any game or mod that intentionally <strong>recreates or reenacts real-world atrocities</strong> (e.g., projects modeled on Columbine or similar tragedies).</li>
+              </ul>
+            </div>
+
+            <p>These games are not only injurious to the psyche of vulnerable players — they also pose a demonstrable risk to public safety, retraumatize survivors of violence, and undermine the ethical standards expected of major distribution platforms. The availability of such content on a major storefront normalizes the spectacle of cruelty and places parents and educators at a profound disadvantage when protecting children.</p>
+
+            <p>Accordingly, I require Valve to:</p>
+            <ul>
+              <li><strong>Immediately remove</strong> from sale and distribution on Steam any currently listed titles fitting the categories above.</li>
+              <li><strong>Expedite review</strong> of the Steam catalogue to identify and purge low-profile or newly published games that meet the same criteria (including UGC worlds, dedicated servers, DLC packages and storefront-listed mods).</li>
+              <li><strong>Publish transparent criteria</strong> listing the content categories that are disallowed on Steam, including examples, and provide an appeals process for developers that is public and accountable.</li>
+              <li><strong>Improve discovery and age-gating controls</strong> so that borderline adult content cannot be found by minors through recommendations, tags, or third-party store feeds.</li>
+              <li><strong>Coordinate with payment processors and platform partners</strong> to ensure that content which violates the standards of human dignity is not monetized through mainstream payment rails.</li>
+              <li><strong>Notify affected consumers and educators</strong> of the removals and provide resources for parents to configure family/parental controls on Steam and associated Valve services.</li>
+            </ul>
+
+            <p>I make this demand not as a call for censorious rashness, but as a moral, social and practical necessity. The distribution of entertainment that centers the celebration of massacre, sexual violence, child exploitation, torture or terrorism has consequences beyond shock value: it contributes to a cultural environment in which brutality is banal and harm is commodified.</p>
+
+            <p>In the interest of public accountability, please respond in writing within <strong>fourteen (14) days</strong> of the date of this letter with a statement of Valve’s intended actions and a timeline for removal and policy updates. Should Valve decline to act, I will pursue all available peaceful and lawful avenues for public advocacy, including the publication of findings, communication with regulators and payment processors, and coordinated petitions from civil society and faith communities.</p>
+
+            <p>I expect Valve to act decisively and with conscience. The protection of children, the care of survivors, and the moral fabric of our shared culture demand nothing less.</p>
+
+            <div class="sig">
+              <div class="name">[u]Cubic[/u] [u]Postcode[/u]</div>
+              <small>His Majesty Cubic Postcode</small>
+            </div>
+          </div>
+        </article>
+      </main>
+
+      <aside class="side">
+        <div class="pane">
+          <div class="badge" title="Royal Decree ID"><span>Royal Decree</span> • <span id="decree-id"></span></div>
+          <h3>Scope of Action</h3>
+          <ul>
+            <li>Steam store &amp; all Valve-run channels</li>
+            <li>UGC worlds/servers/DLC/mods</li>
+            <li>Payment-rail compliance</li>
+            <li>Parent &amp; educator notification</li>
+          </ul>
+        </div>
+
+        <div class="pane">
+          <h3>Why this matters</h3>
+          <ul>
+            <li>Protects minors &amp; vulnerable players</li>
+            <li>Reduces trauma amplification</li>
+            <li>Aligns monetization with human dignity</li>
+            <li>Clearer content standards on Steam</li>
+          </ul>
+        </div>
+
+        <div class="pane">
+          <h3>Quick Actions</h3>
+          <ul>
+            <li><a href="#letter">Jump to Letter</a></li>
+            <li><a href="#" onclick="copyLetter();return false;">Copy Letter Text</a></li>
+            <li><a href="#" onclick="window.print();return false;">Print / Save PDF</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+  // Date and decree ID
+  const todayEl = document.getElementById('today');
+  const now = new Date();
+  const fmt = new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+  todayEl.textContent = `Date: ${fmt.format(now)}`;
+
+  const decreeId = document.getElementById('decree-id');
+  decreeId.textContent = `HMP-STEAM-${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+
+  // Copy helper
+  async function copyLetter(){
+    const el = document.getElementById('letter');
+    // Clone and strip decorative UI to plain text
+    const clone = el.cloneNode(true);
+    // Remove buttons or non-content if any (none here inside .letter)
+    const text = clone.innerText
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    try{
+      await navigator.clipboard.writeText(text);
+      toast('Letter copied to clipboard ✅');
+    }catch(err){
+      toast('Could not copy automatically. Select and copy manually.', true);
+    }
+  }
+
+  // Tiny toast
+  function toast(msg, warn){
+    const t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style,{
+      position:'fixed', inset:'auto 16px 16px auto',
+      padding:'10px 14px', borderRadius:'12px',
+      background: warn ? '#3a1b1b' : '#0f2a42',
+      color:'#e6eef9', border: '1px solid ' + (warn ? '#6b2a2a' : '#33547d'),
+      boxShadow:'0 10px 30px rgba(0,0,0,.5)', zIndex:9999, fontWeight:700
+    });
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.remove(); }, 2200);
+  }
+</script>
+</body>
+</html>
