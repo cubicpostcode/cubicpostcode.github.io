@@ -186,17 +186,24 @@
       <div class="eq">
         <div class="eq__box">
           <span class="tag">#MathPunk</span>
-          <h3 style="margin:.6rem 0">Mensalidade proporcional ao inverso do tempo sem fumar
-            <script>
-            // MathJax config for inline \( ... \) math
-            window.MathJax = {
-              tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
-              svg: { fontCache: 'global' }
-            };
-          </script>
-          <script id="MathJax-script" async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-          </h3>
+<!-- Drop-in block -->
+<h3 style="margin:.6rem 0">
+  Mensalidade proporcional ao inverso do tempo sem fumar
+</h3>
+
+<p style="font-size:1.05rem;line-height:1.6">
+  Fórmula: \( \text{Mensalidade} = \text{Base} \times \dfrac{1}{\text{anos\_sem\_fumar}+1} \)
+</p>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
           <p class="muted" style="margin:.6rem 0 0">O termo “+1” evita divisão por zero e garante um ponto de partida justo para quem acabou de parar.</p>
         </div>
 
