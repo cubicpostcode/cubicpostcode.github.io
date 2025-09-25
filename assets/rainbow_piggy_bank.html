@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rainbow Piggy Bank — 6¢ Steps to ...666</title>
+  <meta name="description" content="Kid‑friendly explanation and calculator for the 6‑cent pattern trick: make an account balance end in 666 (last three digits in cents) — with safety notes." />
+  <style>
+    :root{
+      --bg1:#0f1025; --bg2:#1a0f2f; --bg3:#10253a; --ink:#f8fbff; --muted:#cfe2ff;
+      --card: rgba(255,255,255,.08); --bord: rgba(255,255,255,.18);
+      --yes:#5cffb1; --no:#ff6b6b; --accent:#80e0ff; --accent2:#ffd166; --accent3:#b794ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      color:var(--ink); background: radial-gradient(1200px 800px at 20% -10%,#2b2a72 0%, transparent 70%),
+                 radial-gradient(900px 600px at 120% 10%,#0fa3b1 0%, transparent 65%),
+                 linear-gradient(135deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+      overflow-x:hidden;
+      --shine: conic-gradient(from 0deg at 50% 50%, #fff4 0 10%, #fff0 10% 100%);
+      animation: bgShift 18s ease-in-out infinite alternate;
+    }
+    @keyframes bgShift{0%{filter:hue-rotate(0)}100%{filter:hue-rotate(40deg)}}
+
+    .stars::before,.stars::after{content:""; position:fixed; inset:-50vmax; background:
+      radial-gradient(2px 2px at 10% 20%,#fff8,transparent 60%),
+      radial-gradient(1.5px 1.5px at 60% 40%,#fff6,transparent 60%),
+      radial-gradient(1.2px 1.2px at 30% 80%,#fff5,transparent 60%),
+      radial-gradient(1.4px 1.4px at 80% 70%,#fff7,transparent 60%),
+      radial-gradient(1px 1px at 90% 10%,#fff5,transparent 60%);
+      animation: drift 120s linear infinite; opacity:.35; pointer-events:none; mix-blend-mode:screen;
+    }
+    .stars::after{animation-duration:200s; opacity:.25; filter:blur(.5px)}
+    @keyframes drift{to{transform:translate3d(6vmax, -6vmax,0)}}
+
+    header{
+      position:relative; padding: clamp(24px,4vw,48px) 16px 16px; text-align:center;
+    }
+    .title{font-size:clamp(28px,5vw,54px); font-weight:900; letter-spacing:.5px; line-height:1.05;}
+    .subtitle{font-size:clamp(14px,2.4vw,18px); opacity:.9; max-width:920px; margin:10px auto 0}
+
+    .wrap{max-width:1100px; margin:0 auto; padding: 12px 16px 64px;}
+    .grid{display:grid; grid-template-columns:1.15fr .85fr; gap:20px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;}}
+
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
+          border:1px solid var(--bord); border-radius:22px; box-shadow:0 8px 40px #0005;
+          overflow:hidden; position:relative}
+    .card .head{display:flex; align-items:center; gap:10px; padding:16px 18px; background:linear-gradient(90deg,#ffffff0c,transparent);
+                border-bottom:1px solid var(--bord)}
+    .pill{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--bord); background:var(--card)}
+    .card .body{padding:18px}
+
+    .badge{display:inline-flex; align-items:center; gap:8px; font-weight:700; padding:8px 12px; border-radius:999px; border:1px solid var(--bord);
+           background:linear-gradient(135deg,#ffffff22,#ffffff0a); box-shadow:inset 0 0 0 2px #ffffff08}
+
+    .rainbow{
+      --r: conic-gradient(from 0deg,#ff6b6b,#ffd166,#5cffb1,#80e0ff,#b794ff,#ff6b6b);
+      background: var(--r); -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: 0 0 16px #0006;
+    }
+
+    /* Floating bubbles */
+    .bubble{position:absolute; border-radius:50%; filter: blur(.3px); opacity:.55; pointer-events:none;
+      background: radial-gradient(circle at 30% 30%, #fff8, #fff0 60%),
+                  radial-gradient(circle at 70% 70%, #fff5, #fff0 60%),
+                  linear-gradient(135deg, #ffffff22, #ffffff00);
+      animation: float var(--dur,12s) ease-in-out infinite;
+    }
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-18px)}100%{transform:translateY(0)}}
+
+    /* Calculator styling */
+    label{display:block; font-weight:700; margin:.25rem 0 .4rem}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    input[type="text"], input[type="number"]{width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--bord);
+      background:#0e1320; color:var(--ink); outline:none}
+    input::placeholder{color:#dfe7ff88}
+    button{padding:12px 16px; border-radius:14px; border:1px solid var(--bord); color:#10253a; font-weight:800;
+      background:linear-gradient(135deg,#b5f0ff,#a5ffd6); cursor:pointer; transition:.2s transform ease, .3s box-shadow ease}
+    button:hover{transform:translateY(-1px); box-shadow:0 10px 22px #0005}
+
+    .result{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:10px}
+    @media (max-width:700px){.result{grid-template-columns:1fr}}
+    .tile{padding:12px 14px; border-radius:14px; border:1px solid var(--bord); background:linear-gradient(180deg,#ffffff12,#ffffff08)}
+    .tile .k{font-size:12px; opacity:.8}
+    .tile .v{font-size:20px; font-weight:800}
+
+    .digits{display:flex; gap:8px; align-items:center}
+    .digit{width:60px; height:76px; border-radius:12px; display:grid; place-items:center; font-size:36px; font-weight:900;
+      background:linear-gradient(180deg,#0b101b,#151f30); border:1px solid var(--bord); box-shadow: inset 0 0 16px #000a}
+    .digit.good{background:linear-gradient(180deg,#042915,#0b3f22); outline:2px solid #43ff9d66}
+
+    .callout{padding:14px 16px; border-radius:16px; border:1px solid var(--bord); background:linear-gradient(135deg,#ffffff1a,#ffffff08)}
+
+    .ok{color:var(--yes)}
+    .bad{color:var(--no)}
+
+    /* Simple confetti when success */
+    .confetti{position:relative}
+    .confetti.active::before{content:""; position:absolute; inset:-6px; border-radius:20px; pointer-events:none;
+      background: repeating-conic-gradient(from 0deg, #ff6b6b 0 10deg,#ffd166 10deg 20deg,#5cffb1 20deg 30deg,#80e0ff 30deg 40deg,#b794ff 40deg 50deg);
+      -webkit-mask: radial-gradient(300px 180px at 50% 50%, #000 0 55%, transparent 56%);
+      animation: spin 3.2s linear infinite}
+    @keyframes spin{to{transform:rotate(1turn)}}
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <header>
+    <div class="title rainbow">Rainbow Piggy Bank</div>
+    <p class="subtitle">A colorful, kid‑friendly explainer & calculator for a number pattern trick: keep adding <strong>6 cents</strong> until the last three digits of your balance (in cents) show <strong>666</strong>. This is a math puzzle — use it only with your own money and always follow grown‑up rules.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- EXPLAINER CARD -->
+      <section class="card" aria-labelledby="how">
+        <div class="head">
+          <span class="pill">How it works — for smart kids</span>
+        </div>
+        <div class="body">
+          <div class="callout" id="how">
+            <p><strong>Goal:</strong> We want the balance’s last three cents digits to be <strong>…666</strong>. We look at the balance in <em>cents</em> (no decimals) and only care about the last three digits. That’s called <em>mod 1000</em>.</p>
+            <p>Every time we add <strong>6 cents</strong>, the last three digits jump by <strong>6</strong>. After a while, the pattern may land on <strong>666</strong> — or it might miss it forever. The rule is simple:</p>
+            <ul>
+              <li>If <code>target = (666 − (balance % 1000)) % 1000</code> is <strong>even</strong> → <span class="ok">you can do it</span>.</li>
+              <li>If that target is <strong>odd</strong> → <span class="bad">it’s impossible</span> using only 6‑cent steps.</li>
+            </ul>
+            <p><strong>Why?</strong> Because 6 and 1000 share a factor of 2. To hit exactly 666, the difference needs to be even. (Grown‑up name: solving a modular congruence.)</p>
+          </div>
+
+          <div style="height:8px"></div>
+          <div class="callout">
+            <p><strong>Safety & kindness:</strong> Only practice with your own pocket‑money account or a pretend account. Real banks have rules about tiny, repeated payments. Always ask a parent/guardian before doing money experiments.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALCULATOR CARD -->
+      <section class="card confetti" id="calcCard" aria-labelledby="calc">
+        <div class="head">
+          <span class="pill">Try the calculator</span>
+        </div>
+        <div class="body">
+          <div class="row">
+            <div style="flex:1 1 220px">
+              <label for="amount">Current balance</label>
+              <input id="amount" type="text" inputmode="decimal" placeholder="e.g., 123.45" aria-describedby="amtHelp" />
+              <small id="amtHelp">Use dot as decimal separator (e.g., 16.66). We’ll do the cents math safely.</small>
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button id="go">Check the pattern</button>
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button id="demo">Random demo</button>
+            </div>
+          </div>
+
+          <div class="result" style="margin-top:16px">
+            <div class="tile"><div class="k">Balance in cents</div><div class="v" id="v_cents">–</div></div>
+            <div class="tile"><div class="k">Last three digits (mod 1000)</div><div class="v digits"><span class="digit" id="d1">–</span><span class="digit" id="d2">–</span><span class="digit" id="d3">–</span></div></div>
+            <div class="tile"><div class="k">Target to reach 666</div><div class="v" id="v_target">–</div></div>
+            <div class="tile"><div class="k">Possible?</div><div class="v" id="v_ok">–</div></div>
+            <div class="tile"><div class="k">Number of 6¢ steps</div><div class="v" id="v_n">–</div></div>
+            <div class="tile"><div class="k">Total to send</div><div class="v" id="v_send">–</div></div>
+            <div class="tile"><div class="k">Final balance</div><div class="v" id="v_final">–</div></div>
+            <div class="tile"><div class="k">Explanation</div><div class="v" id="v_explain" style="font-size:16px; line-height:1.2">–</div></div>
+          </div>
+
+          <div style="margin-top:14px" class="callout">
+            <strong>Tip for teachers/parents:</strong> Ask kids to predict “possible or not?” by checking if the target is even. Then reveal the answer and compare!
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Mini lessons -->
+    <section class="card" style="margin-top:22px" aria-labelledby="mini">
+      <div class="head"><span class="pill">Mini‑lessons</span></div>
+      <div class="body" id="mini">
+        <ol>
+          <li><strong>Count in steps:</strong> Adding 6 over and over is like skip‑counting: 0, 6, 12, 18…</li>
+          <li><strong>Look at the last three digits:</strong> Only the last three digits matter (that’s <em>mod 1000</em>), because adding 1000 cents doesn’t change them.</li>
+          <li><strong>Even‑odd secret:</strong> To land exactly on 666, the difference must be even. If it’s odd, you’ll hop over it forever.</li>
+          <li><strong>Fast path (grown‑up trick):</strong> If it’s possible, the smallest number of steps is <code>n ≡ 167 × (target/2) (mod 500)</code>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Friendly rules -->
+    <section class="card" style="margin-top:22px" aria-labelledby="rules">
+      <div class="head"><span class="pill">Friendly rules</span></div>
+      <div class="body" id="rules">
+        <ul>
+          <li>Practice with pretend money or your own account only. Ask a grown‑up first.</li>
+          <li>Some banks charge fees or block tiny repeated payments. This page is for math fun and learning.</li>
+          <li>Be kind with money: never pester people with surprise transfers.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- bubbly decorations -->
+  <div class="bubble" style="left:5%; top:72%; width:100px; height:100px; --dur:14s"></div>
+  <div class="bubble" style="left:82%; top:16%; width:74px; height:74px; --dur:11s"></div>
+  <div class="bubble" style="left:65%; top:78%; width:120px; height:120px; --dur:16s"></div>
+  <div class="bubble" style="left:12%; top:24%; width:66px; height:66px; --dur:13s"></div>
+
+  <script>
+    // Utility: parse a money string to integer cents safely (no floats)
+    function parseMoneyToCents(str){
+      if(!str) return null;
+      str = String(str).trim();
+      if(!/^\d*(?:\.\d{0,2})?$/.test(str)) return null; // only up to 2 decimals
+      const parts = str.split(".");
+      const whole = parts[0] ? BigInt(parts[0]) : 0n;
+      const frac = parts[1] ? (parts[1] + "00").slice(0,2) : "00";
+      const cents = whole*100n + BigInt(frac);
+      return cents;
+    }
+
+    function mod(a, m){ // BigInt positive mod
+      const r = a % m; return r >= 0n ? r : r + m;
+    }
+
+    function compute(balanceCents){
+      const thousand = 1000n;
+      const six = 6n;
+      const b3 = mod(balanceCents, thousand); // last three digits in cents
+      const target = mod(666n - b3, thousand); // how far to go (mod 1000)
+      const possible = (target % 2n === 0n);
+      let n = null, total = null, finalCents = null;
+      if(possible){
+        // n ≡ 167 * (target/2) (mod 500)
+        const t2 = target / 2n;
+        const nRaw = (167n * t2) % 500n;
+        n = Number(nRaw); // safe: < 500
+        total = 6n * BigInt(n);
+        finalCents = balanceCents + total;
+      }
+      return {balanceCents, b3: Number(b3), target: Number(target), possible, n, total, finalCents};
+    }
+
+    function setDigits(num){
+      const s = String(num).padStart(3,'0');
+      const ids = ['d1','d2','d3'];
+      for(let i=0;i<3;i++){
+        const el = document.getElementById(ids[i]);
+        el.textContent = s[i];
+        el.classList.toggle('good', s === '666');
+      }
+    }
+
+    function centsToMoneyStr(c){
+      const sign = c < 0n ? '-' : '';
+      const v = c < 0n ? -c : c;
+      const dollars = v / 100n; const cents = v % 100n;
+      return sign + dollars.toString() + '.' + cents.toString().padStart(2,'0');
+    }
+
+    function run(str){
+      const card = document.getElementById('calcCard');
+      const cents = parseMoneyToCents(str);
+      if(cents === null){
+        document.getElementById('v_cents').textContent = 'Please type like 123.45';
+        setDigits('---');
+        ['v_target','v_ok','v_n','v_send','v_final','v_explain'].forEach(id=>document.getElementById(id).textContent='–');
+        card.classList.remove('active');
+        return;
+      }
+      const r = compute(cents);
+      document.getElementById('v_cents').textContent = r.balanceCents.toString() + '¢';
+      setDigits(r.b3);
+      document.getElementById('v_target').textContent = r.target + ' (needs to be even)';
+      document.getElementById('v_ok').innerHTML = r.possible ? '<span class="ok">YES</span>' : '<span class="bad">NO</span>';
+      if(r.possible){
+        document.getElementById('v_n').textContent = r.n + ' steps of 6¢';
+        document.getElementById('v_send').textContent = centsToMoneyStr(r.total);
+        document.getElementById('v_final').textContent = '$ ' + centsToMoneyStr(r.finalCents);
+        document.getElementById('v_explain').textContent = `Add 6¢, ${r.n} times. That adds up to ${centsToMoneyStr(r.total)}. Your last three digits become 666.`;
+        card.classList.add('active');
+      } else {
+        document.getElementById('v_n').textContent = '—';
+        document.getElementById('v_send').textContent = '—';
+        document.getElementById('v_final').textContent = '—';
+        document.getElementById('v_explain').textContent = 'Because the difference is odd, 6‑cent steps can’t land exactly on 666.';
+        card.classList.remove('active');
+      }
+    }
+
+    document.getElementById('go').addEventListener('click', ()=>run(document.getElementById('amount').value));
+
+    // Demo balances to explore
+    const demos = ['0.00','0.01','10.00','16.66','26.66','50.00','66.66','88.88','100.00','123.45','210.88','286.66','401.60','806.66'];
+    document.getElementById('demo').addEventListener('click', ()=>{
+      const pick = demos[Math.floor(Math.random()*demos.length)];
+      document.getElementById('amount').value = pick;
+      run(pick);
+    });
+  </script>
+</body>
+</html>
