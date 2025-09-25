@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menos Fumadores = Prémio! (Modelo simples)</title>
+  <style>
+    :root{
+      --bg: #0b1220; --ink:#f4fbff; --muted:#b9d2e8; --accent:#7ae1ff; --good:#53d59a; --tax:#ffd166; --card:#111a2b; --border:#1f2b44;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Ubuntu, Arial, sans-serif; color:var(--ink); background: radial-gradient(1200px 600px at 20% -10%, #163362 0%, #0b1220 60%);
+      display:grid; place-items:center; padding:20px}
+    .wrap{width:clamp(320px, 92vw, 860px); background:linear-gradient(180deg, #0f1b33, #0d172a); border:1px solid var(--border); border-radius:24px; padding:20px 18px; box-shadow: 0 20px 60px rgba(0,0,0,.35)}
+    h1{font-size:clamp(20px, 3.6vw, 34px); margin:0 0 6px}
+    p.lead{margin:.2rem 0 1rem; color:var(--muted); font-size:clamp(14px,2.4vw,18px)}
+    .grid{display:grid; grid-template-columns: 1fr; gap:16px}
+    @media (min-width:760px){ .grid{grid-template-columns: 1fr 1fr}}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:14px 14px}
+    label{display:block; font-weight:600; margin:0 0 8px}
+    .row{display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center}
+    input[type=range]{width:100%}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:#0c2144; border:1px solid var(--border); color:var(--muted); font-size:14px}
+    .big{font-size:clamp(24px,5vw,44px); font-weight:800}
+    .result{display:flex; gap:14px; flex-wrap:wrap}
+    .badge{padding:8px 12px; border-radius:12px; border:1px solid var(--border); background:#0d1e3a}
+    .kpi{display:flex; flex-direction:column; gap:6px; align-items:flex-start}
+    .kpi .value{font-weight:900; font-size:clamp(24px, 5vw, 40px)}
+    .kpi .hint{color:var(--muted); font-size:14px}
+    .value.good{color:var(--good)}
+    .value.tax{color:var(--tax)}
+    .row small{color:var(--muted)}
+    .formula{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#091528; padding:10px 12px; border-radius:12px; border:1px solid var(--border); color:#d9ecff}
+    .foot{margin-top:12px; color:#cbd9ee; opacity:.8; font-size:12px}
+    button{background:transparent; color:var(--accent); border:1px solid var(--border); border-radius:10px; padding:8px 10px; cursor:pointer}
+    button:hover{background:#0c2144}
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="t">
+    <h1 id="t">🎉 Menos fumadores = prémio para todos!</h1>
+    <p class="lead">Modelo simples que qualquer criança esperta consegue explicar: <strong>se há menos fumadores</strong>,
+      <span class="pill">👩‍⚕️ salários da função pública ↑</span> e <span class="pill">🏭 imposto sobre salários nas empresas ↓</span>.
+      Tudo suave e com limites seguros.</p>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="b">
+        <h2 id="b" style="margin-top:0">1) Ajusta os números</h2>
+
+        <div class="row">
+          <label for="p0">Fumadores no início (baseline)</label>
+          <input id="p0" type="range" min="5" max="40" step="1" value="20" aria-label="baseline de fumadores">
+          <output id="op0" class="badge" for="p0">20%</output>
+        </div>
+
+        <div class="row">
+          <label for="p">Fumadores hoje</label>
+          <input id="p" type="range" min="0" max="40" step="1" value="15" aria-label="fumadores atuais">
+          <output id="op" class="badge" for="p">15%</output>
+        </div>
+
+        <div class="row">
+          <label for="smax">Teto de aumento salarial (público)</label>
+          <input id="smax" type="range" min="0" max="20" step="1" value="15" aria-label="teto salarial">
+          <output id="os" class="badge" for="smax">+15%</output>
+        </div>
+
+        <div class="row">
+          <label for="tmax">Teto de redução de imposto (empresas)</label>
+          <input id="tmax" type="range" min="0" max="20" step="1" value="10" aria-label="teto imposto">
+          <output id="ot" class="badge" for="tmax">−10%</output>
+        </div>
+
+        <div class="formula" aria-live="polite">
+          Δ = (p₀ − p)/p₀ &nbsp;→&nbsp; salário = 1 + Smax·Δ &nbsp; | &nbsp; imposto = 1 − Tmax·Δ
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px"><button id="reset">Repor</button><small>Fórmula linear simples • tudo em percentagem</small></div>
+      </section>
+
+      <section class="card" aria-labelledby="r">
+        <h2 id="r" style="margin-top:0">2) Resultados (em minutos de explicação! ⏱️)</h2>
+        <div class="kpi">
+          <div class="hint">Queda relativa de fumadores (Δ)</div>
+          <div id="delta" class="value">25.0%</div>
+        </div>
+        <div class="result" style="margin-top:10px">
+          <div class="kpi">
+            <div class="hint">Aumento salarial na função pública</div>
+            <div id="sal" class="value good">+3.8%</div>
+          </div>
+          <div class="kpi">
+            <div class="hint">Redução do imposto sobre salários (empresas)</div>
+            <div id="tax" class="value tax">−2.5%</div>
+          </div>
+        </div>
+        <p class="foot">Tradução para miúdos: <em>“Se há menos fumadores do que no início, damos um bocadinho de prémio: 
+          quem cuida de todos (função pública) recebe um pouco mais, e as empresas pagam um pouco menos de imposto nos salários.
+          Quanto menos fumadores, maior o prémio — mas com limites para ser justo.”</em></p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const el = id => document.getElementById(id);
+    const p0 = el('p0'), p = el('p'), smax = el('smax'), tmax = el('tmax');
+    const op0 = el('op0'), op = el('op'), os = el('os'), ot = el('ot');
+    const delta = el('delta'), sal = el('sal'), tax = el('tax');
+    const reset = el('reset');
+
+    function fmtPct(x, sign=false){
+      const v = (Math.round(x*10)/10).toFixed(1) + '%';
+      if(!sign) return v;
+      return (x>=0? '+' : '−') + (Math.abs(Math.round(x*10)/10).toFixed(1)) + '%';
+    }
+
+    function update(){
+      const P0 = p0.valueAsNumber/100; // baseline
+      const P  = p.valueAsNumber/100;  // atual
+      const S  = smax.valueAsNumber/100; // teto salário
+      const T  = tmax.valueAsNumber/100; // teto imposto
+
+      // Mostrar sliders
+      op0.textContent = (p0.valueAsNumber).toFixed(0) + '%';
+      op.textContent  = (p.valueAsNumber).toFixed(0) + '%';
+      os.textContent  = '+' + (smax.valueAsNumber).toFixed(0) + '%';
+      ot.textContent  = '−' + (tmax.valueAsNumber).toFixed(0) + '%';
+
+      // Δ linear (com piso em 0)
+      const dRaw = (P0 > 0) ? (P0 - P)/P0 : 0;
+      const d = Math.max(0, dRaw);
+
+      // KPIs
+      delta.textContent = fmtPct(d*100);
+      const salInc = S * d * 100; // em %
+      const taxDec = T * d * 100; // em %
+      sal.textContent = fmtPct(salInc, true);
+      tax.textContent = fmtPct(-taxDec, true);
+    }
+
+    [p0,p,smax,tmax].forEach(x=> x.addEventListener('input', update));
+    reset.addEventListener('click', ()=>{ p0.value=20; p.value=15; smax.value=15; tmax.value=10; update();});
+
+    update();
+  </script>
+</body>
+</html>
