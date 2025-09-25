@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quantum Photon Leveler — by Cubic Postcode</title>
+  <meta name="description" content="Meet the Quantum Photon Leveler: a single‑photon, gravity‑aligned optical plumb for record‑breaking horizontal accuracy. Concept and manifesto by Cubic Postcode." />
+  <meta property="og:title" content="Quantum Photon Leveler — by Cubic Postcode" />
+  <meta property="og:description" content="A single‑photon, gravity‑aligned optical plumb for record‑breaking horizontal accuracy." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0df" />
+  <style>
+    :root{
+      --bg-0:#070b10; --bg-1:#0a1422; --bg-2:#0d1b2a;
+      --ink:#e6eef9; --muted:#9fb5cf; --accent:#00d0ff; --accent-2:#a1ffce;
+      --good:#46d48c; --warn:#ffd166; --bad:#ff6b6b; --glass:rgba(255,255,255,.06);
+      --ring: rgba(0,208,255,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--ink);
+      background: radial-gradient(1200px 600px at 70% -10%, #123 10%, transparent 60%),
+                  radial-gradient(800px 400px at -10% 20%, #0a1a2f 0%, transparent 60%),
+                  linear-gradient(180deg,var(--bg-0),var(--bg-1) 40%,var(--bg-2));
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Ubuntu, "Helvetica Neue", Arial;
+      line-height:1.55; letter-spacing:.1px;
+      background-attachment: fixed;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{ text-decoration:underline }
+    h1,h2,h3{line-height:1.15; margin:0 0 .6rem}
+    h1{font-size:clamp(2.2rem, 5vw, 4rem); letter-spacing:.3px}
+    h2{font-size:clamp(1.6rem, 3vw, 2.2rem)}
+    h3{font-size:clamp(1.2rem, 2.2vw, 1.4rem); color:var(--muted)}
+    p{margin:.4rem 0 1rem}
+
+    /* Layout */
+    .wrap{max-width:1100px; margin:0 auto; padding:4rem 1.2rem}
+    header.nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(140%) blur(8px);
+      background:linear-gradient(180deg, rgba(10,20,34,.85), rgba(10,20,34,.6));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{display:flex; align-items:center; gap:1rem; justify-content:space-between; max-width:1100px; margin:0 auto; padding:.6rem 1rem}
+    .brand{display:flex; align-items:center; gap:.7rem; font-weight:700}
+    .brand .dot{width:14px; height:14px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #fff 0%, #adf 35%, #0df 60%, #027 100%); box-shadow:0 0 22px 8px rgba(0,208,255,.35)}
+    .nav-actions{display:flex; gap:.6rem; flex-wrap:wrap}
+    .btn{
+      --pad:.6rem 1rem; --bg:var(--glass); --fg:var(--ink); --bd:1px solid rgba(255,255,255,.12);
+      display:inline-flex; align-items:center; gap:.5rem; padding:var(--pad);
+      background:var(--bg); color:var(--fg); border:var(--bd);
+      border-radius:999px; cursor:pointer; transition:.25s ease transform, .25s ease background;
+    }
+    .btn:hover{transform:translateY(-1px); background:rgba(255,255,255,.09)}
+    .btn.primary{--bg:linear-gradient(135deg, #00d0ff 0%, #46d48c 100%); --fg:#00131a; --bd:none; font-weight:700}
+    .btn.ghost{--bg:transparent; --bd:1px solid rgba(255,255,255,.18)}
+
+    /* Hero */
+    .hero{position:relative; overflow:clip}
+    .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:2rem; align-items:center}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:24px; padding:1.2rem; box-shadow:0 10px 40px rgba(0,0,0,.2);
+    }
+    .glow-ring{position:absolute; inset:auto; width:900px; height:900px; right:-400px; top:-320px; border-radius:50%;
+      background:radial-gradient(circle at 50% 50%, rgba(0,208,255,.35), transparent 70%);
+      filter:blur(40px); opacity:.7; pointer-events:none}
+
+    .kicker{display:inline-flex; align-items:center; gap:.5rem; font-weight:600; color:var(--accent)}
+    .kicker .pulse{width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 0 var(--ring); animation:pulse 2s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 var(--ring)} 70%{box-shadow:0 0 0 22px rgba(0,208,255,0)} 100%{box-shadow:0 0 0 0 rgba(0,208,255,0)}}
+
+    .hero h1 span.grad{background:linear-gradient(90deg,#a1ffce, #00d0ff 40%, #82b1ff 70%, #a1ffce); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .hero .lead{font-size:1.08rem; color:var(--muted)}
+
+    /* Simulator */
+    .sim{display:grid; grid-template-columns:1fr; gap:1rem}
+    .sim-stage{position:relative; isolation:isolate; height:360px; border-radius:18px; background:radial-gradient(120% 120% at 50% 10%, rgba(0,208,255,.09), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); overflow:hidden}
+    .tile{position:absolute; left:50%; top:62%; width:320px; height:12px; transform:translate(-50%,-50%) rotate(var(--tilt,0deg)); background:linear-gradient(90deg, #0df2, transparent 20% 80%, #0df2),
+      linear-gradient(180deg, #0b1726, #0e2136); border:1px solid rgba(0,208,255,.3); border-radius:10px}
+    .emitter{position:absolute; left:50%; top:calc(62% - 10px); transform:translate(-50%,-50%); width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #fff, #0df 50%, #027); box-shadow:0 0 18px 8px rgba(0,208,255,.35)}
+    .fiber{position:absolute; left:50%; top:18px; bottom:130px; width:4px; transform:translateX(-50%); background:linear-gradient(180deg, #7ff 0%, #4cf 50%, #2af 100%); border-radius:4px; box-shadow:0 0 16px rgba(0,208,255,.35)}
+    .bob{position:absolute; left:50%; bottom:18px; transform:translateX(-50%); width:40px; height:40px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #89f, #2af); filter:drop-shadow(0 8px 18px rgba(0,0,0,.4)); border:1px solid rgba(255,255,255,.2)}
+    .photon{position:absolute; left:50%; top:calc(62% - 20px); transform:translate(-50%,-50%); width:6px; height:6px; border-radius:50%; background:#fff; box-shadow:0 0 12px 6px rgba(255,255,255,.55); opacity:0}
+
+    .panel{display:grid; grid-template-columns:1fr 1fr; gap:1rem}
+    .panel .box{background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:1rem}
+    label{display:flex; align-items:center; gap:.6rem; color:var(--muted)}
+    input[type=range]{width:100%}
+    .metric{font-size:1.2rem}
+
+    /* Sections */
+    section{padding:3.6rem 0; scroll-margin-top:80px}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:1.6rem}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem}
+    .tile-card{background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:1rem}
+    .tile-card h3{color:#cfe8ff}
+
+    /* Timeline */
+    .timeline{position:relative; padding-left:1.2rem}
+    .timeline::before{content:""; position:absolute; left:7px; top:0; bottom:0; width:2px; background:linear-gradient(180deg, #0df, transparent)}
+    .time-item{position:relative; padding-left:1rem; margin:.8rem 0}
+    .time-item::before{content:""; position:absolute; left:-2px; top:.4rem; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle, #fff, #0df); box-shadow:0 0 10px #0df}
+
+    /* Callouts */
+    .callout{background:linear-gradient(135deg, rgba(0,208,255,.08), rgba(70,212,140,.08)); border:1px dashed rgba(255,255,255,.2); padding:1rem; border-radius:16px}
+
+    /* Footer */
+    footer{padding:2.2rem 1rem; color:#b8ccdf; border-top:1px solid rgba(255,255,255,.1)}
+
+    /* Anim in */
+    .reveal{opacity:0; transform:translateY(12px); transition: .7s ease}
+    .reveal.in{opacity:1; transform:none}
+
+    /* Print */
+    @media print{
+      header.nav, .nav-spacer, .btn, .glow-ring { display:none !important }
+      body{background:#fff; color:#000}
+      .tile-card, .card, .box{border:1px solid #999}
+      a{color:#06c; text-decoration:underline}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand"><span class="dot" aria-hidden></span> Quantum Photon Leveler <span style="opacity:.6">· Cubic Postcode</span></div>
+      <nav class="nav-actions">
+        <a class="btn ghost" href="#concept">Concept</a>
+        <a class="btn ghost" href="#simulator">Simulator</a>
+        <a class="btn ghost" href="#applications">Applications</a>
+        <a class="btn ghost" href="#press">Press Kit</a>
+        <button class="btn primary" id="copyLink" title="Copy link for journalists">Copy Link</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap hero">
+    <div class="glow-ring" aria-hidden></div>
+    <div class="hero-grid">
+      <div class="card reveal">
+        <div class="kicker"><span class="pulse"></span> A next‑generation standard of levelness</div>
+        <h1><span class="grad">Quantum Photon Leveler</span></h1>
+        <p class="lead">A single‑photon source fires upward from a centered emitter on a tile. A gravity‑aligned, ultra‑thin optical fiber (a photonic plumb line) hangs above. When the surface is truly level relative to Earth’s vertical, injected photons couple into the fiber and are detected at the bob‑tip. Missed photons expose even sub‑nanoradian tilt.</p>
+        <div class="callout"><strong>Claim:</strong> A binary capture test (hit/miss) referenced to photon wavelength and gravity can define horizontal alignment beyond classical spirit levels and rival interferometric standards — in a compact, field‑ready instrument.</div>
+        <div style="margin-top:1rem; display:flex; gap:.6rem; flex-wrap:wrap">
+          <a class="btn" href="#abstract">Read the 1‑minute abstract</a>
+          <a class="btn" href="#timeline">See the timeline</a>
+          <a class="btn" href="#faq">FAQ</a>
+        </div>
+      </div>
+      <div class="card reveal" id="simulator">
+        <h2>Interactive Simulator</h2>
+        <p class="lead">Tilt the tile, fire single photons, and watch the capture probability change.</p>
+        <div class="sim">
+          <div class="sim-stage" id="stage" aria-label="Photon coupling simulator">
+            <div class="fiber" aria-hidden></div>
+            <div class="bob" aria-hidden title="Gravity‑aligned bob"></div>
+            <div class="tile" id="tile" aria-hidden></div>
+            <div class="emitter" aria-hidden title="Single‑photon emitter"></div>
+            <div class="photon" id="photon" aria-hidden></div>
+          </div>
+          <div class="panel">
+            <div class="box">
+              <label for="tilt">Tile tilt (µrad)
+                <input type="range" id="tilt" min="-50" max="50" step="1" value="0" />
+              </label>
+              <div class="metric">Angular tilt: <span id="deg">0</span> µrad</div>
+            </div>
+            <div class="box">
+              <label for="waist">Fiber core (nm)
+                <input type="range" id="waist" min="100" max="2000" step="10" value="600" />
+              </label>
+              <div class="metric">Estimated capture probability: <strong><span id="p">99.9</span>%</strong></div>
+            </div>
+          </div>
+          <div class="box"><button class="btn" id="fire">Fire single photon</button> <span style="color:var(--muted); margin-left:.6rem">Detections: <strong id="hits">0</strong> / Shots: <strong id="shots">0</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="concept" class="wrap reveal">
+    <div class="grid-2">
+      <div class="tile-card">
+        <h2>Concept in one picture</h2>
+        <p>A square tile hosts a deterministic single‑photon emitter at its center. Directly above, a suspended, sub‑micron‑core optical fiber acts as a vertical reference via gravity. Perfect levelness is achieved when upward‑emitted photons consistently couple into the fiber and reach a superconducting (or SPAD) detector at the bob. Deviations reduce coupling with an exquisitely steep response.</p>
+        <ul>
+          <li><strong>Reference axes:</strong> Gravity (plumb) ↔ Horizontal (level)</li>
+          <li><strong>Scales:</strong> Wavelength‑limited alignment; sub‑nanoradian tilt sensitivity</li>
+          <li><strong>Readout:</strong> Binary (detected / missed) → probabilistic estimate of levelness</li>
+        </ul>
+      </div>
+      <div class="tile-card">
+        <h2>Why this matters</h2>
+        <p>Leveling sets the baseline for every precision experiment and build: quantum optics benches, lithography, telescope mounts, interferometers, MEMS packaging, even next‑gen construction robotics. A compact instrument that ties levelness to <em>photonic coupling</em> and <em>gravity</em> creates a new metrological reference — elegant, robust, and universal.</p>
+        <div class="callout"><strong>Elevator pitch:</strong> Replace the bubble with a photon. Replace the vial curvature with gravity. Read levelness from quantum events.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="abstract" class="wrap reveal">
+    <h2>One‑Minute Abstract</h2>
+    <p>
+      We propose a <em>Quantum Photon Leveler (QPL)</em> comprising (i) a single‑photon source at the geometric center of a rigid tile and (ii) a gravity‑referenced, ultra‑thin optical fiber suspended above as an optical plumb. The instrument operationalizes horizontal alignment by maximizing photon coupling into the fiber. Because coupling efficiency is sharply dependent on angular misalignment relative to gravity, the QPL converts minute tilt (µrad→nrad) into large changes in detection probability. With appropriate photon wavelengths, nanofabricated apertures, and low‑dark‑count detectors, the device can rival interferometric sensitivities in a fieldable, calibration‑friendly form factor.
+    </p>
+    <p class="callout">In effect, the QPL defines “level” using <strong>gravity + single photons</strong>, yielding a compact metrological standard attractive to quantum optics, nanofab, and geodetic instrumentation.</p>
+  </section>
+
+  <section id="applications" class="wrap reveal">
+    <h2>Applications</h2>
+    <div class="grid-3">
+      <div class="tile-card">
+        <h3>Quantum & Photonics</h3>
+        <p>Stabilize optical benches; align cavities, waveguides, and cryogenic packages. Improve qubit coherence by eliminating micro‑tilt induced drift.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Nanofabrication</h3>
+        <p>Reference horizontal during EBL/DUV steps; in‑situ calibration for wafer stages; process control with probabilistic readouts.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Metrology & Geodesy</h3>
+        <p>Establish portable level references tied to gravity; networked deployments to map micro‑tilt fields in labs and observatories.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Construction Robotics</h3>
+        <p>Bring photon‑grade leveling to autonomous site equipment; combine with laser grids to transfer level across rooms and floors.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Space & Field Science</h3>
+        <p>Operate in vacuum and extreme temperatures; use as a compact attitude reference in landers and habitats.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Education & Outreach</h3>
+        <p>A tangible, awe‑inducing device: students watch single photons define “level.” Perfect for museums and science weeks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="comparison" class="wrap reveal">
+    <h2>How it compares</h2>
+    <div class="grid-3">
+      <div class="tile-card"><h3>Bubble & Laser Levels</h3><p>Fast and practical. Typical precision ≈ 0.5–1.0 mm/m. Limited by mechanics and optics over distance.</p></div>
+      <div class="tile-card"><h3>Interferometry</h3><p>Gold standard for displacement; exquisite but complex and bench‑bound. QPL aims to approach this sensitivity in a simpler package.</p></div>
+      <div class="tile-card"><h3>Quantum Photon Leveler</h3><p>Binary events amplified into a probability curve. Sensitivity set by photon wavelength, aperture, and detector noise — pushing towards nrad territory.</p></div>
+    </div>
+  </section>
+
+  <section id="timeline" class="wrap reveal">
+    <h2>From Plumb to Photon — a Short Timeline</h2>
+    <div class="timeline">
+      <div class="time-item"><strong>Antiquity</strong> — Plumb line: gravity defines vertical.</div>
+      <div class="time-item"><strong>17–19th c.</strong> — Spirit levels and precision vials define horizontal.</div>
+      <div class="time-item"><strong>20th c.</strong> — Laser levels & interferometers extend range and sensitivity.</div>
+      <div class="time-item"><strong>21st c.</strong> — MEMS/quantum sensors meet photonics.</div>
+      <div class="time-item"><strong>Now</strong> — <em>Quantum Photon Leveler</em>: gravity + single photons yield a portable quantum standard of levelness. Proposed by <strong>Cubic Postcode</strong>.</div>
+    </div>
+  </section>
+
+  <section id="press" class="wrap reveal">
+    <h2>Press Kit</h2>
+    <div class="grid-2">
+      <div class="tile-card">
+        <h3>Boilerplate</h3>
+        <p><strong>Cubic Postcode</strong> proposes the <em>Quantum Photon Leveler (QPL)</em> — an instrument that defines horizontal alignment by maximizing single‑photon coupling into a gravity‑aligned, ultra‑thin optical fiber. The result is a compact, calibration‑friendly device with sensitivity that can rival laboratory interferometry while remaining field‑ready.</p>
+        <p><em>Tagline:</em> “Replace the bubble with a photon.”</p>
+      </div>
+      <div class="tile-card">
+        <h3>Key Messages</h3>
+        <ul>
+          <li>Binary events → probabilistic precision: detect vs. miss translates micro‑tilt into big signals.</li>
+          <li>Foundational: ties levelness to gravity and photon wavelength.</li>
+          <li>Impact: quantum labs, lithography, metrology, construction robotics, and education.</li>
+        </ul>
+      </div>
+      <div class="tile-card">
+        <h3>Contact</h3>
+        <p>Press & inquiries: <a href="mailto:press@cubicpostcode.com">press@cubicpostcode.com</a> · <a href="#" id="onePager">Generate print one‑pager</a></p>
+        <p>Creator: <strong>Cubic Postcode</strong> — London & Lisbon.
+        </p>
+      </div>
+      <div class="tile-card">
+        <h3>Attribution & Ethics</h3>
+        <p>This page is a concept presentation for journalists and researchers. All simulations are illustrative. Any experimental claim should be validated via peer‑reviewed data and open methods.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="wrap reveal">
+    <h2>FAQ</h2>
+    <div class="grid-2">
+      <div class="tile-card">
+        <h3>Is this achievable with current tech?</h3>
+        <p>Yes, single‑photon sources (e.g., quantum dots, NV centers), sub‑micron fiber cores, and low‑dark‑count detectors exist. Packaging them into a compact, gravity‑referenced level is an engineering challenge — and an exciting one.</p>
+      </div>
+      <div class="tile-card">
+        <h3>What limits the accuracy?</h3>
+        <p>Photon wavelength, fiber aperture/NA, source divergence, mechanical stability, air currents, and detector noise. Active isolation and averaging steepen the probability curve.</p>
+      </div>
+      <div class="tile-card">
+        <h3>Could this become a standard?</h3>
+        <p>With reproducible calibration and inter‑lab validation, QPL could serve as a portable reference for horizontal, complementing interferometric benchmarks.</p>
+      </div>
+      <div class="tile-card">
+        <h3>What about a Nobel Prize?</h3>
+        <p>Transformative measurement tools often receive top recognition. Demonstrations that establish a new quantum‑tied standard for levelness — widely adopted and enabling new science — would be a strong contender.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap">
+      <div>© <span id="yr"></span> Cubic Postcode — Quantum Photon Leveler</div>
+      <div style="opacity:.8">Made with CSS3, a pinch of JS, and lots of photons.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Copy link
+    document.getElementById('copyLink').addEventListener('click', async () => {
+      try{ await navigator.clipboard.writeText(location.href); const b = event.currentTarget; const t=b.textContent; b.textContent='Copied!'; setTimeout(()=>b.textContent=t, 1200);}catch(e){alert('Copy failed');}
+    });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((ents)=>{ents.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });},{threshold:.15});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // Simulator logic (illustrative only)
+    const tilt = document.getElementById('tilt');
+    const waist = document.getElementById('waist');
+    const deg = document.getElementById('deg');
+    const p = document.getElementById('p');
+    const tile = document.getElementById('tile');
+    const photon = document.getElementById('photon');
+    const fire = document.getElementById('fire');
+    const shotsEl = document.getElementById('shots');
+    const hitsEl = document.getElementById('hits');
+    let shots=0, hits=0;
+
+    function update(){
+      const microRad = Number(tilt.value); // µrad
+      deg.textContent = microRad.toFixed(0);
+      tile.style.setProperty('--tilt', (microRad/1000*57.2958)+'deg'); // approx for demo
+      // Simple model: capture probability ~ exp(- (tilt / k)^2 ), with k scaling by core size
+      const coreNm = Number(waist.value);
+      const k = 8e0 * (coreNm/600); // illustrative scale
+      const prob = Math.exp( - Math.pow(microRad/k, 2) );
+      const pct = (prob*100);
+      p.textContent = pct.toFixed(pct>99?1: (pct>90?1: (pct>10?1:1)) );
+      return prob;
+    }
+
+    tilt.addEventListener('input', update);
+    waist.addEventListener('input', update);
+    update();
+
+    function animatePhoton(hit){
+      const ph = photon;
+      ph.style.opacity=1; ph.style.transition='none';
+      ph.style.left='50%'; ph.style.top='calc(62% - 20px)';
+      requestAnimationFrame(()=>{
+        ph.style.transition='top .5s linear, opacity .4s ease .5s';
+        ph.style.top = hit? '30px' : '0px';
+        setTimeout(()=>{ ph.style.opacity=0; }, 700);
+      });
+    }
+
+    fire.addEventListener('click', () => {
+      const prob = update();
+      shots++; shotsEl.textContent = shots;
+      const hit = Math.random() < prob;
+      if(hit) hits++;
+      hitsEl.textContent = hits;
+      animatePhoton(hit);
+    });
+
+    // One‑pager print helper
+    document.getElementById('onePager').addEventListener('click', (e)=>{
+      e.preventDefault(); window.print();
+    });
+  </script>
+</body>
+</html>
