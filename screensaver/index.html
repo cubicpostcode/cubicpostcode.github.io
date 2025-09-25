@@ -4,23 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>(3,4,5) Pattern — polished</title>
+
+  <!-- Performance hints for YouTube -->
+  <link rel="preconnect" href="https://www.youtube.com" />
+  <link rel="preconnect" href="https://i.ytimg.com" />
+  <link rel="dns-prefetch" href="//www.youtube.com" />
+  <link rel="dns-prefetch" href="//i.ytimg.com" />
+
   <style>
     :root {
-      --bg-dark: #000000;
-      --bg-light: #ffffff;
+      --bg-dark: #000;
+      --bg-light: #fff;
+      --ink-dark: #fff;
+      --ink-light: #000;
       --btn-bg: #F1F3F4;
-      --btn-fg: #000000;
+      --btn-fg: #000;
+      --focus: #6bd1ff;
     }
     html, body { height: 100%; }
     body {
       margin: 0;
       background: var(--bg-dark);
-      color: #ffffff;
+      color: var(--ink-dark);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      line-height: 1.4;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    body.light { background: var(--bg-light); color: var(--ink-light); }
     body.hide-cursor { cursor: none; }
-    body.light { background: var(--bg-light); color: #000; }
 
     .controls {
       position: fixed;
@@ -42,6 +54,10 @@
       user-select: none;
     }
     button:active { transform: translateY(1px); }
+    button:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
 
     .stage {
       max-width: 1200px;
@@ -51,8 +67,15 @@
       justify-items: center;
       gap: 32px;
     }
+    .stage img.main-hero {
+      max-width: 720px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+
     .videos { display: grid; gap: 28px; justify-items: center; }
-    iframe { max-width: 100%; aspect-ratio: 16/9; }
+    iframe { max-width: 100%; aspect-ratio: 16/9; border: 0; }
 
     audio { width: min(720px, 92vw); }
 
@@ -78,48 +101,49 @@
       font-size: clamp(16px, 3.5vw, 28px);
     }
     .overlay p { max-width: 60ch; opacity: .9; }
-
     .hidden { display: none !important; }
 
-    /* Hide UI in fullscreen, but keep overlay when in "clear" mode */
     body.fs .controls,
     body.fs audio { display: none !important; }
-
-    /* Clear-screen mode hides everything except overlay */
     body.cleared .controls,
     body.cleared audio,
     body.cleared .stage,
     body.cleared .footer,
     body.cleared img[alt="corner-gif"] { display: none !important; }
   </style>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QDG3NX05J6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} gtag('js', new Date());
-    gtag('config', 'G-QDG3NX05J6');
-  </script>
 </head>
 
 <body>
   <!-- Controls -->
   <div class="controls" aria-label="screen controls">
-    <button id="btnFullscreen" title="Toggle fullscreen (F)">Full Screen</button>
-    <button id="btnClear" title="Clear screen 100% (C / Esc)">Clear Screen: 100% [⌨️ Esc]</button>
+    <button id="btnFullscreen" title="Toggle fullscreen (F)" aria-controls="content-root">Full Screen</button>
+    <button id="btnClear" title="Clear screen 100% (C / Esc)" aria-haspopup="dialog" aria-controls="overlay">Clear Screen: 100% [⌨️ Esc]</button>
+    <button id="btnMute" title="Mute / Unmute (M)" aria-pressed="false">Mute</button>
   </div>
 
   <main class="stage" id="content-root">
-    <audio id="audio" controls autoplay preload="auto" playsinline></audio>
+    <!-- Added main image -->
+    <img src="https://cubicpostcode.github.io/on_air_fashion.png" alt="On Air Fashion" class="main-hero" />
+
+    <audio id="audio" controls preload="none" playsinline></audio>
 
     <div class="videos" aria-label="looping videos">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/kyql5p7qiUg?version=3&loop=1&playlist=kyql5p7qiUg" title="YouTube video player 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <iframe
+        loading="lazy"
+        src="https://www.youtube.com/embed/kyql5p7qiUg?version=3&loop=1&playlist=kyql5p7qiUg"
+        title="YouTube video player 1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
 
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/HZ6L_6a7RcQ?version=3&loop=1&playlist=HZ6L_6a7RcQ" title="YouTube video player 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <iframe
+        loading="lazy"
+        src="https://www.youtube.com/embed/HZ6L_6a7RcQ?version=3&loop=1&playlist=HZ6L_6a7RcQ"
+        title="YouTube video player 2"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
     </div>
   </main>
 
-  <!-- Clear-screen overlay (shown only in cleared mode) -->
   <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-live="polite">
     <div>
       <p>Clear Screen mode is active.</p>
@@ -127,116 +151,97 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="footer"><span>&copy; made by humans: https://generated.photos/humans 2023–24</span></div>
   <img src="gif.gif" alt="corner-gif" style="position: fixed; bottom: 0; right: 0; margin: 10px; z-index: 800;" />
 
   <script>
-    // Keep your original anchor/hash behavior
+    // Keep original anchor/hash
     location.hash = "PYTHAGOREAN_TRIPLE_PATTERN_3__4__5_Dyson_sphere_#feedback@cubicpostcode.com";
-  </script>
 
-  <script>
-    // --- Cursor auto-hide after inactivity ----------------------------------
-    (function cursorAutoHide(){
+    const byId = (id) => document.getElementById(id);
+    const audioEl = byId('audio');
+    const overlay = byId('overlay');
+    const btnClear = byId('btnClear');
+    const btnFS = byId('btnFullscreen');
+    const btnMute = byId('btnMute');
+
+    // Cursor auto-hide
+    (function(){
       let timer;
-      const reset = () => { document.body.classList.remove('hide-cursor'); clearTimeout(timer); timer = setTimeout(() => document.body.classList.add('hide-cursor'), 5000); };
+      const reset = () => {
+        document.body.classList.remove('hide-cursor');
+        clearTimeout(timer);
+        timer = setTimeout(() => document.body.classList.add('hide-cursor'), 5000);
+      };
       ['mousemove','keydown','pointerdown','touchstart'].forEach(ev => document.addEventListener(ev, reset, { passive: true }));
       reset();
     })();
 
-    // --- Fullscreen helpers ---------------------------------------------------
+    // Fullscreen
     const isFullscreen = () => !!document.fullscreenElement;
     const enterFullscreen = () => document.documentElement.requestFullscreen();
     const exitFullscreen  = () => document.exitFullscreen();
-
-    function toggleFullscreen(){
-      if (isFullscreen()) { exitFullscreen().catch(()=>{}); }
-      else { enterFullscreen().catch(()=>{}); }
-    }
+    function toggleFullscreen(){ isFullscreen() ? exitFullscreen().catch(()=>{}) : enterFullscreen().catch(()=>{}); }
 
     document.addEventListener('fullscreenchange', () => {
-      if (isFullscreen()) {
-        document.body.classList.add('fs');
-      } else {
-        document.body.classList.remove('fs');
-        // Leaving fullscreen also exits clear mode and restores UI
+      document.body.classList.toggle('fs', isFullscreen());
+      if (!isFullscreen()) {
         document.body.classList.remove('cleared');
         overlay.classList.add('hidden');
       }
     });
 
-    // --- Clear Screen (100%) --------------------------------------------------
-    const overlay = document.getElementById('overlay');
-    const btnClear = document.getElementById('btnClear');
+    // Clear Screen
     btnClear.addEventListener('click', async () => {
       if (!isFullscreen()) { try { await enterFullscreen(); } catch(e){} }
       document.body.classList.add('cleared');
       overlay.classList.remove('hidden');
     });
 
-    // --- Buttons & keyboard shortcuts ----------------------------------------
-    const btnFS = document.getElementById('btnFullscreen');
+    // Buttons & keyboard
     btnFS.addEventListener('click', toggleFullscreen);
+    btnMute.addEventListener('click', () => {
+      audioEl.muted = !audioEl.muted;
+      btnMute.setAttribute('aria-pressed', String(audioEl.muted));
+      btnMute.textContent = audioEl.muted ? 'Unmute' : 'Mute';
+    });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'f' || e.key === 'F') toggleFullscreen();
       else if (e.key === 'c' || e.key === 'C') btnClear.click();
-      else if (e.key === 'm' || e.key === 'M') audio.muted = !audio.muted;
-      else if (e.key === ' ') { // Space: play/pause
-        e.preventDefault();
-        if (audio.paused) audio.play().catch(()=>{}); else audio.pause();
-      } else if (e.key === 'Escape') {
-        // If user presses Esc while not in fullscreen, still restore from clear mode
-        if (!isFullscreen() && document.body.classList.contains('cleared')) {
-          document.body.classList.remove('cleared');
-          overlay.classList.add('hidden');
-        }
+      else if (e.key === 'm' || e.key === 'M') btnMute.click();
+      else if (e.key === ' ') { e.preventDefault(); audioEl.paused ? audioEl.play().catch(()=>{}) : audioEl.pause(); }
+      else if (e.key === 'Escape') {
+        document.body.classList.remove('cleared');
+        overlay.classList.add('hidden');
+        if (isFullscreen()) { exitFullscreen().catch(()=>{}); }
       }
     });
 
-    // --- Audio: random notes playlist ----------------------------------------
-    const audio = document.getElementById('audio');
-    const audioFiles = Array.from({length: 12}, (_,i) => `note${40+i}.mp3`); // note40..note51
+    // Audio random playlist
+    const audioFiles = Array.from({length: 12}, (_,i) => `note${40+i}.mp3`);
+    const pickRandomFile = () => audioFiles[Math.floor(Math.random()*audioFiles.length)];
+    const queueRandom = () => { audioEl.src = pickRandomFile(); };
+    function playRandom(){ queueRandom(); audioEl.play().catch(()=>{}); }
+    audioEl.addEventListener('ended', () => { queueRandom(); audioEl.play().catch(()=>{}); });
 
-    function pickRandomFile(){ return audioFiles[Math.floor(Math.random()*audioFiles.length)]; }
-    function queueRandom(){ audio.src = pickRandomFile(); }
-
-    function playRandom(){
-      queueRandom();
-      const p = audio.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(() => { /* Likely blocked by autoplay policy; will try again on first user gesture */ });
-      }
-    }
-
-    audio.addEventListener('ended', () => { queueRandom(); audio.play().catch(()=>{}); });
-
-    // Ensure playback starts after first gesture if autoplay is blocked
     let started = false;
     function ensureStart(){ if (!started) { started = true; playRandom(); } }
-    ['click','keydown','touchstart'].forEach(ev => document.addEventListener(ev, ensureStart, { once: true, passive: true }));
-
-    // Try immediately as well (may be blocked)
+    ['click','keydown','touchstart','pointerdown'].forEach(ev => document.addEventListener(ev, ensureStart, { once: true, passive: true }));
     playRandom();
 
-    // --- Background toggler (27-second cycle) --------------------------------
-    (function backgroundCycle(){
-      const ON = new Set([1,3,5,8,10,12,14,17,19,21,23,25]); // preserve your pattern
+    // Background toggler
+    (function(){
+      const ON = new Set([1,3,5,8,10,12,14,17,19,21,23,25]);
       function secondsSinceUTCMidnight(){
         const now = new Date();
-        const sinceLocalMidnight = now.getTime() - new Date(now).setHours(0,0,0,0);
-        let s = Math.floor(sinceLocalMidnight / 1000) + now.getTimezoneOffset() * 60;
-        if (s < 0) s += 86400; // wrap
-        return s;
+        const utcNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+                                now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), 0);
+        const utcMidnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
+        return Math.floor((utcNow - utcMidnight) / 1000);
       }
-      function tick(){
-        const mod = secondsSinceUTCMidnight() % 27;
-        const light = ON.has(mod);
-        document.body.classList.toggle('light', light);
-      }
-      tick();
-      setInterval(tick, 1000);
+      function tick(){ document.body.classList.toggle('light', ON.has(secondsSinceUTCMidnight() % 27)); }
+      tick(); setInterval(tick, 1000);
     })();
   </script>
 </body>
