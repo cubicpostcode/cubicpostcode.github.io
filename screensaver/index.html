@@ -110,7 +110,35 @@
     body.cleared .stage,
     body.cleared .footer,
     body.cleared img[alt="corner-gif"] { display: none !important; }
-  </style>
+
+  /* When clear-only mode is on, hide everything */
+  body.clear-only {
+    cursor: none !important;
+    background: #000;            /* your flasher will overwrite as needed */
+    overflow: hidden !important; /* avoid scrollbars */
+  }
+  /* Hide all normal content without reflow flicker */
+  body.clear-only > * {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* EXCEPT your flasher element (if you use one) */
+  /* Replace #flasher with whatever you already use for the flashing layer */
+  body.clear-only #flasher {
+    visibility: visible !important;
+    pointer-events: none !important;
+  }
+
+  /* If your flasher paints the BODY itself (no element), keep a top overlay to block anything */
+  #clearMask {
+    position: fixed; inset: 0; z-index: 2147483647;
+    background: transparent;      /* stays transparent; your flasher sets body background */
+    display: none;
+    pointer-events: none;         /* don’t steal input */
+  }
+  body.clear-only #clearMask { display: block; }    
+</style>
 </head>
 
 <body>
@@ -153,6 +181,8 @@
 
   <div class="footer"><span>&copy; made by humans: https://generated.photos/humans 2023–25</span></div>
   <img src="gif.gif" alt="corner-gif" style="position: fixed; bottom: 0; right: 0; margin: 10px; z-index: 800;" />
+
+  <div id="clearMask" aria-hidden="true"></div>
 
   <script>
     // Keep original anchor/hash
@@ -244,6 +274,29 @@
       tick(); setInterval(tick, 1000);
     })();
   </script>
+  <script>
+  // Turn on pure screen mode (no UI, just flash)
+  function enterClearOnly() {
+    document.body.classList.add('clear-only');
+    // If your flasher uses a dedicated element, ensure it has id="flasher"
+    // If your flasher paints BODY background directly, nothing else to do.
+  }
+
+  // Restore normal page
+  function exitClearOnly() {
+    document.body.classList.remove('clear-only');
+  }
+
+  // Example: wire to your existing keys/buttons
+  // C = clear-only on; Esc = off (keep your current bindings, just call the helpers)
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'c') enterClearOnly();
+    if (e.key === 'Escape')          exitClearOnly();
+  });
+
+  document.querySelector('#clearBtn')?.addEventListener('click', enterClearOnly);
+</script>
 </body>
 </html>
+
 
