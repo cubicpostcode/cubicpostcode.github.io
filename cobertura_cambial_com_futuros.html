@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hedging Cambial — Pergunta & Resposta (HTML5)</title>
+  <meta name="description" content="Explicação clara dos instrumentos financeiros para mitigar risco cambial, com foco em contratos futuros de moeda-câmbio." />
+  <style>
+    :root{
+      --bg:#0b1020; --ink:#eaf2ff; --muted:#a9b9d6; --card:#111a2e; --accent:#7bdcff; --ok:#35d49b; --warn:#ffd166; --bad:#ff6b6b; --border:#20304f;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1200px 600px at 10% -10%, #14223f 0%, transparent 60%),
+                  radial-gradient(1200px 600px at 110% 20%, #0a1a34 0%, transparent 60%),
+                  linear-gradient(180deg,#0b1020,#0c1226 50%,#0a0f20 100%);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:32px 20px 64px}
+    header{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:rgba(10,16,32,.6); border-bottom:1px solid var(--border);}
+    header .bar{max-width:980px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:14px}
+    .badge{font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:.8rem; color:#001824; background:linear-gradient(90deg, var(--accent), #b4f2ff); padding:6px 10px; border-radius:999px}
+    h1{font-size:clamp(1.6rem, 3vw, 2.2rem); margin:20px 0 8px}
+    p.lead{color:var(--muted); margin:0 0 18px; font-size:1.05rem}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.00)); border:1px solid var(--border); border-radius:18px; padding:22px}
+    .q{display:flex; gap:14px; align-items:flex-start}
+    .q .qmark{flex:0 0 36px; height:36px; border-radius:10px; display:grid; place-items:center; font-weight:800; color:#001824; background:linear-gradient(90deg,#7bdcff,#b4f2ff)}
+    .q .text{font-size:1.05rem}
+    .grid{display:grid; gap:18px}
+    @media(min-width:860px){ .grid{grid-template-columns: 1.2fr .8fr} }
+    h2{font-size:1.15rem; letter-spacing:.02em; text-transform:uppercase; color:#d7e8ff; margin:22px 0 10px}
+    .pill{display:inline-block; padding:6px 10px; border:1px solid var(--border); border-radius:999px; color:var(--muted); font-size:.9rem}
+    ul{margin:10px 0 6px 18px}
+    li{margin:6px 0}
+    .tbl{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:14px; border:1px solid var(--border)}
+    .tbl th,.tbl td{padding:10px 12px; text-align:left}
+    .tbl thead th{background:#0f1a32; color:#cfe4ff; font-weight:700}
+    .tbl tbody tr:nth-child(odd){background:rgba(255,255,255,.02)}
+    .note{font-size:.95rem; color:var(--muted)}
+    .callout{border:1px dashed var(--border); border-radius:14px; padding:14px; background:rgba(123,220,255,.06)}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:.95rem}
+    footer{margin-top:36px; color:var(--muted); font-size:.9rem}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chips .chip{padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:#cfe4ff}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <span class="badge">Finanças · Risco Cambial</span>
+      <span class="pill">HTML5 · didático</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>Cobertura Cambial com Contratos Futuros — Pergunta & Resposta</h1>
+    <p class="lead">Guia compacto para atenuar/salvaguardar/retificar danos de flutuações de <em>moeda-câmbio</em> por meio de <strong>futuros</strong>, <strong>forward</strong>, <strong>opções</strong> e <strong>swaps</strong>.</p>
+
+    <section class="card q" aria-labelledby="pergunta">
+      <div class="qmark">?</div>
+      <div class="text">
+        <h2 id="pergunta">Pergunta (formulada como universitário)</h2>
+        <p><strong>“Quais são os instrumentos financeiros mais apropriados para atenuar, salvaguardar, prever ou retificar os danos colaterais decorrentes das flutuações de uma moeda-câmbio (<em>currency</em>)? Em particular, como se utilizam os <em>contratos futuros de moeda-câmbio</em> para implementar essas salvaguardas e minimizar danos colaterais flagrantes para importadores, exportadores ou investidores?”</strong></p>
+      </div>
+    </section>
+
+    <div class="grid" style="margin-top:18px">
+      <section class="card" aria-labelledby="resposta">
+        <h2 id="resposta">Resposta — visão geral</h2>
+        <p>Flutuações cambiais afetam <span class="pill">importadores</span>, <span class="pill">exportadores</span> e <span class="pill">investidores</span>. Para mitigar o risco, usam-se instrumentos de <em>hedging</em>:</p>
+        <ul>
+          <li><strong>Futuros de moeda-câmbio-câmbio</strong> (bolsa, padronizados) — proteção transparente com liquidez elevada.</li>
+          <li><strong>Forwards</strong> (a termo, <em>OTC</em>) — acordos privados, altamente customizáveis.</li>
+          <li><strong>Opções de moeda-câmbio</strong> — “seguro” com prémio; dá direito, não obrigação.</li>
+          <li><strong>Swaps cambiais</strong> — trocas de fluxos em moeda-câmbios-câmbio distintas; útil para horizontes longos.</li>
+        </ul>
+
+        <div class="callout">
+          <strong>Regra prática:</strong>
+          <ul>
+            <li>Se <em>vai pagar</em> moeda-câmbio estrangeira no futuro ⇒ <span class="kbd">comprar futuros</span> dessa moeda-câmbio.</li>
+            <li>Se <em>vai receber</em> moeda-câmbio estrangeira no futuro ⇒ <span class="kbd">vender futuros</span> dessa moeda-câmbio.</li>
+          </ul>
+          <p class="note">O ganho/perda no futuro compensa o movimento adverso no câmbio à vista (<em>spot</em>).</p>
+        </div>
+
+        <h2>Como funcionam <em>futuros de moeda-câmbio</em> (na prática)</h2>
+        <ol>
+          <li><strong>Fixação de preço hoje</strong>: define-se a taxa futura via preço do contrato em bolsa.</li>
+          <li><strong>Ajuste diário</strong> (<em>mark-to-market</em>): ganhos/perdas diários creditados em margem.</li>
+          <li><strong>Encerramento</strong>: antes do vencimento, zera-se a posição (ou entrega/recebimento conforme regras do contrato).</li>
+        </ol>
+
+        <table class="tbl" aria-label="Exposição e estratégia">
+          <thead>
+            <tr><th>Exposição</th><th>Movimento adverso temido</th><th>Estratégia com futuros</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Importador que pagará USD</td><td>USD ↑</td><td><strong>Compra</strong> futuros de USD</td></tr>
+            <tr><td>Exportador que receberá USD</td><td>USD ↓</td><td><strong>Vende</strong> futuros de USD</td></tr>
+            <tr><td>Investidor com ativos em USD</td><td>USD ↓</td><td><strong>Vende</strong> futuros de USD</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Exemplo numérico rápido</h2>
+        <p><strong>Exportador UE</strong> espera receber <strong>1.000.000 USD</strong> em 90 dias. EURUSD hoje (spot) 1,1000. Contrato futuro de EURUSD (visto como preço em USD por EUR) implícito aponta para 1,1000 (simplificação).</p>
+        <ul>
+          <li><em>Sem hedge</em>: se USD cai 5% (EURUSD sobe ~5%), ao converter recebe menos EUR.</li>
+          <li><em>Com hedge</em>: o exportador <strong>vende futuros de USD</strong> (ou compra futuros de EUR, conforme a convenção do contrato). Se o USD cai, os futuros geram <strong>ganho</strong> que <strong>compensa</strong> a perda na conversão.</li>
+        </ul>
+        <p class="note"><span class="pill">Dica</span> Combine tamanho do contrato e número de contratos para aproximar a exposição (pode haver <em>basis risk</em> e desalinhamento de datas).</p>
+      </section>
+
+      <aside class="card" aria-labelledby="procon">
+        <h2 id="procon">Futuros × Forwards × Opções</h2>
+        <ul>
+          <li><strong>Futuros</strong>: padronizados, margens e <em>mark-to-market</em>, baixa fricção operacional.</li>
+          <li><strong>Forwards</strong>: máximo ajuste de <em>notional</em>, data e moeda-câmbio; spread depende de contraparte.</li>
+          <li><strong>Opções</strong>: assimétricas; protegem contra cenários extremos preservando <em>upside</em>, porém exigem prémio.</li>
+        </ul>
+        <h2>Boas práticas</h2>
+        <ul>
+          <li>Mapear <span class="pill">montante</span>, <span class="pill">moeda-câmbio</span>, <span class="pill">prazo</span> e <span class="pill">tolerância a risco</span>.</li>
+          <li>Escolher o instrumento com melhor <em>fit</em> operativo/regulatório.</li>
+          <li>Monitorizar <em>basis</em>, liquidez e requisitos de margem.</li>
+        </ul>
+        <h2>Glossário rápido</h2>
+        <ul>
+          <li><strong>Spot</strong>: câmbio à vista.</li>
+          <li><strong>Forward/Futuro</strong>: câmbio acordado para data futura.</li>
+          <li><strong>Mark-to-market</strong>: ajuste diário de ganhos/perdas.</li>
+          <li><strong>Basis risk</strong>: desvio entre a exposição real e o contrato usado.</li>
+        </ul>
+        <div class="chips" aria-label="tags">
+          <span class="chip">#hedging</span>
+          <span class="chip">#FX</span>
+          <span class="chip">#futuros</span>
+          <span class="chip">#opções</span>
+          <span class="chip">#swaps</span>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Página didática para uso académico. Este conteúdo é meramente informativo e não constitui aconselhamento financeiro.
+    </footer>
+    <section class="card" style="margin-top:18px" aria-labelledby="estrutura">
+        <h2 id="estrutura">Vamos estruturar a explicação de forma clara</h2>
+        <p class="note">Primeiro os problemas criados pelas flutuações cambiais, depois os instrumentos de cobertura mais usados, com ênfase nos contratos futuros de <strong>moeda-câmbio</strong>.</p>
+
+        <h3>1. O problema das flutuações cambiais</h3>
+        <p>Quando a taxa de câmbio entre duas <strong>moedas-câmbio</strong> varia de forma significativa, surgem riscos:</p>
+        <ul>
+          <li><strong>Exportadores</strong>: recebem em <em>moeda-câmbio</em> estrangeira e temem que ela desvalorize antes da conversão.</li>
+          <li><strong>Importadores</strong>: pagam em <em>moeda-câmbio</em> estrangeira e temem que ela valorize, aumentando o custo da compra.</li>
+          <li><strong>Investidores e empresas multinacionais</strong>: expostos a perdas potenciais ao converter lucros, dividendos ou investimentos.</li>
+        </ul>
+
+        <h3>2. Instrumentos financeiros de proteção</h3>
+        <h4>(a) Contratos Futuros de <span class="kbd">moeda-câmbio</span></h4>
+        <p>São acordos <strong>padronizados em bolsa</strong> (ex.: CME – Chicago Mercantile Exchange) para comprar ou vender uma certa quantidade de <em>moeda-câmbio</em> estrangeira numa data futura a um preço previamente acordado.</p>
+        <p><em>Como funcionam?</em></p>
+        <ul>
+          <li>Um <strong>importador</strong> que precisa de USD daqui a 3 meses pode <strong>comprar contratos futuros de USD</strong>. Se o dólar valorizar, o futuro gera lucro que compensa o custo mais alto da compra real.</li>
+          <li>Um <strong>exportador</strong> que receberá USD pode <strong>vender contratos futuros de USD</strong>. Se o dólar cair, o futuro gera ganho que compensa a perda na conversão.</li>
+        </ul>
+        <p><strong>Vantagem</strong>: proteção clara e transparente, com liquidez elevada.<br>
+           <strong>Desvantagem</strong>: contratos rígidos (tamanho e datas fixos).</p>
+
+        <h4>(b) Contratos a Termo (Forwards)</h4>
+        <p>Acordos <strong>privados e flexíveis</strong> entre duas partes para trocar <em>moedas-câmbio</em> numa data futura a uma taxa acordada hoje. São mais customizáveis que os futuros, mas menos líquidos e não são negociados em bolsa.</p>
+
+        <h4>(c) Opções de <span class="kbd">moeda-câmbio</span></h4>
+        <p>Concedem o <strong>direito (não a obrigação)</strong> de comprar/vender <em>moeda-câmbio</em> a um preço fixo no futuro. Funcionam como um “seguro cambial”: paga-se um prémio e só se exerce se for vantajosa. Úteis para proteger mantendo a possibilidade de beneficiar de movimentos favoráveis.</p>
+
+        <h4>(d) Swaps Cambiais</h4>
+        <p>Troca de fluxos em <em>moedas-câmbio</em> diferentes, muitas vezes combinando <strong>juros + principal</strong>. Muito usados para gerir exposições de longo prazo.</p>
+
+        <h3>3. Porque os <em>futuros</em> são tão relevantes</h3>
+        <ul>
+          <li>Funcionam como uma <strong>rede de segurança padronizada</strong> para expostos a <em>moeda-câmbio</em>.</li>
+          <li>Reduzem a incerteza, estabilizando o planeamento financeiro.</li>
+          <li>Minimizam danos colaterais flagrantes como: perda súbita de margens de exportação, aumento inesperado de custos de importação, e quebras na avaliação de ativos no estrangeiro.</li>
+        </ul>
+
+        <div class="callout">
+          <p><strong>✅ Resumo prático</strong></p>
+          <ul>
+            <li>Se você <em>tem de pagar</em> <strong>moeda-câmbio</strong> estrangeira no futuro → <span class="kbd">compra futuros</span> dessa <em>moeda-câmbio</em>.</li>
+            <li>Se você <em>vai receber</em> <strong>moeda-câmbio</strong> estrangeira no futuro → <span class="kbd">vende futuros</span> dessa <em>moeda-câmbio</em>.</li>
+          </ul>
+          <p class="note">Assim, quaisquer movimentos adversos no câmbio são compensados pelo resultado dos contratos futuros.</p>
+        </div>
+      </section>
+
+    </main>
+</body>
+</html>
