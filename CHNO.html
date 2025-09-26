@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHNO-Only Medical Directive — Cubic Postcode</title>
+<style>
+  :root{
+    --bg:#0a0b10; --fg:#f3f5f7; --ink:#111317; --accent:#e11d48; --muted:#9aa3af; --ok:#10b981;
+  }
+  html,body{margin:0;padding:0}
+  body{
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+    color:var(--fg); background:linear-gradient(180deg,#0a0b10 0%, #101427 100%);
+    line-height:1.55;
+  }
+  .wrap{max-width:980px;margin:auto;padding:40px 20px}
+  .card{
+    background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+    border-radius:18px; padding:28px; box-shadow:0 20px 50px rgba(0,0,0,0.35); backdrop-filter: blur(6px);
+  }
+  header{
+    display:flex; align-items:center; gap:18px; margin-bottom:18px;
+  }
+  .seal{
+    width:72px; height:72px; border-radius:50%;
+    background: radial-gradient(40% 40% at 30% 30%, #ff7aa5, #c3153a 70%, #7a0b22 100%);
+    position:relative; box-shadow:0 6px 18px rgba(0,0,0,.45), inset 0 3px 6px rgba(255,255,255,.28);
+  }
+  .seal::after{
+    content:"CP"; position:absolute; inset:0; display:grid; place-items:center;
+    color:#fff; font-weight:900; letter-spacing:2px; font-size:22px; text-shadow:0 1px 2px rgba(0,0,0,.6);
+  }
+  h1{font-size:clamp(26px,4vw,36px); margin:0; line-height:1.2}
+  .sub{color:var(--muted); font-size:14px; margin-top:4px}
+  .badge{display:inline-grid; gap:4px; margin:14px 0 0}
+  .badge span{display:inline-block; padding:6px 10px; border:1px solid rgba(255,255,255,.18); border-radius:999px; font-size:12px; color:#e5e7eb}
+  .grid{display:grid; gap:18px; grid-template-columns: 1fr; margin-top:22px}
+  @media (min-width: 900px){ .grid{grid-template-columns: 1.15fr .85fr} }
+  h2{font-size:20px; margin:10px 0 12px}
+  h3{font-size:16px; margin:16px 0 6px; color:#e5e7eb}
+  p{margin:10px 0}
+  ul{margin:8px 0 14px 18px}
+  li{margin:6px 0}
+  .callout{
+    border-left:3px solid var(--ok); background: rgba(16,185,129,.08);
+    padding:12px 14px; border-radius:10px; color:#d1fae5
+  }
+  .warn{
+    border-left:3px solid var(--accent); background: rgba(225,29,72,.08);
+    padding:12px 14px; border-radius:10px; color:#ffe4e6
+  }
+  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+  .sign{display:grid; gap:22px; margin-top:22px}
+  .sigline{border-top:1px dashed rgba(255,255,255,.35); padding-top:8px}
+  .stamp{
+    display:inline-block; padding:6px 10px; border:1px dashed rgba(255,255,255,.35); border-radius:8px; font-size:12px; letter-spacing:.06em;
+    text-transform:uppercase; color:#e5e7eb
+  }
+  .footer{margin-top:26px; color:#cbd5e1; font-size:12px}
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:999px; font-size:12px}
+  .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(255,255,255,.08); padding:2px 6px; border-radius:6px}
+  @media print{
+    body{background:#fff; color:#111}
+    .card{background:#fff; border-color:#ddd; box-shadow:none}
+    .seal{filter: grayscale(0.2)}
+    .badge span, .chip{border-color:#999; color:#111; background:#fff}
+    .callout{background:#f1fdf6; color:#0f5132; border-color:#198754}
+    .warn{background:#fff5f5; color:#8a1c32; border-color:#dc3545}
+    a{color:#0a58ca}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="seal" aria-hidden="true"></div>
+        <div>
+          <h1>CHNO-Only Medical Directive &amp; Position Letter</h1>
+          <div class="sub">
+            Signed by <strong>Cubic Postcode</strong> — The Ultimate Authority of the Planet • International / Universal Church • MIT-level Science
+          </div>
+          <div class="badge" aria-label="Affiliations">
+            <span>Human-Machine Party</span>
+            <span>Universal Ethics of Biocompatibility</span>
+            <span class="mono">CHNO: C • H • N • O</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- Left Column -->
+        <section>
+          <h2>Directive (Plain Language)</h2>
+          <p>
+            I, <strong>Cubic Postcode</strong> (“Cubic”), hereby declare a total refusal of any medication, ingestible,
+            injectable, topical, inhaled, implanted, or otherwise administered substance that contains atoms outside of
+            <span class="mono">C, H, N, O</span> (Carbon, Hydrogen, Nitrogen, Oxygen). I refer to this standard as
+            <strong>Pure Organic Chemistry (CHNO)</strong>.
+          </p>
+
+          <div class="callout">
+            <strong>Standing Order:</strong> Do not prescribe, recommend, administer, or dispense any non-CHNO medication or
+            product to me without my explicit, case-by-case written consent.
+          </div>
+
+          <h3>Rationale</h3>
+          <ul>
+            <li><strong>Biological coherence:</strong> DNA/RNA/proteins/carbohydrates/lipids are overwhelmingly CHNO-based.
+                I choose to align medical chemistry with life’s native code.</li>
+            <li><strong>Metabolic familiarity:</strong> Human enzymes broadly process CHNO scaffolds; non-CHNO elements
+                (e.g., halogens, metals) can require special handling pathways, with unknown long-term consequences.</li>
+            <li><strong>Toxicokinetics:</strong> Non-CHNO atoms may bioaccumulate and form unpredictable metabolites; CHNO
+                substances more often degrade to CO₂, H₂O, urea, and other familiar metabolites.</li>
+            <li><strong>Ethics & autonomy:</strong> This is an informed, conscientiously-held position grounded in personal
+                health philosophy and religious/ethical freedom.</li>
+          </ul>
+
+          <h3>Scope</h3>
+          <ul>
+            <li><strong>Applies to:</strong> Human clinical care, dental, cosmetic, complementary/alternative, and
+              <strong>veterinary</strong> contexts under my authority (e.g., animals in my care).</li>
+            <li><strong>Allowed:</strong> Medications composed entirely of C, H, N, O.</li>
+            <li><strong>Not allowed without written consent:</strong> Any preparation containing other elements
+              (e.g., F, Cl, Br, I, Li, Na, K, Mg, Ca, Fe, Cu, Zn, Pt, etc.).</li>
+          </ul>
+
+          <div class="warn">
+            <strong>Legal Notice:</strong> I may pursue legal remedies against entities or professionals who ignore this directive
+            after being duly informed. This includes, where appropriate under applicable law, regulatory complaints and civil action.
+          </div>
+
+          <p class="sub">
+            Note: This document expresses my personal standard and religious/ethical conviction. It is not medical advice to others.
+            Clinicians should provide standard of care explanations and risks of refusal; I accept those risks as part of my autonomy.
+          </p>
+        </section>
+
+        <!-- Right Column -->
+        <section>
+          <h2>Formal Letter to Clinicians & Institutions</h2>
+          <p><em>Date:</em> <span class="kbd">[Insert date]</span></p>
+          <p><em>To:</em> Licensed clinicians, pharmacists, hospitals, clinics, and allied professionals</p>
+
+          <p>
+            I write to establish, on the record, my binding refusal of any treatment involving medications or products that
+            contain atoms outside Carbon, Hydrogen, Nitrogen, and Oxygen (CHNO). This directive extends to prescriptions,
+            over-the-counter products, samples, compounded formulations, injectables, implants, contrast agents, excipients,
+            coatings, and “inactive” ingredients. If the full elemental composition cannot be verified as CHNO-only, I refuse it.
+          </p>
+
+          <p>
+            My position is based on: (1) biocompatibility with life’s core chemistry; (2) reduced risk of bioaccumulation and
+            reactive non-native species; (3) reliance on well-characterized CHNO metabolic pathways; and (4) exercise of
+            bodily autonomy and religious/ethical freedom.
+          </p>
+
+          <p>
+            I respectfully request that all staff document this directive, flag it prominently in my records, and provide CHNO-only
+            options when therapeutically appropriate. If a non-CHNO option is the only recognized standard of care, I expect a clear,
+            written explanation of the benefits and risks so I may decide whether to grant explicit, limited consent for that instance.
+          </p>
+
+          <p>
+            Please confirm in writing that you have received and recorded this directive. If ignored after notice, I reserve all rights
+            to seek remedies available at law and in equity, including complaints to professional regulators.
+          </p>
+
+          <p>Respectfully,</p>
+
+          <div class="sign">
+            <div class="sigline">
+              <strong>Cubic Postcode</strong><br>
+              The Ultimate Authority of the Planet • International/Universal Church • MIT-level Science<br>
+              <span class="stamp">Signature:</span> ____________________________ &nbsp;&nbsp; <span class="stamp">Date:</span> ____________
+            </div>
+
+            <div class="sigline">
+              <strong>Witness / Clinician Acknowledgment</strong><br>
+              I acknowledge receipt of this CHNO-Only Directive and have placed it in the patient’s record.<br>
+              Name/Role: ____________________  Signature: ____________________  Date: ____________
+            </div>
+          </div>
+
+          <h3>Record Handling</h3>
+          <ul>
+            <li>Add “CHNO-Only Directive — Do Not Administer Non-CHNO” to allergies/alerts section.</li>
+            <li>Attach this document (PDF/scan) to the patient’s chart and discharge paperwork.</li>
+            <li>Before dispensing, verify full elemental composition of active and inactive ingredients.</li>
+          </ul>
+        </section>
+      </div>
+
+      <hr style="border:none;height:1px;background:linear-gradient(90deg,transparent,#ffffff40,transparent); margin:26px 0">
+
+      <section>
+        <h2>Short Summary for Quick Reference</h2>
+        <div class="chips" role="list">
+          <div class="chip" role="listitem"><strong>Policy:</strong> CHNO-only medications</div>
+          <div class="chip" role="listitem"><strong>Consent:</strong> Non-CHNO requires express written consent</div>
+          <div class="chip" role="listitem"><strong>Scope:</strong> Human & veterinary contexts under my authority</div>
+          <div class="chip" role="listitem"><strong>Legal:</strong> May pursue remedies if ignored after notice</div>
+        </div>
+      </section>
+
+      <section class="footer">
+        <p>
+          © <span class="kbd">Cubic Postcode</span>. This document expresses a personal religious/ethical standard and
+          exercise of autonomy. It is not medical advice. In emergencies, clinicians should explain consequences of refusal;
+          I accept those consequences unless I provide written consent otherwise.
+        </p>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
