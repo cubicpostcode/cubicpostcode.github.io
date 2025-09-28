@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Popeye & Olive Conveyor Counter</title>
+<style>
+  * {margin:0;padding:0;box-sizing:border-box;}
+  
+  body {
+    background: 
+      /* Horizontal spectrum bands - like a timeline flowing left to right */
+      linear-gradient(90deg,
+        #FF0018 0%,
+        #FF0018 11.11%,
+        #FFA52C 11.11%,
+        #FFA52C 22.22%,
+        #FFFF41 22.22%,
+        #FFFF41 33.33%,
+        #008018 33.33%,
+        #008018 44.44%,
+        #0000F9 44.44%,
+        #0000F9 55.55%,
+        #86007D 55.55%,
+        #86007D 66.66%,
+        #FFFFFF 66.66%,
+        #FFFFFF 77.77%,
+        #000000 77.77%,
+        #000000 88.88%,
+        #784F17 88.88%,
+        #784F17 100%
+      );
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: monospace;
+    position: relative;
+  }
+  
+  /* Conveyor belt flow lines */
+  body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      /* Horizontal conveyor lines */
+      repeating-linear-gradient(0deg, 
+        transparent, 
+        transparent 24px, 
+        rgba(255,255,255,0.08) 24px, 
+        rgba(255,255,255,0.08) 25px
+      ),
+      /* Vertical dividers for each color section */
+      repeating-linear-gradient(90deg,
+        transparent,
+        transparent calc(100% / 9 - 1px),
+        rgba(255,255,255,0.1) calc(100% / 9 - 1px),
+        rgba(255,255,255,0.1) calc(100% / 9)
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Fast conveyor belt effect */
+  body::after {
+    content: '';
+    position: absolute;
+    width: 300%;
+    height: 100%;
+    background: repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 40px,
+      rgba(255,255,255,0.05) 40px,
+      rgba(255,255,255,0.05) 80px
+    );
+    animation: conveyorFlow 3s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  @keyframes conveyorFlow {
+    from { transform: translateX(0); }
+    to { transform: translateX(-80px); }
+  }
+  
+  /* Counter display */
+  .counter {
+    display: flex;
+    gap: 20px;
+    /* Dark backdrop for contrast */
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 20px;
+    position: relative;
+    z-index: 3;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  
+
+  
+  /* Conveyor belt stream - loopy and dynamic */
+  .segment-stream {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    z-index: 2;
+    background: 
+      linear-gradient(to top, 
+        rgba(20,20,20,0.98) 0%, 
+        rgba(40,40,40,0.8) 30%,
+        rgba(60,60,60,0.5) 60%,
+        rgba(0,0,0,0.2) 100%);
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    box-shadow: 0 -15px 40px rgba(0,0,0,0.6);
+    border-top: 3px solid rgba(255,255,255,0.1);
+  }
+  
+  /* Conveyor belt track lines */
+  .segment-stream::before {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: 
+      repeating-linear-gradient(90deg,
+        #333 0px,
+        #333 20px,
+        #555 20px,
+        #555 25px);
+    animation: trackScroll 2s linear infinite;
+  }
+  
+  @keyframes trackScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-25px); }
+  }
+  
+  /* Stream inner container - loopy path */
+  .stream-inner {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 0 20px;
+    white-space: nowrap;
+    transition: transform 0.3s ease-out;
+    animation: streamLoop 1s ease-in-out infinite;
+  }
+  
+  @keyframes streamLoop {
+    0%, 100% { 
+      transform: translateY(0) scale(1);
+    }
+    25% { 
+      transform: translateY(-3px) scale(1.02);
+    }
+    50% { 
+      transform: translateY(2px) scale(0.98);
+    }
+    75% { 
+      transform: translateY(-1px) scale(1.01);
+    }
+  }
+  
+  /* Individual streaming segment - more dynamic */
+  .stream-segment {
+    flex-shrink: 0;
+    width: 12px;
+    height: 100px;
+    border-radius: 6px;
+    opacity: 0.9;
+    box-shadow: 
+      0 4px 8px rgba(0,0,0,0.4),
+      inset 0 2px 4px rgba(255,255,255,0.2);
+    transition: transform 0.2s ease;
+    animation: segmentBounce 0.8s ease-in-out infinite;
+  }
+  
+  .stream-segment:hover {
+    transform: scale(1.1) translateY(-5px);
+  }
+  
+  @keyframes segmentBounce {
+    0%, 100% { 
+      transform: translateY(0) rotateZ(0deg);
+    }
+    50% { 
+      transform: translateY(-2px) rotateZ(1deg);
+    }
+  }
+  
+  /* H-pair in stream - more dynamic connection */
+  .stream-h-pair {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+    animation: pairDance 1.2s ease-in-out infinite;
+  }
+  
+  @keyframes pairDance {
+    0%, 100% { 
+      transform: scale(1) rotate(0deg);
+    }
+    33% { 
+      transform: scale(1.05) rotate(1deg);
+    }
+    66% { 
+      transform: scale(0.95) rotate(-1deg);
+    }
+  }
+  
+  .stream-h-pair .stream-bar {
+    width: 12px;
+    height: 100px;
+    border-radius: 6px;
+    box-shadow: 
+      0 4px 8px rgba(0,0,0,0.4),
+      inset 0 2px 4px rgba(255,255,255,0.2);
+    transition: all 0.2s ease;
+  }
+  
+  .stream-h-pair .stream-connector {
+    position: absolute;
+    width: 24px;
+    height: 6px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    background: inherit;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    animation: connectorPulse 1s ease-in-out infinite;
+  }
+  
+  @keyframes connectorPulse {
+    0%, 100% { 
+      width: 24px;
+      opacity: 0.9;
+    }
+    50% { 
+      width: 28px;
+      opacity: 1;
+    }
+  }
+  
+  /* Stream segment colors - enhanced with gradients */
+  .stream-c0 { 
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(200,200,200,0.2));
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .stream-c1 { 
+    background: linear-gradient(135deg, #FF0018, #CC0014);
+  }
+  .stream-c2 { 
+    background: linear-gradient(135deg, #FFA52C, #E8941F);
+  }
+  .stream-c3 { 
+    background: linear-gradient(135deg, #FFFF41, #E6E639);
+  }
+  .stream-c4 { 
+    background: linear-gradient(135deg, #008018, #006614);
+  }
+  .stream-c5 { 
+    background: linear-gradient(135deg, #0000F9, #0000CC);
+  }
+  .stream-c6 { 
+    background: linear-gradient(135deg, #86007D, #6B0063);
+  }
+  .stream-c7 { 
+    background: linear-gradient(135deg, #FFFFFF, #E6E6E6);
+  }
+  .stream-c8 { 
+    background: linear-gradient(135deg, #000000, #333333);
+    border: 2px solid #666;
+  }
+  .stream-c9 { 
+    background: linear-gradient(135deg, #784F17, #654013);
+  }
+  
+  /* Count label with speed indicator */
+  .count-label {
+    position: absolute;
+    bottom: 8px;
+    right: 20px;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    font-family: monospace;
+    z-index: 3;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .speed-indicator {
+    color: #00FF88;
+    margin-left: 10px;
+    animation: speedGlow 1s ease-in-out infinite;
+  }
+  
+  @keyframes speedGlow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; text-shadow: 0 0 10px #00FF88; }
+  }
+  
+  /* Each digit box */
+  .digit {
+    width: 150px;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 150px;
+    font-weight: bold;
+    position: relative;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .digit:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Glass window effect for 0 - shiny metal frame */
+  .c0 { 
+    color: rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, 
+      rgba(135, 206, 235, 0.15) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(135, 206, 235, 0.15) 100%);
+    border: 5px solid transparent;
+    border-image: linear-gradient(135deg,
+      #C0C0C0 0%,
+      #FFFFFF 25%,
+      #B8B8B8 50%,
+      #FFFFFF 75%,
+      #C0C0C0 100%);
+    border-image-slice: 1;
+    border-radius: 20px 20px 15px 15px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 
+      inset 0 0 20px rgba(135, 206, 235, 0.2),
+      0 6px 12px rgba(0, 0, 0, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.6),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Vertical metal crossbar */
+  .c0::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(90deg,
+      #808080 0%,
+      #B8B8B8 20%,
+      #FFFFFF 50%,
+      #B8B8B8 80%,
+      #808080 100%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    box-shadow: 
+      2px 0 3px rgba(0, 0, 0, 0.3),
+      -2px 0 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Horizontal metal crossbar */
+  .c0::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(180deg,
+      #808080 0%,
+      #B8B8B8 20%,
+      #FFFFFF 50%,
+      #B8B8B8 80%,
+      #808080 100%);
+    transform: translateY(-50%);
+    pointer-events: none;
+    box-shadow: 
+      0 2px 3px rgba(0, 0, 0, 0.3),
+      0 -2px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Color classes for 1-9 */
+  .c1 { color: #FF0018; }
+  .c2 { color: #FFA52C; }
+  .c3 { color: #FFFF41; }
+  .c4 { color: #008018; }
+  .c5 { color: #0000F9; }
+  .c6 { color: #86007D; }
+  .c7 { color: #FFFFFF; }
+  .c8 { 
+    color: #000000;
+    text-shadow: 
+      -2px -2px 0 rgba(255,255,255,0.5),
+      2px -2px 0 rgba(255,255,255,0.5),
+      -2px 2px 0 rgba(255,255,255,0.5),
+      2px 2px 0 rgba(255,255,255,0.5),
+      0 -2px 0 rgba(255,255,255,0.5),
+      0 2px 0 rgba(255,255,255,0.5),
+      -2px 0 0 rgba(255,255,255,0.5),
+      2px 0 0 rgba(255,255,255,0.5);
+  }
+  .c9 { color: #784F17; }
+</style>
+</head>
+<body>
+
+
+
+<div class="counter">
+  <div class="digit c0" id="thousands">0</div>
+  <div class="digit c0" id="hundreds">0</div>
+  <div class="digit c0" id="tens">0</div>
+  <div class="digit c0" id="ones">0</div>
+</div>
+
+<!-- Dynamic loopy segment stream -->
+<div class="segment-stream" id="segmentStream">
+  <div class="stream-inner" id="streamInner"></div>
+  <div class="count-label">
+    Segments: <span id="segmentCount">0</span>
+    <span class="speed-indicator" id="speedIndicator">⚡1x</span>
+  </div>
+</div>
+
+<script>
+// Enhanced stopwatch counter with dynamic conveyor belt
+let count = 0;
+let isCounterRunning = false;
+let currentSpeed = 1;
+
+// Initialize speech synthesis
+const synth = window.speechSynthesis;
+
+// Calculate speed multiplier based on count
+function getSpeedMultiplier() {
+  if (count < 50) return 1;
+  if (count < 100) return 1.5;
+  if (count < 200) return 2;
+  if (count < 500) return 2.5;
+  return Math.min(4, 2.5 + (count - 500) / 1000);
+}
+
+// Update conveyor belt speed
+function updateConveyorSpeed() {
+  const newSpeed = getSpeedMultiplier();
+  if (newSpeed !== currentSpeed) {
+    currentSpeed = newSpeed;
+    
+    // Update CSS animation speeds
+    const style = document.createElement('style');
+    style.textContent = `
+      body::after { animation: conveyorFlow ${3/currentSpeed}s linear infinite; }
+      .segment-stream::before { animation: trackScroll ${2/currentSpeed}s linear infinite; }
+      .stream-inner { animation: streamLoop ${1/currentSpeed}s ease-in-out infinite; }
+      .stream-segment { animation: segmentBounce ${0.8/currentSpeed}s ease-in-out infinite; }
+    `;
+    document.head.appendChild(style);
+    
+    // Update speed indicator
+    const speedIndicator = document.getElementById('speedIndicator');
+    if (currentSpeed >= 4) {
+      speedIndicator.textContent = '⚡⚡⚡MAX';
+      speedIndicator.style.color = '#FF4444';
+    } else {
+      speedIndicator.textContent = `⚡${currentSpeed.toFixed(1)}x`;
+      speedIndicator.style.color = currentSpeed > 2 ? '#FFAA00' : '#00FF88';
+    }
+  }
+}
+
+// Build the dynamic loopy segment stream
+function buildSegmentStream() {
+  const streamInner = document.getElementById('streamInner');
+  streamInner.innerHTML = '';
+  
+  // Calculate how many segments to show (more as speed increases)
+  const maxVisibleSegments = Math.min(200, 50 + Math.floor(count / 10));
+  const startIndex = Math.max(1, count - maxVisibleSegments);
+  
+  // Build segments with loopy animation delays
+  for (let i = startIndex; i <= count; i++) {
+    const digitValue = i % 10 || 10;
+    const colorIndex = digitValue === 10 ? 0 : digitValue;
+    
+    if (i % 2 === 0 && i > 0) {
+      // Create H-pair for even numbers
+      const pair = document.createElement('div');
+      pair.className = 'stream-h-pair';
+      pair.style.animationDelay = `${(i % 10) * 0.1}s`;
+      
+      const left = document.createElement('div');
+      const prevDigit = (i - 1) % 10 || 10;
+      const prevColor = prevDigit === 10 ? 0 : prevDigit;
+      left.className = `stream-bar stream-c${prevColor}`;
+      left.style.animationDelay = `${(i % 8) * 0.05}s`;
+      
+      const right = document.createElement('div');
+      right.className = `stream-bar stream-c${colorIndex}`;
+      right.style.animationDelay = `${((i+1) % 8) * 0.05}s`;
+      
+      const connector = document.createElement('div');
+      connector.className = `stream-connector stream-c${prevColor}`;
+      
+      pair.appendChild(left);
+      pair.appendChild(right);
+      pair.appendChild(connector);
+      streamInner.appendChild(pair);
+    } else if (i % 2 === 1 && i === count) {
+      // Add single segment for odd numbers at the end
+      const segment = document.createElement('div');
+      segment.className = `stream-segment stream-c${colorIndex}`;
+      segment.style.animationDelay = `${(i % 10) * 0.1}s`;
+      streamInner.appendChild(segment);
+    }
+  }
+  
+  // Update segment count and speed
+  document.getElementById('segmentCount').textContent = count;
+  updateConveyorSpeed();
+  
+  // Dynamic scroll with easing
+  if (count > 30) {
+    const containerWidth = document.getElementById('segmentStream').offsetWidth;
+    const streamWidth = streamInner.scrollWidth;
+    
+    if (streamWidth > containerWidth) {
+      const scrollAmount = -(streamWidth - containerWidth + 50);
+      const scrollDuration = Math.max(0.3, 1 - currentSpeed * 0.1);
+      
+      streamInner.style.transition = `transform ${scrollDuration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+      streamInner.style.transform = `translateX(${scrollAmount}px)`;
+    }
+  }
+}
+
+// Speech synthesis function
+function speakNumber(number, callback) {
+  if (!synth) {
+    callback();
+    return;
+  }
+  
+  synth.cancel();
+  
+  let message;
+  if (number === 0) {
+    message = "I love you";
+  } else if (number >= 1 && number <= 9) {
+    const words = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    message = words[number];
+  } else {
+    callback();
+    return;
+  }
+  
+  const utterance = new SpeechSynthesisUtterance(message);
+  utterance.lang = 'en-US';
+  utterance.rate = Math.min(1.5, 0.9 + currentSpeed * 0.1);
+  utterance.pitch = 1.1;
+  utterance.volume = 0.7;
+  
+  const voices = synth.getVoices();
+  if (voices.length > 0) {
+    const femaleVoice = voices.find(voice => 
+      voice.name.includes('Female') || 
+      voice.name.includes('Samantha') || 
+      voice.name.includes('Victoria')
+    );
+    if (femaleVoice) {
+      utterance.voice = femaleVoice;
+    } else {
+      utterance.voice = voices[0];
+    }
+  }
+  
+  utterance.onend = () => {
+    if (number === 0) {
+      setTimeout(callback, 1000 / currentSpeed);
+    } else {
+      setTimeout(callback, 300 / currentSpeed);
+    }
+  };
+  
+  utterance.onerror = () => {
+    callback();
+  };
+  
+  synth.speak(utterance);
+}
+
+function updateDisplay() {
+  const thousands = Math.floor(count / 1000) % 10;
+  const hundreds = Math.floor(count / 100) % 10;
+  const tens = Math.floor(count / 10) % 10;
+  const ones = count % 10;
+  
+  const thousandsElement = document.getElementById('thousands');
+  const hundredsElement = document.getElementById('hundreds');
+  const tensElement = document.getElementById('tens');
+  const onesElement = document.getElementById('ones');
+  
+  // Update classes with animation
+  thousandsElement.className = 'digit c' + thousands;
+  hundredsElement.className = 'digit c' + hundreds;
+  tensElement.className = 'digit c' + tens;
+  onesElement.className = 'digit c' + ones;
+  
+  // Update text
+  thousandsElement.textContent = thousands;
+  hundredsElement.textContent = hundreds;
+  tensElement.textContent = tens;
+  onesElement.textContent = ones;
+  
+  // Build dynamic segment stream
+  buildSegmentStream();
+  
+  // Speak and continue
+  if (count > 0) {
+    speakNumber(ones, () => {
+      count++;
+      if (count > 9999) {
+        count = 0;
+        currentSpeed = 1;
+        document.getElementById('streamInner').innerHTML = '';
+        document.getElementById('segmentCount').textContent = '0';
+      }
+      
+      // Dynamic timing based on speed
+      const baseDelay = count < 50 ? 2000 : count < 200 ? 1500 : 1000;
+      const delay = baseDelay / currentSpeed;
+      
+      setTimeout(() => {
+        if (isCounterRunning) {
+          updateDisplay();
+        }
+      }, delay);
+    });
+  } else {
+    count++;
+    setTimeout(() => {
+      if (isCounterRunning) {
+        updateDisplay();
+      }
+    }, 3000);
+  }
+}
+
+// Load voices first
+if (synth) {
+  synth.getVoices();
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = () => synth.getVoices();
+  }
+}
+
+// Start counter
+setTimeout(() => {
+  isCounterRunning = true;
+  updateDisplay();
+}, 500);
+
+// Fullscreen on click
+document.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+});
+</script>
+
+</body>
+</html>
