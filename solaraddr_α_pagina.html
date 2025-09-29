@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOLARADDR-α — Padrão Nacional de Endereçamento Solar</title>
+  <meta name="description" content="Proposta de padronização de endereços postais baseada em orientação solar — Página de apresentação e proposta de lei.">
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --card:#0b1220;
+      --accent:#7be4c7; /* mint */
+      --accent-2:#7aa2ff; /* sky */
+      --muted:#98a2b3;
+      --glass: rgba(255,255,255,0.04);
+      --radius:16px;
+      --mono: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:var(--mono);background:linear-gradient(180deg,#081125 0%, #071024 40%, #041022 100%);color:#e6eef6;-webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:40px auto;padding:28px}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), var(--glass));padding:28px;border-radius:var(--radius);box-shadow:0 8px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px)}
+    h1{margin:0 0 12px;font-size:2.1rem;line-height:1.05}
+    p.lead{color:var(--muted);margin:0 0 18px}
+    .cta{display:inline-flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022029;padding:12px 18px;border-radius:12px;font-weight:700;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(123,228,199,0.12);transition:transform .18s ease}
+    .btn:active{transform:translateY(2px)}
+
+    /* Animated skyline */
+    .skyline{position:relative;height:220px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#071024 0%, #05203a 100%);box-shadow:inset 0 -40px 60px rgba(0,0,0,0.45)}
+    .sun{position:absolute;left:8%;bottom:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff3d9 0%, #ffd27a 30%, rgba(255,210,122,0.12) 60%, transparent 61%);filter:blur(2px);opacity:0.95;transform:translateY(0);animation:rise 9s ease-in-out infinite}
+    @keyframes rise{0%{transform:translateY(30px);opacity:0}25%{opacity:1}50%{transform:translateY(-6px)}100%{transform:translateY(30px);opacity:0}}
+    .horizon{position:absolute;left:0;right:0;bottom:36px;height:2px;background:linear-gradient(90deg,transparent,#7aa2ff,transparent);opacity:.18}
+    .buildings{position:absolute;left:0;right:0;bottom:0;height:120px;display:flex;align-items:end;gap:12px;padding:0 18px}
+    .b{background:linear-gradient(180deg,#081126,#0b1632);width:40px;height:40px;border-radius:6px;box-shadow:0 6px 20px rgba(2,6,23,0.6);opacity:.95}
+    .b.s1{height:76px;width:56px}
+    .b.s2{height:96px;width:70px}
+    .b.s3{height:54px;width:44px}
+    .b.s4{height:110px;width:82px}
+
+    /* Content sections */
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:28px;margin-top:28px}
+    .card{background:var(--card);padding:22px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.5)}
+    h2{margin-top:0}
+    ul{color:var(--muted);padding-left:18px}
+
+    /* Law text area */
+    .law{white-space:pre-wrap;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:18px;border-radius:12px;color:#dfeefd;max-height:480px;overflow:auto;font-size:0.95rem}
+
+    /* floating info */
+    .chip{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(123,228,199,0.06), rgba(122,162,255,0.04));color:var(--accent);font-weight:700}
+
+    /* footer */
+    footer{margin-top:28px;color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;align-items:center}
+
+    /* responsive */
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;}
+      .grid{grid-template-columns:1fr}
+      .hero-card{padding:18px}
+      .skyline{height:160px}
+    }
+
+    /* small flourish */
+    .stat{display:flex;gap:12px;align-items:center}
+    .stat .num{font-size:1.6rem;color:var(--accent);font-weight:800}
+
+    /* subtle animated underline for links */
+    a{color:var(--accent-2);text-decoration:none;position:relative}
+    a:after{content:'';position:absolute;left:0;bottom:-4px;height:2px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+    a:hover:after{transform:scaleX(1)}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="chip">SOLARADDR-α</div>
+          </div>
+          <div style="text-align:right;color:var(--muted)">Proposta de Standard &bull; 2025</div>
+        </div>
+        <h1>Endereços com propósito: a orientação solar como padrão</h1>
+        <p class="lead">Uma proposta técnica, cultural e administrativa para padronizar endereços em Portugal, combinando eficiência logística com identidade ambiental local.</p>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:16px">
+          <button class="btn" onclick="document.getElementById('proposal').scrollIntoView({behavior:'smooth'})">Ver Proposta de Lei</button>
+          <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent)" onclick="alert('Obrigado — partilhe com o seu círculo político.')">Partilhar</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="skyline card" role="img" aria-label="Ilustração do nascer do sol sobre edifícios">
+          <div class="sun" style="left:64%"></div>
+          <div class="horizon"></div>
+          <div class="buildings">
+            <div class="b s3"></div>
+            <div class="b s1"></div>
+            <div class="b s4"></div>
+            <div class="b s2"></div>
+            <div class="b s3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Porquê implementar o SOLARADDR-α?</h2>
+        <p style="color:var(--muted)">A proposta alia três eixos essenciais: eficácia operacional, coesão cultural e inovação normativa. Abaixo os argumentos principais.</p>
+
+        <ul>
+          <li><strong>Agilidade logística:</strong> sequência porta → andar → unidade reduz ambiguidades em entregas e emergências.</li>
+          <li><strong>Dado padronizado:</strong> facilita interoperabilidade entre serviços, registal, URIs oficiais e sistemas de mapeamento.</li>
+          <li><strong>Identidade local:</strong> o elemento &quot;letra solar&quot; liga os edifícios ao ciclo natural do local, valorizando patrimónios ambientais e culturais.</li>
+          <li><strong>Planeamento urbano:</strong> melhor integração entre georreferenciação, eficiência energética e políticas públicas.</li>
+        </ul>
+
+        <div style="display:flex;gap:18px;margin-top:18px;flex-wrap:wrap">
+          <div class="stat"><div class="num">A → Z</div><div style="color:var(--muted)">Ordenação alfabética baseada em métrica física</div></div>
+          <div class="stat"><div class="num">10 anos</div><div style="color:var(--muted)">Prazo de transição proposto (com prioridade a novas obras)</div></div>
+        </div>
+
+      </div>
+
+      <aside class="card">
+        <h3>Como funciona (resumo técnico)</h3>
+        <ol style="color:var(--muted);padding-left:18px">
+          <li>Escolha da <strong>Data de Referência Local</strong> (p.ex., equinócio da primavera).</li>
+          <li>Cálculo do <strong>azimute do nascer do sol</strong> para as coordenadas do edifício.</li>
+          <li>Projeção do ponto solar de referência (PSR) sobre a planta do andar.</li>
+          <li>Medição das distâncias das fechaduras ao PSR e atribuição das letras A, B, C…</li>
+        </ol>
+
+        <div style="margin-top:12px">
+          <strong>Entidades responsáveis:</strong>
+          <p style="color:var(--muted);margin:6px 0 0">IGP (azimutes), Câmaras Municipais (registo) e Serviços Postais (aplicação prática).</p>
+        </div>
+      </aside>
+    </div>
+
+    <section id="proposal" style="margin-top:28px">
+      <div class="card">
+        <h2>Proposta de Lei (Síntese) — Apresentação pelo Partido LIVRE</h2>
+        <p style="color:var(--muted)">Abaixo encontra-se a versão preparada da proposta de lei que padroniza o sistema SOLARADDR-α para uso nacional. Esta versão pode ser copiada para documentos oficiais e adaptada conforme a revisão jurídica do grupo parlamentar.</p>
+
+        <div class="law" id="lawText">
+/* Proposta de Lei n.º ___/2025
+   Padronização Nacional dos Endereços Postais com Sistema SOLARADDR-α */
+
+Preâmbulo
+O endereçamento postal é essencial para a organização territorial, a logística urbana, a segurança pública e a prestação de serviços. A diversidade de formatos atuais cria inconsistências que afetam correios, emergência médica, estatísticas e planeamento urbano.
+A presente lei introduz um padrão nacional unificado, incorporando o sistema SOLARADDR-α, que organiza os endereços do macro para o micro (porta → andar → unidade) e que acrescenta um elemento inovador: a letra solar, determinada pela posição relativa das unidades habitacionais face ao nascer do sol na data de referência local.
+
+Artigo 1.º — Objeto
+Estabelece-se o Sistema Nacional de Endereçamento Solar (designado “SOLARADDR-α”) para padronização obrigatória de endereços postais em todo o território da República Portuguesa.
+
+Artigo 2.º — Estrutura do Endereço
+1. Todo o endereço de imóvel urbano ou rústico deverá seguir o formato:
+   [Nome da via ou Código de Lote] – P[porta] – F[andar] – S[letra solar]
+   - P: número da porta/entrada principal do edifício.
+   - F: número do andar (0 = rés-do-chão; -1 = cave).
+   - S: letra solar, conforme Artigo 3.º.
+2. O formato aplica-se a correspondência postal, registos prediais, contratos de fornecimento de serviços e documentos oficiais.
+
+Artigo 3.º — Letra Solar
+1. A letra solar é atribuída a cada unidade habitacional ou comercial de acordo com:
+   a) O azimute do nascer do sol no equinócio da primavera, calculado para a latitude e longitude do imóvel.
+   b) O ponto solar de referência (PSR), obtido pela projeção horizontal desse azimute sobre a planta do andar.
+   c) A distância horizontal entre a fechadura de cada unidade e o PSR, ordenada do menor para o maior valor.
+   d) Atribuição alfabética crescente: A, B, C…
+2. Em caso de empate, prevalece a unidade com menor desvio angular relativamente ao azimute.
+
+Artigo 4.º — Competências da Administração
+1. O Instituto Geográfico Português (IGP) definirá:
+   - Tabelas de azimutes por município;
+   - Procedimentos de medição e homologação.
+2. As Câmaras Municipais ficam responsáveis por:
+   - Registar e publicar os novos endereços;
+   - Notificar proprietários e inquilinos.
+
+Artigo 5.º — Transição e Prazo
+1. O sistema SOLARADDR-α será implementado progressivamente num período de dez anos, com prioridade para novas construções.
+2. Endereços antigos manter-se-ão válidos durante a transição, devendo constar em simultâneo nos registos oficiais.
+
+Artigo 6.º — Financiamento
+As despesas resultantes da aplicação desta lei serão suportadas por:
+- Orçamento do Estado,
+- Fundos europeus de inovação urbana,
+- Taxas moderadoras de registo para novas edificações.
+
+Artigo 7.º — Entrada em Vigor
+A presente lei entra em vigor 90 dias após a sua publicação.
+
+Nota Justificativa
+Esta proposta melhora a eficiência logística (correios, serviços de emergência, e-commerce), valoriza a astronomia e a geografia como elementos culturais, reforçando a identidade ambiental do país, e padroniza dados cadastrais, facilitando planeamento urbano e políticas públicas.
+
+Lisboa, [data a inserir]
+Grupo Parlamentar do LIVRE
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <button class="btn" onclick="copyLaw()">Copiar Proposta</button>
+          <button class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent)" onclick="downloadHTML()">Descarregar HTML</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© SOLARADDR-α — Projeto aberto • Disponível para adaptação legislativa</div>
+      <div style="color:var(--muted)">Sugestão: <a href="#proposal">Apresente aos deputados do LIVRE</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function copyLaw(){
+      const txt = document.getElementById('lawText').innerText;
+      navigator.clipboard.writeText(txt).then(()=>{
+        alert('Proposta copiada para área de transferência.');
+      }).catch(()=>{alert('Não foi possível copiar — use Ctrl+C.');});
+    }
+
+    function downloadHTML(){
+      const blob = new Blob([document.documentElement.outerHTML],{type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'SOLARADDR-alpha_proposta.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
