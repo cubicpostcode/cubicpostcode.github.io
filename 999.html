@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved DTMF Tone Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <button id="playButton">Play DTMF '9' Tone</button>
+    <button id="stopButton" style="display: none;">Stop Sequence</button>
+    <div id="status">Press the button or any key to start. Use 'Stop' to halt the sequence.</div>
+
+    <script>
+        let audioContext;
+        let isPlaying = false;
+        let timeoutId;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone() {
+            initAudio();
+            const now = audioContext.currentTime;
+            const duration = 0.1;  // 100ms total tone
+            const attack = 0.005;  // 5ms attack
+            const decay = 0.005;   // 5ms decay
+            const sustain = duration - attack - decay;
+            const volume = 0.2;    // Adjusted for ~ -14 dB, closer to telephony levels
+
+            const oscillator1 = audioContext.createOscillator();
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const merger = audioContext.createChannelMerger(2);  // For stereo if needed
+
+            // DTMF '9' frequencies
+            oscillator1.frequency.setValueAtTime(999, now);
+            oscillator2.frequency.setValueAtTime(2999, now);
+
+            // Envelope: attack to volume, hold, decay to 0
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(volume, now + attack);
+            gainNode.gain.setValueAtTime(volume, now + attack + sustain);
+            gainNode.gain.linearRampToValueAtTime(0, now + duration);
+
+            // Connect: oscillators to gain to merger to destination
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            gainNode.connect(merger);
+            merger.connect(audioContext.destination);
+
+            // Start and stop
+            oscillator1.start(now);
+            oscillator2.start(now);
+            oscillator1.stop(now + duration);
+            oscillator2.stop(now + duration);
+        }
+
+        function startPlayback() {
+            if (isPlaying) return;
+            isPlaying = true;
+            document.getElementById('stopButton').style.display = 'inline-block';
+            document.getElementById('status').textContent = 'Sequence playing... Press Stop or wait.';
+            playOne();
+        }
+
+        function playOne() {
+            playTone();
+            const gap = Math.random() * (4000 - 600) + 600;  // 600-4000ms random gap
+            timeoutId = setTimeout(() => {
+                if (isPlaying) {
+                    playOne();
+                }
+            }, gap);
+        }
+
+        function stopPlayback() {
+            isPlaying = false;
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+            document.getElementById('stopButton').style.display = 'none';
+            document.getElementById('status').textContent = 'Stopped. Press Play or any key to start again.';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButton = document.getElementById('playButton');
+            const stopButton = document.getElementById('stopButton');
+
+            playButton.addEventListener('click', startPlayback);
+            stopButton.addEventListener('click', stopPlayback);
+
+            // Key press: Any key starts (or toggles if playing)
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    stopPlayback();
+                } else {
+                    startPlayback();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
