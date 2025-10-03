@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTMF '9' Key Sound Emulation</title>
+</head>
+<body>
+    <h1>DTMF '9' Key Sound Emulation</h1>
+    <p>Click the button to start playing the DTMF tone for '9' (852 Hz + 1477 Hz) as short beeps, each lasting 100ms, spaced by random gaps between 600ms and 4000ms.</p>
+    <button id="startBtn">Start Sequence</button>
+    <button id="stopBtn" disabled>Stop Sequence</button>
+
+    <script>
+        let audioCtx;
+        let isPlaying = false;
+        let timeoutId;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playBeep() {
+            if (!audioCtx || isPlaying === false) return;
+
+            const oscillator1 = audioCtx.createOscillator();
+            const oscillator2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator1.frequency.setValueAtTime(852, audioCtx.currentTime); // Low frequency
+            oscillator2.frequency.setValueAtTime(1477, audioCtx.currentTime); // High frequency
+
+            oscillator1.type = 'sine';
+            oscillator2.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume level
+
+            const beepDuration = 0.1; // 100ms beep
+            oscillator1.start(audioCtx.currentTime);
+            oscillator2.start(audioCtx.currentTime);
+            oscillator1.stop(audioCtx.currentTime + beepDuration);
+            oscillator2.stop(audioCtx.currentTime + beepDuration);
+        }
+
+        function scheduleNext() {
+            if (!isPlaying) return;
+
+            const minGap = 600;
+            const maxGap = 4000;
+            const gap = minGap + Math.random() * (maxGap - minGap);
+
+            timeoutId = setTimeout(() => {
+                playBeep();
+                scheduleNext();
+            }, gap);
+        }
+
+        function startSequence() {
+            initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isPlaying = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            playBeep(); // Play first beep immediately
+            scheduleNext(); // Schedule the next one after random gap
+        }
+
+        function stopSequence() {
+            isPlaying = false;
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startSequence);
+        document.getElementById('stopBtn').addEventListener('click', stopSequence);
+    </script>
+</body>
+</html>
