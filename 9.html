@@ -41,7 +41,7 @@
 
             gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume level
 
-            const beepDuration = 0.1; // 100ms beep
+            const beepDuration = 0.3; // 100ms beep
             oscillator1.start(audioCtx.currentTime);
             oscillator2.start(audioCtx.currentTime);
             oscillator1.stop(audioCtx.currentTime + beepDuration);
@@ -87,4 +87,5 @@
         document.getElementById('stopBtn').addEventListener('click', stopSequence);
     </script>
 </body>
+
 </html>
