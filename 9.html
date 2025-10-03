@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTMF Tone Player</title>
+    <title>Improved DTMF Tone Player</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -22,17 +23,27 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            margin: 10px;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <button id="playButton">Play DTMF '9' Tone</button>
+    <button id="stopButton" style="display: none;">Stop Sequence</button>
+    <div id="status">Press the button or any key to start. Use 'Stop' to halt the sequence.</div>
 
     <script>
-        let audioContext;  // Global AudioContext for Web Audio API
+        let audioContext;
+        let isPlaying = false;
+        let timeoutId;
 
         function initAudio() {
             if (!audioContext) {
@@ -42,46 +53,84 @@
 
         function playTone() {
             initAudio();
+            const now = audioContext.currentTime;
+            const duration = 0.1;  // 100ms total tone
+            const attack = 0.005;  // 5ms attack
+            const decay = 0.005;   // 5ms decay
+            const sustain = duration - attack - decay;
+            const volume = 0.2;    // Adjusted for ~ -14 dB, closer to telephony levels
+
             const oscillator1 = audioContext.createOscillator();
             const oscillator2 = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
+            const merger = audioContext.createChannelMerger(2);  // For stereo if needed
 
-            // DTMF '9' frequencies: 852 Hz (row) + 1477 Hz (column)
-            oscillator1.frequency.setValueAtTime(852, audioContext.currentTime);
-            oscillator2.frequency.setValueAtTime(1477, audioContext.currentTime);
+            // DTMF '9' frequencies
+            oscillator1.frequency.setValueAtTime(852, now);
+            oscillator2.frequency.setValueAtTime(1477, now);
 
-            // Short beep: 100ms duration
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);  // Volume
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            // Envelope: attack to volume, hold, decay to 0
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(volume, now + attack);
+            gainNode.gain.setValueAtTime(volume, now + attack + sustain);
+            gainNode.gain.linearRampToValueAtTime(0, now + duration);
 
+            // Connect: oscillators to gain to merger to destination
             oscillator1.connect(gainNode);
             oscillator2.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            gainNode.connect(merger);
+            merger.connect(audioContext.destination);
 
-            oscillator1.start(audioContext.currentTime);
-            oscillator2.start(audioContext.currentTime);
-            oscillator1.stop(audioContext.currentTime + 0.1);
-            oscillator2.stop(audioContext.currentTime + 0.1);
+            // Start and stop
+            oscillator1.start(now);
+            oscillator2.start(now);
+            oscillator1.stop(now + duration);
+            oscillator2.stop(now + duration);
         }
 
         function startPlayback() {
-            playTone();  // Play one beep immediately
-            // Optional: Chain more beeps with random gaps (600-4000ms)
-            setTimeout(() => {
-                const gap = Math.random() * (4000 - 600) + 600;
-                setTimeout(startPlayback, gap);  // Recursive for continuous sequence
-            }, 100);  // Small delay after first beep
+            if (isPlaying) return;
+            isPlaying = true;
+            document.getElementById('stopButton').style.display = 'inline-block';
+            document.getElementById('status').textContent = 'Sequence playing... Press Stop or wait.';
+            playOne();
         }
 
-        // Button click handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const button = document.getElementById('playButton');
-            button.addEventListener('click', startPlayback);
+        function playOne() {
+            playTone();
+            const gap = Math.random() * (4000 - 600) + 600;  // 600-4000ms random gap
+            timeoutId = setTimeout(() => {
+                if (isPlaying) {
+                    playOne();
+                }
+            }, gap);
+        }
 
-            // Key press handler: Plays on ANY key press
+        function stopPlayback() {
+            isPlaying = false;
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+            document.getElementById('stopButton').style.display = 'none';
+            document.getElementById('status').textContent = 'Stopped. Press Play or any key to start again.';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButton = document.getElementById('playButton');
+            const stopButton = document.getElementById('stopButton');
+
+            playButton.addEventListener('click', startPlayback);
+            stopButton.addEventListener('click', stopPlayback);
+
+            // Key press: Any key starts (or toggles if playing)
             document.addEventListener('keydown', function(event) {
-                // event.preventDefault();  // Uncomment to block default key actions (e.g., typing)
-                startPlayback();
+                if (event.key === 'Escape') {
+                    stopPlayback();
+                } else {
+                    startPlayback();
+                }
             });
         });
     </script>
