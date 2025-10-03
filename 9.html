@@ -3,89 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTMF '9' Key Sound Emulation</title>
+    <title>DTMF Tone Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>DTMF '9' Key Sound Emulation</h1>
-    <p>Click the button to start playing the DTMF tone for '9' (852 Hz + 1477 Hz) as short beeps, each lasting 100ms, spaced by random gaps between 600ms and 4000ms.</p>
-    <button id="startBtn">Start Sequence</button>
-    <button id="stopBtn" disabled>Stop Sequence</button>
+    <button id="playButton">Play DTMF '9' Tone</button>
 
     <script>
-        let audioCtx;
-        let isPlaying = false;
-        let timeoutId;
+        let audioContext;  // Global AudioContext for Web Audio API
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
 
-        function playBeep() {
-            if (!audioCtx || isPlaying === false) return;
+        function playTone() {
+            initAudio();
+            const oscillator1 = audioContext.createOscillator();
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
 
-            const oscillator1 = audioCtx.createOscillator();
-            const oscillator2 = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
+            // DTMF '9' frequencies: 852 Hz (row) + 1477 Hz (column)
+            oscillator1.frequency.setValueAtTime(852, audioContext.currentTime);
+            oscillator2.frequency.setValueAtTime(1477, audioContext.currentTime);
+
+            // Short beep: 100ms duration
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);  // Volume
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
 
             oscillator1.connect(gainNode);
             oscillator2.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            gainNode.connect(audioContext.destination);
 
-            oscillator1.frequency.setValueAtTime(852, audioCtx.currentTime); // Low frequency
-            oscillator2.frequency.setValueAtTime(1477, audioCtx.currentTime); // High frequency
-
-            oscillator1.type = 'sine';
-            oscillator2.type = 'sine';
-
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume level
-
-            const beepDuration = 0.3; // 100ms beep
-            oscillator1.start(audioCtx.currentTime);
-            oscillator2.start(audioCtx.currentTime);
-            oscillator1.stop(audioCtx.currentTime + beepDuration);
-            oscillator2.stop(audioCtx.currentTime + beepDuration);
+            oscillator1.start(audioContext.currentTime);
+            oscillator2.start(audioContext.currentTime);
+            oscillator1.stop(audioContext.currentTime + 0.1);
+            oscillator2.stop(audioContext.currentTime + 0.1);
         }
 
-        function scheduleNext() {
-            if (!isPlaying) return;
-
-            const minGap = 600;
-            const maxGap = 4000;
-            const gap = minGap + Math.random() * (maxGap - minGap);
-
-            timeoutId = setTimeout(() => {
-                playBeep();
-                scheduleNext();
-            }, gap);
+        function startPlayback() {
+            playTone();  // Play one beep immediately
+            // Optional: Chain more beeps with random gaps (600-4000ms)
+            setTimeout(() => {
+                const gap = Math.random() * (4000 - 600) + 600;
+                setTimeout(startPlayback, gap);  // Recursive for continuous sequence
+            }, 100);  // Small delay after first beep
         }
 
-        function startSequence() {
-            initAudio();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            isPlaying = true;
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('stopBtn').disabled = false;
-            playBeep(); // Play first beep immediately
-            scheduleNext(); // Schedule the next one after random gap
-        }
+        // Button click handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('playButton');
+            button.addEventListener('click', startPlayback);
 
-        function stopSequence() {
-            isPlaying = false;
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-                timeoutId = null;
-            }
-            document.getElementById('startBtn').disabled = false;
-            document.getElementById('stopBtn').disabled = true;
-        }
-
-        document.getElementById('startBtn').addEventListener('click', startSequence);
-        document.getElementById('stopBtn').addEventListener('click', stopSequence);
+            // Key press handler: Plays on ANY key press
+            document.addEventListener('keydown', function(event) {
+                // event.preventDefault();  // Uncomment to block default key actions (e.g., typing)
+                startPlayback();
+            });
+        });
     </script>
 </body>
-
 </html>
