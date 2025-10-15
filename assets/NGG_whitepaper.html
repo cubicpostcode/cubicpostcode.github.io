@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NanoGAMA-hour-timerGlass (NGG): Planet-Locked Nanoscale Time, Level, and Orientation System</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --fg: #e6f1ff;
+      --muted: #b6c6e0;
+      --accent: #59d3ff;
+      --accent2: #98ffa7;
+      --card: #121826;
+      --border: #1f2a3a;
+    }
+    html, body { background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; line-height: 1.6; }
+    header { padding: 32px 16px; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(89,211,255,0.05), rgba(152,255,167,0.02)); }
+    h1 { font-size: 2rem; margin: 0.3rem 0; }
+    h2 { font-size: 1.4rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.2rem; }
+    p, li { color: var(--muted); }
+    .container { max-width: 920px; margin: 0 auto; padding: 24px; }
+    .meta { color: var(--accent); margin-top: 8px; }
+    .claim { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 12px; }
+    code, pre { background: #0f1522; color: #bfe6ff; padding: 2px 6px; border-radius: 6px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 12px; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    footer { margin: 48px 0 24px; text-align: center; color: var(--muted); }
+    .diagram { background: radial-gradient(1200px 600px at 50% -20%, rgba(89,211,255,0.08), transparent), linear-gradient(180deg, rgba(152,255,167,0.06), transparent 40%); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .small { font-size: 0.92rem; }
+    .toc a { color: var(--accent); text-decoration: none; }
+    a { color: var(--accent2); }
+    .badge { display:inline-block; padding:2px 8px; border:1px solid var(--border); border-radius:999px; background: #101827; color: var(--accent2); font-size: 0.85rem;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NanoGAMA-hour-timerGlass (NGG): Planet-Locked Nanoscale Time, Level, and Orientation System</h1>
+    <div class="meta">Authored by <strong>Engineer Cubic Postcode</strong> — October 15, 2025</div>
+    <div class="meta"><span class="badge">IP Claim: Mechanism, Control Architecture & Synchronization Scheme</span></div>
+  </header>
+
+  <main class="container">
+    <section class="claim" id="ip-claim">
+      <h2>IP Notice & Author’s Declaration</h2>
+      <p>
+        I, <strong>Engineer Cubic Postcode</strong>, hereby assert intellectual property over the invention herein described as the
+        <em>NanoGAMA-hour-timerGlass (NGG)</em>, including its magnetically disciplined hourglass with nanoscale flow gating,
+        gravity-referenced pendulum stabilization, bubble-based tilt rejection, spin-precession time disciplining, multi-sensor fusion,
+        and the end-to-end protocol that locks cyber-mechanical systems to planetary reference vectors {B, g, Ω}.
+      </p>
+      <p class="small">
+        This document serves as an enabling disclosure of mechanisms, control loops, materials, and integration details sufficient for one skilled in the art to practice the invention.
+        All rights reserved. This is not legal advice. Patentability and jurisdictional protection require formal filing.
+      </p>
+    </section>
+
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>
+        The NGG is a nanoscale instrument that unifies three precision subsystems—(i) a nano-bubble level for tilt sensing against gravity,
+        (ii) a vertical nanobeam pendulum for gravimetric resonance, and (iii) a calibrated ferrofluidic hourglass with magnetic gating—
+        into a single planet-locked time-and-attitude reference. The system employs solid-state spin precession (e.g., NV-center ODMR or spintronic MTJs)
+        to derive a frequency from the local geomagnetic field, which disciplines the hourglass flow and, secondarily, the pendulum phase via
+        a hierarchical PLL. Sensor fusion with optional on-chip Sagnac gyroscopy yields a universal local frame based on {B, g, Ω} without RF/GPS.
+      </p>
+    </section>
+
+    <section id="toc" class="card">
+      <h2>Table of Contents</h2>
+      <ol class="toc">
+        <li><a href="#background">Background and Prior Art Context</a></li>
+        <li><a href="#principle">Principle of Operation</a></li>
+        <li><a href="#architecture">System Architecture & Control</a></li>
+        <li><a href="#components">Nanoscale Components</a></li>
+        <li><a href="#protocol">Synchronization Protocol (Fleet/Swarm)</a></li>
+        <li><a href="#errors">Error Sources & Mitigations</a></li>
+        <li><a href="#materials">Materials & Fabrication Notes</a></li>
+        <li><a href="#applications">Applications</a></li>
+        <li><a href="#claims">Illustrative Claims</a></li>
+        <li><a href="#figures">Text-Only Figures & Diagrams</a></li>
+        <li><a href="#disclaimer">Legal & Practical Notes</a></li>
+      </ol>
+    </section>
+
+    <section id="background">
+      <h2>1. Background and Prior Art Context</h2>
+      <p>
+        Precision timekeeping and alignment traditionally rely on quartz, atomic references, or satellite time transfer.
+        At nanoscale and in RF-denied environments, these approaches are impractical. The NGG leverages planetary invariants—
+        gravity (g), geomagnetism (B), and Earth’s rotation (Ω)—as orthogonal anchors. The approach is inspired by pendulum
+        chronometry (<span class="kbd">Horologium Oscillatorium</span>) yet updated with spin physics and microfluidics.
+      </p>
+    </section>
+
+    <section id="principle">
+      <h2>2. Principle of Operation</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>2.1 Bubble Tilt Sensing</h3>
+          <p>
+            A sealed nano-capillary with a stabilized gas bubble provides tilt via centroid displacement under gravity.
+            Optical evanescent coupling or capacitive fringes deliver sub-nanoradian resolution. This aligns the device plane
+            to the local gravitational equipotential.
+          </p>
+        </div>
+        <div class="card">
+          <h3>2.2 Nano-Pendulum Resonator</h3>
+          <p>
+            A vertical diamond or SiC nanobeam forms a high-Q gravimetric resonator. Its period T≈2π√(L/g_eff) becomes a slow, stable reference.
+            A parametric drive maintains oscillation; control effort is used as a gravity/tilt error channel.
+          </p>
+        </div>
+        <div class="card">
+          <h3>2.3 Magnetically Gated Hourglass</h3>
+          <p>
+            A nanoscale throat passes monodisperse magnetic nanoparticles in a viscous carrier. A patterned permalloy yoke with a nano-coil modulates
+            effective viscosity/aperture via magnetic field, turning mass flow into a controllable, countable timebase.
+          </p>
+        </div>
+        <div class="card">
+          <h3>2.4 Spin-Precession Frequency</h3>
+          <p>
+            Solid-state spins precess at f_L=(γ/2π)|B|. NV-center ODMR or MTJ angle-sensitive stacks yield a dimensioned frequency that
+            disciplines the hourglass rate and, indirectly, the pendulum phase—realizing a planet-locked clock.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2>3. System Architecture & Control</h2>
+      <div class="diagram">
+        <p><strong>Discipline Chain:</strong> Spin clock (f_L) → Hourglass flow counter → Pendulum phase → Fused epoch & attitude.</p>
+      </div>
+      <h3>3.1 Phase-Locked Loops (PLLs)</h3>
+      <p>
+        A primary PLL locks the hourglass counting rate to f_L/N. A secondary, low-bandwidth loop nudges pendulum phase to the hourglass,
+        while tilt errors from the bubble servo remove geometric bias. An EKF fuses {tilt, phase, flow, B-vector, optional Ω} into a single state.
+      </p>
+      <h3>3.2 Holdover & Health</h3>
+      <p>
+        During geomagnetic disturbances, holdover uses pendulum+Sagnac. Consistency checks across {B, g, Ω} detect interference or tampering.
+      </p>
+    </section>
+
+    <section id="components">
+      <h2>4. Nanoscale Components</h2>
+      <ul>
+        <li><strong>Hourglass body:</strong> fused silica or DLC; ALD-defined throat; fluoropolymer passivation.</li>
+        <li><strong>Magnetic particles:</strong> Fe₃O₄ / CoFe₂O₄ with surfactants; narrow σ for monodispersity.</li>
+        <li><strong>Magnetic gate:</strong> permalloy yoke + nano-coil; back-bias with soft magnet to linearize control.</li>
+        <li><strong>Pendulum:</strong> diamond/SiC nanobeam; photonic crystal cavity for interferometric readout.</li>
+        <li><strong>Spin sensor:</strong> NV diamond with microwave loop, or MTJ/GMR/TMR stack.</li>
+        <li><strong>Optional gyro:</strong> microring Sagnac interferometer.</li>
+      </ul>
+    </section>
+
+    <section id="protocol">
+      <h2>5. Synchronization Protocol (Fleet/Swarm)</h2>
+      <ol>
+        <li>Coarse level to g; sweep B; bias magnetic gate.</li>
+        <li>Lock f_L; discipline hourglass counts to f_L/N.</li>
+        <li>Capture pendulum; phase-lock with minimal authority.</li>
+        <li>Run EKF to publish epoch, attitude, and uncertainties.</li>
+        <li>Peer handshake via optical blinks; consensus epoch with local anchors retained.</li>
+      </ol>
+    </section>
+
+    <section id="errors">
+      <h2>6. Error Sources & Mitigations</h2>
+      <ul>
+        <li>Thermal/Brownian → high-Q structures, vacuum pack, stable T.</li>
+        <li>Magnetic noise → shielding + low-bandwidth averaging of planetary component.</li>
+        <li>Space weather → storm detection via f_L; holdover on mechanical references.</li>
+        <li>Throat aging → close loop on mass flow; flip orientation to average bias.</li>
+        <li>Heading ambiguity → combine B with Ω or B-inclination.</li>
+      </ul>
+    </section>
+
+    <section id="materials">
+      <h2>7. Materials & Fabrication Notes</h2>
+      <p>
+        Suggested processes include ALD for throat geometry, FIB patterning for magnetic gates, CVD diamond for NV hosts,
+        and wafer-level vacuum encapsulation. Integration with silicon photonics supports compact interferometry and ODMR optics.
+      </p>
+    </section>
+
+    <section id="applications">
+      <h2>8. Applications</h2>
+      <div class="grid">
+        <div class="card"><h3>Quantum & Cryo Labs</h3><p>RF-quiet timing/attitude reference.</p></div>
+        <div class="card"><h3>Swarm Robotics</h3><p>GPS-denied coordination with consensus epoch.</p></div>
+        <div class="card"><h3>Underground/Indoor</h3><p>Planet-locked navigation without beacons.</p></div>
+        <div class="card"><h3>Metrology/MEMS</h3><p>On-chip calibration and drift monitoring.</p></div>
+      </div>
+    </section>
+
+    <section id="claims">
+      <h2>9. Illustrative Claims (Non-Limiting)</h2>
+      <ol>
+        <li>A device comprising a nano-bubble tilt sensor, a vertical nanobeam pendulum, and a magnetically gated nano-hourglass, where a spin-precession frequency derived from the geomagnetic field disciplines hourglass mass flow.</li>
+        <li>The device of claim 1 wherein a secondary loop phase-locks the pendulum to the disciplined hourglass while tilt error is nulled by bubble feedback.</li>
+        <li>The device of claim 1 further comprising a microring Sagnac gyroscope to reference Earth rotation and remove azimuthal ambiguity.</li>
+        <li>A method to synchronize a plurality of devices by deriving local epochs from {B, g, Ω}, exchanging optical handshakes, and forming a consensus epoch with holdover during magnetic disturbances.</li>
+      </ol>
+    </section>
+
+    <section id="figures">
+      <h2>10. Text-Only Figures & Diagrams</h2>
+      <pre>
+[Fig. 1] Discipline Chain
+  B → f_L  ─┐
+            ├─> PLL1 → Hourglass counts ─┐
+  Bubble → tilt ─────────────────────────┼─> EKF → Epoch + Attitude
+  Pendulum phase ──── PLL2 (low BW) ─────┘
+      </pre>
+      <pre>
+[Fig. 2] Sensor Triad & Frame
+  g (down)  ,  B (azimuth)  ,  Ω (rotation)
+  Frame axes: e1 = g/|g|, e2 = B × g, e3 = e1 × e2
+      </pre>
+    </section>
+
+    <section id="disclaimer" class="card">
+      <h2>11. Legal & Practical Notes</h2>
+      <p>
+        This disclosure is provided for technical clarity. For enforceable IP rights, filing with appropriate patent offices is required.
+        The author asserts inventorship of the synchronization mechanism, discipline chain, and nano-hourglass gating architecture.
+      </p>
+    </section>
+
+    <footer>
+      © October 15, 2025 — Engineer Cubic Postcode. All rights reserved.
+    </footer>
+  </main>
+</body>
+</html>
