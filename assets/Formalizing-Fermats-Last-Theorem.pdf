@@ -1,0 +1,609 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 3737
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 771.0238582677164914 Td
+(FORMALIZING FERMAT'S LAST THEOREM) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 742.6774015748030706 Td
+(Bridging Mathematics, Programming, and AI in the Modern Era) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 711.4962992125983874 Td
+(THE CHALLENGE) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 683.1498425196850803 Td
+(How could a programmer with expertise in formal logic systems, scientific ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 666.1419685039369369 Td
+(computation, blockchain, and functional languages contribute to formalizing ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 649.1340944881889072 Td
+(Fermat's Last Theorem?) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 617.952992125984224 Td
+(THE MATHEMATICAL CHALLENGE) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 589.6065354330708033 Td
+(Andrew Wiles' proof spans hundreds of pages and draws on:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 572.5986614173227736 Td
+(• Algebraic Number Theory) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 555.5907874015747439 Td
+(• Elliptic Curves  ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 538.5829133858267141 Td
+(• Modular Forms) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 507.4018110236219741 Td
+(While accepted as correct, it hasn't been fully formalized in a ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 490.3939370078739444 Td
+(computer-verifiable system.) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 459.2128346456692611 Td
+(PROGRAMMING EXPERTISE CONTRIBUTIONS) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 416.69314960629913 Td
+(Formal Logic Systems Mastery:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 399.6852755905511003 Td
+(• Breaking down complex arguments into logical steps) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 382.6774015748030706 Td
+(• Representing mathematical objects in formal systems) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 365.6695275590550409 Td
+(• Handling dependencies between proof components) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 334.4884251968503008 Td
+(Functional Programming Skills:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 317.480551181102328 Td
+(• Curry-Howard correspondence connections) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 300.4726771653542983 Td
+(• Type systems mirroring logical structures) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 283.4648031496062686 Td
+(• Immutable data structures for mathematical objects) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 252.2837007874014716 Td
+(LEAN AND MODERN THEOREM PROVING) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 209.7640157480313974 Td
+(LEAN 4 Advantages:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 192.7561417322833677 Td
+(• Dependent type system for sophisticated statements) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 175.748267716535338 Td
+(• Tactic system for semi-automated proof construction) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 158.7403937007873083 Td
+(• Mathlib library foundation) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 141.7325196850392786 Td
+(• Metaprogramming for domain-specific automation) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 110.5514173228345953 Td
+(BLOCKCHAIN AND CLOUD INTEGRATION) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 68.0317322834645211 Td
+(Blockchain Knowledge:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 51.0238582677164914 Td
+(• Cryptographic verification systems) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 2474
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 785.1970866141732586 Td
+(• Distributed consensus on mathematical claims) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 768.1892125984252289 Td
+(• Smart contracts for proof encoding) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 737.0081102362204319 Td
+(Cloud and AI Integration:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 720.0002362204724022 Td
+(• Distributed proof checking) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 702.9923622047243725 Td
+(• GPU acceleration for proof search) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 685.9844881889763428 Td
+(• AI systems for proof suggestion) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 654.8033858267716596 Td
+(WHY THIS MATTERS) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 626.4569291338582389 Td
+(In an AI age, formally verified proofs provide absolute certainty ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 609.4490551181102092 Td
+(about mathematical results and serve as foundations for verifying ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 592.4411811023621794 Td
+(AI-generated mathematical content.) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 561.2600787401574962 Td
+(PRACTICAL CONTRIBUTIONS) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 532.9136220472440755 Td
+(• Building infrastructure for number theory formalization) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 515.9057480314959321 Td
+(• Proof engineering and complexity management) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 498.8978740157479592 Td
+(• Automation development for routine proofs) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 481.8899999999999295 Td
+(• Verification pipelines and CI systems) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 464.8821259842518998 Td
+(• Educational tools for accessible formal proofs) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 433.7010236220471597 Td
+(THE FUTURE IMPACT) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 405.3545669291337958 Td
+(Formalizing Fermat's Last Theorem would bridge Wiles' mathematical ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 388.3466929133857661 Td
+(insights with computer-verifiable proof, serving as a cornerstone ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 371.3388188976377364 Td
+(for mathematical AI systems in our computational world.) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 2.5.1)
+/CreationDate (D:20251015121302+01'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000006604 00000 n 
+0000008429 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000003941 00000 n 
+0000004078 00000 n 
+0000006667 00000 n 
+0000006792 00000 n 
+0000006922 00000 n 
+0000007055 00000 n 
+0000007193 00000 n 
+0000007317 00000 n 
+0000007446 00000 n 
+0000007578 00000 n 
+0000007714 00000 n 
+0000007842 00000 n 
+0000007969 00000 n 
+0000008098 00000 n 
+0000008231 00000 n 
+0000008333 00000 n 
+0000008679 00000 n 
+0000008765 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <169275699515758F4A542DE0216EFFFA> <169275699515758F4A542DE0216EFFFA> ]
+>>
+startxref
+8869
+%%EOF
