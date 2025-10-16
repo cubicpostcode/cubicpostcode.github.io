@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inquérito Ético Global — Prompt + Resposta</title>
+  <meta name="description" content="Prompt ideal e resposta (inquérito de 50 perguntas) para um projeto global de psicologia ética." />
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #151936;
+      --text: #e9ecf1;
+      --muted: #a9b0c6;
+      --accent: #6dd6ff;
+      --accent-2: #b794f4;
+      --card: #0f1220;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 10% -10%, #1c2150 0%, var(--bg) 60%),
+                  radial-gradient(1000px 600px at 120% 10%, #1a1f45 0%, var(--bg) 50%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .wrap {
+      width: min(1100px, 100% - 2rem);
+      margin: 3rem auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 2.5vw + 1rem, 3rem);
+      margin: 0 0 .25rem 0;
+      letter-spacing: .2px;
+    }
+    .subtitle { color: var(--muted); }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    section { margin: 1.5rem 0; }
+    h2 { font-size: 1.3rem; margin: 0 0 .5rem 0; }
+    h3 { font-size: 1.05rem; margin: 1.25rem 0 .5rem 0; color: var(--accent); }
+    p { margin: .5rem 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; gap: 1rem; }
+    @media (min-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    details { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; padding: .75rem 1rem; }
+    details > summary { cursor: pointer; font-weight: 600; color: var(--accent-2); }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: rgba(255,255,255,.08); border-radius: 8px; padding: .15rem .4rem; }
+    .badge { display: inline-block; background: rgba(109,214,255,.15); color: var(--accent); border:1px solid rgba(109,214,255,.35); border-radius: 999px; padding: .15rem .6rem; font-size: .8rem; }
+    ol { padding-left: 1.1rem; }
+    li { margin: .6rem 0; }
+    .options { margin-top: .25rem; }
+    .options div { margin: .25rem 0; }
+    footer { margin-top: 2.5rem; text-align: center; color: var(--muted); font-size: .9rem; }
+    .small { font-size: .95rem; }
+    .card { background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius: var(--radius); padding: 1rem; }
+    .pill { display:inline-block; padding:.15rem .5rem; border-radius:999px; border:1px solid rgba(255,255,255,.2); color:var(--muted); font-size:.8rem; }
+    .toolbar { display:flex; gap:.5rem; align-items:center; justify-content:flex-end; margin-bottom:.5rem; }
+    button.copy {
+      background: transparent; color: var(--accent); border:1px solid rgba(109,214,255,.4); border-radius:10px; padding:.4rem .6rem; cursor:pointer;
+    }
+    button.copy:hover { background: rgba(109,214,255,.1); }
+    pre { white-space: pre-wrap; word-wrap: break-word; background: #0c1026; border:1px solid rgba(255,255,255,.08); padding:1rem; border-radius:12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge">Projeto de Psicologia Ética Internacional</div>
+      <h1>Inquérito Ético Global — Prompt Ideal & Resposta</h1>
+      <p class="subtitle">Instrumento de 50 perguntas de escolha múltipla (4 opções) para mapear e promover princípios éticos universais.</p>
+    </header>
+
+    <section class="panel" id="prompt">
+      <div class="toolbar"><button class="copy" data-copy="prompt-text">Copiar prompt</button></div>
+      <h2>🧩 Prompt Ideal (versão refinada)</h2>
+      <div id="prompt-text" class="small">
+        <p>
+          <strong>Tarefa:</strong> Cria um inquérito ético global com <strong>50 perguntas</strong> de <strong>escolha múltipla</strong> (4 opções cada), destinado a avaliar e estimular o desenvolvimento moral em diversas culturas.
+          O instrumento deve:
+        </p>
+        <ol>
+          <li>Mapear dimensões-chave: empatia, justiça/responsabilidade, integridade, respeito/tolerância, sustentabilidade, autoconhecimento/autorregulação, cooperação/comunidade, perdão/humildade, esperança/propósito, crescimento ético contínuo.</li>
+          <li>Utilizar cenários realistas e linguagem inclusiva, evitando enviesamentos culturais ou políticos.</li>
+          <li>Apresentar opções que reflitam <em>estágios de maturidade ética</em> crescentes (de respostas egocêntricas a respostas orientadas ao bem comum).</li>
+          <li>Permitir futura pontuação psicométrica (ex.: TRI), mas <em>sem</em> revelar chaves de correção no texto do inquérito.</li>
+          <li>Ser adequado para adultos e jovens a partir dos 15 anos, em português claro, com frases curtas.</li>
+        </ol>
+        <p>
+          <strong>Entregáveis:</strong> (a) Lista completa das 50 perguntas com 4 opções (A–D) cada; (b) Estrutura por domínios temáticos; (c) Texto introdutório breve e neutro.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel" id="resposta">
+      <h2>🧭 Resposta — Inquérito Global de Conduta e Princípios Éticos</h2>
+      <p class="muted">Versão 1.0 — Não há respostas “certas” ou “erradas”; escolha a opção que melhor descreve a sua reação espontânea.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>1) Empatia e Compaixão</h3>
+          <ol start="1">
+            <li>Quando alguém está em sofrimento emocional, costumo:
+              <div class="options">
+                <div>A) Evitar envolver-me.</div>
+                <div>B) Ouvir e mudar de assunto.</div>
+                <div>C) Demonstrar apoio e perguntar como ajudar.</div>
+                <div>D) Sentir com a pessoa e agir para aliviar.</div>
+              </div>
+            </li>
+            <li>Ao ver um sem-abrigo, penso primeiro:
+              <div class="options">
+                <div>A) “Não é problema meu.”</div>
+                <div>B) “Alguém devia ajudar.”</div>
+                <div>C) “Gostava de poder fazer algo.”</div>
+                <div>D) “Posso ajudar de alguma forma agora.”</div>
+              </div>
+            </li>
+            <li>Se um colega comete um erro, eu:
+              <div class="options">
+                <div>A) Critico de imediato.</div>
+                <div>B) Ignoro.</div>
+                <div>C) Apoio para que aprenda.</div>
+                <div>D) Ofereço ajuda sem julgar.</div>
+              </div>
+            </li>
+            <li>Quando alguém discorda fortemente de mim:
+              <div class="options">
+                <div>A) Fico irritado e argumento.</div>
+                <div>B) Tento convencer.</div>
+                <div>C) Escuto antes de responder.</div>
+                <div>D) Procuro compreender genuinamente.</div>
+              </div>
+            </li>
+            <li>O sofrimento noutros países toca-me emocionalmente?
+              <div class="options">
+                <div>A) Pouco ou nada.</div>
+                <div>B) Só com exposição intensa nos media.</div>
+                <div>C) Sim, sinto empatia.</div>
+                <div>D) Sim, e procuro agir.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>2) Justiça e Responsabilidade</h3>
+          <ol start="6">
+            <li>Vejo alguém a ser tratado injustamente:
+              <div class="options">
+                <div>A) Evito intervir.</div>
+                <div>B) Espero que outro intervenha.</div>
+                <div>C) Questiono o que está a acontecer.</div>
+                <div>D) Intervenho, mesmo com desconforto.</div>
+              </div>
+            </li>
+            <li>Quando cometo um erro:
+              <div class="options">
+                <div>A) Nego.</div>
+                <div>B) Justifico.</div>
+                <div>C) Admito.</div>
+                <div>D) Admito e aprendo com ele.</div>
+              </div>
+            </li>
+            <li>As leis servem para:
+              <div class="options">
+                <div>A) Limitar.</div>
+                <div>B) Proteger quem tem poder.</div>
+                <div>C) Garantir alguma ordem.</div>
+                <div>D) Proteger todos e promover equidade.</div>
+              </div>
+            </li>
+            <li>Quando alguém tira vantagem injusta de mim:
+              <div class="options">
+                <div>A) Deixo para lá.</div>
+                <div>B) Procuro vingança.</div>
+                <div>C) Defendo os meus direitos com calma.</div>
+                <div>D) Busco justiça sem ressentimento.</div>
+              </div>
+            </li>
+            <li>Quando tenho poder sobre alguém, costumo:
+              <div class="options">
+                <div>A) Usá-lo a meu favor.</div>
+                <div>B) Manter distância.</div>
+                <div>C) Agir com responsabilidade.</div>
+                <div>D) Usá-lo para proteger e servir.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>3) Integridade e Honestidade</h3>
+          <ol start="11">
+            <li>Se ninguém descobriria uma mentira, eu:
+              <div class="options">
+                <div>A) Mentiria se benéfico.</div>
+                <div>B) Talvez, se for pequeno.</div>
+                <div>C) Provavelmente não.</div>
+                <div>D) Nunca, para preservar a integridade.</div>
+              </div>
+            </li>
+            <li>Encontro uma carteira com dinheiro e documentos. Eu:
+              <div class="options">
+                <div>A) Fico com o dinheiro.</div>
+                <div>B) Fico com parte.</div>
+                <div>C) Entrego, mas penso em guardar algo.</div>
+                <div>D) Entrego tudo.</div>
+              </div>
+            </li>
+            <li>Já admiti um erro que ninguém notou?
+              <div class="options">
+                <div>A) Nunca.</div>
+                <div>B) Raramente.</div>
+                <div>C) Às vezes.</div>
+                <div>D) Sempre que acontece.</div>
+              </div>
+            </li>
+            <li>Ser honesto significa:
+              <div class="options">
+                <div>A) Evitar problemas.</div>
+                <div>B) Não mentir muito.</div>
+                <div>C) Ser transparente.</div>
+                <div>D) Viver coerente com valores.</div>
+              </div>
+            </li>
+            <li>Se me oferecerem uma vantagem injusta, penso:
+              <div class="options">
+                <div>A) “Oportunidade rara.”</div>
+                <div>B) “Todos fariam o mesmo.”</div>
+                <div>C) “Não é certo.”</div>
+                <div>D) “Recuso, mesmo perdendo.”</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>4) Sustentabilidade e Consciência Global</h3>
+          <ol start="16">
+            <li>Penso nas consequências ambientais das minhas ações:
+              <div class="options">
+                <div>A) Quase nunca.</div>
+                <div>B) Às vezes.</div>
+                <div>C) Frequentemente.</div>
+                <div>D) Sempre, e ajo de acordo.</div>
+              </div>
+            </li>
+            <li>Diante do consumo excessivo:
+              <div class="options">
+                <div>A) É normal.</div>
+                <div>B) Incomoda, mas continuo.</div>
+                <div>C) Tento moderar.</div>
+                <div>D) Procuro viver com simplicidade.</div>
+              </div>
+            </li>
+            <li>A pobreza global é responsabilidade de:
+              <div class="options">
+                <div>A) Pessoas pobres.</div>
+                <div>B) Governos.</div>
+                <div>C) Sociedade como um todo.</div>
+                <div>D) Cada um de nós, em conjunto.</div>
+              </div>
+            </li>
+            <li>O que mais motiva as minhas escolhas:
+              <div class="options">
+                <div>A) Benefício próprio.</div>
+                <div>B) Aparência social.</div>
+                <div>C) Bem-estar mútuo.</div>
+                <div>D) Contribuição para o mundo.</div>
+              </div>
+            </li>
+            <li>Se sei que um produto é feito com trabalho infantil:
+              <div class="options">
+                <div>A) Compro mesmo assim.</div>
+                <div>B) Só se for muito barato.</div>
+                <div>C) Procuro alternativa.</div>
+                <div>D) Boicoto conscientemente.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>5) Respeito e Tolerância</h3>
+          <ol start="21">
+            <li>Pessoas com opiniões muito diferentes são:
+              <div class="options">
+                <div>A) Difíceis de suportar.</div>
+                <div>B) Interessantes até certo ponto.</div>
+                <div>C) Uma oportunidade de aprender.</div>
+                <div>D) Essenciais para o diálogo.</div>
+              </div>
+            </li>
+            <li>Quando alguém comete um erro cultural:
+              <div class="options">
+                <div>A) Critico.</div>
+                <div>B) Corrijo friamente.</div>
+                <div>C) Explico com respeito.</div>
+                <div>D) Ajudo a compreender o contexto.</div>
+              </div>
+            </li>
+            <li>Sobre minorias sociais:
+              <div class="options">
+                <div>A) Não me afetam.</div>
+                <div>B) Devem adaptar-se.</div>
+                <div>C) Devem ser respeitadas.</div>
+                <div>D) Devem ser protegidas e incluídas.</div>
+              </div>
+            </li>
+            <li>Quando um debate aquece:
+              <div class="options">
+                <div>A) Quero vencer.</div>
+                <div>B) Evito.</div>
+                <div>C) Busco equilíbrio.</div>
+                <div>D) Procuro harmonia e verdade.</div>
+              </div>
+            </li>
+            <li>Respeito é:
+              <div class="options">
+                <div>A) Obedecer regras.</div>
+                <div>B) Evitar conflito.</div>
+                <div>C) Reconhecer o outro.</div>
+                <div>D) Valorizar a dignidade de todos.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>6) Autoconhecimento e Disciplina Moral</h3>
+          <ol start="26">
+            <li>Quando erro, costumo refletir?
+              <div class="options">
+                <div>A) Não.</div>
+                <div>B) Só se for grave.</div>
+                <div>C) Frequentemente.</div>
+                <div>D) Sempre, para melhorar.</div>
+              </div>
+            </li>
+            <li>Mantenho os meus princípios sob pressão?
+              <div class="options">
+                <div>A) Raramente.</div>
+                <div>B) Às vezes.</div>
+                <div>C) Quase sempre.</div>
+                <div>D) Sempre.</div>
+              </div>
+            </li>
+            <li>Controlar impulsos é:
+              <div class="options">
+                <div>A) Demasiado difícil.</div>
+                <div>B) Algo que evito pensar.</div>
+                <div>C) Um desafio importante.</div>
+                <div>D) Parte do crescimento pessoal.</div>
+              </div>
+            </li>
+            <li>Quando me irrito, costumo:
+              <div class="options">
+                <div>A) Descarregar.</div>
+                <div>B) Reprimir.</div>
+                <div>C) Respirar e esperar.</div>
+                <div>D) Compreender a origem da emoção.</div>
+              </div>
+            </li>
+            <li>A minha motivação ética vem de:
+              <div class="options">
+                <div>A) Medo de punição.</div>
+                <div>B) Desejo de aprovação.</div>
+                <div>C) Consciência racional.</div>
+                <div>D) Amor e compaixão.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>7) Cooperação e Comunidade</h3>
+          <ol start="31">
+            <li>Numa equipa, prefiro:
+              <div class="options">
+                <div>A) Liderar sempre.</div>
+                <div>B) Trabalhar sozinho.</div>
+                <div>C) Cooperar quando necessário.</div>
+                <div>D) Partilhar e apoiar continuamente.</div>
+              </div>
+            </li>
+            <li>Quando alguém precisa de ajuda, mas não pede:
+              <div class="options">
+                <div>A) Ignoro.</div>
+                <div>B) Espero que peça.</div>
+                <div>C) Ofereço ajuda.</div>
+                <div>D) Ajudo discretamente.</div>
+              </div>
+            </li>
+            <li>Se tenho uma vantagem, partilho?
+              <div class="options">
+                <div>A) Não.</div>
+                <div>B) Só com amigos.</div>
+                <div>C) Se for justo.</div>
+                <div>D) Sempre que possível.</div>
+              </div>
+            </li>
+            <li>A comunidade local é:
+              <div class="options">
+                <div>A) Irrelevante.</div>
+                <div>B) Útil às vezes.</div>
+                <div>C) Importante.</div>
+                <div>D) Vital para o bem comum.</div>
+              </div>
+            </li>
+            <li>A solidariedade é:
+              <div class="options">
+                <div>A) Um fardo.</div>
+                <div>B) Um dever.</div>
+                <div>C) Uma virtude.</div>
+                <div>D) Uma alegria natural.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>8) Perdão e Humildade</h3>
+          <ol start="36">
+            <li>Quando alguém me ofende:
+              <div class="options">
+                <div>A) Guardo rancor.</div>
+                <div>B) Evito contacto.</div>
+                <div>C) Perdoo com o tempo.</div>
+                <div>D) Perdoo conscientemente.</div>
+              </div>
+            </li>
+            <li>Admitir que estou errado é:
+              <div class="options">
+                <div>A) Vergonhoso.</div>
+                <div>B) Difícil.</div>
+                <div>C) Necessário.</div>
+                <div>D) Sinal de maturidade.</div>
+              </div>
+            </li>
+            <li>Sobre pedir desculpas:
+              <div class="options">
+                <div>A) É fraqueza.</div>
+                <div>B) Só se inevitável.</div>
+                <div>C) É correto.</div>
+                <div>D) É libertador.</div>
+              </div>
+            </li>
+            <li>Quando tenho sucesso, reconheço os outros?
+              <div class="options">
+                <div>A) Raramente.</div>
+                <div>B) Só quem ajudou muito.</div>
+                <div>C) Sempre que possível.</div>
+                <div>D) Sempre, ninguém vence sozinho.</div>
+              </div>
+            </li>
+            <li>Humildade é:
+              <div class="options">
+                <div>A) Submissão.</div>
+                <div>B) Simpatia.</div>
+                <div>C) Reconhecer limites.</div>
+                <div>D) Saber o meu valor sem me colocar acima.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>9) Esperança e Propósito Ético</h3>
+          <ol start="41">
+            <li>Acredito que a humanidade pode melhorar?
+              <div class="options">
+                <div>A) Não.</div>
+                <div>B) Pouco.</div>
+                <div>C) Sim, com esforço.</div>
+                <div>D) Sim, com consciência coletiva.</div>
+              </div>
+            </li>
+            <li>O meu propósito inclui ajudar outros?
+              <div class="options">
+                <div>A) Não.</div>
+                <div>B) Indiretamente.</div>
+                <div>C) Sim, de alguma forma.</div>
+                <div>D) Sim, é central para mim.</div>
+              </div>
+            </li>
+            <li>Perante desafios morais, eu:
+              <div class="options">
+                <div>A) Evito pensar.</div>
+                <div>B) Escolho o mais fácil.</div>
+                <div>C) Pondero consequências.</div>
+                <div>D) Ajo conforme valores, mesmo que custe.</div>
+              </div>
+            </li>
+            <li>O futuro ético do mundo depende de:
+              <div class="options">
+                <div>A) Líderes.</div>
+                <div>B) Sorte.</div>
+                <div>C) Educação.</div>
+                <div>D) Cada pessoa consciente.</div>
+              </div>
+            </li>
+            <li>Bondade é:
+              <div class="options">
+                <div>A) Inocência.</div>
+                <div>B) Um luxo.</div>
+                <div>C) Um valor.</div>
+                <div>D) Essência da humanidade.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>10) Crescimento Ético Contínuo</h3>
+          <ol start="46">
+            <li>Mudar de opinião é:
+              <div class="options">
+                <div>A) Sinal de fraqueza.</div>
+                <div>B) Desconfortável.</div>
+                <div>C) Às vezes necessário.</div>
+                <div>D) Parte do amadurecimento.</div>
+              </div>
+            </li>
+            <li>Procuro aprender com quem pensa diferente?
+              <div class="options">
+                <div>A) Não.</div>
+                <div>B) Raramente.</div>
+                <div>C) Sim, quando posso.</div>
+                <div>D) Sempre.</div>
+              </div>
+            </li>
+            <li>O que define uma pessoa boa?
+              <div class="options">
+                <div>A) Sucesso e respeito.</div>
+                <div>B) Cumprir regras.</div>
+                <div>C) Ajudar e respeitar.</div>
+                <div>D) Agir com consciência e amor.</div>
+              </div>
+            </li>
+            <li>O maior valor humano é:
+              <div class="options">
+                <div>A) Força.</div>
+                <div>B) Inteligência.</div>
+                <div>C) Justiça.</div>
+                <div>D) Compaixão.</div>
+              </div>
+            </li>
+            <li>Se pudesse mudar algo na humanidade:
+              <div class="options">
+                <div>A) Eliminar conflitos.</div>
+                <div>B) Aumentar o conforto.</div>
+                <div>C) Ensinar empatia.</div>
+                <div>D) Despertar a consciência ética coletiva.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <details>
+        <summary>Notas metodológicas (opcional)</summary>
+        <p class="small muted">
+          O inquérito foi organizado em 10 domínios, 5 itens por domínio. As opções A→D sugerem progressão de orientação egocêntrica → pró-social/coletiva. Para análise psicométrica futura, recomenda-se TRI/Graded Response Model, verificação de DIF intercultural e construção de índices por domínio e global.
+        </p>
+      </details>
+    </section>
+
+    <footer>
+      <p>© 2025 — Iniciativa aberta para uso educacional, clínico e comunitário.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Botão de copiar
+    function copyFrom(elId) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      try { document.execCommand('copy'); } catch {}
+      sel.removeAllRanges();
+    }
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => copyFrom(btn.getAttribute('data-copy')));
+    });
+  </script>
+</body>
+</html>
