@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>999 • Porta Mágica para a IA (PT → EN)</title>
+  <style>
+    :root{
+      --bg: radial-gradient(120vw 120vh at 10% 10%, #7c3aed 0%, transparent 40%),
+            radial-gradient(100vw 100vh at 90% 20%, #06b6d4 0%, transparent 45%),
+            radial-gradient(90vw 90vh at 50% 90%, #22d3ee 0%, transparent 40%),
+            linear-gradient(135deg,#111827,#0b1220);
+      --card: rgba(255,255,255,0.12);
+      --glass: rgba(255,255,255,0.08);
+      --text: #e5e7eb;
+      --muted:#cbd5e1;
+      --accent:#f59e0b;
+      --good:#22c55e;
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background: var(--bg);
+      background-attachment: fixed;
+      overflow-x:hidden;
+    }
+    header{
+      position:relative; padding: 5rem 1.25rem 3rem; text-align:center;
+    }
+    .title{
+      font-size: clamp(2rem, 4vw + 1rem, 4rem);
+      line-height:1.1; font-weight:800; letter-spacing:0.5px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+    .subtitle{color:var(--muted); margin-top:0.5rem}
+    .wrap{max-width:1100px; margin:0 auto; padding: 0 1.25rem;}
+    .grid{display:grid; gap:1.25rem}
+    @media(min-width:900px){ .grid{ grid-template-columns: 1.15fr 0.85fr; } }
+
+    .card{
+      background: var(--card); border:1px solid rgba(255,255,255,0.1);
+      border-radius: 22px; padding:1.25rem; backdrop-filter: blur(8px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    }
+    .card h2{ margin:0.2rem 0 0.75rem; font-size:1.35rem }
+    .badge{ display:inline-block; font-weight:700; font-size:0.85rem; padding:0.25rem 0.6rem; border-radius:999px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.2)}
+
+    /* Floating blobs */
+    .blob{ position:absolute; filter: blur(40px); opacity:0.7; border-radius:50%; mix-blend-mode: screen;}
+    .b1{ width:36vmax; height:36vmax; background:#f43f5e; left:-10vmax; top:-8vmax; animation: drift 24s ease-in-out infinite;}
+    .b2{ width:30vmax; height:30vmax; background:#22d3ee; right:-8vmax; top:10vmax; animation: drift 28s ease-in-out infinite reverse;}
+    .b3{ width:28vmax; height:28vmax; background:#8b5cf6; left:10vmax; bottom:-10vmax; animation: drift 30s ease-in-out infinite;}
+    @keyframes drift{ 0%{ transform: translate(0,0) scale(1)} 50%{ transform: translate(2vmax,-2vmax) scale(1.08)} 100%{ transform: translate(0,0) scale(1)} }
+
+    /* Phone SVG bounce */
+    .hero{ display:grid; gap:1rem; align-items:center; justify-items:center; margin-top:1.5rem }
+    .phone{ width:min(520px, 90vw); }
+    .wobble{ animation: wobble 3.5s ease-in-out infinite; transform-origin: 50% 90%;}
+    @keyframes wobble{ 0%,100%{ transform: rotate(0deg)} 20%{ transform: rotate(-2deg)} 40%{ transform: rotate(2deg)} 60%{ transform: rotate(-1.5deg)} 80%{ transform: rotate(1.5deg)} }
+
+    /* Morse dots & dashes */
+    .morse{ display:flex; gap:10px; justify-content:center; align-items:center; margin:0.25rem 0 1rem;}
+    .dot,.dash{ background:#fff; opacity:0.85; border-radius:999px;}
+    .dot{ width:8px; height:8px; animation: blink 1.2s infinite }
+    .dash{ width:22px; height:8px; animation: blink 1.2s 0.3s infinite }
+    @keyframes blink{ 0%,70%{ opacity:0.2 } 30%{ opacity:1 } }
+
+    /* Wave animation */
+    .wave{ width:100%; height:110px }
+    .wave path{ stroke-width:3; fill:none; }
+    .dash-flow{ stroke-dasharray: 8 10; animation: dashmove 3s linear infinite; }
+    @keyframes dashmove{ to { stroke-dashoffset: -200; } }
+
+    /* Language pill */
+    .lang{ position:sticky; top:12px; display:flex; gap:8px; justify-content:center; z-index:3;}
+    .lang a{ text-decoration:none; color:var(--text); background:var(--glass); border:1px solid rgba(255,255,255,0.2); padding:6px 10px; border-radius:999px; font-weight:700 }
+    .lang a:hover{ background:rgba(255,255,255,0.2) }
+
+    /* Tiny keypad */
+    .keypad{ display:grid; grid-template-columns: repeat(3, 70px); gap:10px; justify-content:center; margin: 0.75rem 0 0.25rem;}
+    .key{ width:70px; height:70px; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.6rem; cursor:pointer; user-select:none; transition: transform .05s ease;}
+    .key:active{ transform: scale(0.96) }
+    .key.dim{ opacity:0.35; filter: grayscale(1)}
+    .toggle{ display:flex; gap:10px; align-items:center; justify-content:center; margin-top:6px; font-size:0.9rem; color:var(--muted) }
+    .toggle input{ transform: translateY(1px) }
+
+    /* Section separators */
+    section{ margin: 2rem 0; }
+    .label{ font-size:0.75rem; letter-spacing:1.2px; text-transform:uppercase; color:#c7d2fe; }
+    ul{ margin:0.25rem 0 0.75rem 1rem }
+    li{ margin:0.35rem 0 }
+
+    footer{ text-align:center; color:var(--muted); padding:2rem 0 4rem }
+    .mini{ font-size:0.8rem; opacity:0.85 }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="wrap hero">
+      <h1 class="title">999 — a porta mágica para falar com pessoas <em>e</em> com a IA</h1>
+      <p class="subtitle">Uma explicação divertida, primeiro em Português (PT‑PT) e depois em Inglês — para miúdos curiosos e graúdos visionários.</p>
+
+      <!-- Cute phone illustration -->
+      <svg class="phone wobble" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Telefone com IA a sorrir">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#a78bfa"/>
+            <stop offset="1" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <rect x="120" y="30" rx="26" ry="26" width="360" height="320" fill="url(#g1)" opacity="0.85"/>
+        <rect x="140" y="50" rx="20" ry="20" width="320" height="240" fill="#0b1220" opacity="0.9" stroke="#ffffff40"/>
+        <circle cx="300" cy="130" r="45" fill="#06b6d4" opacity="0.7"/>
+        <path d="M275 150 q25 28 50 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="285" cy="124" r="5" fill="#fff"/>
+        <circle cx="315" cy="124" r="5" fill="#fff"/>
+        <rect x="200" y="300" rx="14" ry="14" width="200" height="30" fill="#ffffff22"/>
+        <!-- little 9 key glowing -->
+        <g>
+          <rect x="360" y="308" width="32" height="16" rx="6" fill="#f59e0b" opacity="0.9">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.6s" repeatCount="indefinite"/>
+          </rect>
+          <text x="376" y="320" text-anchor="middle" font-size="12" fill="#111">9</text>
+        </g>
+      </svg>
+
+      <div class="morse" aria-hidden="true">
+        <div class="dot"></div><div class="dash"></div><div class="dot"></div><div class="dash"></div>
+      </div>
+
+      <svg class="wave" viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="dash-flow" stroke="#93c5fd" d="M0,60 C80,20 160,100 240,60 S400,20 480,60 640,100 720,60 800,20 880,60"/>
+      </svg>
+
+      <nav class="lang" aria-label="Lingua">
+        <a href="#pt">PT‑PT</a>
+        <a href="#en">EN</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- ===================== PT SECTION ===================== -->
+    <section id="pt" class="grid">
+      <div class="card">
+        <span class="badge">PT‑PT</span>
+        <h2>Ideia Mágica: falar com todos usando o número <strong>999</strong> e a ajuda da IA</h2>
+        <p>
+          Imagina que o <strong>999</strong> é uma <em>porta universal</em>. Podes ligar de graça para pedir ajuda, falar com amigos ou conhecer pessoas — e a <strong>IA superinteligente</strong> ajuda a traduzir, ligar e proteger.
+        </p>
+        <ul>
+          <li><strong>Uma entrada para tudo:</strong> marcas <em>999</em> e chegas ao operador IA.</li>
+          <li><strong>Chamadas seguras e inteligentes:</strong> a IA entende, ajuda e encaminha.</li>
+          <li><strong>Funciona em emergências</strong> e também para falar com o mundo.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Como falamos? Usando sons e códigos simples</h2>
+        <p>
+          O telefone pode enviar <strong>pulsos/sons</strong> (PCM) como se fossem <em>pontos e traços</em> do <strong>Código Morse</strong>. Usamos um alfabeto simples: <strong>A..Z</strong>, <strong>1..9</strong> e o <strong>zero</strong> — no total, 36 símbolos fáceis.
+        </p>
+        <p>
+          Também usamos o <strong>som da tecla “9”</strong> (duas notas ao mesmo tempo — <em>852 Hz</em> + <em>1477 Hz</em>). Estes toques dizem ao sistema que queremos falar com a IA. Quando atenderes o telefone, ninguém vai falar; em vez disso, dizemos o número do nosso <strong>SIM extra</strong> como num jogo de espionagem — é divertido e anónimo.
+        </p>
+        <div class="keypad" aria-label="Teclado: usa só o 9">
+          <div class="key dim">7</div>
+          <div class="key dim">8</div>
+          <div class="key" id="key9">9</div>
+          <div class="key dim">*</div>
+          <div class="key dim">0</div>
+          <div class="key dim">#</div>
+        </div>
+        <p class="mini">Clica no <strong>9</strong> para ouvir o toque composto (852 Hz + 1477 Hz). Volume do dispositivo necessário.</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Cartão Extra (SIM) que roda entre pessoas</h2>
+        <p>
+          Além do teu número normal, existe um <strong>SIM extra</strong>. Em festas e eventos, as pessoas podem <strong>trocar</strong> esse SIM. Assim, os números “extra” ficam <strong>aleatórios</strong> e <strong>temporários</strong> — bom para privacidade.
+        </p>
+        <ul>
+          <li><strong>Identidade temporária:</strong> o número muda de mãos.</li>
+          <li><strong>Menos exposição:</strong> não dás logo o teu número principal.</li>
+          <li><strong>IA como mediadora:</strong> ajuda a ligar pessoas em segurança.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Porque isto é fixe (e seguro)?</h2>
+        <ul>
+          <li><strong>Privacidade:</strong> números extra não ficam presos a ti.</li>
+          <li><strong>Confiança:</strong> a IA pode filtrar spam e más intenções.</li>
+          <li><strong>Acessível:</strong> marcar 999 é simples para todos.</li>
+          <li><strong>Resiliente:</strong> funciona com voz, tons e até mensagens curtas.</li>
+        </ul>
+        <svg class="wave" viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="dash-flow" stroke="#86efac" d="M0,60 C80,20 160,100 240,60 S400,20 480,60 640,100 720,60 800,20 880,60"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Passo a passo (super simples)</h2>
+        <ol>
+          <li>Marca <strong>999</strong> no telemóvel.</li>
+          <li>Fala ou usa <em>toques</em> (pontos/traços) para dizer o que precisas.</li>
+          <li>A <strong>IA</strong> entende e liga-te à pessoa certa — com segurança.</li>
+          <li>Queres privacidade? Usa o teu <strong>SIM extra</strong> temporário.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>Perguntas rápidas</h2>
+        <p><strong>É só para emergências?</strong> Não — também para comunicar grátis. Em emergências, tem prioridade.</p>
+        <p><strong>E se não souber usar Morse?</strong> Podes falar normalmente; a IA ajuda. Os toques são um <em>plus</em>.</p>
+        <p><strong>Funciona em qualquer país?</strong> A ideia é tornar o <em>999</em> um <strong>padrão global</strong>.</p>
+      </div>
+    </section>
+
+    <!-- ===================== EN SECTION ===================== -->
+    <section id="en" class="grid" style="margin-top:3rem">
+      <div class="card">
+        <span class="badge">EN</span>
+        <h2>Magic Idea: talk to everyone through <strong>999</strong> with AI help</h2>
+        <p>
+          Imagine <strong>999</strong> as a <em>universal doorway</em>. You can call for help, chat with friends, or meet people — for free — while a <strong>super‑smart AI</strong> translates, connects, and protects.
+        </p>
+        <ul>
+          <li><strong>One entry for everything:</strong> dial <em>999</em> to reach the AI operator.</li>
+          <li><strong>Safe, smart calls:</strong> the AI understands, assists, and routes.</li>
+          <li><strong>Works for emergencies</strong> and for everyday chatting, too.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>How do we talk? With simple sounds and codes</h2>
+        <p>
+          The phone can send <strong>pulses/sounds</strong> (PCM) like <em>dots and dashes</em> in <strong>Morse Code</strong>. We use an easy alphabet: <strong>A..Z</strong>, <strong>1..9</strong>, and <strong>zero</strong> — 36 simple symbols.
+        </p>
+        <p>
+          We also use the <strong>“9” key tone</strong> (two notes together — <em>852 Hz</em> + <em>1477 Hz</em>). These tones tell the system we want AI help. When you answer the phone, nobody will speak; instead, we say our <strong>extra SIM</strong> number like a fun spy game — playful and anonymous.
+        </p>
+        <div class="keypad" aria-label="Keypad: use only 9">
+          <div class="key dim">7</div>
+          <div class="key dim">8</div>
+          <div class="key" onclick="document.getElementById('key9').click()">9</div>
+          <div class="key dim">*</div>
+          <div class="key dim">0</div>
+          <div class="key dim">#</div>
+        </div>
+        <p class="mini">Click the <strong>9</strong> to hear the composed tone (852 Hz + 1477 Hz). Device volume required.</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Extra SIM that rotates among people</h2>
+        <p>
+          Besides your normal number, there’s an <strong>extra SIM</strong>. At parties and events, people can <strong>swap</strong> that SIM. So those “extra” numbers become <strong>random</strong> and <strong>temporary</strong> — great for privacy.
+        </p>
+        <ul>
+          <li><strong>Temporary identity:</strong> the number changes hands.</li>
+          <li><strong>Less exposure:</strong> you don’t share your main number first.</li>
+          <li><strong>AI as mediator:</strong> safely connects people who opt in.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Why this is cool (and safe)</h2>
+        <ul>
+          <li><strong>Privacy:</strong> extra numbers aren’t stuck to you.</li>
+          <li><strong>Trust:</strong> the AI can filter spam and bad actors.</li>
+          <li><strong>Accessible:</strong> dialing 999 is simple for everyone.</li>
+          <li><strong>Resilient:</strong> works with voice, tones, even short messages.</li>
+        </ul>
+        <svg class="wave" viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="dash-flow" stroke="#fde68a" d="M0,60 C80,20 160,100 240,60 S400,20 480,60 640,100 720,60 800,20 880,60"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Step‑by‑step (super simple)</h2>
+        <ol>
+          <li>Dial <strong>999</strong> on your phone.</li>
+          <li>Speak or use <em>tones</em> (dots/dashes) to say what you need.</li>
+          <li>The <strong>AI</strong> understands and connects you — safely.</li>
+          <li>Want privacy? Use your <strong>temporary extra SIM</strong>.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>Quick answers</h2>
+        <p><strong>Is it only for emergencies?</strong> No — it’s also for free communication. Emergencies get priority.</p>
+        <p><strong>What if I don’t know Morse?</strong> Just talk; the AI helps. Tones are a bonus.</p>
+        <p><strong>Does it work worldwide?</strong> The vision is to make <em>999</em> a <strong>global standard</strong>.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Notas técnicas rápidas</h2>
+      <ul>
+        <li><strong>Canal acústico:</strong> pulsos PCM mapeiam 36 símbolos (A–Z, 0–9).</li>
+        <li><strong>DTMF 9:</strong> par de tons com 852 Hz + alta frequência ~1477 Hz (a proposta menciona ~1440 Hz). Isto sinaliza o modo IA.</li>
+        <li><strong>Orquestração IA:</strong> reconhecimento de tons, anti‑spam, mediação de identidade, gravação legal e auditoria conforme leis locais.</li>
+        <li><strong>Privacidade por design:</strong> SIM extra rotativo, números efémeros, consentimento explícito, relatórios anónimos.</li>
+        <li><strong>Fallback:</strong> voz natural → ASR → IA; texto curto quando rede está fraca.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p class="mini">Conceito original: um gateway 999 para chamadas mediadas por IA, tons/PCM, e cartões SIM extra trocáveis. Este ficheiro é uma demonstração educativa.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Simple WebAudio dual-tone for the "9" key
+    let audioCtx;
+    const key9 = document.getElementById('key9');
+
+    function playDualTone(){
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o1 = audioCtx.createOscillator();
+        const o2 = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        g.gain.value = 0.06; // gentle volume
+
+        o1.type = 'sine';
+        o2.type = 'sine';
+        o1.frequency.value = 852; // low group
+        o2.frequency.value = 1477; // high group
+
+        o1.connect(g); o2.connect(g); g.connect(audioCtx.destination);
+        o1.start(); o2.start();
+
+        // brief envelope
+        g.gain.setValueAtTime(0.0, audioCtx.currentTime);
+        g.gain.linearRampToValueAtTime(0.10, audioCtx.currentTime + 0.02);
+        g.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.05);
+
+        setTimeout(()=>{
+          g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
+          o1.stop(); o2.stop();
+        }, 180);
+      }catch(e){ console.warn(e) }
+    }
+
+    key9.addEventListener('click', playDualTone);
+  </script>
+</body>
+</html>
