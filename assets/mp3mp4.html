@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MP3 + SRT → Random-Color Video</title>
+  <style>
+    :root { --bg:#0b0f14; --card:#121822; --ink:#e6edf3; --muted:#9fb0c3; --accent:#4cc2ff; }
+    * { box-sizing: border-box; }
+    body{ margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: radial-gradient(1200px 600px at 80% -20%, #1a2431, transparent),
+           radial-gradient(900px 700px at -10% 110%, #0e1520, transparent), var(--bg); color: var(--ink); }
+    header{ padding: 28px 20px 12px; text-align:center; }
+    header h1{ margin:0 0 6px; font-size: clamp(20px, 2.2vw, 30px); letter-spacing: 0.2px; }
+    header p{ margin:0; color: var(--muted); font-size: 14px; }
+
+    .wrap{ max-width: 1100px; margin: 20px auto 80px; padding: 0 18px; }
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0)); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .grid{ display:grid; grid-template-columns: 1fr; gap: 14px; }
+    @media(min-width: 900px){ .grid{ grid-template-columns: 340px 1fr; } }
+
+    .inputs{ display:grid; gap:10px; }
+    label{ font-size: 13px; color: var(--muted); }
+    input[type="file"]{ width:100%; padding: 14px; background: var(--card); color: var(--ink); border:1px solid rgba(255,255,255,0.08); border-radius: 12px; }
+
+    button{ appearance:none; border:0; background: linear-gradient(180deg, #5fd4ff, #34a9ff); color:#042038; font-weight:700; padding: 12px 16px; border-radius: 12px; cursor:pointer; transition: transform .05s ease; }
+    button:disabled{ opacity:.6; cursor:not-allowed; }
+    button:active{ transform: translateY(1px); }
+
+    .status{ font-size: 13px; color: var(--muted); min-height: 1.2em; }
+
+    .stage{ background:#000; border-radius: 12px; overflow:hidden; display:grid; gap:10px; padding:10px; }
+    canvas{ width:100%; height:auto; background:#000; border-radius: 10px; display:block; }
+
+    .out{ display:grid; gap:10px; }
+    video{ width:100%; border-radius: 12px; border:1px solid rgba(255,255,255,0.08); background:#000; }
+    a.download{ display:inline-block; text-decoration:none; color:#042038; background:#9fe3ff; padding: 10px 14px; border-radius: 10px; font-weight:700; }
+    progress{ width:100%; height: 10px; accent-color: var(--accent); }
+    .tips{ font-size: 12px; color: var(--muted); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MP3 + SRT → Random-Color Video (burned-in subtitles)</h1>
+    <p>Upload an <span class="mono">.mp3</span> (or any audio) and an <span class="mono">.srt</span>. This will render a 1280×720 <span class="mono">.webm</span> with animated colors + your audio, and subtitles drawn onto the video.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid card">
+      <section class="inputs">
+        <div>
+          <label>Audio file (MP3 or any supported audio)</label>
+          <input id="audioFile" type="file" accept="audio/*" />
+        </div>
+        <div>
+          <label>Subtitles (SRT)</label>
+          <input id="srtFile" type="file" accept=".srt,text/plain" />
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button id="startBtn">Generate video</button>
+          <span class="status" id="status">Idle.</span>
+        </div>
+        <div class="tips">Best in latest Chrome / Edge / Firefox desktop. Safari support may vary for <span class="mono">captureStream</span>/<span class="mono">MediaRecorder</span>.</div>
+      </section>
+
+      <section class="stage">
+        <canvas id="canvas" width="1280" height="720"></canvas>
+        <progress id="prog" max="1" value="0"></progress>
+      </section>
+    </div>
+
+    <div class="out" style="margin-top:16px;">
+      <video id="preview" controls></video>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a id="download" class="download" href="#" download="rendered.webm" hidden>Download video</a>
+        <span class="tips">The preview above is the exact file you'll download.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const audioInput = $('#audioFile');
+    const srtInput = $('#srtFile');
+    const startBtn = $('#startBtn');
+    const statusEl = $('#status');
+    const canvas = $('#canvas');
+    const ctx = canvas.getContext('2d');
+    const preview = $('#preview');
+    const download = $('#download');
+    const prog = $('#prog');
+
+    // --- Utility: SRT parsing ---
+    function parseSRT(text){
+      // Normalize newlines, split on blank lines.
+      const blocks = text.replace(/\r/g, '').split(/\n\n+/);
+      const entries = [];
+      for(const b of blocks){
+        const lines = b.trim().split('\n');
+        if(lines.length < 2) continue;
+        // Time line can be at index 0 or 1 depending on presence of numeric cue index
+        let timeLineIdx = 0;
+        if(/^[0-9]+$/.test(lines[0].trim())) timeLineIdx = 1;
+        const timeLine = lines[timeLineIdx] || '';
+        const m = timeLine.match(/(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})/);
+        if(!m) continue;
+        const start = srtTimeToSeconds(m[1]);
+        const end = srtTimeToSeconds(m[2]);
+        const textLines = lines.slice(timeLineIdx+1).join('\n').trim();
+        const clean = textLines.replace(/<[^>]+>/g,''); // strip tags
+        entries.push({start, end, text: clean});
+      }
+      return entries.sort((a,b)=>a.start-b.start);
+    }
+    function srtTimeToSeconds(t){
+      const [h,m,s_ms] = t.split(':');
+      const [s,ms] = s_ms.split(',');
+      return (+h)*3600 + (+m)*60 + (+s) + (+ms)/1000;
+    }
+
+    // --- Subtitle layout (simple word wrapping) ---
+    function drawSubtitles(cues, t){
+      if(!cues || !cues.length) return;
+      const cue = cues.find(c=>t >= c.start && t <= c.end);
+      if(!cue) return;
+
+      const pad = 24; // padding inside the box
+      const maxW = canvas.width * 0.86;
+      const fontSize = Math.max(28, Math.round(canvas.height * 0.04));
+      ctx.font = `${fontSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+
+      // Wrap text into lines
+      const words = cue.text.split(/\s+/);
+      const lines = [];
+      let line = '';
+      for(const w of words){
+        const test = line ? line + ' ' + w : w;
+        const wWidth = ctx.measureText(test).width;
+        if(wWidth > maxW && line){
+          lines.push(line);
+          line = w;
+        } else {
+          line = test;
+        }
+      }
+      if(line) lines.push(line);
+
+      const lineHeight = fontSize * 1.3;
+      const totalH = lines.length * lineHeight + pad*2;
+      const boxW = Math.min(maxW + pad*2, canvas.width*0.95);
+      const x = canvas.width / 2;
+      const y = canvas.height - totalH - 40; // 40px from bottom
+
+      // Shadowed rounded box
+      roundRect(ctx, (canvas.width - boxW)/2, y, boxW, totalH, 18);
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fill();
+
+      // Text with soft outline
+      ctx.lineWidth = Math.max(3, fontSize * 0.10);
+      ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+      ctx.fillStyle = '#fff';
+
+      let ty = y + pad + lineHeight - fontSize*0.15;
+      for(const ln of lines){
+        ctx.strokeText(ln, x, ty);
+        ctx.fillText(ln, x, ty);
+        ty += lineHeight;
+      }
+    }
+
+    function roundRect(ctx, x, y, w, h, r){
+      r = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y,   x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x,   y+h, r);
+      ctx.arcTo(x,   y+h, x,   y,   r);
+      ctx.arcTo(x,   y,   x+w, y,   r);
+      ctx.closePath();
+    }
+
+    // --- Animated colorful background ---
+    function drawBackground(t){
+      // t is seconds (audio time). Animate hues via time; add moving shapes.
+      const w = canvas.width, h = canvas.height;
+      const hueA = (t*30) % 360;
+      const hueB = (t*70 + 120) % 360;
+      const hueC = (t*110 + 240) % 360;
+
+      const grad = ctx.createLinearGradient(0,0,w,h);
+      grad.addColorStop(0, `hsl(${hueA}, 75%, 50%)`);
+      grad.addColorStop(0.5, `hsl(${hueB}, 70%, 45%)`);
+      grad.addColorStop(1, `hsl(${hueC}, 80%, 40%)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,w,h);
+
+      // Overlay translucent blobs
+      const blobs = 6;
+      for(let i=0;i<blobs;i++){
+        const r = (Math.sin(t*0.7 + i)*0.5 + 0.5) * 0.35 + 0.15; // 0.15..0.85
+        const x = (Math.sin(t*0.9 + i*1.7)*0.5 + 0.5) * w;
+        const y = (Math.cos(t*0.6 + i*1.3)*0.5 + 0.5) * h;
+        const rad = Math.max(w,h) * r * 0.45;
+        const hue = (hueA + i*40) % 360;
+        const g = ctx.createRadialGradient(x,y,0,x,y,rad);
+        g.addColorStop(0, `hsla(${hue}, 90%, 60%, 0.35)`);
+        g.addColorStop(1, `hsla(${hue}, 90%, 60%, 0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x,y,rad,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    // --- Recording & rendering ---
+    let animId = null;
+    function renderLoop(getTime, cues){
+      const t = getTime();
+      drawBackground(t);
+      drawSubtitles(cues, t);
+      animId = requestAnimationFrame(()=>renderLoop(getTime, cues));
+    }
+
+    function stopLoop(){ if(animId) cancelAnimationFrame(animId); animId = null; }
+
+    async function generate(){
+      download.hidden = true;
+      preview.removeAttribute('src');
+      preview.load();
+
+      // Validate inputs
+      const audioFile = audioInput.files?.[0];
+      const srtFile = srtInput.files?.[0];
+      if(!audioFile){ return alert('Please choose an audio file (MP3 or similar)'); }
+      if(!srtFile){ return alert('Please choose an SRT subtitles file'); }
+
+      status('Parsing subtitles…');
+      const srtText = await srtFile.text();
+      const cues = parseSRT(srtText);
+      if(!cues.length){ return alert('No readable cues found in the SRT.'); }
+
+      // Prepare audio element
+      status('Loading audio…');
+      const audioURL = URL.createObjectURL(audioFile);
+      const audio = new Audio(audioURL);
+      audio.crossOrigin = 'anonymous';
+      audio.preload = 'auto';
+
+      await new Promise((res, rej)=>{
+        audio.onloadedmetadata = ()=>res();
+        audio.onerror = ()=>rej(new Error('Failed to load audio.'));
+      });
+
+      const duration = isFinite(audio.duration) ? audio.duration : (cues.at(-1)?.end || 0);
+      if(duration <= 0){ return alert('Could not determine audio duration.'); }
+
+      // Set up WebAudio for clean capture
+      const ac = new (window.AudioContext || window.webkitAudioContext)();
+      const src = ac.createMediaElementSource(audio);
+      const destNode = ac.createMediaStreamDestination();
+      src.connect(ac.destination);  // to speakers
+      src.connect(destNode);        // to recorder
+
+      // Video stream from canvas
+      const fps = 30;
+      const canvasStream = canvas.captureStream ? canvas.captureStream(fps) : null;
+      if(!canvasStream){
+        alert('canvas.captureStream is not supported in this browser.');
+        return;
+      }
+
+      // Combine video + audio
+      const mixed = new MediaStream([
+        ...canvasStream.getVideoTracks(),
+        ...destNode.stream.getAudioTracks()
+      ]);
+
+      // Choose a recorder mime type
+      const mimeCandidates = [
+        'video/webm;codecs=vp9,opus',
+        'video/webm;codecs=vp8,opus',
+        'video/webm;codecs=h264,opus',
+        'video/webm;codecs=vp9',
+        'video/webm'
+      ];
+      const mimeType = mimeCandidates.find(t => MediaRecorder.isTypeSupported(t)) || '';
+      if(!mimeType){
+        alert('No supported MediaRecorder MIME type found. Try Chrome/Edge/Firefox.');
+        return;
+      }
+
+      const chunks = [];
+      let recorder;
+      try{
+        recorder = new MediaRecorder(mixed, { mimeType, videoBitsPerSecond: 6_000_000, audioBitsPerSecond: 192_000 });
+      }catch(e){
+        console.error(e);
+        alert('Failed to start MediaRecorder.');
+        return;
+      }
+
+      recorder.ondataavailable = (ev)=>{
+        if(ev.data && ev.data.size) chunks.push(ev.data);
+      };
+      recorder.onstop = ()=>{
+        stopLoop();
+        const blob = new Blob(chunks, { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        preview.src = url;
+        download.href = url;
+        download.hidden = false;
+        status('Done! Render complete.');
+        prog.value = 0;
+      };
+
+      // Progress
+      const startTS = performance.now();
+      const expectedMs = duration * 1000;
+      const tick = ()=>{
+        const elapsed = performance.now() - startTS;
+        prog.value = Math.min(1, elapsed / expectedMs);
+        if(recorder && recorder.state === 'recording') requestAnimationFrame(tick);
+      };
+
+      // Start!
+      status('Rendering… (playing audio and recording canvas)');
+      startBtn.disabled = true;
+      recorder.start(100); // request frequent dataavailable events
+
+      // Sync animation clock to audio time
+      const t0 = () => audio.currentTime;
+      renderLoop(t0, cues);
+
+      // Play audio (requires a user gesture – clicking the button satisfies it)
+      await ac.resume();
+      await audio.play();
+      requestAnimationFrame(tick);
+
+      audio.onended = ()=>{
+        if(recorder.state !== 'inactive') recorder.stop();
+        src.disconnect();
+        destNode.disconnect();
+      };
+
+      // Safety stop if SRT ends before audio (rare)
+      setTimeout(()=>{
+        if(audio.ended || recorder.state === 'inactive') return;
+        // let it run until audio ends
+      }, (duration + 1) * 1000);
+    }
+
+    function status(msg){ statusEl.textContent = msg; }
+
+    startBtn.addEventListener('click', ()=>{
+      if(!(window.MediaRecorder && canvas.captureStream)){
+        alert('Your browser lacks MediaRecorder or canvas.captureStream support. Try Chrome/Edge/Firefox desktop.');
+        return;
+      }
+      startBtn.disabled = true;
+      generate().catch(err=>{
+        console.error(err);
+        status('Error: ' + (err?.message || err));
+      }).finally(()=>{
+        startBtn.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
