@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FX & USDT Hedging — Animated Green Playbook</title>
+  <meta name="description" content="Single‑file HTML5 summary of currency risk hedging and a USDT-focused modern strategy, with vivid green CSS/SVG animations." />
+  <style>
+    :root{
+      --bg-0:#06140a; /* near black green */
+      --bg-1:#0b2412;
+      --bg-2:#0f3119;
+      --ink-0:#eaffea;
+      --ink-1:#c9f7d0;
+      --ink-2:#94e6a5;
+      --accent-0:#00ff95;
+      --accent-1:#29e07a;
+      --accent-2:#5bffb0;
+      --card:#0e1f16;
+      --muted:#7fd7a1;
+      --border:#1e4b33;
+      --shadow: 0 10px 30px rgba(0,255,149,0.15);
+      --radius: 16px;
+    }
+
+    /* Global reset + typography */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink-0);
+      background:
+        radial-gradient(1200px 800px at 80% -10%, rgba(0,255,149,.08), transparent 70%),
+        radial-gradient(900px 600px at 10% 10%, rgba(41,224,122,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      line-height:1.5; overflow-x:hidden;
+    }
+
+    /* Animated gradient aura */
+    .aura{
+      position:fixed; inset:-20vh -20vw; z-index:-1; filter:blur(60px) saturate(120%);
+      background: conic-gradient(from 0deg, rgba(0,255,149,.18), rgba(50,205,130,.12), rgba(0,255,149,.18));
+      animation: spin 30s linear infinite;
+      opacity:.45; pointer-events:none;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Floating particles */
+    .sparkle{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .sparkle span{
+      position:absolute; width:2px; height:2px; background:var(--accent-2); border-radius:50%;
+      opacity:.7; animation: float 12s linear infinite;
+      box-shadow:0 0 8px rgba(91,255,176,.8);
+    }
+    @keyframes float{
+      0%{ transform:translateY(110vh) translateX(0) scale(1); opacity:0 }
+      10%{opacity:.8}
+      50%{ transform:translateY(50vh) translateX(30px) scale(1.4) }
+      100%{ transform:translateY(-10vh) translateX(-30px) scale(.9); opacity:0 }
+    }
+
+    /* Header / Nav */
+    header{
+      position:sticky; top:0; backdrop-filter:saturate(180%) blur(8px);
+      background: linear-gradient(180deg, rgba(6,20,10,.85), rgba(6,20,10,.55));
+      border-bottom:1px solid var(--border); z-index:10;
+    }
+    .nav{ max-width:1150px; margin:0 auto; display:flex; gap:16px; align-items:center; padding:14px 18px; }
+    .brand{ display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing:.5px }
+    .brand svg{ filter:drop-shadow(0 0 6px rgba(0,255,149,.6)); }
+    .nav a{
+      color:var(--ink-1); text-decoration:none; padding:8px 12px; border:1px solid transparent;
+      border-radius:999px; transition:.25s ease; font-size:14px
+    }
+    .nav a:hover{ border-color:var(--accent-0); color:var(--ink-0); box-shadow:var(--shadow); transform:translateY(-1px) }
+
+    main{ max-width:1150px; margin:0 auto; padding:28px 18px 96px; position:relative; z-index:1 }
+
+    /* Hero */
+    .hero{ display:grid; grid-template-columns:1.6fr .9fr; gap:24px; align-items:center; margin:18px 0 26px }
+    .hero .card{ background:linear-gradient(180deg, rgba(20,60,38,.45), rgba(20,60,38,.25)); border:1px solid var(--border) }
+    h1{ font-size: clamp(28px, 4vw, 44px); line-height:1.15; margin:0 0 10px; color:var(--ink-0) }
+    .kicker{ color:var(--muted); text-transform:uppercase; letter-spacing:.15em; font-size:12px }
+    .badge{ display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid var(--border); border-radius:999px; font-size:12px; color:var(--ink-2) }
+
+    /* Cards */
+    .card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:18px 18px 16px; box-shadow:var(--shadow);
+    }
+
+    /* Sections */
+    section{ margin:28px 0 }
+    section h2{ font-size: clamp(22px, 3.2vw, 32px); margin:0 0 12px; color:var(--ink-0) }
+    section p, li{ color:var(--ink-1) }
+
+    /* Grid */
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:16px }
+    .span-4{ grid-column: span 4 }
+    .span-6{ grid-column: span 6 }
+    .span-8{ grid-column: span 8 }
+    .span-12{ grid-column: span 12 }
+    @media (max-width: 880px){
+      .hero{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns: 1fr }
+      .span-4,.span-6,.span-8,.span-12{ grid-column: auto }
+    }
+
+    /* Details accordion */
+    details{ border:1px solid var(--border); border-radius:12px; padding:14px 14px; background:linear-gradient(180deg, rgba(18,52,34,.5), rgba(18,52,34,.25)); }
+    summary{ cursor:pointer; font-weight:600; color:var(--ink-0) }
+    details[open]{ box-shadow:0 0 0 1px rgba(0,255,149,.15), var(--shadow) }
+
+    /* Table */
+    table{ width:100%; border-collapse: collapse; overflow:hidden; border-radius:12px; border:1px solid var(--border); background:linear-gradient(180deg, rgba(9,40,24,.35), rgba(9,40,24,.15)); }
+    th,td{ padding:12px; text-align:left; border-bottom:1px solid var(--border) }
+    th{ color:var(--ink-0) }
+    tr:hover td{ background:rgba(0,255,149,.06) }
+
+    /* CTA footer */
+    .footer{
+      margin-top:40px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      border-top:1px solid var(--border); padding-top:16px; color:var(--muted)
+    }
+    .btn{
+      --_g: radial-gradient(120% 120% at 0% 0%, rgba(0,255,149,.25), transparent 50%);
+      background:
+        linear-gradient(180deg, rgba(0,255,149,.18), rgba(0,255,149,.06)),
+        var(--_g);
+      border:1px solid var(--accent-0); color:#06351d; font-weight:700;
+      padding:10px 14px; border-radius:12px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+      box-shadow:0 6px 22px rgba(0,255,149,.2);
+      transition:.25s ease;
+    }
+    .btn:hover{ transform:translateY(-1px) scale(1.01); filter:saturate(110%) }
+
+    /* Progress bar on scroll */
+    .progress{ position:fixed; inset:0 0 auto; height:3px; background:linear-gradient(90deg, var(--accent-1), var(--accent-2)); transform-origin:0 50%; transform:scaleX(0); z-index:20 }
+
+    /* Print tweaks */
+    @media print{
+      header, .sparkle, .aura, .progress{ display:none !important }
+      body{ background:#fff; color:#000 }
+      .card, details, table{ box-shadow:none; border:1px solid #ccc }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="aura" aria-hidden="true"></div>
+  <div class="sparkle" aria-hidden="true" id="sparkle"></div>
+
+  <header>
+    <nav class="nav">
+      <div class="brand" aria-label="Brand">
+        <svg width="28" height="28" viewBox="0 0 64 64" role="img" aria-label="Green shield">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0%" stop-color="#00ff95"/>
+              <stop offset="100%" stop-color="#5bffb0"/>
+            </linearGradient>
+          </defs>
+          <path d="M32 4l22 10v13c0 13-8.5 25-22 33C18.5 52 10 40 10 27V14L32 4z" fill="url(#g)"/>
+          <path d="M21 30l7 7 15-15" fill="none" stroke="#062e1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Hedging Playbook</span>
+      </div>
+      <div style="flex:1"></div>
+      <a href="#core">Core</a>
+      <a href="#futures">Futures Hedge</a>
+      <a href="#usdt">USDT Strategy</a>
+      <a href="#quant">Quant Plan</a>
+      <a href="#summary">Cheat‑Sheet</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="card">
+        <p class="kicker">Capital Preservation • FX & Crypto</p>
+        <h1>Protecting a Currency‑Heavy Fortune with Futures — and a Modern USDT Overlay</h1>
+        <p>
+          This single‑page guide distills the session into a crisp, actionable strategy: first, classic FX futures hedging for fiat currency exposure; then, a crypto‑native plan for wealth held in <strong>USDT</strong>, including de‑peg and USD weakness hedges, plus safe yield offsets.
+        </p>
+        <p class="badge" aria-label="Badge"><span>✔</span> Risk‑first • Liquidity‑aware • Roll‑friendly</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 480 360" width="100%" height="100%" role="img" aria-label="Animated green rings">
+          <defs>
+            <radialGradient id="ring" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#00ff95" stop-opacity=".9"/>
+              <stop offset="60%" stop-color="#00ff95" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#00ff95" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <g>
+            <circle cx="240" cy="160" r="40" fill="url(#ring)">
+              <animate attributeName="r" values="40;110;40" dur="9s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="240" cy="200" r="20" fill="url(#ring)">
+              <animate attributeName="r" values="20;160;20" dur="13s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="240" cy="180" r="70" fill="url(#ring)">
+              <animate attributeName="r" values="70;220;70" dur="16s" repeatCount="indefinite" />
+            </circle>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section id="core">
+      <h2>🎯 Core Problem & Objective</h2>
+      <div class="grid">
+        <div class="card span-6">
+          <h3 style="margin-top:0">The Problem</h3>
+          <ul>
+            <li>Large fortune concentrated in <strong>cash / currency</strong>.</li>
+            <li>Fear of <strong>FOREX volatility</strong> and <strong>loss of purchasing power</strong>.</li>
+            <li>Desire to use <strong>futures contracts</strong> to <em>hedge</em>, not speculate.</li>
+          </ul>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">Objective</h3>
+          <ul>
+            <li><strong>Capital preservation</strong> with high liquidity.</li>
+            <li>Neutralize unwanted FX moves via <strong>opposite futures</strong> positions.</li>
+            <li>Manage roll, margin, and basis risks professionally.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="futures">
+      <h2>⚙️ Classic FX Futures Hedge</h2>
+      <div class="grid">
+        <div class="card span-4">
+          <h3 style="margin-top:0">1) Map Exposure</h3>
+          <p>Quantify holdings by currency, horizon, and tolerance. Example: 60% USD, 30% EUR, 10% GBP.</p>
+        </div>
+        <div class="card span-4">
+          <h3 style="margin-top:0">2) Contract Selection</h3>
+          <p>Choose standardized futures (e.g., EUR/USD, GBP/USD, JPY/USD on major exchanges).</p>
+        </div>
+        <div class="card span-4">
+          <h3 style="margin-top:0">3) Opposite Position</h3>
+          <p>If you hold USD and fear EUR strength: <strong>buy EUR/USD futures</strong> (or equivalently short USD vs EUR).</p>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">4) Hedge Ratio</h3>
+          <p>Match notional to exposure; full (100%) for preservation or partial (50–80%) to allow upside.</p>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">5) Roll & Margin</h3>
+          <p>Manage expiries (quarterly cycles), funding, and basis. Avoid over‑hedging. Rebalance with exposure changes.</p>
+        </div>
+      </div>
+
+      <details style="margin-top:12px">
+        <summary>📈 Worked Example — EUR Holder fearing EUR weakness vs USD</summary>
+        <div class="card" style="margin-top:12px">
+          <p><strong>Exposure:</strong> Long €10,000,000. <strong>Action:</strong> Sell EUR/USD futures. If each contract is €125,000, you’d hedge with ~<strong>80 contracts</strong>. If EUR falls, futures gains offset spot losses.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="usdt">
+      <h2>🧭 Modern Strategy for USDT (Tether) Wealth</h2>
+      <div class="grid">
+        <div class="card span-12">
+          <p>USDT pegs to USD, but you face: <em>USD inflation</em>, <em>issuer/peg risk</em>, and <em>crypto liquidity/regulatory shocks</em>. Build a <strong>three‑layer defense</strong>:</p>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">Layer 1 — Base Diversification</h3>
+          <ul>
+            <li>Do not remain 100% in USDT.</li>
+            <li>Blend: 40% USDT (ops), 20% USDC/PYUSD (issuer/regulatory diversification), 20% non‑USD stablecoins or tokenized gold/treasuries, 20% hard assets (BTC/ETH/XAUt) as inflation hedge.</li>
+          </ul>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">Layer 2 — Futures Hedge Overlay</h3>
+          <ul>
+            <li><strong>USD weakness:</strong> Long BTC or ETH vs USD (perps or futures) in modest size (10–30%).</li>
+            <li><strong>USDT de‑peg:</strong> Long USDC/USDT (or short USDT/USD where available) to profit if USDT trades &lt; 1.00.</li>
+            <li><strong>Traditional hedge:</strong> Long EUR/USD or XAU/USD on CME if you can off‑ramp.</li>
+          </ul>
+        </div>
+        <div class="card span-12">
+          <h3 style="margin-top:0">Layer 3 — Yield & Safety Enhancement</h3>
+          <p>Offset hedge carry with conservative yield: DAI Savings Rate, tokenized T‑bills, or blue‑chip lending (Aave/Compound) — always prefer over‑collateralized venues and monitor smart‑contract risk.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quant">
+      <h2>🧮 Quantitative Hedge Plan (Example: $10M USDT)</h2>
+      <div class="card">
+        <table aria-label="Quant plan table">
+          <thead>
+            <tr><th>Goal</th><th>Instrument</th><th>Position</th><th>Notional</th><th>Horizon</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Hedge USD inflation</td><td>Gold Futures (CME)</td><td>Long ~1,000 oz</td><td>$2M</td><td>6 months, roll</td></tr>
+            <tr><td>Hedge USDT de‑peg</td><td>USDC/USDT perp</td><td>Long spread</td><td>$1M</td><td>Continuous</td></tr>
+            <tr><td>Hedge USD weakness</td><td>BTC perp/futures</td><td>Long</td><td>$2M</td><td>Dynamic</td></tr>
+            <tr><td>Liquidity reserve</td><td>USDT + tokenized T‑bills</td><td>Hold</td><td>$5M</td><td>Ongoing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details style="margin-top:12px">
+        <summary>🧪 How it behaves</summary>
+        <div class="card" style="margin-top:12px">
+          <ul>
+            <li>If <strong>USD weakens</strong>: BTC/Gold legs generally gain, offsetting loss of USD purchasing power.</li>
+            <li>If <strong>USDT de‑pegs down</strong>: USDC/USDT long spread appreciates, compensating capital loss.</li>
+            <li>If <strong>status quo</strong>: Expect mild carry costs (funding/roll) — use yield layer to net out.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section id="summary">
+      <h2>🧾 Cheat‑Sheet</h2>
+      <div class="grid">
+        <div class="card span-8">
+          <h3 style="margin-top:0">Risks → Hedges</h3>
+          <table>
+            <thead><tr><th>Risk</th><th>Hedge / Mitigation</th><th>Instrument</th></tr></thead>
+            <tbody>
+              <tr><td>USD inflation</td><td>Anti‑USD beta</td><td>Gold / BTC long futures</td></tr>
+              <tr><td>USDT de‑peg</td><td>Issuer basis hedge</td><td>Long USDC/USDT or short USDT/USD</td></tr>
+              <tr><td>FX instability</td><td>Cross‑currency protection</td><td>Long EUR/USD or XAU/USD</td></tr>
+              <tr><td>Counterparty risk</td><td>Issuer diversification</td><td>USDT + USDC + tokenized T‑bills</td></tr>
+              <tr><td>Yield erosion</td><td>Safe on‑chain yield</td><td>DSR / T‑bill tokens / Aave</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card span-4">
+          <h3 style="margin-top:0">Advanced Overlay</h3>
+          <ol>
+            <li>Base: Multi‑stable + T‑bill tokens.</li>
+            <li>Overlay: Dynamic futures tied to DXY trend.</li>
+            <li>Yield: Low‑risk lending offsets carry.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Pro tip: set <em>risk limits</em>, automate <em>roll calendars</em>, and monitor <em>funding rates</em>.</span>
+        <a class="btn" href="#core" aria-label="Back to top">↟ Back to Top</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Animated progress bar
+    const progress = document.getElementById('progress');
+    const onScroll = () => {
+      const s = window.scrollY; const d = document.body.scrollHeight - window.innerHeight; const p = d>0 ? (s/d) : 0; progress.style.transform = `scaleX(${p})`;
+    };
+    document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    // Create sparkles
+    const sparkle = document.getElementById('sparkle');
+    const makeSparkles = (n=48) => {
+      for(let i=0;i<n;i++){
+        const dot = document.createElement('span');
+        const delay = (Math.random()*12).toFixed(2)+'s';
+        const left = Math.random()*100; const size = Math.random()*2 + 1;
+        dot.style.left = left + 'vw';
+        dot.style.animationDelay = delay;
+        dot.style.width = size+'px'; dot.style.height = size+'px';
+        sparkle.appendChild(dot);
+      }
+    };
+    makeSparkles(72);
+
+    // Smooth anchor scroll for nicer UX
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+  </script>
+</body>
+</html>
