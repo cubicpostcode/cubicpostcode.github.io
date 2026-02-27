@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: #eee; font-family: 'Segoe UI', sans-serif; }
+        #ui { text-align: center; margin-bottom: 15px; }
+        #instructions { font-size: 14px; color: #888; margin-top: 5px; }
+        canvas { border: 2px solid #444; background: #000; box-shadow: 0 0 20px rgba(0,255,255,0.1); }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <div id="scoreboard" style="font-size: 24px;">Hits: 0 | Escapes: 0</div>
+        <div id="instructions">Use ⬅️ and ➡️ keys to rotate your paddle. Don't let the ball escape!</div>
+    </div>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('scoreboard');
+        
+        const center = { x: 300, y: 300 };
+        const radius = 250;
+        let paddleAngle = 0;
+        let paddleWidth = 0.4; // Initial width in radians
+        let hits = 0;
+        let escapes = 0;
+        
+        let ball = { x: 300, y: 300, dx: 4, dy: 4, radius: 8 };
+        let keys = { ArrowLeft: false, ArrowRight: false };
+
+        window.addEventListener('keydown', e => keys[e.key] = true);
+        window.addEventListener('keyup', e => keys[e.key] = false);
+
+        function resetBall() {
+            ball = { x: 300, y: 300, dx: (Math.random() - 0.5) * 10, dy: (Math.random() - 0.5) * 10, radius: 8 };
+            // Ensure ball isn't too slow
+            if(Math.abs(ball.dx) < 3) ball.dx = 4;
+            if(Math.abs(ball.dy) < 3) ball.dy = 4;
+        }
+
+        function update() {
+            if (keys.ArrowLeft) paddleAngle -= 0.12;
+            if (keys.ArrowRight) paddleAngle += 0.12;
+
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            let dist = Math.hypot(ball.x - center.x, ball.y - center.y);
+            
+            if (dist + ball.radius >= radius) {
+                let angleToBall = Math.atan2(ball.y - center.y, ball.x - center.x);
+                let diff = angleToBall - paddleAngle;
+                
+                if (diff > Math.PI) diff -= 2 * Math.PI;
+                if (diff < -Math.PI) diff += 2 * Math.PI;
+                
+                if (Math.abs(diff) < paddleWidth) {
+                    hits++;
+                    // Increase speed and shrink paddle
+                    ball.dx = -ball.dx * 1.08;
+                    ball.dy = -ball.dy * 1.08;
+                    paddleWidth = Math.max(0.15, 0.4 - (hits * 0.01)); 
+                    
+                    ball.x = center.x + (radius - ball.radius - 2) * Math.cos(angleToBall);
+                    ball.y = center.y + (radius - ball.radius - 2) * Math.sin(angleToBall);
+                } else {
+                    escapes++;
+                    paddleWidth = 0.4; // Reset paddle size on failure
+                    resetBall();
+                }
+                scoreElement.innerText = `Hits: ${hits} | Escapes: ${escapes}`;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, 600, 600);
+            
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#0ff';
+            ctx.lineWidth = 12;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, paddleAngle - paddleWidth, paddleAngle + paddleWidth);
+            ctx.stroke();
+
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            update();
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
