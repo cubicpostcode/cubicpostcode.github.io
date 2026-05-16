@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Last Keyboard — Planetary Language for Humans and AI</title>
+  <style>
+    :root{
+      --bg:#050816;
+      --bg2:#0b1026;
+      --ink:#f7fbff;
+      --muted:#b8c7dd;
+      --hot:#00f5ff;
+      --pink:#ff3df2;
+      --gold:#ffd166;
+      --green:#7cffcb;
+      --glass:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.18);
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0,245,255,.22), transparent 28%),
+        radial-gradient(circle at 80% 0%, rgba(255,61,242,.22), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(124,255,203,.12), transparent 30%),
+        linear-gradient(160deg, var(--bg), var(--bg2) 45%, #02040b);
+      overflow-x:hidden;
+    }
+
+    body:before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom, black, transparent 90%);
+      z-index:-2;
+    }
+
+    body:after{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      background:conic-gradient(from 0deg, transparent, rgba(0,245,255,.08), transparent, rgba(255,61,242,.08), transparent);
+      animation:spin 28s linear infinite;
+      z-index:-3;
+    }
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .noise{
+      position:fixed;
+      inset:0;
+      opacity:.08;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+      z-index:100;
+      mix-blend-mode:screen;
+    }
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:5rem 1.2rem 3rem;
+      position:relative;
+    }
+
+    .hero-inner{
+      width:min(1120px, 100%);
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:2.2rem;
+      align-items:center;
+    }
+
+    .badge{
+      width:max-content;
+      max-width:100%;
+      padding:.55rem .85rem;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      border-radius:999px;
+      color:var(--green);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-size:.75rem;
+      backdrop-filter:blur(16px);
+      box-shadow:0 0 32px rgba(124,255,203,.12);
+    }
+
+    h1{
+      margin:.8rem 0 .5rem;
+      font-size:clamp(3rem, 8vw, 8.3rem);
+      line-height:.82;
+      letter-spacing:-.08em;
+      text-transform:uppercase;
+      text-wrap:balance;
+    }
+
+    .gradient{
+      background:linear-gradient(90deg, var(--hot), var(--pink), var(--gold));
+      background-size:200% auto;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:shine 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes shine{to{background-position:100% center}}
+
+    .subtitle{
+      max-width:650px;
+      color:var(--muted);
+      font-size:clamp(1.08rem, 2vw, 1.35rem);
+      line-height:1.62;
+      margin:1.2rem 0 1.8rem;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.8rem;
+      color:#dfe9ff;
+    }
+
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.07);
+      border-radius:999px;
+      padding:.68rem .9rem;
+      backdrop-filter:blur(14px);
+      box-shadow:0 12px 40px rgba(0,0,0,.18);
+    }
+
+    .device-card{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:38px;
+      padding:1.2rem;
+      background:linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
+      backdrop-filter:blur(22px);
+      box-shadow:0 40px 120px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.2);
+      overflow:hidden;
+      transform-style:preserve-3d;
+      animation:float 7s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}
+      50%{transform:translateY(-18px) rotateX(3deg) rotateY(-3deg)}
+    }
+
+    .device-card:before{
+      content:"";
+      position:absolute;
+      inset:-50%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      transform:rotate(28deg);
+      animation:sweep 5s linear infinite;
+    }
+
+    @keyframes sweep{
+      from{translate:-35% 0}
+      to{translate:35% 0}
+    }
+
+    svg{display:block; width:100%; height:auto; position:relative; z-index:1}
+
+    .signal{
+      stroke-dasharray:12 14;
+      animation:dash 1.4s linear infinite;
+    }
+
+    @keyframes dash{to{stroke-dashoffset:-52}}
+
+    main{
+      width:min(920px, calc(100% - 2rem));
+      margin:0 auto 6rem;
+    }
+
+    .article{
+      border:1px solid var(--line);
+      background:rgba(4,8,24,.62);
+      backdrop-filter:blur(18px);
+      border-radius:34px;
+      padding:clamp(1.2rem, 4vw, 3.5rem);
+      box-shadow:0 40px 130px rgba(0,0,0,.42);
+    }
+
+    .kicker{
+      color:var(--gold);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      font-size:.76rem;
+      margin-bottom:.5rem;
+    }
+
+    h2{
+      margin:2.6rem 0 .7rem;
+      font-size:clamp(1.7rem, 4vw, 3.2rem);
+      line-height:.95;
+      letter-spacing:-.045em;
+    }
+
+    p{
+      color:#d9e5fa;
+      font-size:1.08rem;
+      line-height:1.82;
+      margin:1.1rem 0;
+    }
+
+    .drop:first-letter{
+      float:left;
+      font-size:5.1rem;
+      line-height:.78;
+      padding:.18rem .5rem 0 0;
+      color:var(--hot);
+      text-shadow:0 0 28px rgba(0,245,255,.55);
+      font-weight:900;
+    }
+
+    blockquote{
+      margin:2rem 0;
+      padding:1.2rem 1.4rem;
+      border-left:4px solid var(--pink);
+      background:linear-gradient(90deg, rgba(255,61,242,.14), transparent);
+      border-radius:0 22px 22px 0;
+      font-size:1.55rem;
+      line-height:1.35;
+      letter-spacing:-.035em;
+      color:white;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1rem;
+      margin:2rem 0;
+    }
+
+    .tile{
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:1.1rem;
+      background:rgba(255,255,255,.055);
+      min-height:135px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .tile:before{
+      content:"";
+      position:absolute;
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      right:-28px;
+      bottom:-28px;
+      background:radial-gradient(circle, rgba(0,245,255,.28), transparent 70%);
+    }
+
+    .tile b{display:block; font-size:2rem; color:var(--green)}
+    .tile span{color:var(--muted); line-height:1.45; display:block; margin-top:.35rem}
+
+    .word-orbit{
+      margin:2.5rem 0;
+      border-radius:30px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+    }
+
+    .marquee{
+      display:flex;
+      gap:1rem;
+      padding:1rem 0;
+      width:max-content;
+      animation:marquee 22s linear infinite;
+    }
+
+    .marquee span{
+      color:var(--hot);
+      border:1px solid rgba(0,245,255,.28);
+      border-radius:999px;
+      padding:.6rem .95rem;
+      background:rgba(0,245,255,.06);
+      box-shadow:0 0 24px rgba(0,245,255,.08);
+      white-space:nowrap;
+    }
+
+    @keyframes marquee{
+      to{transform:translateX(-50%)}
+    }
+
+    .svg-section{
+      margin:2rem 0;
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:1rem;
+      background:linear-gradient(135deg, rgba(0,245,255,.08), rgba(255,61,242,.08));
+      overflow:hidden;
+    }
+
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      margin:3rem auto 0;
+      max-width:780px;
+      font-size:.95rem;
+    }
+
+    .glow-button{
+      display:inline-block;
+      margin-top:1rem;
+      color:#06101b;
+      text-decoration:none;
+      font-weight:800;
+      background:linear-gradient(90deg, var(--hot), var(--green));
+      padding:.9rem 1.15rem;
+      border-radius:999px;
+      box-shadow:0 0 42px rgba(0,245,255,.35);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .glow-button:hover{
+      transform:translateY(-3px) scale(1.02);
+      box-shadow:0 0 70px rgba(124,255,203,.48);
+    }
+
+    @media (max-width:850px){
+      .hero-inner{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      h1{font-size:clamp(3.5rem, 18vw, 6rem)}
+      .device-card{order:-1}
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="badge">Planetary Language / AI Interface / 9,999 Sounds</div>
+        <h1>The Last <span class="gradient">Keyboard</span></h1>
+        <p class="subtitle">
+          Inside a future where a superintelligent AI designs a universal language,
+          and a wearable device understands the will of your fingers before they move.
+        </p>
+        <div class="meta">
+          <span class="pill">Mandarin-like sound logic</span>
+          <span class="pill">EMG wrist interface</span>
+          <span class="pill">Silent semantic speech</span>
+        </div>
+      </div>
+
+      <div class="device-card" aria-label="SVG image of a hand, wrist device, and semantic signals">
+        <svg viewBox="0 0 620 620" role="img">
+          <defs>
+            <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#00f5ff" stop-opacity=".9"/>
+              <stop offset="65%" stop-color="#ff3df2" stop-opacity=".2"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="band" x1="0" x2="1">
+              <stop stop-color="#00f5ff"/>
+              <stop offset=".55" stop-color="#7cffcb"/>
+              <stop offset="1" stop-color="#ff3df2"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <circle cx="310" cy="310" r="245" fill="url(#pulse)" opacity=".36"/>
+          <circle cx="310" cy="310" r="210" fill="none" stroke="#ffffff" stroke-opacity=".16"/>
+          <circle cx="310" cy="310" r="165" fill="none" stroke="#00f5ff" stroke-opacity=".18" class="signal"/>
+
+          <path d="M208 388c-18-52-34-114-26-154 5-24 27-24 35 0l31 94-4-180c0-29 39-31 42-2l9 159 17-181c4-29 43-24 40 6l-13 184 44-155c9-30 48-20 39 11l-49 177 71-80c21-23 56 6 35 31l-94 112c-21 25-49 39-84 39h-27c-35 0-55-22-66-61z"
+            fill="#eef7ff" opacity=".9"/>
+          <path d="M211 389c-18-52-34-114-26-154" fill="none" stroke="#06101b" stroke-opacity=".22" stroke-width="5"/>
+          <rect x="218" y="418" width="180" height="66" rx="31" fill="#080d1e" stroke="url(#band)" stroke-width="5"/>
+          <circle cx="356" cy="451" r="18" fill="#00f5ff" filter="url(#glow)"/>
+          <path d="M372 451c60-20 92-56 117-117" fill="none" stroke="#00f5ff" stroke-width="5" stroke-linecap="round" class="signal"/>
+          <path d="M154 236c-42-50-50-94-25-132" fill="none" stroke="#ff3df2" stroke-width="4" stroke-linecap="round" class="signal"/>
+          <text x="70" y="98" fill="#7cffcb" font-size="26" font-family="monospace">0001 SELF</text>
+          <text x="422" y="320" fill="#00f5ff" font-size="24" font-family="monospace">3141 MOVE</text>
+          <text x="380" y="518" fill="#ffd166" font-size="22" font-family="monospace">9999 WORLD</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <article class="article">
+      <div class="kicker">Feature</div>
+      <p class="drop">
+        By the late 2030s, people may stop typing — not because keyboards disappear,
+        but because language itself changes. Imagine a world where communication happens
+        through tiny intended finger movements detected by a lightweight wrist device.
+        No tapping. No swiping. No speaking aloud. Just intention.
+      </p>
+
+      <blockquote>
+        A universal language may not be spoken first. It may be felt by the hand,
+        predicted by AI, and rendered as meaning.
+      </blockquote>
+
+      <p>
+        A subtle twitch of the index finger might mean <em>location</em>. A thumb impulse
+        could modify tense. A barely visible intended motion could transmit an entire
+        sentence to an AI system that already understands context, tone, and emotional nuance.
+      </p>
+
+      <div class="grid">
+        <div class="tile"><b>9,999</b><span>core semantic words or sounds, small enough to learn, large enough to encode civilization.</span></div>
+        <div class="tile"><b>0 dB</b><span>silent conversation through wearable intent detection instead of public speech.</span></div>
+        <div class="tile"><b>AI</b><span>a superintelligence chooses sounds optimized for humans, machines, and noisy reality.</span></div>
+      </div>
+
+      <h2>The Problem With Human Language</h2>
+      <p>
+        Human languages are astonishingly expressive. They are also deeply inefficient.
+        English spelling is chaotic. Mandarin tones are difficult for many adults to learn.
+        Many languages contain legacy complexity inherited from history, conquest, migration,
+        poetry, and accident.
+      </p>
+      <p>
+        That historical richness matters. But computationally, natural language is messy.
+        Modern AI systems spend enormous effort translating accents, dialects, spelling errors,
+        slang, ambiguity, and redundancy. To an engineer, natural language increasingly looks
+        less like a masterpiece and more like legacy code.
+      </p>
+
+      <h2>Why Mandarin Keeps Appearing</h2>
+      <p>
+        Experimental planetary-language proposals often gravitate toward Mandarin-like sound
+        logic: short syllables, strong rhythm, high information density, tonal compression,
+        and limited consonant clutter. A superintelligent AI could search billions of possible
+        sound systems and optimize for global pronounceability, acoustic distinctiveness,
+        emotional resonance, child learnability, and speech-recognition accuracy.
+      </p>
+
+      <div class="word-orbit" aria-hidden="true">
+        <div class="marquee">
+          <span>ma</span><span>lin</span><span>dao</span><span>ren</span><span>shi</span><span>ku</span><span>zen</span><span>mio</span><span>tang</span><span>wei</span>
+          <span>ma</span><span>lin</span><span>dao</span><span>ren</span><span>shi</span><span>ku</span><span>zen</span><span>mio</span><span>tang</span><span>wei</span>
+        </div>
+      </div>
+
+      <h2>The Death of Typing</h2>
+      <p>
+        The radical shift arrives when language merges with wearable AI. Instead of detecting
+        completed movements, advanced wrist devices could infer intended movements from
+        microscopic electrical activity in muscles and nerves. In practical terms: you think
+        about moving your finger, and the machine already knows.
+      </p>
+      <p>
+        Combine that with predictive AI and a compressed planetary language. Communication
+        no longer requires spelling words. The system reconstructs meaning from partial
+        gestures, context, semantic probability, and conversational history.
+      </p>
+
+      <div class="svg-section">
+        <svg viewBox="0 0 900 310" role="img" aria-label="Diagram showing finger intent becoming universal meaning">
+          <defs>
+            <linearGradient id="flow" x1="0" x2="1">
+              <stop stop-color="#ff3df2"/>
+              <stop offset=".5" stop-color="#00f5ff"/>
+              <stop offset="1" stop-color="#7cffcb"/>
+            </linearGradient>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect width="900" height="310" rx="30" fill="#050816"/>
+          <circle cx="120" cy="155" r="62" fill="none" stroke="#ff3df2" stroke-width="6" filter="url(#softGlow)"/>
+          <text x="120" y="146" text-anchor="middle" fill="#fff" font-size="25" font-family="monospace">FINGER</text>
+          <text x="120" y="178" text-anchor="middle" fill="#b8c7dd" font-size="17" font-family="monospace">WILL</text>
+
+          <path d="M200 155 C300 85, 380 225, 480 155 S660 85, 750 155" fill="none" stroke="url(#flow)" stroke-width="8" stroke-linecap="round" class="signal"/>
+
+          <circle cx="455" cy="155" r="72" fill="none" stroke="#00f5ff" stroke-width="6" filter="url(#softGlow)"/>
+          <text x="455" y="146" text-anchor="middle" fill="#fff" font-size="25" font-family="monospace">AI</text>
+          <text x="455" y="178" text-anchor="middle" fill="#b8c7dd" font-size="17" font-family="monospace">SEMANTIC CORE</text>
+
+          <circle cx="780" cy="155" r="62" fill="none" stroke="#7cffcb" stroke-width="6" filter="url(#softGlow)"/>
+          <text x="780" y="146" text-anchor="middle" fill="#fff" font-size="25" font-family="monospace">MEANING</text>
+          <text x="780" y="178" text-anchor="middle" fill="#b8c7dd" font-size="17" font-family="monospace">9999 WORDS</text>
+
+          <text x="450" y="270" text-anchor="middle" fill="#ffd166" font-size="20" font-family="monospace">
+            micro-signal → prediction → planetary language
+          </text>
+        </svg>
+      </div>
+
+      <h2>A Civilization of Silent Conversations</h2>
+      <p>
+        In crowded cities, people could communicate silently through AI-mediated intent signals.
+        Offices might become nearly noiseless. VR systems could bypass voice chat entirely.
+        Language barriers could collapse in real time.
+      </p>
+      <p>
+        The smartphone era trained humans to look down at glass rectangles. The next era may
+        train humans to communicate invisibly.
+      </p>
+
+      <h2>The Cultural Backlash</h2>
+      <p>
+        Linguists would be right to object that natural languages are not just communication
+        systems. They encode history, identity, humor, emotion, spirituality, and worldview.
+        An optimized planetary language could unintentionally flatten human diversity into
+        machine-compatible uniformity.
+      </p>
+      <p>
+        There is also a darker worry: surveillance. A device that understands intended finger
+        movement could become the most intimate interface ever invented. The same technology
+        that enables silent universal understanding could also become a system for extracting
+        the edge of intention.
+      </p>
+
+      <h2>Beyond Language</h2>
+      <p>
+        A universal semantic protocol would create a shared layer between humans, AIs, robots,
+        augmented reality, and eventually autonomous agents. Communication itself becomes
+        infrastructure — closer to TCP/IP, GPS, or Unicode than to English or French.
+      </p>
+
+      <blockquote>
+        For centuries, civilization evolved around spoken language. The next civilization may
+        evolve around interpreted intention.
+      </blockquote>
+
+      <p>
+        And somewhere in that transition, the keyboard — the defining artifact of the digital age —
+        may quietly disappear forever.
+      </p>
+
+      <p class="footer">
+        Concept by Cubic Postcode. A speculative article and visual prototype about a
+        9,999-word planetary language, superintelligent sound design, and finger-intent devices.
+        <br />
+        <a class="glow-button" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Return to top</a>
+      </p>
+    </article>
+  </main>
+</body>
+</html>
