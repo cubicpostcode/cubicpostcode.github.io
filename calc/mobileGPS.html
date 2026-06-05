@@ -206,19 +206,19 @@
             else
                 var slice_number = -my_x * 2 - 1;
 
-            var code = Math.floor(slice_number) * 441000000000000 + cube_p;
-            code = code.toPrecision(22) + "";
-            if (code.includes('.')) {
-                let foundNonZero = false;
-                for (let i = code.indexOf('.') + 1; i < code.length; i++) {
-                    if (code[i] != '0')
-                        foundNonZero = true;
-                }
-                if (!foundNonZero)
-                    code = code.substring(0, code.indexOf('.'));
+            // FIXED: Use BigInt for exact 22-digit display without scientific notation
+            var code = BigInt(Math.floor(slice_number)) * BigInt(441000000000000) + BigInt(cube_p);
+            var codeStr = code.toString();
+
+            // Pad with leading zeros to always show exactly 22 digits
+            while (codeStr.length < 22) {
+                codeStr = "0" + codeStr;
+            }
+            if (codeStr.length > 22) {
+                codeStr = codeStr.substring(0, 22);
             }
 
-            document.getElementById('cube-code').innerHTML = code;
+            document.getElementById('cube-code').innerHTML = codeStr;
            
         }
     </script>  
