@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rádio Renascença • Sempre nunca igual</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .display-font {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(234, 179, 8, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .math-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .math-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+
+  <!-- Hero -->
+  <section class="hero-bg min-h-screen flex items-center relative">
+    <div class="max-w-5xl mx-auto px-6 py-24 text-center relative z-10">
+      <div class="flex justify-center mb-8">
+        <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-3xl border border-white/20">
+          <i class="fa-solid fa-radio text-amber-400 text-2xl"></i>
+          <span class="uppercase tracking-[4px] text-sm font-medium">Rádio Renascença</span>
+        </div>
+      </div>
+      
+      <h1 class="display-font text-7xl md:text-8xl font-bold leading-none mb-6 text-white tracking-tighter">
+        Sempre<br>nunca igual
+      </h1>
+      
+      <p class="text-2xl md:text-3xl text-amber-300/90 font-light max-w-2xl mx-auto">
+        O novo lema da Rádio Renascença
+      </p>
+      
+      <div class="mt-16 flex justify-center gap-4">
+        <a href="#formal" 
+           class="px-8 py-4 bg-white text-zinc-900 rounded-2xl font-medium hover:bg-amber-300 transition-all flex items-center gap-2 group">
+          <span>Ver em Linguagem Formal</span>
+          <i class="fa-solid fa-arrow-down group-hover:translate-y-1 transition"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <div class="max-w-5xl mx-auto px-6 py-20">
+
+    <!-- About -->
+    <div class="mb-24">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-4xl display-font font-semibold mb-6">Uma identidade que nunca se repete</h2>
+          <p class="text-zinc-400 leading-relaxed text-lg">
+            "Sempre nunca igual" é mais do que um lema. É uma declaração de princípio: 
+            em cada momento, em cada programa, em cada nota, a Renascença se renova, 
+            surpreende e mantém-se fiel à sua essência sem nunca ser a mesma.
+          </p>
+        </div>
+        
+        <div class="bg-zinc-900/50 border border-white/10 rounded-3xl p-10 backdrop-blur-sm">
+          <blockquote class="text-2xl italic text-amber-200 leading-relaxed">
+            "Sempre nunca igual"<br>
+            <span class="block text-sm mt-6 not-italic text-zinc-500 font-medium">— Novo lema da Rádio Renascença</span>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mathematical Section -->
+    <section id="formal" class="mb-24">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-2 bg-white/5 text-amber-400 text-sm tracking-widest rounded-full mb-4">LINGUAGEM FORMAL</span>
+        <h2 class="text-5xl display-font font-semibold">Sempre nunca igual</h2>
+        <p class="text-zinc-400 mt-3">Expresso em notação matemática e lógica</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- Card 1 -->
+        <div class="math-card bg-zinc-900 border border-white/10 rounded-3xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-amber-400/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl font-semibold">1</div>
+            <h3 class="text-xl font-medium">Versão Principal</h3>
+          </div>
+          <div class="bg-black/70 rounded-2xl p-8 font-mono text-xl leading-relaxed text-amber-300 border border-white/5">
+            ∀t (P(t) ≠ P(t′))
+          </div>
+          <p class="text-zinc-400 text-sm mt-6">Para todo instante t, o conteúdo/programa no instante t é diferente de qualquer outro instante.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="math-card bg-zinc-900 border border-white/10 rounded-3xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-amber-400/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl font-semibold">2</div>
+            <h3 class="text-xl font-medium">Versão Forte</h3>
+          </div>
+          <div class="bg-black/70 rounded-2xl p-8 font-mono text-xl leading-relaxed text-amber-300 border border-white/5">
+            ∀t₁ ∀t₂ (t₁ ≠ t₂ → P(t₁) ≠ P(t₂))
+          </div>
+          <p class="text-zinc-400 text-sm mt-6">Para quaisquer dois instantes distintos, o conteúdo é sempre diferente.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="math-card bg-zinc-900 border border-white/10 rounded-3xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-amber-400/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl font-semibold">3</div>
+            <h3 class="text-xl font-medium">Versão Modal</h3>
+          </div>
+          <div class="bg-black/70 rounded-2xl p-8 font-mono text-xl leading-relaxed text-amber-300 border border-white/5">
+            □ ¬Igual
+          </div>
+          <p class="text-zinc-400 text-sm mt-6">É necessariamente verdade que nunca é igual (lógica modal).</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="math-card bg-zinc-900 border border-white/10 rounded-3xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-amber-400/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl font-semibold">4</div>
+            <h3 class="text-xl font-medium">Versão Curta &amp; Impactante</h3>
+          </div>
+          <div class="bg-black/70 rounded-2xl p-8 font-mono text-xl leading-relaxed text-amber-300 border border-white/5">
+            ∀t. ¬Estático(t)
+          </div>
+          <p class="text-zinc-400 text-sm mt-6">Em todo instante, não é estático / nunca é o mesmo.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Final message -->
+    <div class="text-center py-20 border-t border-white/10">
+      <p class="text-2xl display-font text-amber-300 mb-2">"Sempre nunca igual"</p>
+      <p class="text-zinc-400">Rádio Renascença — 2026</p>
+    </div>
+  </div>
+
+  <script>
+    console.log('%cSempre nunca igual', 'color:#fbbf24; font-family:Playfair Display; font-size:22px;');
+  </script>
+</body>
+</html>
