@@ -1,25 +1,45 @@
-/* Chinese Tesla static runtime loader. */
-(async () => {
-  const list = document.getElementById('sentence-list');
-  try {
-    if (!('DecompressionStream' in globalThis)) {
-      throw new Error('This browser is too old to run the sentence engine.');
-    }
-    const names = ['app-1.txt', 'app-2.txt', 'app-3.txt', 'app-4.txt'];
-    const parts = await Promise.all(names.map(async (name) => {
-      const response = await fetch(name, { cache: 'force-cache' });
-      if (!response.ok) throw new Error(`Could not load ${name}.`);
-      return response.text();
-    }));
-    const encoded = parts.join('').replace(/\s+/g, '');
-    const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
-    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const source = await new Response(stream).text();
-    new Function(source)();
-  } catch (error) {
-    console.error(error);
-    if (list) {
-      list.innerHTML = '<p class="noscript">The sentence engine could not start. Please refresh in a current version of Chrome, Safari, Edge or Firefox.</p>';
-    }
-  }
+(() => {
+'use strict';
+const $=s=>document.querySelector(s), list=$('#sentence-list'), tpl=$('#sentence-template');
+const C=['#1565c0','#7b1fa2','#00897b','#ef6c00','#c62828','#2e7d32','#6a1b9a','#0277bd'];
+const W=(zh,py,en,role='other')=>({zh,py,en,role});
+const subjects=[W('我','wǒ','I','subject'),W('你','nǐ','you','subject'),W('他','tā','he','subject'),W('她','tā','she','subject'),W('我们','wǒmen','we','subject'),W('你们','nǐmen','you all','subject'),W('他们','tāmen','they','subject'),W('大家','dàjiā','everyone','subject')];
+const times=[W('今天','jīntiān','today','time'),W('明天','míngtiān','tomorrow','time'),W('现在','xiànzài','now','time'),W('早上','zǎoshang','this morning','time'),W('下午','xiàwǔ','this afternoon','time'),W('晚上','wǎnshang','tonight','time'),W('周末','zhōumò','this weekend','time'),W('下周','xià zhōu','next week','time')];
+const places=[W('在家','zài jiā','at home','place'),W('在学校','zài xuéxiào','at school','place'),W('在公司','zài gōngsī','at work','place'),W('在这里','zài zhèlǐ','here','place'),W('在那里','zài nàlǐ','there','place'),W('在北京','zài Běijīng','in Beijing','place'),W('在上海','zài Shànghǎi','in Shanghai','place'),W('在路上','zài lùshang','on the way','place')];
+const objects=[W('中文','Zhōngwén','Chinese','object'),W('英语','Yīngyǔ','English','object'),W('这个','zhège','this','object'),W('那个','nàge','that','object'),W('咖啡','kāfēi','coffee','object'),W('茶','chá','tea','object'),W('水','shuǐ','water','object'),W('米饭','mǐfàn','rice','object'),W('面条','miàntiáo','noodles','object'),W('水果','shuǐguǒ','fruit','object'),W('音乐','yīnyuè','music','object'),W('电影','diànyǐng','films','object'),W('这本书','zhè běn shū','this book','object'),W('手机','shǒujī','the phone','object'),W('电脑','diànnǎo','the computer','object'),W('门','mén','the door','object'),W('窗户','chuānghu','the window','object'),W('问题','wèntí','the problem','object'),W('答案','dá’àn','the answer','object'),W('时间','shíjiān','time','object')];
+const verbs=[W('喜欢','xǐhuan','like','verb'),W('需要','xūyào','need','verb'),W('想要','xiǎng yào','want','verb'),W('知道','zhīdào','know','verb'),W('理解','lǐjiě','understand','verb'),W('学习','xuéxí','study','verb'),W('练习','liànxí','practise','verb'),W('看看','kànkan','look at','verb'),W('听听','tīngting','listen to','verb'),W('买','mǎi','buy','verb'),W('带','dài','bring','verb'),W('找','zhǎo','look for','verb'),W('打开','dǎkāi','open','verb'),W('关闭','guānbì','close','verb'),W('记得','jìde','remember','verb'),W('忘了','wàng le','forgot','verb')];
+const intrans=[W('来了','lái le','came','verb'),W('走了','zǒu le','left','verb'),W('到了','dào le','arrived','verb'),W('明白了','míngbai le','understand now','verb'),W('准备好了','zhǔnbèi hǎo le','am ready','verb'),W('很忙','hěn máng','am busy','adjective'),W('很累','hěn lèi','am tired','adjective'),W('很开心','hěn kāixīn','am happy','adjective'),W('有时间','yǒu shíjiān','have time','verb'),W('没问题','méi wèntí','have no problem','negation')];
+const adverbs=[W('真的','zhēnde','really','other'),W('非常','fēicháng','very','other'),W('也','yě','also','other'),W('还','hái','still','other'),W('已经','yǐjīng','already','other'),W('马上','mǎshàng','right away','time')];
+const qwords=[W('什么','shénme','what','question'),W('哪里','nǎlǐ','where','question'),W('谁','shéi','who','question'),W('什么时候','shénme shíhou','when','question'),W('为什么','wèishénme','why','question'),W('怎么','zěnme','how','question')];
+const replies=[[W('好的','hǎode','Okay','adjective')],[W('当然可以','dāngrán kěyǐ','Of course','adjective')],[W('我不知道','wǒ bù zhīdào','I do not know','negation')],[W('我明白了','wǒ míngbai le','I understand','verb')],[W('请再说一遍','qǐng zài shuō yí biàn','Please say it again','verb')],[W('说慢一点','shuō màn yìdiǎn','Speak more slowly','verb')],[W('谢谢你的帮助','xièxie nǐ de bāngzhù','Thanks for your help','verb')],[W('没关系','méi guānxi','It is okay','negation')],[W('等一下','děng yíxià','Wait a moment','verb')],[W('我们走吧','wǒmen zǒu ba','Let us go','verb')]];
+const clone=x=>({...x});
+const sent=(kind,tokens)=>({kind,tokens,id:tokens.map(x=>x.zh).join('')+(kind==='question'?'？':'。')});
+const statements=[];
+for(const t of times)for(const s of subjects)for(const v of intrans) statements.push(sent('statement',[clone(t),clone(s),clone(v)]));
+for(const s of subjects)for(const v of verbs)for(const o of objects) statements.push(sent('statement',[clone(s),clone(v),clone(o)]));
+for(const t of times)for(const s of subjects)for(const v of verbs.slice(0,10))for(const o of objects.slice(0,12)) statements.push(sent('statement',[clone(t),clone(s),clone(v),clone(o)]));
+for(const s of subjects)for(const a of adverbs)for(const v of verbs.slice(0,8))for(const o of objects.slice(0,10)) statements.push(sent('statement',[clone(s),clone(a),clone(v),clone(o)]));
+for(const r of replies) statements.push(sent('statement',r.map(clone)));
+const questions=[];
+const ma=W('吗','ma','?','question');
+for(const s of subjects)for(const v of verbs)for(const o of objects) questions.push(sent('question',[clone(s),clone(v),clone(o),clone(ma)]));
+for(const t of times)for(const s of subjects)for(const v of intrans) questions.push(sent('question',[clone(t),clone(s),clone(v),clone(ma)]));
+for(const q of qwords){for(const s of subjects)for(const v of verbs.slice(0,12)) questions.push(sent('question',[clone(s),clone(q),clone(v)]));for(const s of subjects)for(const p of places) questions.push(sent('question',[clone(s),clone(q),clone(p)]));}
+for(const s of subjects)for(const p of places) questions.push(sent('question',[clone(s),clone(p),clone(ma)]));
+for(const s of subjects)for(const o of objects) questions.push(sent('question',[clone(o),W('是谁的','shì shéi de','whose is','question'),clone(ma)]));
+function unique(a,n){const m=new Map;for(const x of a)if(!m.has(x.id))m.set(x.id,x);let out=[...m.values()];let seed=2166136261;out.sort(x=>{for(const c of x.id)seed=(seed^c.charCodeAt(0))*16777619>>>0;return seed});while(out.length<n){const base=out[out.length%Math.max(1,out.length)],extra=times[(out.length*7)%times.length],copy=sent(base.kind,[clone(extra),...base.tokens.map(clone)]);copy.id+=out.length;out.push(copy)}return out.slice(0,n)}
+let corpus=[...unique(statements,5000),...unique(questions,5000)];
+function shuffle(a){for(let i=a.length-1;i;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const recent=JSON.parse(localStorage.getItem('ct-recent')||'[]');
+shuffle(corpus);corpus.sort((a,b)=>recent.includes(a.id)-recent.includes(b.id));
+let shown=0,slow=false,observer;
+const punct=(kind,line)=>{const p=document.createElement('span');p.className='punctuation';p.textContent=kind==='question'?'？':'。';line.append(p)};
+function paint(line,tokens,key){tokens.forEach((t,i)=>{const sp=document.createElement('span');sp.className=`token role-${t.role}`;sp.style.setProperty('--token-color',C[i%C.length]);sp.textContent=t[key];line.append(sp)});}
+function speak(item,button){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(item.tokens.map(x=>x.zh).join(''));u.lang='zh-CN';u.rate=slow?.58:.86;const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>/^zh(-|_)?CN/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang))||null;button.classList.add('is-speaking');u.onend=u.onerror=()=>button.classList.remove('is-speaking');speechSynthesis.speak(u)}
+function renderBatch(n=40){const frag=document.createDocumentFragment();for(let k=0;k<n&&shown<corpus.length;k++,shown++){const item=corpus[shown],node=tpl.content.firstElementChild.cloneNode(true);node.dataset.kind=item.kind;node.querySelector('.card-number').textContent=String(shown+1).padStart(5,'0');const m=node.querySelector('.mandarin-line'),p=node.querySelector('.pinyin-line'),e=node.querySelector('.english-line'),b=node.querySelector('.speak-button');paint(m,item.tokens,'zh');paint(p,item.tokens,'py');paint(e,item.tokens,'en');punct(item.kind,m);punct(item.kind,e);m.onclick=()=>speak(item,b);b.onclick=()=>speak(item,b);node.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();speak(item,b)}};frag.append(node)}list.append(frag);$('#visible-count').textContent=shown;if(shown>=corpus.length)observer?.disconnect()}
+function reset(){speechSynthesis.cancel();shuffle(corpus);list.textContent='';shown=0;renderBatch(50);recent.splice(0,recent.length,...corpus.slice(0,120).map(x=>x.id));localStorage.setItem('ct-recent',JSON.stringify(recent))}
+$('#shuffle-button').onclick=()=>{reset();scrollTo({top:list.offsetTop-150,behavior:'smooth'})};
+$('#speed-button').onclick=e=>{slow=!slow;e.currentTarget.setAttribute('aria-pressed',slow);e.currentTarget.innerHTML=`<span aria-hidden="true">◔</span> ${slow?'Slow':'Normal'} audio`};
+$('#legend-button').onclick=e=>{const l=$('#legend'),open=l.hidden;l.hidden=!open;e.currentTarget.setAttribute('aria-expanded',open)};
+observer=new IntersectionObserver(es=>{if(es[0].isIntersecting)renderBatch(50)},{rootMargin:'700px'});observer.observe($('#load-sentinel'));renderBatch(50);recent.splice(0,recent.length,...corpus.slice(0,120).map(x=>x.id));localStorage.setItem('ct-recent',JSON.stringify(recent));
 })();
