@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#a8071a">
-  <meta name="description" content="10,000 semantically structured Mandarin questions, statements and replies using 715 distinct Hanzi, with Pinyin, English and Mandarin audio.">
+  <meta name="description" content="10,000 carefully structured Mandarin questions, statements and replies with Pinyin, English and Mandarin audio.">
   <title>Chinese Tesla · 10,000 Mandarin Sentences</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="autoplay.css?v=20260718-autoplay-1">
 </head>
 <body>
   <a class="skip-link" href="#sentence-list">Skip to sentences</a>
@@ -21,7 +22,7 @@
       <div>
         <p class="eyebrow">CHINESE TESLA</p>
         <h1><span lang="zh-Hans">一万句中文</span><span class="title-divider">·</span>10,000 Mandarin Sentences</h1>
-        <p class="hero__sub">Short, useful, shuffled every visit. Tap any Mandarin line to hear it.</p>
+        <p class="hero__sub">Short, useful, shuffled every visit. Tap Mandarin to hear it—or switch Play on and sit back.</p>
       </div>
     </div>
   </header>
@@ -40,6 +41,9 @@
         </div>
 
         <div class="control-buttons">
+          <button id="autoplay-button" class="control-button control-button--play" type="button" aria-pressed="false" disabled>
+            <span aria-hidden="true">▶</span> Play: off
+          </button>
           <button id="shuffle-button" class="control-button control-button--primary" type="button">
             <span aria-hidden="true">↻</span> New shuffle
           </button>
@@ -69,7 +73,7 @@
 
     <section class="intro-note" aria-label="How the page works">
       <span class="seal" aria-hidden="true">学</span>
-      <p>The rebuilt collection contains 10,000 unique cards using 715 distinct Hanzi. It is reshuffled on every visit, with recent sentences gently moved later.</p>
+      <p>The rebuilt collection contains 10,000 unique cards using 715 distinct Hanzi. Switch Play on for continuous hands-free scrolling and Mandarin pronunciation.</p>
     </section>
 
     <section id="sentence-list" class="sentence-list" aria-label="Mandarin sentence collection"></section>
@@ -101,6 +105,6 @@
     </article>
   </template>
 
-  <script src="app-v4.js?v=20260718-rebuild-4" defer></script>
+  <script src="app-v5.js?v=20260718-autoplay-1" defer></script>
 </body>
 </html>
