@@ -1,0 +1,55 @@
+.control-button--play {
+  border-color: rgba(168, 7, 26, .38);
+  box-shadow: inset 0 0 0 1px rgba(245, 196, 81, .18);
+}
+
+.control-button--play[aria-pressed="true"] {
+  background: var(--china-red);
+  color: #fff;
+  border-color: var(--china-red);
+  box-shadow: 0 0 0 3px rgba(245, 196, 81, .34), 0 7px 18px rgba(101, 5, 21, .18);
+}
+
+.control-button:disabled {
+  cursor: wait;
+  opacity: .55;
+  transform: none;
+  box-shadow: none;
+}
+
+.sentence-card.is-autoplaying {
+  transform: translateY(-2px);
+  border-color: rgba(168, 7, 26, .72);
+  box-shadow: 0 0 0 3px rgba(245, 196, 81, .48), 0 18px 42px rgba(88, 23, 24, .18);
+}
+
+.sentence-card.is-autoplaying::after {
+  content: "PLAYING";
+  position: absolute;
+  right: .8rem;
+  bottom: .55rem;
+  color: rgba(101, 5, 21, .46);
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+body.autoplay-on .control-shell {
+  box-shadow: 0 0 0 2px rgba(245, 196, 81, .34), 0 9px 30px rgba(72, 0, 9, .1);
+}
+
+@media (max-width: 760px) {
+  .control-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .control-button--primary {
+    grid-column: auto;
+  }
+
+  .sentence-card.is-autoplaying::after {
+    display: none;
+  }
+}
