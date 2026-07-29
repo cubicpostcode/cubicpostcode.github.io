@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#07111f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Trafalgar Sky</title>
   <style>
     html,body{margin:0;min-height:100%;background:#07111f;color:#eef4fb;font-family:system-ui,sans-serif}
@@ -20,18 +23,21 @@
     <div>Loading Trafalgar Sky…</div>
     <small>Preparing the interactive 3D scene…</small>
   </main>
-  <script src="moon-assets/data-01.js"></script>
-  <script src="moon-assets/data-02.js"></script>
-  <script src="moon-assets/data-03.js"></script>
-  <script src="moon-assets/data-04.js"></script>
-  <script src="moon-assets/data-05.js"></script>
-  <script src="moon-assets/data-06.js"></script>
+  <script src="moon-assets/data-01.js?v=c73f3ea5"></script>
+  <script src="moon-assets/data-02.js?v=c73f3ea5"></script>
+  <script src="moon-assets/data-03.js?v=c73f3ea5"></script>
+  <script src="moon-assets/data-04.js?v=c73f3ea5"></script>
+  <script src="moon-assets/data-05.js?v=c73f3ea5"></script>
+  <script src="moon-assets/data-06.js?v=c73f3ea5"></script>
   <script>
     (async () => {
       if (!("DecompressionStream" in window)) {
         throw new Error("Please open this page in a current version of Chrome, Edge, Firefox or Safari.");
       }
       const encoded = window.__TRAFALGAR_GZ || "";
+      if (!encoded || encoded.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(encoded)) {
+        throw new Error("The application payload did not load completely. Reload the page once.");
+      }
       const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
       const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
       const html = await new Response(stream).text();
@@ -40,7 +46,7 @@
       document.write(html);
       document.close();
     })().catch(error => {
-      document.body.innerHTML = `<main><h1>Unable to load Trafalgar Sky</h1><p>${String(error.message || error)}</p></main>`;
+      document.body.innerHTML = `<main><h1>Unable to load Trafalgar Sky</h1><p>${String(error.message || error)}</p><p><button onclick="location.reload()">Reload</button></p></main>`;
     });
   </script>
 </body>
