@@ -43,8 +43,52 @@
       if (!encoded || encoded.length % 4 !== 0) throw new Error("The application payload did not load completely. Please refresh the page.");
       const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
       const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-      const html = await new Response(stream).text();
+      let html = await new Response(stream).text();
       delete window.__TRAFALGAR_GZ;
+
+      const worldOpacityBlock = `      <div class="timeline">
+        <span class="small">World opacity</span>
+        <input id="worldOpacity" type="range" min="0" max="100" step="1" value="100" aria-label="World opacity">
+        <span id="worldOpacityLabel" class="small">100%</span>
+      </div>`;
+
+      const celestialScaleControls = `
+      <div class="timeline">
+        <span class="small">Sun display size</span>
+        <input id="sunDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Sun display size multiplier" oninput="document.getElementById('sunDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setSunScale(this.value)">
+        <span id="sunDisplayScaleLabel" class="small">1.0×</span>
+      </div>
+      <div class="timeline">
+        <span class="small">Moon display size</span>
+        <input id="moonDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Moon display size multiplier" oninput="document.getElementById('moonDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setMoonScale(this.value)">
+        <span id="moonDisplayScaleLabel" class="small">1.0×</span>
+      </div>`;
+
+      const scaleFunctions = `    function setSunScale(value) {
+      const factor=Math.max(1,Math.min(5,Number(value)||1));
+      sun.scale.setScalar(factor);
+      return factor;
+    }
+
+    function setMoonScale(value) {
+      const factor=Math.max(1,Math.min(5,Number(value)||1));
+      moon.scale.setScalar(factor);
+      return factor;
+    }
+
+`;
+
+      html = html
+        .replace(worldOpacityBlock, worldOpacityBlock + celestialScaleControls)
+        .replace('The Sun and Moon are enlarged slightly so they remain visible.','Their astronomical positions remain exact; the display-size controls can enlarge either body illustratively from 1× to 5× for clarity.')
+        .replace('    function setWorldVisible(show) {', scaleFunctions + '    function setWorldVisible(show) {')
+        .replace(
+          '    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize};',
+          `    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize,setSunScale,setMoonScale};
+    setSunScale(document.getElementById('sunDisplayScale')?.value||1);
+    setMoonScale(document.getElementById('moonDisplayScale')?.value||1);`
+        );
+
       document.open();
       document.write(html);
       document.close();
