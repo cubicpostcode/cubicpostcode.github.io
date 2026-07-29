@@ -1,0 +1,94 @@
+name: Validate Moon2 browser model
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/validate-moon2-model.yml
+      - moon2.html
+      - moon2-model18-c98efce62cd7/**
+      - moon2-repair-54eab612513d/**
+      - moon2-model18-part009-split-v1/**
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Reconstruct and validate browser model
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import gzip
+          import hashlib
+          import json
+          import struct
+
+          base = Path('moon2-model18-c98efce62cd7')
+          repair = Path('moon2-repair-54eab612513d')
+          segment9 = Path('moon2-model18-part009-split-v1/part-001.b64')
+          repair_map = {
+              2: [repair / f'p002-{i:02d}.b64' for i in range(1, 4)],
+              4: [repair / f'p004-{i:02d}.b64' for i in range(1, 4)],
+              5: [repair / f'p005-{i:02d}.b64' for i in range(1, 4)],
+          }
+
+          decoded_parts = []
+          report_parts = []
+          for number in range(1, 10):
+              if number in repair_map:
+                  encoded = ''.join(path.read_text(encoding='utf-8').strip() for path in repair_map[number])
+                  source = '+'.join(str(path) for path in repair_map[number])
+              elif number == 9:
+                  encoded = segment9.read_text(encoding='utf-8').strip()
+                  source = str(segment9)
+              else:
+                  path = base / f'part-{number:03d}.b64'
+                  encoded = path.read_text(encoding='utf-8').strip()
+                  source = str(path)
+              if not encoded or len(encoded) % 4:
+                  raise RuntimeError(f'Part {number} has invalid Base64 length {len(encoded)}')
+              decoded = base64.b64decode(encoded, validate=True)
+              decoded_parts.append(decoded)
+              report_parts.append({'number': number, 'source': source, 'base64Characters': len(encoded), 'decodedBytes': len(decoded)})
+
+          compressed = b''.join(decoded_parts)
+          raw = gzip.decompress(compressed)
+          if raw[:8] != b'TRAFVAR1':
+              raise RuntimeError(f'Unexpected magic: {raw[:8]!r}')
+          header_length = struct.unpack_from('<I', raw, 8)[0]
+          header = json.loads(raw[12:12 + header_length])
+          report = {
+              'ok': True,
+              'compressedBytes': len(compressed),
+              'compressedSha256': hashlib.sha256(compressed).hexdigest(),
+              'uncompressedBytes': len(raw),
+              'uncompressedSha256': hashlib.sha256(raw).hexdigest(),
+              'magic': raw[:8].decode('ascii'),
+              'headerLength': header_length,
+              'faces': header.get('faces'),
+              'vertices': header.get('vertices'),
+              'chunks': len(header.get('chunks', [])),
+              'materials': len(header.get('materials', [])),
+              'parts': report_parts,
+          }
+          Path('moon2-model-validation.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Commit validation report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moon2-model-validation.json
+          if git diff --cached --quiet; then
+            echo "Validation report unchanged."
+          else
+            git commit -m "Validate Moon2 browser model payload end to end"
+            git push origin master
+          fi
