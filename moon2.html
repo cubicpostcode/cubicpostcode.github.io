@@ -9,10 +9,40 @@
  const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));let html=await new Response(stream).text();
  const landmarkCalls=`    // Clean architectural reconstruction. The damaged imported mesh is deliberately not rendered.\n    buildGround();\n    buildNationalGallery();\n    buildStMartin();\n    buildNelsonColumn();\n    buildFountain(-51, 5);\n    buildFountain(51, 5);\n    buildAdmiraltyArch();\n    buildSurroundingBuildings();\n    buildTreesAndLamps();\n\n`;
  const cleanModelReady=`    detailedRoot.visible=false;\n    setModelProgress(100,'Ready · clean architectural reconstruction');\n    modelLoading.querySelector('.model-loading-title').textContent='Trafalgar Square ready';\n    modelLoading.classList.add('done');\n    setTimeout(()=>modelLoading.remove(),500);`;
+ const worldOpacityBlock=`      <div class="timeline">
+        <span class="small">World opacity</span>
+        <input id="worldOpacity" type="range" min="0" max="100" step="1" value="100" aria-label="World opacity">
+        <span id="worldOpacityLabel" class="small">100%</span>
+      </div>`;
+ const celestialScaleControls=`
+      <div class="timeline">
+        <span class="small">Sun display size</span>
+        <input id="sunDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Sun display size multiplier" oninput="document.getElementById('sunDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setSunScale(this.value)">
+        <span id="sunDisplayScaleLabel" class="small">1.0×</span>
+      </div>
+      <div class="timeline">
+        <span class="small">Moon display size</span>
+        <input id="moonDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Moon display size multiplier" oninput="document.getElementById('moonDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setMoonScale(this.value)">
+        <span id="moonDisplayScaleLabel" class="small">1.0×</span>
+      </div>`;
+ const scaleFunctions=`    function setSunScale(value) {
+      const factor=Math.max(1,Math.min(5,Number(value)||1));
+      sun.scale.setScalar(factor);
+      return factor;
+    }
+
+    function setMoonScale(value) {
+      const factor=Math.max(1,Math.min(5,Number(value)||1));
+      moon.scale.setScalar(factor);
+      return factor;
+    }
+
+`;
  html=html.replace('<title>Trafalgar Sky 2 — Detailed Trafalgar Square</title>','<title>Trafalgar Sky 2 — Clean Trafalgar Square Reconstruction</title>')
    .replace('Detailed model edition · interactive topocentric ephemeris','Clean architectural edition · interactive topocentric ephemeris')
    .replace('Loading detailed Trafalgar Square model…','Loading clean Trafalgar Square reconstruction…')
    .replace('Loading detailed Trafalgar Square…','Loading clean Trafalgar Square reconstruction…')
+   .replace(worldOpacityBlock,worldOpacityBlock+celestialScaleControls)
    .replace('    function makeLabel(text) {',landmarkCalls+'    function makeLabel(text) {')
    .replace('    loadDetailedModel();',cleanModelReady)
    .replace('This edition uses a heavily optimised, application-integrated Trafalgar Square model licensed through Fab. The original FBX is not distributed.','This edition currently uses a clean application-built architectural reconstruction while the licensed source-model conversion is corrected. The original FBX is not distributed.')
@@ -28,7 +58,12 @@
    .replace("worldSun.intensity = mode==='day' ? 0.55+2.45*daylight : Math.max(0,daylight*.25);","worldSun.intensity = mode==='day' ? 0.55+2.45*daylight : 0.08;")
    .replace("hemisphere.intensity = mode==='day' ? 0.85+daylight*.55 : 0.17;","hemisphere.intensity = mode==='day' ? 0.85+daylight*.55 : 0.42;")
    .replace("fill.intensity = mode==='day' ? 0.12+daylight*.18 : 0.06;","fill.intensity = mode==='day' ? 0.12+daylight*.18 : 0.16;\n      nightKey.intensity = mode==='night' ? 0.36 : 0.08;")
-   .replace("renderer.toneMappingExposure = mode==='day' ? 1.05 : 1.35;","renderer.toneMappingExposure = mode==='day' ? 1.05 : 1.55;");
+   .replace("renderer.toneMappingExposure = mode==='day' ? 1.05 : 1.35;","renderer.toneMappingExposure = mode==='day' ? 1.05 : 1.55;")
+   .replace('    function setWorldVisible(show) {',scaleFunctions+'    function setWorldVisible(show) {')
+   .replace('    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize};',
+`    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize,setSunScale,setMoonScale};
+    setSunScale(document.getElementById('sunDisplayScale')?.value||1);
+    setMoonScale(document.getElementById('moonDisplayScale')?.value||1);`);
  document.open();document.write(html);document.close();
 })().catch(error=>{document.body.innerHTML=`<main><h1>Unable to load Trafalgar Sky 2</h1><p>${String(error.message||error)}</p><button onclick="location.reload()">Reload</button></main>`;});
 </script></body></html>
