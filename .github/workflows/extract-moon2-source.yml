@@ -1,0 +1,44 @@
+name: Extract Moon2 deployed source
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/extract-moon2-source.yml
+      - moon2-app18-86cf522ed83d/part-001.b64
+      - moon2-app18-86cf522ed83d/part-002.b64
+
+permissions:
+  contents: write
+
+jobs:
+  extract-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Decode and decompress deployed app
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import gzip
+
+          base = Path('moon2-app18-86cf522ed83d')
+          encoded = ''.join((base / f'part-{i:03d}.b64').read_text(encoding='utf-8').strip() for i in (1, 2))
+          html = gzip.decompress(base64.b64decode(encoded)).decode('utf-8')
+          Path('moon2-debug-source.html').write_text(html, encoding='utf-8')
+          print(f'Extracted {len(html):,} characters')
+          PY
+      - name: Commit extracted source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moon2-debug-source.html
+          if git diff --cached --quiet; then
+            echo "Source already current."
+          else
+            git commit -m "Extract Moon2 deployed app source for diagnosis"
+            git push origin master
+          fi
