@@ -8,6 +8,7 @@ on:
       - moon2.html
       - moon2-model18-c98efce62cd7/**
       - moon2-repair-54eab612513d/**
+      - moon2-repair2-c98efce62cd7/**
       - moon2-model18-part009-split-v1/**
 
 permissions:
@@ -35,11 +36,12 @@ jobs:
           try:
               base = Path('moon2-model18-c98efce62cd7')
               repair = Path('moon2-repair-54eab612513d')
+              repair2 = Path('moon2-repair2-c98efce62cd7')
               segment9 = Path('moon2-model18-part009-split-v1/part-001.b64')
               repair_map = {
                   2: [repair / f'p002-{i:02d}.b64' for i in range(1, 4)],
                   4: [repair / f'p004-{i:02d}.b64' for i in range(1, 4)],
-                  5: [repair / f'p005-{i:02d}.b64' for i in range(1, 4)],
+                  5: [repair2 / f'p005-{i:02d}.b64' for i in range(1, 4)],
               }
 
               decoded_parts = []
@@ -102,6 +104,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Validation report unchanged."
           else
-            git commit -m "Record Moon2 browser model validation result"
+            git commit -m "Record corrected Moon2 model validation result"
             git push origin master
           fi
