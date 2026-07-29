@@ -1,0 +1,72 @@
+name: Inspect Moon2 segment variants
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/inspect-moon2-segments.yml
+      - moon2-model18-c98efce62cd7/**
+      - moon2-repair-54eab612513d/**
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Inspect Base64 variants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import hashlib
+          import json
+
+          base = Path('moon2-model18-c98efce62cd7')
+          repair = Path('moon2-repair-54eab612513d')
+          report = {}
+
+          def inspect_text(text):
+              item = {
+                  'characters': len(text),
+                  'mod4': len(text) % 4,
+                  'sha256': hashlib.sha256(text.encode('ascii', errors='replace')).hexdigest(),
+              }
+              try:
+                  decoded = base64.b64decode(text, validate=True)
+                  item.update({'base64Valid': True, 'decodedBytes': len(decoded), 'decodedSha256': hashlib.sha256(decoded).hexdigest()})
+              except Exception as error:
+                  item.update({'base64Valid': False, 'error': f'{type(error).__name__}: {error}'})
+              return item
+
+          for number in (2, 4, 5):
+              original_path = base / f'part-{number:03d}.b64'
+              original = original_path.read_text(encoding='utf-8').strip()
+              repaired_paths = [repair / f'p{number:03d}-{i:02d}.b64' for i in range(1, 4)]
+              repaired_chunks = [path.read_text(encoding='utf-8').strip() for path in repaired_paths]
+              repaired = ''.join(repaired_chunks)
+              report[str(number)] = {
+                  'original': inspect_text(original),
+                  'repairCombined': inspect_text(repaired),
+                  'repairChunks': [inspect_text(chunk) for chunk in repaired_chunks],
+                  'repairPaths': [str(path) for path in repaired_paths],
+              }
+
+          Path('moon2-segment-inspection.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Commit inspection report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moon2-segment-inspection.json
+          if git diff --cached --quiet; then
+            echo "Inspection report unchanged."
+          else
+            git commit -m "Inspect Moon2 original and repaired segment variants"
+            git push origin master
+          fi
