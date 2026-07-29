@@ -6,6 +6,9 @@
  await Promise.all(Array.from({length:Math.min(4,count)},async()=>{while(queue.length){const i=queue.shift(),r=await fetch(`${base}part-${String(i+1).padStart(3,'0')}.b64?v=86cf522ed83d`,{cache:'force-cache'});if(!r.ok)throw new Error(`Unable to load application part ${i+1}.`);parts[i]=(await r.text()).trim();}}));
  const encoded=parts.join('');if(!encoded||encoded.length%4)throw new Error('The application payload did not load completely.');
  const binary=atob(encoded),bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
- const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));const html=await new Response(stream).text();document.open();document.write(html);document.close();
+ const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));const html=await new Response(stream).text();
+ const nativeFetch=window.fetch.bind(window),repairMap={"002":["moon2-repair-54eab612513d/p002-01.b64","moon2-repair-54eab612513d/p002-02.b64","moon2-repair-54eab612513d/p002-03.b64"],"004":["moon2-repair-54eab612513d/p004-01.b64","moon2-repair-54eab612513d/p004-02.b64","moon2-repair-54eab612513d/p004-03.b64"],"005":["moon2-repair-54eab612513d/p005-01.b64","moon2-repair-54eab612513d/p005-02.b64","moon2-repair-54eab612513d/p005-03.b64"]};
+ window.fetch=async(input,init)=>{const url=typeof input==='string'?input:input.url;const match=url.match(/moon2-model18-c98efce62cd7\/part-(002|004|005)\.b64/);if(!match)return nativeFetch(input,init);const list=repairMap[match[1]],texts=await Promise.all(list.map(async path=>{const r=await nativeFetch(`${path}?v=54eab612513d`,{cache:'force-cache'});if(!r.ok)throw new Error(`Unable to load repaired model part ${match[1]}.`);return (await r.text()).trim();}));return new Response(texts.join(''),{status:200,headers:{'Content-Type':'text/plain;charset=utf-8'}});};
+ document.open();document.write(html);document.close();
 })().catch(error=>{document.body.innerHTML=`<main><h1>Unable to load Trafalgar Sky 2</h1><p>${String(error.message||error)}</p><button onclick="location.reload()">Reload</button></main>`;});
 </script></body></html>
