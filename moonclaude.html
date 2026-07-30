@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Trafalgar Sky — Sun &amp; Moon over Trafalgar Square</title>
+<meta name="description" content="A draggable 3D reconstruction of Trafalgar Square, London, showing the accurately calculated positions of the Sun and Moon for any date and time.">
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="moonclaude.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">
+      <button id="menuToggle" class="icon-btn" aria-label="Open time controls" aria-expanded="false">☰</button>
+      <span class="mark">Trafalgar&nbsp;Sky</span>
+      <span class="sub">Sun &amp; Moon over the Square</span>
+    </div>
+
+    <div class="chronometer" id="chronometer" aria-live="polite">
+      <div class="chrono-block">
+        <div class="chrono-date mono" id="chronoDate">—</div>
+        <div class="chrono-time"><span id="chronoTime">--:--</span><span class="secs">:<span id="chronoSecs">--</span></span></div>
+        <div class="chrono-zone" id="chronoZone">—</div>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="pill-toggle" role="group" aria-label="Time display standard">
+        <button id="btnLondonTime" aria-pressed="true" class="active">London</button>
+        <button id="btnUtcTime" aria-pressed="false">UTC</button>
+      </div>
+      <button id="menuToggleRight" class="icon-btn" aria-label="Open view controls" aria-expanded="false">⚙</button>
+    </div>
+  </header>
+
+  <div class="overlay-backdrop" id="overlayBackdrop"></div>
+
+  <div id="main">
+    <aside class="side-panel scroll" id="leftPanel" aria-label="Time controls">
+      <div>
+        <h2 class="panel-title">Time <span class="rule"></span></h2>
+
+        <fieldset>
+          <legend>Set date &amp; time</legend>
+          <label for="dateTimeInput">Date and time (<span id="dtInputZoneLabel">London civil time</span>)</label>
+          <input type="datetime-local" id="dateTimeInput" step="1">
+          <div class="row">
+            <button class="btn wide primary" id="btnNow">Now</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Step</legend>
+          <div class="row g3">
+            <button class="btn" id="stepDayBack" title="Back one day">−1 day</button>
+            <button class="btn" id="stepHourBack" title="Back one hour">−1 hr</button>
+            <button class="btn" id="stepMinBack" title="Back one minute">−1 min</button>
+          </div>
+          <div class="row g3">
+            <button class="btn" id="stepMinFwd" title="Forward one minute">+1 min</button>
+            <button class="btn" id="stepHourFwd" title="Forward one hour">+1 hr</button>
+            <button class="btn" id="stepDayFwd" title="Forward one day">+1 day</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Playback</legend>
+          <div class="row g2">
+            <button class="btn wide" id="btnPlay">▶ Play</button>
+            <button class="btn wide" id="btnPause" disabled>❚❚ Pause</button>
+          </div>
+          <div class="speed-row">
+            <input type="range" id="speedSlider" min="0" max="6" step="1" value="1">
+            <span id="speedLabel" class="mono">1×</span>
+          </div>
+          <div class="hint">Real time up to one simulated day per second.</div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Time of day</legend>
+          <input type="range" id="todSlider" min="0" max="86399" step="1" value="43200" aria-label="Time of day slider">
+          <div class="slider-value"><span>00:00</span><span>12:00</span><span>23:59</span></div>
+        </fieldset>
+      </div>
+    </aside>
+
+    <div id="viewportWrap">
+      <canvas id="scene-canvas" tabindex="0" aria-label="Interactive 3D view of Trafalgar Square with the Sun and Moon"></canvas>
+      <div id="compassBezel" aria-hidden="true"><div id="compassStrip"></div></div>
+      <div id="lightPhaseTag" class="viewport-overlay">Daylight</div>
+      <div id="horizonReadout" class="viewport-overlay">Sun <b id="sunQuick">—</b> · Moon <b id="moonQuick">—</b></div>
+      <div id="errorBanner" role="alert"></div>
+      <button id="toggleDataStrip" class="icon-btn" aria-label="Toggle data panels" aria-expanded="true">▾</button>
+      <div id="viewportLoading">
+        <div class="spinner"></div>
+        <p id="viewportLoadingText">Loading the sky over Trafalgar Square…</p>
+      </div>
+    </div>
+
+    <aside class="side-panel scroll" id="rightPanel" aria-label="Camera and view controls">
+      <div>
+        <h2 class="panel-title">Camera <span class="rule"></span></h2>
+        <fieldset>
+          <legend>Presets</legend>
+          <div class="row g2">
+            <button class="btn" id="viewReset">Reset view</button>
+            <button class="btn" id="viewAerial">Aerial view</button>
+          </div>
+          <div class="row g2">
+            <button class="btn" id="viewGround">Ground view</button>
+            <button class="btn" id="viewCentreSun">Centre Sun</button>
+          </div>
+          <div class="row g2"><button class="btn wide" id="viewCentreMoon">Centre Moon</button></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Field of view: <span id="fovValue" class="mono">55°</span></legend>
+          <input type="range" id="fovSlider" min="25" max="100" step="1" value="55">
+        </fieldset>
+
+        <fieldset>
+          <legend>Compass facing: <span id="facingValue" class="mono">N</span></legend>
+          <input type="range" id="facingSlider" min="0" max="359" step="1" value="0">
+        </fieldset>
+
+        <div class="hint">Drag to orbit (right-drag/2-finger to pan), scroll/pinch to zoom. Arrow keys rotate &amp; tilt (Shift = 3×) when the view has focus.</div>
+      </div>
+
+      <div>
+        <h2 class="panel-title">Sun &amp; Moon size <span class="rule"></span></h2>
+        <fieldset>
+          <legend>Sun display size: <span id="sunSizeValue" class="mono">1.0×</span></legend>
+          <input type="range" id="sunSizeSlider" min="1" max="5" step="0.1" value="1">
+        </fieldset>
+        <fieldset>
+          <legend>Moon display size: <span id="moonSizeValue" class="mono">1.0×</span></legend>
+          <input type="range" id="moonSizeSlider" min="1" max="5" step="0.1" value="1">
+        </fieldset>
+        <div class="hint">Illustrative only — does not change coordinates or the angular-diameter readouts below.</div>
+      </div>
+
+      <div>
+        <h2 class="panel-title">Lighting <span class="rule"></span></h2>
+        <fieldset>
+          <legend>Mode</legend>
+          <div class="row g3">
+            <button class="btn small" id="lightAuto" aria-pressed="true">Auto</button>
+            <button class="btn small" id="lightDay" aria-pressed="false">Daylight</button>
+            <button class="btn small" id="lightNight" aria-pressed="false">Night+</button>
+          </div>
+        </fieldset>
+      </div>
+
+      <div>
+        <h2 class="panel-title">World <span class="rule"></span></h2>
+        <fieldset>
+          <legend>Visibility</legend>
+          <button class="btn wide" id="btnHideWorld">Hide world</button>
+          <label for="worldOpacitySlider" style="margin-top:8px;">World opacity: <span id="worldOpacityValue" class="mono">100%</span></label>
+          <input type="range" id="worldOpacitySlider" min="0" max="100" step="1" value="100">
+        </fieldset>
+        <div class="hint">Stars shown are decorative and pseudorandom (fixed seed) — not real catalogue positions.</div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="dataStrip">
+    <div class="data-col moon-visual-col">
+      <h2 class="panel-title" style="align-self:flex-start;">Apparent Moon <span class="rule"></span></h2>
+      <canvas id="moonPhaseCanvas" width="150" height="150"></canvas>
+      <div class="moon-visual-caption" id="moonPhaseCaption">—</div>
+      <div class="obs-info" style="width:100%; margin-top:6px;">
+        <div class="data-item"><span class="k">Observer</span><span class="v">51.5080°N, 0.1282°W</span></div>
+        <div class="data-item"><span class="k">Elevation</span><span class="v">25 m</span></div>
+        <div class="data-item"><span class="k">Twilight phase</span><span class="v" id="twilightPhase">—</span></div>
+      </div>
+    </div>
+    <div class="data-col"><h2 class="data-panel-title sun"><span class="dot sun"></span>Sun</h2><div class="data-grid" id="sunData"></div></div>
+    <div class="data-col"><h2 class="data-panel-title moon"><span class="dot moon"></span>Moon</h2><div class="data-grid" id="moonData"></div></div>
+  </div>
+</div>
+
+<script>
+(async function loadTrafalgarSky(){
+  const sourceBase = 'https://raw.githubusercontent.com/cubicpostcode/cubicpostcode/main/';
+  const modules = [
+    'moonclaude-1.js','moonclaude-2.js','moonclaude-2b.js','moonclaude-2c.js','moonclaude-2d.js',
+    'moonclaude-3.js','moonclaude-3b.js','moonclaude-3c.js','moonclaude-3c2.js','moonclaude-3d.js'
+  ];
+  const loading = document.getElementById('viewportLoadingText');
+  try{
+    const codeParts = [];
+    for(const file of modules){
+      if(loading) loading.textContent = `Loading ${file}…`;
+      const response = await fetch(sourceBase + file + '?v=d7f562a5c19144aaaf157f4d16693a8f09f2191a', {cache:'no-store'});
+      if(!response.ok) throw new Error(`${file}: HTTP ${response.status}`);
+      codeParts.push(await response.text());
+    }
+    const domAlreadyReady = document.readyState !== 'loading';
+    const startup = domAlreadyReady ? '\nApp.init();' : '';
+    (0, eval)(codeParts.join('\n;\n') + startup);
+  }catch(error){
+    console.error('Unable to load Trafalgar Sky:', error);
+    const banner = document.getElementById('errorBanner');
+    if(banner){
+      banner.textContent = 'The application could not load its source modules. Please reload the page.';
+      banner.style.display = 'block';
+    }
+    const spinner = document.getElementById('viewportLoading');
+    if(spinner) spinner.classList.add('hidden');
+  }
+})();
+</script>
+</body>
+</html>
