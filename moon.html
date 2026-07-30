@@ -1,3 +1,247 @@
+<!--
+IDEAL GENERATION PROMPT FOR TRAFALGAR SKY / moon.html
+
+Build and publish a polished HTML5 single-page web app called “Trafalgar Sky” at:
+
+https://cubicpostcode.github.io/moon.html
+
+The app must show a draggable 3D reconstruction of Trafalgar Square in London and accurately display the apparent positions of the Sun and Moon for any selected date and time, past or future.
+
+Work autonomously and complete the full implementation, testing and GitHub Pages deployment. Ask questions only when a genuinely blocking decision cannot reasonably be inferred.
+
+OBSERVATION POINT
+
+Use this fixed observer location:
+
+Latitude: 51.508045° N
+Longitude: 0.128217° W
+Elevation: 25 metres
+Location: central Trafalgar Square, London
+
+ASTRONOMICAL ACCURACY
+
+Use a reputable astronomical calculation library such as Astronomy Engine, pinned to a specific stable version.
+
+The calculations should be comparable in accuracy to MoonCalc and must include:
+
+- Topocentric Sun and Moon positions
+- Lunar parallax
+- Atmospheric refraction
+- Light-time and aberration corrections where supported
+- Correct London civil time, including GMT and BST
+- UTC display
+- Dates in the past and future
+- Correct Moon phase and illuminated fraction
+- Correct local orientation of the Moon’s bright limb
+- Correct distinction between above and below the horizon
+
+Display for both the Sun and Moon:
+
+- Azimuth in degrees and compass direction
+- Refracted altitude
+- Right ascension and declination of date
+- J2000 right ascension and declination
+- Distance
+- Apparent angular diameter
+- Next rise
+- Next upper culmination or meridian transit
+- Next set
+
+For culmination, display the London date and time, altitude and compass direction.
+
+TIME CONTROLS
+
+Provide:
+
+- Date and time input
+- Choice between London civil time and UTC
+- “Now” button
+- −1 day, −1 hour and −1 minute buttons
+- +1 minute, +1 hour and +1 day buttons
+- Play and pause
+- Playback speeds from real time up to one simulated day per second
+- Time-of-day slider
+- Clearly visible clock and calendar
+
+3D TRAFALGAR SQUARE
+
+Do not use paid or copyrighted third-party model assets.
+
+Create an original, neat, lightweight, stylised architectural reconstruction using Three.js geometry generated in code.
+
+It should be recognisably Trafalgar Square and include:
+
+- Nelson’s Column
+- Nelson statue
+- Four lions
+- Both fountains
+- National Gallery façade, portico and dome
+- St Martin-in-the-Fields
+- Admiralty Arch
+- Northern terrace and steps
+- Plaza, surrounding roads and road markings
+- Trees, lamps and representative surrounding buildings
+
+The model does not need photorealistic detail, but it must be coherent, attractive and immediately recognisable. Avoid malformed geometry, intersecting surfaces or triangles connecting unrelated objects.
+
+Orient the scene to true compass directions:
+
+- +Z north
+- +X east
+
+CAMERA AND NAVIGATION
+
+Use Three.js OrbitControls.
+
+Support:
+
+- Left-drag or one-finger drag to orbit
+- Right-drag or two-finger drag to pan
+- Mouse wheel or pinch to zoom
+- Full upward and downward tilting
+- Reset 3D view
+- Aerial view
+- Ground view
+- Centre Sun
+- Centre Moon
+- Adjustable field of view
+- Adjustable compass-facing direction
+
+Keyboard controls:
+
+- Left arrow: rotate the world anticlockwise
+- Right arrow: rotate the world clockwise
+- Up arrow: tilt upward
+- Down arrow: tilt downward
+- Shift plus an arrow: move three times faster
+
+Arrow keys must not interfere while a text, date, range or select control is focused.
+
+SUN AND MOON DISPLAY
+
+Place the Sun and Moon at their correct calculated altitude and azimuth.
+
+Their base visual size may be slightly enlarged for visibility, but provide two independent illustrative-size controls:
+
+- Sun display size: 1.0× to 5.0×
+- Moon display size: 1.0× to 5.0×
+- Step size: 0.1×
+- Default: 1.0×
+
+These controls must change only the visual display size. They must not alter coordinates, angular diameter readouts or astronomical calculations.
+
+The Sun’s glow should scale with the Sun.
+
+Render the Moon as a three-dimensional sphere with:
+
+- Correct illuminated fraction
+- Correct terminator
+- Correct bright-limb orientation
+- Subtle surface and crater detail
+- Faint earthshine where appropriate
+
+LIGHTING AND ATMOSPHERE
+
+Use the calculated Sun direction as the main directional light so buildings cast time-dependent shadows.
+
+Provide:
+
+- Auto lighting
+- Forced daylight
+- Enhanced night view
+
+The auto mode should respond to the Sun’s altitude and distinguish:
+
+- Daylight
+- Civil twilight
+- Nautical twilight
+- Astronomical twilight
+- Night
+
+Objects below the true horizon should be hidden by the ground or horizon rather than appearing through the Earth.
+
+WORLD VISIBILITY
+
+Provide:
+
+- Hide world / Show world button
+- World-opacity slider from 0% to 100%
+
+At:
+
+- 100%: the world is fully solid
+- 1–99%: the world becomes progressively translucent
+- 0%: only the Sun and Moon remain visible
+
+World opacity must not alter the Sun or Moon.
+
+STARS
+
+Decorative pseudorandom stars are acceptable for this version, but they must be described honestly as decorative and not as real catalogue stars.
+
+Use a fixed random seed so the decorative star pattern does not change on every reload.
+
+INTERFACE
+
+Use a clean, responsive, dark astronomical interface suitable for desktop, tablet and mobile.
+
+The main areas should include:
+
+- Time and camera controls
+- Large interactive 3D scene
+- Apparent Moon visualisation
+- Observation information
+- Separate Sun and Moon data panels
+
+Use British English throughout.
+
+Make all controls accessible with labels and sensible keyboard behaviour.
+
+PERFORMANCE
+
+The app should:
+
+- Load quickly on an ordinary computer and modern phone
+- Avoid unnecessary external assets
+- Use efficient geometry
+- Limit device-pixel ratio where appropriate
+- Remain responsive during animated time playback
+- Pin external JavaScript library versions
+
+DELIVERY
+
+Publish the finished app to the master branch of:
+
+cubicpostcode/cubicpostcode.github.io
+
+The final public URL must be:
+
+https://cubicpostcode.github.io/moon.html
+
+Do not modify unrelated pages or files.
+
+Do not report that publication is successful merely because a GitHub commit succeeded.
+
+Before declaring completion:
+
+1. Confirm that moon.html exists on the deployment branch.
+2. Verify all referenced files exist.
+3. Open the actual GitHub Pages URL.
+4. Confirm it returns the application rather than a 404 page.
+5. Confirm the astronomical engine loads.
+6. Confirm the Three.js scene loads.
+7. Test the Sun and Moon position updates.
+8. Test the Moon illumination.
+9. Test mouse, touch and arrow-key camera movement.
+10. Test upward and downward tilt.
+11. Test world opacity and Hide world.
+12. Test Sun and Moon display-size sliders at 1× and 5×.
+13. Test culmination displays.
+14. Check the browser console for errors.
+15. Use a versioned query-string link when handing over a newly deployed build.
+
+Leave the source understandable and maintainable. Avoid fragile split Base64 loaders unless file-size limits genuinely require them. Prefer an ordinary HTML file and clearly named static JavaScript or asset files.
+-->
 <!doctype html>
 <html lang="en-GB">
 <head>
