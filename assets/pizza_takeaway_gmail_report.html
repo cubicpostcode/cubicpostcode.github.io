@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Pizza Takeaway Spending Report — Gmail Estimate</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --sheet: rgba(255, 255, 255, 0.94);
+      --sheet-strong: #ffffff;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --grid: #dbe3ec;
+      --grid-dark: #c5d0dc;
+      --accent: #2563eb;
+      --accent-soft: #eaf2ff;
+      --positive: #0f766e;
+      --positive-soft: #e6fffb;
+      --warning: #9a6700;
+      --warning-soft: #fff7d6;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    .animated-bg,
+    .animated-bg::before,
+    .animated-bg::after {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+    }
+
+    .animated-bg {
+      z-index: -3;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.14), transparent 26%),
+        radial-gradient(circle at 84% 15%, rgba(14, 165, 233, 0.11), transparent 24%),
+        radial-gradient(circle at 78% 82%, rgba(15, 118, 110, 0.10), transparent 30%),
+        linear-gradient(135deg, #f8fafc 0%, #eef4fb 48%, #f8fafc 100%);
+      background-size: 140% 140%;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .animated-bg::before {
+      z-index: -2;
+      opacity: 0.42;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.17) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.17) 1px, transparent 1px);
+      background-size: 32px 32px;
+      animation: gridMove 24s linear infinite;
+      mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.65) 55%, transparent 100%);
+    }
+
+    .animated-bg::after {
+      z-index: -1;
+      inset: -20%;
+      background: conic-gradient(from 180deg at 50% 50%, rgba(37,99,235,.08), rgba(14,165,233,.02), rgba(15,118,110,.08), rgba(37,99,235,.08));
+      filter: blur(50px);
+      animation: rotateGlow 30s linear infinite;
+    }
+
+    @keyframes drift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
+    }
+
+    @keyframes gridMove {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(32px, 32px, 0); }
+    }
+
+    @keyframes rotateGlow {
+      to { transform: rotate(360deg) scale(1.06); }
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 38px auto 64px;
+    }
+
+    .report {
+      background: var(--sheet);
+      border: 1px solid rgba(197, 208, 220, 0.85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      background: linear-gradient(180deg, #f8fafc, #eef3f8);
+      border-bottom: 1px solid var(--grid-dark);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .toolbar .left,
+    .toolbar .right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #94a3b8;
+      box-shadow: 16px 0 #cbd5e1, 32px 0 #e2e8f0;
+      margin-right: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 10px;
+      border: 1px solid var(--grid-dark);
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      color: #475569;
+      font-weight: 650;
+    }
+
+    .header {
+      padding: 32px 34px 26px;
+      border-bottom: 1px solid var(--grid);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,250,252,.92)),
+        linear-gradient(90deg, rgba(37,99,235,.05), transparent);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 900px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      max-width: 850px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1.02rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--grid);
+      background: rgba(248,250,252,.75);
+    }
+
+    .metric {
+      min-height: 138px;
+      padding: 24px 22px;
+      border-right: 1px solid var(--grid);
+      position: relative;
+    }
+
+    .metric:last-child { border-right: 0; }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .metric-value {
+      margin-top: 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .metric-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.45;
+    }
+
+    .content {
+      padding: 28px 30px 34px;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section:first-child { margin-top: 0; }
+
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: .82rem;
+      text-align: right;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--grid-dark);
+      border-radius: 14px;
+      background: var(--sheet-strong);
+      box-shadow: 0 7px 24px rgba(15,23,42,.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 650px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-right: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th:last-child,
+    td:last-child { border-right: 0; }
+
+    tr:last-child td { border-bottom: 0; }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #eef3f8;
+      color: #334155;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    td { font-size: .93rem; }
+
+    td.number,
+    th.number { text-align: right; }
+
+    .total-row td {
+      background: #f8fbff;
+      font-weight: 800;
+    }
+
+    .best {
+      color: var(--positive);
+      font-weight: 850;
+    }
+
+    .range { color: var(--muted); }
+
+    .bar-cell {
+      width: 42%;
+      min-width: 240px;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: #edf2f7;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--w);
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2563eb, #0ea5e9);
+      animation: fill 1.2s ease both;
+      transform-origin: left;
+    }
+
+    @keyframes fill {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+    }
+
+    .note-card {
+      padding: 18px;
+      border: 1px solid var(--grid-dark);
+      border-radius: 14px;
+      background: rgba(255,255,255,.9);
+    }
+
+    .note-card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .note-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: .92rem;
+    }
+
+    .callout {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-left: 5px solid var(--warning);
+      border-radius: 10px;
+      background: var(--warning-soft);
+      color: #6b4e00;
+      line-height: 1.6;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 30px 24px;
+      border-top: 1px solid var(--grid);
+      color: var(--muted);
+      font-size: .8rem;
+      background: rgba(248,250,252,.8);
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric:nth-child(2) { border-right: 0; }
+      .metric:nth-child(-n+2) { border-bottom: 1px solid var(--grid); }
+      .method-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 16px, 1180px); margin-top: 12px; }
+      .report { border-radius: 16px; }
+      .toolbar { align-items: flex-start; }
+      .toolbar .right { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .metric { border-right: 0; border-bottom: 1px solid var(--grid); }
+      .metric:last-child { border-bottom: 0; }
+      .content { padding: 22px 16px 28px; }
+      .section-title { align-items: flex-start; flex-direction: column; }
+      .section-note { text-align: left; }
+      .foot { flex-direction: column; padding: 18px 16px 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media print {
+      .animated-bg { display: none; }
+      body { background: white; }
+      .wrap { width: 100%; margin: 0; }
+      .report { box-shadow: none; border: 0; }
+      .toolbar { display: none; }
+      .table-wrap { box-shadow: none; }
+      .bar-fill { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <article class="report" aria-labelledby="report-title">
+      <div class="toolbar">
+        <div class="left">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="badge">Gmail analysis</span>
+          <span class="badge">2005–31 Jul 2026</span>
+        </div>
+        <div class="right">
+          <span>Spreadsheet-style estimate</span>
+          <span>•</span>
+          <span>Nominal GBP</span>
+        </div>
+      </div>
+
+      <header class="header">
+        <div class="eyebrow">Pizza takeaway spending report</div>
+        <h1 id="report-title">Estimated lifetime pizza orders and spending found in Gmail</h1>
+        <p class="subtitle">
+          A reconstructed estimate based on order confirmations and receipts from Deliveroo, Just Eat,
+          Domino’s, Papa John’s, Uber Eats, Hungryhouse, Pizza Da Vinci and Pizza Fresco.
+        </p>
+      </header>
+
+      <section class="summary-grid" aria-label="Headline estimates">
+        <div class="metric">
+          <div class="metric-label">Confirmed takeaway orders</div>
+          <div class="metric-value">636</div>
+          <div class="metric-note">Plausible range: 620–660</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Estimated pizzas</div>
+          <div class="metric-value">650</div>
+          <div class="metric-note">Plausible range: 580–740</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Total checkout spend</div>
+          <div class="metric-value">£14.2k</div>
+          <div class="metric-note">Estimated range: £12.5k–£16.0k</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Pizza-only component</div>
+          <div class="metric-value">£11.0k</div>
+          <div class="metric-note">Excludes most extras and fees</div>
+        </div>
+      </section>
+
+      <div class="content">
+        <section class="section">
+          <div class="section-title">
+            <h2>Executive estimate</h2>
+            <div class="section-note">Best estimate compared with a plausible uncertainty range</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Measure</th>
+                  <th class="number">Best estimate</th>
+                  <th class="number">Plausible range</th>
+                  <th>Interpretation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Pizza-takeaway orders</td>
+                  <td class="number best">636</td>
+                  <td class="number range">620–660</td>
+                  <td>Distinct confirmed pizza-restaurant transactions found in Gmail</td>
+                </tr>
+                <tr>
+                  <td>Actual full-sized pizzas</td>
+                  <td class="number best">650</td>
+                  <td class="number range">580–740</td>
+                  <td>Adjusted for dessert-only baskets and occasional multi-pizza orders</td>
+                </tr>
+                <tr>
+                  <td>Total checkout spending</td>
+                  <td class="number best">£14,200</td>
+                  <td class="number range">£12,500–£16,000</td>
+                  <td>Includes pizza, toppings, sides, cakes, delivery and service charges</td>
+                </tr>
+                <tr>
+                  <td>Pizza itself</td>
+                  <td class="number best">£11,000</td>
+                  <td class="number range">£10,000–£12,000</td>
+                  <td>Estimated food value attributable to pizzas rather than extras and fees</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2>Orders by platform</h2>
+            <div class="section-note">Deliveroo dominates the record</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Platform or restaurant</th>
+                  <th class="number">Confirmation events</th>
+                  <th class="number">Share</th>
+                  <th class="bar-cell">Relative volume</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deliveroo pizza restaurants</td>
+                  <td class="number">568</td>
+                  <td class="number">89.3%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 89.3%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Just Eat confirmed pizza orders</td>
+                  <td class="number">56</td>
+                  <td class="number">8.8%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 8.8%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Domino’s direct</td>
+                  <td class="number">4</td>
+                  <td class="number">0.6%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.6%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Papa John’s direct</td>
+                  <td class="number">4</td>
+                  <td class="number">0.6%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.6%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Uber Eats</td>
+                  <td class="number">1</td>
+                  <td class="number">0.2%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.2%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Hungryhouse</td>
+                  <td class="number">1</td>
+                  <td class="number">0.2%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.2%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Pizza Da Vinci direct</td>
+                  <td class="number">1</td>
+                  <td class="number">0.2%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.2%"></div></div></td>
+                </tr>
+                <tr>
+                  <td>Pizza Fresco direct</td>
+                  <td class="number">1</td>
+                  <td class="number">0.2%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 0.2%"></div></div></td>
+                </tr>
+                <tr class="total-row">
+                  <td>Total</td>
+                  <td class="number">636</td>
+                  <td class="number">100%</td>
+                  <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="--w: 100%"></div></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2>Deliveroo pizza orders by year</h2>
+            <div class="section-note">Confirmed pizza-restaurant emails in Gmail</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th class="number">Orders</th>
+                  <th class="number">Share of Deliveroo total</th>
+                  <th class="bar-cell">Relative volume</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2020</td><td class="number">41</td><td class="number">7.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:37.6%"></div></div></td></tr>
+                <tr><td>2021</td><td class="number">109</td><td class="number">19.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></td></tr>
+                <tr><td>2022</td><td class="number">79</td><td class="number">13.9%</td><td><div class="bar-track"><div class="bar-fill" style="--w:72.5%"></div></div></td></tr>
+                <tr><td>2023</td><td class="number">96</td><td class="number">16.9%</td><td><div class="bar-track"><div class="bar-fill" style="--w:88.1%"></div></div></td></tr>
+                <tr><td>2024</td><td class="number">107</td><td class="number">18.8%</td><td><div class="bar-track"><div class="bar-fill" style="--w:98.2%"></div></div></td></tr>
+                <tr><td>2025</td><td class="number">78</td><td class="number">13.7%</td><td><div class="bar-track"><div class="bar-fill" style="--w:71.6%"></div></div></td></tr>
+                <tr><td>2026 to 31 July</td><td class="number">58</td><td class="number">10.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:53.2%"></div></div></td></tr>
+                <tr class="total-row"><td>Total</td><td class="number">568</td><td class="number">100%</td><td><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2>Methodology and limitations</h2>
+            <div class="section-note">Why this is a careful estimate rather than an exact bank total</div>
+          </div>
+          <div class="method-grid">
+            <div class="note-card">
+              <h3>How the estimate was built</h3>
+              <p>
+                Order confirmations were separated from newsletters, promotions, review requests, unsuccessful orders and cancellations.
+                Receipts from different years were sampled to avoid applying modern prices retrospectively. Basket composition was adjusted
+                because some pizza-restaurant orders contained desserts or sides only, while some larger orders likely contained multiple pizzas.
+              </p>
+            </div>
+            <div class="note-card">
+              <h3>Known uncertainty</h3>
+              <p>
+                Cash orders, telephone orders, deleted messages and receipts sent to other accounts are not visible. A small number of duplicate,
+                refunded or replacement confirmations may remain. Figures are nominal pounds paid at the time and are not inflation-adjusted.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Earliest unambiguous Gmail evidence:</strong> a Just Eat pizza order dated 6 July 2009.
+            No confirmed pizza receipts were found for 2005–2008, which may reflect offline ordering, another email account or missing messages.
+          </div>
+        </section>
+      </div>
+
+      <footer class="foot">
+        <span>Prepared from Gmail order-confirmation evidence.</span>
+        <span>No messages were deleted, archived, moved, or marked as read.</span>
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
