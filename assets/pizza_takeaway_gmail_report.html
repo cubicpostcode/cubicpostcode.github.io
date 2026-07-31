@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -301,6 +302,23 @@
       font-weight: 800;
     }
 
+    .zero-row td {
+      color: #7c8798;
+      background: #fbfcfe;
+    }
+
+    .evidence-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .76rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
     .best {
       color: var(--positive);
       font-weight: 850;
@@ -444,7 +462,7 @@
         <div class="eyebrow">Pizza takeaway spending report</div>
         <h1 id="report-title">Estimated lifetime pizza orders and spending found in Gmail</h1>
         <p class="subtitle">
-          A reconstructed estimate based on order confirmations and receipts from Deliveroo, Just Eat,
+          A reconstructed estimate covering the complete Gmail evidence period from 2005 to 2026, based on order confirmations and receipts from Deliveroo, Just Eat,
           Domino’s, Papa John’s, Uber Eats, Hungryhouse, Pizza Da Vinci and Pizza Fresco.
         </p>
       </header>
@@ -595,8 +613,53 @@
 
         <section class="section">
           <div class="section-title">
-            <h2>Deliveroo pizza orders by year</h2>
-            <div class="section-note">Confirmed pizza-restaurant emails in Gmail</div>
+            <h2>Full Gmail chronology: all platforms, 2005–2026</h2>
+            <div class="section-note">Zero means no surviving confirmed receipt was found—not proof that no pizza was ordered</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th class="number">Confirmed orders</th>
+                  <th class="number">Share of total</th>
+                  <th class="bar-cell">Relative volume</th>
+                  <th>Evidence summary</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="zero-row"><td>2005</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr class="zero-row"><td>2006</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr class="zero-row"><td>2007</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr class="zero-row"><td>2008</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr><td>2009</td><td class="number">1</td><td class="number">0.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:0.9%"></div></div></td><td><span class="evidence-tag">Earliest receipt</span> Just Eat / Pizza On Demand</td></tr>
+                <tr class="zero-row"><td>2010</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr><td>2011</td><td class="number">1</td><td class="number">0.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:0.9%"></div></div></td><td>Domino’s direct</td></tr>
+                <tr><td>2012</td><td class="number">1</td><td class="number">0.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:0.9%"></div></div></td><td>Pizza Fresco direct</td></tr>
+                <tr class="zero-row"><td>2013</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr class="zero-row"><td>2014</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr class="zero-row"><td>2015</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr><td>2016</td><td class="number">7</td><td class="number">1.1%</td><td><div class="bar-track"><div class="bar-fill" style="--w:6.3%"></div></div></td><td>3 Domino’s, 3 Papa John’s and 1 Hungryhouse</td></tr>
+                <tr class="zero-row"><td>2017</td><td class="number">0</td><td class="number">0.0%</td><td><div class="bar-track"></div></td><td>No surviving confirmed Gmail receipt found</td></tr>
+                <tr><td>2018</td><td class="number">26</td><td class="number">4.1%</td><td><div class="bar-track"><div class="bar-fill" style="--w:23.4%"></div></div></td><td>Primarily Just Eat orders from Pizza Da Vinci and Pizza GoGo</td></tr>
+                <tr><td>2019</td><td class="number">20</td><td class="number">3.1%</td><td><div class="bar-track"><div class="bar-fill" style="--w:18.0%"></div></div></td><td>19 Just Eat confirmations and 1 direct Pizza Da Vinci order</td></tr>
+                <tr><td>2020</td><td class="number">46</td><td class="number">7.2%</td><td><div class="bar-track"><div class="bar-fill" style="--w:41.4%"></div></div></td><td>41 Deliveroo and 5 Just Eat confirmations</td></tr>
+                <tr><td>2021</td><td class="number">111</td><td class="number">17.5%</td><td><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></td><td><span class="evidence-tag">Peak year</span> 109 Deliveroo, 1 Just Eat and 1 Uber Eats</td></tr>
+                <tr><td>2022</td><td class="number">79</td><td class="number">12.4%</td><td><div class="bar-track"><div class="bar-fill" style="--w:71.2%"></div></div></td><td>Deliveroo pizza-restaurant confirmations</td></tr>
+                <tr><td>2023</td><td class="number">100</td><td class="number">15.7%</td><td><div class="bar-track"><div class="bar-fill" style="--w:90.1%"></div></div></td><td>96 Deliveroo and 4 Just Eat confirmations</td></tr>
+                <tr><td>2024</td><td class="number">108</td><td class="number">17.0%</td><td><div class="bar-track"><div class="bar-fill" style="--w:97.3%"></div></div></td><td>107 Deliveroo and 1 Papa John’s direct order</td></tr>
+                <tr><td>2025</td><td class="number">78</td><td class="number">12.3%</td><td><div class="bar-track"><div class="bar-fill" style="--w:70.3%"></div></div></td><td>Deliveroo pizza-restaurant confirmations</td></tr>
+                <tr><td>2026 to 31 July</td><td class="number">58</td><td class="number">9.1%</td><td><div class="bar-track"><div class="bar-fill" style="--w:52.3%"></div></div></td><td>Partial year; Deliveroo pizza-restaurant confirmations</td></tr>
+                <tr class="total-row"><td>Total</td><td class="number">636</td><td class="number">100%</td><td><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div></td><td>All confirmed order events used in the estimate</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2>Supporting detail: Deliveroo pizza orders by year</h2>
+            <div class="section-note">This supporting table begins in 2020 because no Deliveroo pizza confirmations were found before then</div>
           </div>
           <div class="table-wrap">
             <table>
