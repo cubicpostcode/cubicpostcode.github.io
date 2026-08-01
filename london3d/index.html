@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#071224" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <title>Cubic Postcode Celestial Beacon — React V3.8 World-Locked Moon Timeline</title>
+    <title>Cubic Postcode Celestial Beacon — React V3.8.2 World-Locked Moon Timeline</title>
     <script>
       window.__CP_QUALITY = (() => {
         const requested = new URLSearchParams(location.search).get('quality');
@@ -65,28 +65,7 @@
         };
       })();
     </script>
-    <script>
-      (() => {
-        const nativeFetch = window.fetch.bind(window);
-        window.fetch = async (input, init) => {
-          const requested = typeof input === 'string' ? input : (input && input.url) || '';
-          if (/trafalgar-square-stable-v38\.glb(?:[?#]|$)/.test(requested)) {
-            if (!('DecompressionStream' in window)) throw new Error('This browser cannot decompress the Trafalgar Square model. Please use a current Chromium, Firefox, or Safari browser.');
-            const compressedUrl = new URL('./models/trafalgar-square-stable-v38.glb.gz', location.href);
-            const response = await nativeFetch(compressedUrl, { cache: 'force-cache' });
-            if (!response.ok) throw new Error(`Unable to load compressed Trafalgar model (${response.status})`);
-            if (!response.body) throw new Error('The compressed Trafalgar model response has no readable stream.');
-            const headers = new Headers(response.headers);
-            headers.set('Content-Type', 'model/gltf-binary');
-            headers.delete('Content-Encoding');
-            headers.delete('Content-Length');
-            return new Response(response.body.pipeThrough(new DecompressionStream('gzip')), { status: 200, headers });
-          }
-          return nativeFetch(input, init);
-        };
-      })();
-    </script>
-    <script type="module" crossorigin src="./assets/cubic-postcode-beacon-react-timeline-v38-gzip-loader.js?v=384"></script>
+    <script type="module" src="./assets/london3d-bootstrap-v382.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/cubic-postcode-beacon-react-timeline-v38.css?v=380" />
   </head>
   <body>
@@ -94,14 +73,14 @@
     <div id="hqLoading" class="hq-loading">
       <div class="hq-loading-card">
         <div class="hq-beam"></div>
-        <strong>Loading the celestial timeline…</strong>
-        <span>The stable Trafalgar Square world, world-locked Moon beam and astronomical day controls are being prepared</span>
+        <strong>Loading London 3D bootstrap 3.8.2…</strong>
+        <span>A cache-proof startup loader is downloading the application and Trafalgar Square model</span>
       </div>
     </div>
     <aside id="beaconHud" class="beacon-hud" aria-label="Celestial beacon time and astronomy controls">
       <button id="beaconToggle" class="beacon-title" type="button" aria-expanded="true">
         <span class="beacon-mini-beam"></span>
-        <span><b>Cubic Postcode Celestial Beacon</b><small>React V3.8 · World-Locked Moon · <i id="qualityMode">AUTO</i></small></span>
+        <span><b>Cubic Postcode Celestial Beacon</b><small>React V3.8.2 · World-Locked Moon · <i id="qualityMode">AUTO</i></small></span>
       </button>
       <div id="beaconBody" class="beacon-body">
         <button id="copyPostcode" class="origin-address" type="button" title="Copy 22-digit summit Cubic Postcode">
@@ -115,17 +94,34 @@
             <select id="zoneSelect" aria-label="Time zone"><option value="london">London</option><option value="utc">UTC</option></select>
           </div>
           <div class="step-row">
-            <button type="button" data-days="-1">−1 day</button><button type="button" data-step="-3600000">−1 h</button><button type="button" data-step="-60000">−1 min</button><button type="button" id="nowBtn">Now</button><button type="button" data-step="60000">+1 min</button><button type="button" data-step="3600000">+1 h</button><button type="button" data-days="1">+1 day</button>
+            <button type="button" data-days="-1">−1 day</button>
+            <button type="button" data-step="-3600000">−1 h</button>
+            <button type="button" data-step="-60000">−1 min</button>
+            <button type="button" id="nowBtn">Now</button>
+            <button type="button" data-step="60000">+1 min</button>
+            <button type="button" data-step="3600000">+1 h</button>
+            <button type="button" data-days="1">+1 day</button>
           </div>
           <div class="play-row">
             <button type="button" id="playBtn">▶ Play</button>
-            <select id="speedSelect" aria-label="Simulation playback speed"><option value="1">Real time</option><option value="60">1 min / sec</option><option value="3600">1 hour / sec</option><option value="86400">1 day / sec</option></select>
+            <select id="speedSelect" aria-label="Simulation playback speed">
+              <option value="1">Real time</option>
+              <option value="60">1 min / sec</option>
+              <option value="3600">1 hour / sec</option>
+              <option value="86400">1 day / sec</option>
+            </select>
             <span>Simulation</span>
           </div>
         </section>
         <div class="beam-data">
-          <div class="beam-card sun"><div class="beam-row sun"><i></i><span>Sun</span><b id="sunReading">Calculating…</b></div><div id="sunEvents" class="event-line">Rise — · Culmination — · Set —</div></div>
-          <div class="beam-card moon"><div class="beam-row moon"><i></i><span>Moon</span><b id="moonReading">Calculating…</b></div><div id="moonEvents" class="event-line">Rise — · Culmination — · Set —</div></div>
+          <div class="beam-card sun">
+            <div class="beam-row sun"><i></i><span>Sun</span><b id="sunReading">Calculating…</b></div>
+            <div id="sunEvents" class="event-line">Rise — · Culmination — · Set —</div>
+          </div>
+          <div class="beam-card moon">
+            <div class="beam-row moon"><i></i><span>Moon</span><b id="moonReading">Calculating…</b></div>
+            <div id="moonEvents" class="event-line">Rise — · Culmination — · Set —</div>
+          </div>
         </div>
         <div id="beaconClock" class="beacon-clock">Current simulation time · London</div>
         <div class="beacon-note">The Moon stream is now transformed only by its calculated topocentric sky direction and is depth-tested inside the 3D world; camera movement no longer controls its spatial appearance. Rise, culmination and set refer to the selected London or UTC calendar day.</div>
@@ -134,32 +130,104 @@
     <div id="beaconToast" class="beacon-toast">Copied</div>
     <script>
       (() => {
-        const hud = document.getElementById('beaconHud'); const cpTime = window.__CP_TIME;
+        const hud = document.getElementById('beaconHud');
+        const cpTime = window.__CP_TIME;
         document.getElementById('qualityMode').textContent = String(window.__CP_QUALITY || 'balanced').toUpperCase();
-        const toggle = document.getElementById('beaconToggle'), toast = document.getElementById('beaconToast'), dateInput = document.getElementById('dateInput'), timeInput = document.getElementById('timeInput'), zoneSelect = document.getElementById('zoneSelect'), playBtn = document.getElementById('playBtn'), speedSelect = document.getElementById('speedSelect');
-        toggle.addEventListener('click', () => { const closed = hud.classList.toggle('closed'); toggle.setAttribute('aria-expanded', String(!closed)); });
-        document.getElementById('copyPostcode').addEventListener('click', async () => { try { await navigator.clipboard.writeText('6821822164313072477990'); toast.textContent = '22-digit Cubic Postcode copied'; } catch { toast.textContent = '6821822164313072477990'; } toast.classList.add('show'); clearTimeout(window.__beaconToastTimer); window.__beaconToastTimer = setTimeout(() => toast.classList.remove('show'), 1800); });
+        const toggle = document.getElementById('beaconToggle');
+        const toast = document.getElementById('beaconToast');
+        const dateInput = document.getElementById('dateInput');
+        const timeInput = document.getElementById('timeInput');
+        const zoneSelect = document.getElementById('zoneSelect');
+        const playBtn = document.getElementById('playBtn');
+        const speedSelect = document.getElementById('speedSelect');
+        toggle.addEventListener('click', () => {
+          const closed = hud.classList.toggle('closed');
+          toggle.setAttribute('aria-expanded', String(!closed));
+        });
+        document.getElementById('copyPostcode').addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText('6821822164313072477990'); toast.textContent = '22-digit Cubic Postcode copied'; }
+          catch { toast.textContent = '6821822164313072477990'; }
+          toast.classList.add('show');
+          clearTimeout(window.__beaconToastTimer);
+          window.__beaconToastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+        });
         window.addEventListener('error', event => console.error('Celestial Beacon runtime error:', event.error || event.message));
         window.addEventListener('unhandledrejection', event => console.error('Celestial Beacon unhandled rejection:', event.reason));
         const pad = value => String(value).padStart(2, '0');
-        const refreshInputs = force => { if (!force && (document.activeElement === dateInput || document.activeElement === timeInput)) return; const p = cpTime.getParts(cpTime.getDate()); dateInput.value = `${p.year}-${pad(p.month)}-${pad(p.day)}`; timeInput.value = `${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`; zoneSelect.value = cpTime.getZone(); playBtn.textContent = cpTime.isPlaying() ? '❚❚ Pause' : '▶ Play'; speedSelect.value = String(cpTime.getSpeed()); };
-        const applyInputs = () => { if (!dateInput.value || !timeInput.value) return; const [year, month, day] = dateInput.value.split('-').map(Number); const [hour, minute, second = 0] = timeInput.value.split(':').map(Number); cpTime.setPlaying(false); cpTime.setDate(cpTime.fromParts({year,month,day,hour,minute,second})); refreshInputs(true); };
-        dateInput.addEventListener('change', applyInputs); timeInput.addEventListener('change', applyInputs); zoneSelect.addEventListener('change', () => { cpTime.setZone(zoneSelect.value); refreshInputs(true); });
+        const refreshInputs = force => {
+          if (!force && (document.activeElement === dateInput || document.activeElement === timeInput)) return;
+          const p = cpTime.getParts(cpTime.getDate());
+          dateInput.value = `${p.year}-${pad(p.month)}-${pad(p.day)}`;
+          timeInput.value = `${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`;
+          zoneSelect.value = cpTime.getZone();
+          playBtn.textContent = cpTime.isPlaying() ? '❚❚ Pause' : '▶ Play';
+          speedSelect.value = String(cpTime.getSpeed());
+        };
+        const applyInputs = () => {
+          if (!dateInput.value || !timeInput.value) return;
+          const [year, month, day] = dateInput.value.split('-').map(Number);
+          const [hour, minute, second = 0] = timeInput.value.split(':').map(Number);
+          cpTime.setPlaying(false);
+          cpTime.setDate(cpTime.fromParts({year,month,day,hour,minute,second}));
+          refreshInputs(true);
+        };
+        dateInput.addEventListener('change', applyInputs);
+        timeInput.addEventListener('change', applyInputs);
+        zoneSelect.addEventListener('change', () => { cpTime.setZone(zoneSelect.value); refreshInputs(true); });
         document.querySelectorAll('[data-step]').forEach(button => button.addEventListener('click', () => { cpTime.setPlaying(false); cpTime.step(Number(button.dataset.step)); refreshInputs(true); }));
         document.querySelectorAll('[data-days]').forEach(button => button.addEventListener('click', () => { cpTime.setPlaying(false); cpTime.stepDays(Number(button.dataset.days)); refreshInputs(true); }));
-        document.getElementById('nowBtn').addEventListener('click', () => { cpTime.now(); refreshInputs(true); }); playBtn.addEventListener('click', () => { cpTime.setPlaying(!cpTime.isPlaying()); refreshInputs(true); }); speedSelect.addEventListener('change', () => { cpTime.setSpeed(Number(speedSelect.value)); refreshInputs(true); });
+        document.getElementById('nowBtn').addEventListener('click', () => { cpTime.now(); refreshInputs(true); });
+        playBtn.addEventListener('click', () => { cpTime.setPlaying(!cpTime.isPlaying()); refreshInputs(true); });
+        speedSelect.addEventListener('change', () => { cpTime.setSpeed(Number(speedSelect.value)); refreshInputs(true); });
         const compass = az => ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round((((az % 360) + 360) % 360) / 22.5) % 16];
-        const eventTime = date => date ? new Intl.DateTimeFormat('en-GB', { timeZone: cpTime.getZoneName(), hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(date)) : '—';
-        const eventLine = events => { if (!events) return 'Rise — · Culmination — · Set —'; const culm = events.culmination; const culmText = culm ? `${eventTime(culm.date)} (${culm.altitude.toFixed(1)}°)` : '—'; return `Rise ${eventTime(events.rise)} · Culmination ${culmText} · Set ${eventTime(events.set)}`; };
+        const eventTime = date => {
+          if (!date) return '—';
+          return new Intl.DateTimeFormat('en-GB', { timeZone: cpTime.getZoneName(), hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(date));
+        };
+        const eventLine = events => {
+          if (!events) return 'Rise — · Culmination — · Set —';
+          const culm = events.culmination;
+          const culmText = culm ? `${eventTime(culm.date)} (${culm.altitude.toFixed(1)}°)` : '—';
+          return `Rise ${eventTime(events.rise)} · Culmination ${culmText} · Set ${eventTime(events.set)}`;
+        };
         let modelFinishedAt = 0;
         setInterval(() => {
-          refreshInputs(false); const data = window.__cubicBeaconData;
-          if (data) { document.getElementById('sunReading').textContent = `${data.sun.az.toFixed(1)}° ${compass(data.sun.az)} · ${data.sun.alt.toFixed(1)}° alt`; const illum = Number.isFinite(data.moon.illum) ? ` · ${(data.moon.illum * 100).toFixed(0)}% lit` : ''; document.getElementById('moonReading').textContent = `${data.moon.az.toFixed(1)}° ${compass(data.moon.az)} · ${data.moon.alt.toFixed(1)}° alt${illum}`; document.getElementById('sunEvents').textContent = eventLine(data.sun.events); document.getElementById('moonEvents').textContent = eventLine(data.moon.events); const mode = cpTime.isPlaying() ? ` · playing ×${cpTime.getSpeed().toLocaleString('en-GB')}` : ' · paused'; document.getElementById('beaconClock').textContent = new Intl.DateTimeFormat('en-GB', { timeZone: cpTime.getZoneName(), weekday:'short', year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23', timeZoneName:'short' }).format(data.time) + mode; }
-          if (window.__cpModelReady && !modelFinishedAt) modelFinishedAt = performance.now(); if (modelFinishedAt && performance.now() - modelFinishedAt > 1000) document.getElementById('hqLoading')?.classList.add('hidden');
+          refreshInputs(false);
+          const data = window.__cubicBeaconData;
+          if (data) {
+            document.getElementById('sunReading').textContent = `${data.sun.az.toFixed(1)}° ${compass(data.sun.az)} · ${data.sun.alt.toFixed(1)}° alt`;
+            const illum = Number.isFinite(data.moon.illum) ? ` · ${(data.moon.illum * 100).toFixed(0)}% lit` : '';
+            document.getElementById('moonReading').textContent = `${data.moon.az.toFixed(1)}° ${compass(data.moon.az)} · ${data.moon.alt.toFixed(1)}° alt${illum}`;
+            document.getElementById('sunEvents').textContent = eventLine(data.sun.events);
+            document.getElementById('moonEvents').textContent = eventLine(data.moon.events);
+            const mode = cpTime.isPlaying() ? ` · playing ×${cpTime.getSpeed().toLocaleString('en-GB')}` : ' · paused';
+            document.getElementById('beaconClock').textContent = new Intl.DateTimeFormat('en-GB', {
+              timeZone: cpTime.getZoneName(), weekday:'short', year:'numeric', month:'short', day:'2-digit',
+              hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23', timeZoneName:'short'
+            }).format(data.time) + mode;
+          }
+          if (window.__cpModelReady && !modelFinishedAt) modelFinishedAt = performance.now();
+          if (modelFinishedAt && performance.now() - modelFinishedAt > 1000) document.getElementById('hqLoading')?.classList.add('hidden');
         }, 150);
         refreshInputs(true);
-        let canvasHooked = false; setInterval(() => { const canvas = document.querySelector('canvas'); if (canvas && !canvasHooked) { canvasHooked = true; canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); const el = document.getElementById('hqLoading'); if (el) { el.classList.remove('hidden'); el.innerHTML = '<div class="hq-loading-card"><div class="hq-beam"></div><strong>The graphics context was interrupted</strong><span>Close other 3D tabs and reload with Ctrl+F5.</span></div>'; } }, {passive:false}); } }, 500);
-        setTimeout(() => { if (!window.__cpModelReady) { const el = document.getElementById('hqLoading'); if (el) el.innerHTML = '<div class="hq-loading-card"><div class="hq-beam"></div><strong>The stable world has not mounted</strong><span>Reload with Ctrl+F5. The model is being delivered as a compressed GitHub Pages asset.</span></div>'; } }, 45000);
+        let canvasHooked = false;
+        setInterval(() => {
+          const canvas = document.querySelector('canvas');
+          if (canvas && !canvasHooked) {
+            canvasHooked = true;
+            canvas.addEventListener('webglcontextlost', event => {
+              event.preventDefault();
+              const el = document.getElementById('hqLoading');
+              if (el) { el.classList.remove('hidden'); el.innerHTML = '<div class="hq-loading-card"><div class="hq-beam"></div><strong>The graphics context was interrupted</strong><span>Close other 3D tabs and reload with Ctrl+F5.</span></div>'; }
+            }, {passive:false});
+          }
+        }, 500);
+        setTimeout(() => {
+          if (!window.__cpModelReady) {
+            const el = document.getElementById('hqLoading');
+            if (el) el.innerHTML = '<div class="hq-loading-card"><div class="hq-beam"></div><strong>The stable world has not mounted</strong><span>Keep the local server window open and reload with Ctrl+F5.</span></div>';
+          }
+        }, 45000);
       })();
     </script>
   </body>
