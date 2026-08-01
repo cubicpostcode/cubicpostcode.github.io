@@ -1,0 +1,77 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #eef4ff;
+  background: #070a10;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { background: #070a10; }
+.app-shell { position: relative; width: 100%; height: 100%; overflow: hidden; background: #070a10; }
+.app-shell canvas { display: block; width: 100%; height: 100%; outline: none; }
+.hint {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: calc(100vw - 24px);
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+  color: #b6c2d4;
+  background: rgba(8,12,19,.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 760px) {
+  .hint { bottom: max(8px, env(safe-area-inset-bottom)); font-size: 10px; padding: 7px 10px; }
+}
+
+.hq-loading{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,rgba(28,55,103,.7),rgba(5,9,21,.98) 62%);transition:opacity .55s ease,visibility .55s ease}.hq-loading.hidden{opacity:0;visibility:hidden;pointer-events:none}.hq-loading-card{width:min(430px,calc(100vw - 36px));padding:28px;border:1px solid rgba(184,218,255,.18);border-radius:22px;background:rgba(6,13,28,.8);box-shadow:0 24px 80px rgba(0,0,0,.45);backdrop-filter:blur(18px);text-align:center}.hq-loading-card strong{display:block;font-size:17px}.hq-loading-card span{display:block;margin-top:7px;color:#aebbd0;font-size:11px;line-height:1.45}.hq-beam{width:6px;height:56px;margin:0 auto 19px;border-radius:999px;background:linear-gradient(180deg,#fff6b7 0%,#ff781f 44%,#ffffff 55%,#9eefff 75%,#3d85ff 100%);box-shadow:0 0 16px rgba(255,138,52,.75),0 0 28px rgba(91,177,255,.6);animation:hqBeam 1.45s ease-in-out infinite}@keyframes hqBeam{50%{transform:scaleY(.72);filter:brightness(1.35)}}
+.beacon-hud{position:absolute;z-index:7;left:14px;top:max(14px,env(safe-area-inset-top));width:min(365px,calc(100vw - 28px));border:1px solid rgba(188,218,255,.16);border-radius:17px;background:linear-gradient(155deg,rgba(7,14,29,.91),rgba(5,10,22,.76));box-shadow:0 18px 60px rgba(0,0,0,.35);backdrop-filter:blur(17px);overflow:hidden;transition:.22s}.beacon-title{width:100%;display:flex;align-items:center;gap:10px;padding:9px 11px;border:0;color:#edf5ff;background:transparent;text-align:left;cursor:pointer}.beacon-title b{display:block;font-size:11px;line-height:1.18}.beacon-title small{display:block;margin-top:2px;color:#93a4bc;font-size:8px;letter-spacing:.1em;text-transform:uppercase}.beacon-mini-beam{width:6px;height:27px;flex:0 0 auto;border-radius:999px;transform:rotate(28deg);background:linear-gradient(180deg,#ffb31f 0%,#fff7d7 46%,#dffaff 56%,#4191ff 100%);box-shadow:-3px 0 14px rgba(255,93,0,.38),3px 0 15px rgba(66,150,255,.46)}.beacon-body{max-height:300px;padding:0 11px 11px;opacity:1;transition:.2s}.beacon-hud.closed .beacon-body{max-height:0;padding-bottom:0;opacity:0;overflow:hidden}.origin-address{display:block;width:100%;padding:9px 10px;border:1px solid rgba(116,170,255,.18);border-radius:11px;color:#eaf3ff;background:rgba(71,126,224,.07);text-align:left;cursor:pointer}.origin-address span{display:block;color:#8fa3bf;font-size:8px;text-transform:uppercase;letter-spacing:.08em}.origin-address b{display:block;margin-top:3px;font:650 11px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.035em}.beam-data{display:grid;gap:5px;margin-top:8px}.beam-row{display:grid;grid-template-columns:8px 36px 1fr;align-items:center;gap:6px;padding:7px 8px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.035);font-size:9px}.beam-row i{width:7px;height:7px;border-radius:50%;box-shadow:0 0 10px currentColor}.beam-row span{font-weight:700}.beam-row b{text-align:right;font-weight:550;color:#dfe9f8;font-variant-numeric:tabular-nums}.beam-row.sun{color:#ff6473}.beam-row.moon{color:#62a6ff}.beacon-clock{margin-top:8px;color:#9eafc5;font-size:9px}.beacon-note{margin-top:6px;color:#73859c;font-size:8px;line-height:1.4}.beacon-toast{position:absolute;z-index:30;left:50%;bottom:58px;transform:translate(-50%,12px);opacity:0;padding:8px 12px;border:1px solid rgba(187,218,255,.18);border-radius:999px;color:#eaf3ff;background:rgba(7,14,27,.93);font-size:10px;transition:.2s;pointer-events:none}.beacon-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:720px){.beacon-hud{left:8px;top:max(8px,env(safe-area-inset-top));width:calc(100vw - 16px)}.beacon-title small{display:none}.beacon-hud:not(.closed){right:8px}.hint{font-size:8px}.hq-loading-card{padding:23px}}
+@media(prefers-reduced-motion:reduce){.hq-beam{animation:none}}
+
+.beacon-title small i{font-style:normal;color:#b9d8ff}
+
+
+/* V3.3 elemental identities, no additional WebGL geometry */
+.beam-row.sun{color:#ffb327;background:linear-gradient(90deg,rgba(255,91,0,.14),rgba(255,190,35,.035));border-color:rgba(255,151,31,.17)}
+.beam-row.sun i{background:radial-gradient(circle,#fff6a0 0 18%,#ffb214 38%,#ff3b00 72%,transparent 74%);box-shadow:0 0 14px #ff6a00,0 0 28px rgba(255,62,0,.55)}
+.beam-row.moon{color:#e9fbff;background:linear-gradient(90deg,rgba(213,249,255,.13),rgba(89,179,220,.035));border-color:rgba(201,244,255,.16)}
+.beam-row.moon i{background:radial-gradient(circle,#fff 0 22%,#d9f8ff 42%,#7fcbe8 72%,transparent 75%);box-shadow:0 0 14px #dffaff,0 0 30px rgba(103,204,239,.5)}
+
+/* V3.5 solar-to-lunar refraction identity */
+.origin-address{background:linear-gradient(90deg,rgba(255,92,0,.08),rgba(255,255,255,.055) 48%,rgba(63,142,255,.09));border-color:rgba(210,231,255,.22)}
+.beacon-note{color:#8295ae}
+
+
+/* V3.8 timeline controls and daily celestial events */
+.beacon-hud{width:min(450px,calc(100vw - 28px));}
+.beacon-body{max-height:min(720px,calc(100vh - 78px));overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(151,193,238,.24) transparent;}
+.beacon-hud.closed .beacon-body{max-height:0;overflow:hidden;}
+.time-controls{margin-top:8px;padding:8px;border:1px solid rgba(190,221,255,.12);border-radius:12px;background:rgba(255,255,255,.025);}
+.time-grid{display:grid;grid-template-columns:1.2fr 1fr .72fr;gap:5px;}
+.time-grid input,.time-grid select,.play-row select{min-width:0;height:29px;padding:0 7px;border:1px solid rgba(190,221,255,.15);border-radius:8px;color:#e9f4ff;background:#0b1629;font:600 9px/1 ui-sans-serif,system-ui;color-scheme:dark;outline:none;}
+.time-grid input:focus,.time-grid select:focus,.play-row select:focus{border-color:rgba(107,181,255,.58);box-shadow:0 0 0 2px rgba(64,145,255,.12);}
+.step-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:5px;}
+.step-row button,.play-row button{min-width:0;height:27px;padding:0 3px;border:1px solid rgba(190,221,255,.13);border-radius:7px;color:#cfdef1;background:rgba(104,151,214,.075);font:650 8px/1 ui-sans-serif,system-ui;cursor:pointer;}
+.step-row button:hover,.play-row button:hover{color:#fff;background:rgba(92,161,244,.18);border-color:rgba(148,203,255,.33);}
+.play-row{display:grid;grid-template-columns:78px 1fr auto;align-items:center;gap:5px;margin-top:5px;}
+.play-row span{color:#7f94ae;font-size:8px;text-transform:uppercase;letter-spacing:.08em;}
+.beam-card{border:1px solid rgba(255,255,255,.065);border-radius:11px;overflow:hidden;background:rgba(255,255,255,.018);}
+.beam-card .beam-row{margin:0;border:0;border-radius:0;}
+.event-line{padding:5px 8px 6px;border-top:1px solid rgba(255,255,255,.055);color:#afbdd0;font:550 8px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;}
+.beam-card.sun .event-line{background:linear-gradient(90deg,rgba(255,100,0,.055),transparent);}
+.beam-card.moon .event-line{background:linear-gradient(90deg,rgba(116,220,255,.055),transparent);}
+.beacon-clock{padding:6px 8px;border:1px solid rgba(190,221,255,.09);border-radius:9px;background:rgba(255,255,255,.022);font-variant-numeric:tabular-nums;}
+@media(max-width:720px){.beacon-hud{width:calc(100vw - 16px)}.time-grid{grid-template-columns:1fr 1fr .72fr}.step-row button{font-size:7px}.event-line{font-size:7px}.beacon-note{display:none}}
