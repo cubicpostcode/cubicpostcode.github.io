@@ -1,0 +1,7 @@
+Deployment staging for React V3.8.
+
+Upload the binary model into this folder using exactly this filename:
+trafalgar-square-stable-v38.glb
+
+Expected size: 34,359,992 bytes
+Expected SHA-256: c16e16efbe17e18406f94d74338643acdff6625bd98af7eda2c9c58fd55f0030
