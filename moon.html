@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050914">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Trafalgar Sky — Cubic Postcode Celestial Beacon V1</title>
+  <title>Trafalgar Sky — Cubic Postcode Celestial Beacon V1.1 World-Locked Moon</title>
   <link rel="stylesheet" href="moon-beacon-v1.css?v=20260801-2">
   <script type="importmap">
   {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/","astronomy-engine":"https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/+esm"}}
@@ -13,12 +13,12 @@
 </head>
 <body>
   <div id="app"></div>
-  <div class="loading" id="loading"><div class="loader"><div class="spinner"></div><strong>Preparing the celestial beacon…</strong><div style="margin-top:6px;font-size:11px;color:#91a4be">Trafalgar Square · Sun · Moon · Cubic Postcode</div></div></div>
+  <div class="loading" id="loading"><div class="loader"><div class="spinner"></div><strong>Preparing the world-locked celestial beacon…</strong><div style="margin-top:6px;font-size:11px;color:#91a4be">Trafalgar Square · Sun · Moon · Cubic Postcode</div></div></div>
   <div class="ui">
     <section class="panel control-panel" aria-label="Time and beacon controls">
-      <div class="kicker">Cubic Postcode · Celestial Beacon V1</div>
+      <div class="kicker">Cubic Postcode · Celestial Beacon V1.1</div>
       <h1>Trafalgar Sky</h1>
-      <p class="subtitle">A red magical beam tracks the Sun; a blue magical beam tracks the Moon. Both originate from the summit of Nelson’s Column.</p>
+      <p class="subtitle">A red magical beam tracks the Sun; a blue world-locked beam tracks the Moon. Both originate from the summit of Nelson’s Column.</p>
       <div class="origin" title="Click the address to copy it">
         <div class="origin-mark" aria-hidden="true"></div>
         <div><div class="origin-label">Nelson summit origin cube</div><div id="postcode" class="postcode" tabindex="0" role="button">Calculating…</div><div id="voxel" class="coords"></div></div>
@@ -38,12 +38,12 @@
       <div class="kicker">Live celestial bearings</div>
       <div class="body-card sun"><div class="body-title"><span><i class="dot"></i>&nbsp; Sun</span><span id="sunState" class="state"></span></div><div class="metric"><span>Azimuth</span><b id="sunAz">—</b><span>Altitude</span><b id="sunAlt">—</b><span>Compass</span><b id="sunCompass">—</b></div></div>
       <div class="body-card moon"><div class="body-title"><span><i class="dot"></i>&nbsp; Moon</span><span id="moonState" class="state"></span></div><div class="metric"><span>Azimuth</span><b id="moonAz">—</b><span>Altitude</span><b id="moonAlt">—</b><span>Illuminated</span><b id="moonPhase">—</b></div></div>
-      <div class="legend"><strong>Scientific axis:</strong> each beam’s bright central core follows the calculated topocentric direction. The surrounding waves, sparkles and travelling address-cubes are illustrative magical energy.</div>
+      <div class="legend"><strong>Scientific axis:</strong> each beam’s bright central core follows the calculated topocentric direction. The Moon beam is anchored at Nelson’s summit, transformed only by its astronomical direction and depth-tested inside the 3D world. The surrounding waves, sparkles and travelling address-cubes remain illustrative magical energy.</div>
     </aside>
     <div class="hint">Drag to orbit · Wheel to zoom · Right-drag to pan · Arrow keys orbit · WASD fly · R/F rise or lower · Autopilot resumes after 100 ms</div>
   </div>
   <div id="toast" class="toast">Copied</div>
-  <script type="module" src="moon-beacon-v1-loader.js?v=20260801-3"></script>
-  <script>setTimeout(()=>{if(!window.__beaconReady){const el=document.getElementById('loading');if(el)el.innerHTML='<div class="loader"><h2>Unable to start the celestial beacon</h2><p>The 3D or astronomy library did not load. Please refresh in a current browser.</p><button onclick="location.reload()">Reload</button></div>'}},9000)</script>
+  <script type="module" src="moon-beacon-v11-worldlocked-loader.js?v=20260801-1"></script>
+  <script>setTimeout(()=>{if(!window.__beaconReady){const el=document.getElementById('loading');if(el)el.innerHTML='<div class="loader"><h2>Unable to start the celestial beacon</h2><p>The 3D or astronomy library did not load. Please refresh in a current browser.</p><button onclick="location.reload()">Reload</button></div>'}},12000)</script>
 </body>
 </html>
