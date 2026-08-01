@@ -48,13 +48,13 @@ const gunzipIfNeeded = async bytes => {
 const nativeFetch = window.fetch.bind(window);
 
 try {
-  setStage('bootstrap-v382', 'Bootstrap 3.8.2 active · preparing the application…');
+  setStage('bootstrap-v383', 'Bootstrap 3.8.3 active · aligning the celestial coordinate frame…');
 
   window.fetch = async (input, init) => {
     const requested = typeof input === 'string' ? input : (input && input.url) || '';
     if (/trafalgar-square-stable-v38\.glb(?:[?#]|$)/.test(requested)) {
       setStage('model-download', 'Downloading the Trafalgar Square model…');
-      const modelUrl = new URL('./models/trafalgar-square-stable-v38.glb.gz?build=382-20260801', location.href);
+      const modelUrl = new URL('./models/trafalgar-square-stable-v38.glb.gz?build=383-20260801', location.href);
       const response = await nativeFetch(modelUrl, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Trafalgar model download failed (${response.status})`);
       const raw = new Uint8Array(await response.arrayBuffer());
@@ -70,19 +70,31 @@ try {
   };
 
   setStage('application-download', 'Downloading the London 3D application…');
-  const appUrl = new URL('./assets/cubic-postcode-beacon-react-timeline-v38.js.gz?build=382-20260801', location.href);
+  const appUrl = new URL('./assets/cubic-postcode-beacon-react-timeline-v38.js.gz?build=383-20260801', location.href);
   const appResponse = await nativeFetch(appUrl, { cache: 'no-store' });
   if (!appResponse.ok) throw new Error(`Application download failed (${appResponse.status})`);
   const appRaw = new Uint8Array(await appResponse.arrayBuffer());
   setStage('application-decompression', `Preparing the application · ${(appRaw.byteLength / 1024).toFixed(0)} KB received…`);
   const appBytes = await gunzipIfNeeded(appRaw);
-  const source = new TextDecoder('utf-8', { fatal: true }).decode(appBytes);
+  let source = new TextDecoder('utf-8', { fatal: true }).decode(appBytes);
   if (!source.includes('Cubic Postcode Celestial Beacon React V3.8')) {
     throw new Error('The downloaded application bundle failed its integrity check');
   }
 
-  setStage('application-execution', 'Starting the React 3D application…');
-  (0, eval)(`${source}\n//# sourceURL=london3d-v38-runtime.js`);
+  // The detailed Trafalgar GLB uses +X=east and -Z=north. The previous
+  // horizontal-to-world conversion treated +Z as north, mirroring celestial
+  // bearings across the east-west axis. Apply the real model frame to both
+  // the Sun and Moon before running the self-contained React bundle.
+  const directionOld = 'function CpDir(e,t){let n=e*Math.PI/180,r=t*Math.PI/180,i=Math.cos(r);return new U(i*Math.sin(n),Math.sin(r),i*Math.cos(n)).normalize()}';
+  const directionNew = 'function CpDir(e,t){let n=e*Math.PI/180,r=t*Math.PI/180,i=Math.cos(r);return new U(i*Math.sin(n),Math.sin(r),-i*Math.cos(n)).normalize()}';
+  if (!source.includes(directionOld)) {
+    throw new Error('The celestial direction signature was not found in the London 3D application');
+  }
+  source = source.replace(directionOld, directionNew);
+  window.__cpCelestialFrame = { east: '+X', north: '-Z', version: '3.8.3' };
+
+  setStage('application-execution', 'Starting the geographically aligned React 3D application…');
+  (0, eval)(`${source}\n//# sourceURL=london3d-v383-runtime.js`);
   setStage('application-running', 'Application started · waiting for the 3D model…');
 
   const startedAt = performance.now();
