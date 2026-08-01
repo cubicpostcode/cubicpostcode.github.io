@@ -1,344 +1,49 @@
-<!--
-IDEAL GENERATION PROMPT FOR TRAFALGAR SKY / moon.html
-
-Build and publish a polished HTML5 single-page web app called “Trafalgar Sky” at:
-
-https://cubicpostcode.github.io/moon.html
-
-The app must show a draggable 3D reconstruction of Trafalgar Square in London and accurately display the apparent positions of the Sun and Moon for any selected date and time, past or future.
-
-Work autonomously and complete the full implementation, testing and GitHub Pages deployment. Ask questions only when a genuinely blocking decision cannot reasonably be inferred.
-
-OBSERVATION POINT
-
-Use this fixed observer location:
-
-Latitude: 51.508045° N
-Longitude: 0.128217° W
-Elevation: 25 metres
-Location: central Trafalgar Square, London
-
-ASTRONOMICAL ACCURACY
-
-Use a reputable astronomical calculation library such as Astronomy Engine, pinned to a specific stable version.
-
-The calculations should be comparable in accuracy to MoonCalc and must include:
-
-- Topocentric Sun and Moon positions
-- Lunar parallax
-- Atmospheric refraction
-- Light-time and aberration corrections where supported
-- Correct London civil time, including GMT and BST
-- UTC display
-- Dates in the past and future
-- Correct Moon phase and illuminated fraction
-- Correct local orientation of the Moon’s bright limb
-- Correct distinction between above and below the horizon
-
-Display for both the Sun and Moon:
-
-- Azimuth in degrees and compass direction
-- Refracted altitude
-- Right ascension and declination of date
-- J2000 right ascension and declination
-- Distance
-- Apparent angular diameter
-- Next rise
-- Next upper culmination or meridian transit
-- Next set
-
-For culmination, display the London date and time, altitude and compass direction.
-
-TIME CONTROLS
-
-Provide:
-
-- Date and time input
-- Choice between London civil time and UTC
-- “Now” button
-- −1 day, −1 hour and −1 minute buttons
-- +1 minute, +1 hour and +1 day buttons
-- Play and pause
-- Playback speeds from real time up to one simulated day per second
-- Time-of-day slider
-- Clearly visible clock and calendar
-
-3D TRAFALGAR SQUARE
-
-Do not use paid or copyrighted third-party model assets.
-
-Create an original, neat, lightweight, stylised architectural reconstruction using Three.js geometry generated in code.
-
-It should be recognisably Trafalgar Square and include:
-
-- Nelson’s Column
-- Nelson statue
-- Four lions
-- Both fountains
-- National Gallery façade, portico and dome
-- St Martin-in-the-Fields
-- Admiralty Arch
-- Northern terrace and steps
-- Plaza, surrounding roads and road markings
-- Trees, lamps and representative surrounding buildings
-
-The model does not need photorealistic detail, but it must be coherent, attractive and immediately recognisable. Avoid malformed geometry, intersecting surfaces or triangles connecting unrelated objects.
-
-Orient the scene to true compass directions:
-
-- +Z north
-- +X east
-
-CAMERA AND NAVIGATION
-
-Use Three.js OrbitControls.
-
-Support:
-
-- Left-drag or one-finger drag to orbit
-- Right-drag or two-finger drag to pan
-- Mouse wheel or pinch to zoom
-- Full upward and downward tilting
-- Reset 3D view
-- Aerial view
-- Ground view
-- Centre Sun
-- Centre Moon
-- Adjustable field of view
-- Adjustable compass-facing direction
-
-Keyboard controls:
-
-- Left arrow: rotate the world anticlockwise
-- Right arrow: rotate the world clockwise
-- Up arrow: tilt upward
-- Down arrow: tilt downward
-- Shift plus an arrow: move three times faster
-
-Arrow keys must not interfere while a text, date, range or select control is focused.
-
-SUN AND MOON DISPLAY
-
-Place the Sun and Moon at their correct calculated altitude and azimuth.
-
-Their base visual size may be slightly enlarged for visibility, but provide two independent illustrative-size controls:
-
-- Sun display size: 1.0× to 5.0×
-- Moon display size: 1.0× to 5.0×
-- Step size: 0.1×
-- Default: 1.0×
-
-These controls must change only the visual display size. They must not alter coordinates, angular diameter readouts or astronomical calculations.
-
-The Sun’s glow should scale with the Sun.
-
-Render the Moon as a three-dimensional sphere with:
-
-- Correct illuminated fraction
-- Correct terminator
-- Correct bright-limb orientation
-- Subtle surface and crater detail
-- Faint earthshine where appropriate
-
-LIGHTING AND ATMOSPHERE
-
-Use the calculated Sun direction as the main directional light so buildings cast time-dependent shadows.
-
-Provide:
-
-- Auto lighting
-- Forced daylight
-- Enhanced night view
-
-The auto mode should respond to the Sun’s altitude and distinguish:
-
-- Daylight
-- Civil twilight
-- Nautical twilight
-- Astronomical twilight
-- Night
-
-Objects below the true horizon should be hidden by the ground or horizon rather than appearing through the Earth.
-
-WORLD VISIBILITY
-
-Provide:
-
-- Hide world / Show world button
-- World-opacity slider from 0% to 100%
-
-At:
-
-- 100%: the world is fully solid
-- 1–99%: the world becomes progressively translucent
-- 0%: only the Sun and Moon remain visible
-
-World opacity must not alter the Sun or Moon.
-
-STARS
-
-Decorative pseudorandom stars are acceptable for this version, but they must be described honestly as decorative and not as real catalogue stars.
-
-Use a fixed random seed so the decorative star pattern does not change on every reload.
-
-INTERFACE
-
-Use a clean, responsive, dark astronomical interface suitable for desktop, tablet and mobile.
-
-The main areas should include:
-
-- Time and camera controls
-- Large interactive 3D scene
-- Apparent Moon visualisation
-- Observation information
-- Separate Sun and Moon data panels
-
-Use British English throughout.
-
-Make all controls accessible with labels and sensible keyboard behaviour.
-
-PERFORMANCE
-
-The app should:
-
-- Load quickly on an ordinary computer and modern phone
-- Avoid unnecessary external assets
-- Use efficient geometry
-- Limit device-pixel ratio where appropriate
-- Remain responsive during animated time playback
-- Pin external JavaScript library versions
-
-DELIVERY
-
-Publish the finished app to the master branch of:
-
-cubicpostcode/cubicpostcode.github.io
-
-The final public URL must be:
-
-https://cubicpostcode.github.io/moon.html
-
-Do not modify unrelated pages or files.
-
-Do not report that publication is successful merely because a GitHub commit succeeded.
-
-Before declaring completion:
-
-1. Confirm that moon.html exists on the deployment branch.
-2. Verify all referenced files exist.
-3. Open the actual GitHub Pages URL.
-4. Confirm it returns the application rather than a 404 page.
-5. Confirm the astronomical engine loads.
-6. Confirm the Three.js scene loads.
-7. Test the Sun and Moon position updates.
-8. Test the Moon illumination.
-9. Test mouse, touch and arrow-key camera movement.
-10. Test upward and downward tilt.
-11. Test world opacity and Hide world.
-12. Test Sun and Moon display-size sliders at 1× and 5×.
-13. Test culmination displays.
-14. Check the browser console for errors.
-15. Use a versioned query-string link when handing over a newly deployed build.
-
-Leave the source understandable and maintainable. Avoid fragile split Base64 loaders unless file-size limits genuinely require them. Prefer an ordinary HTML file and clearly named static JavaScript or asset files.
--->
 <!doctype html>
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#07111f">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050914">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Trafalgar Sky</title>
-  <style>
-    html,body{margin:0;min-height:100%;background:#07111f;color:#eef4fb;font-family:system-ui,sans-serif}
-    body{display:grid;place-items:center}
-    main{text-align:center;padding:2rem}
-    .spinner{width:42px;height:42px;margin:0 auto 1rem;border:4px solid #ffffff2b;border-top-color:#79b8ff;border-radius:50%;animation:s 1s linear infinite}
-    @keyframes s{to{transform:rotate(360deg)}}
-    small{color:#a9b7c9}
-  </style>
+  <title>Trafalgar Sky — Cubic Postcode Celestial Beacon V1</title>
+  <link rel="stylesheet" href="moon-beacon-v1.css?v=20260801-1">
+  <script type="importmap">
+  {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/","astronomy-engine":"https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/+esm"}}
+  </script>
 </head>
 <body>
-  <main>
-    <div class="spinner" aria-hidden="true"></div>
-    <div>Loading Trafalgar Sky…</div>
-    <small>Preparing the interactive 3D scene…</small>
-  </main>
-  <script src="moon-assets-84339918/data-01.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-02.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-03a.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-03b.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-04.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-05.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-06.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-07.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-08a.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-08b.js?v=84339918"></script>
-  <script src="moon-assets-84339918/data-09.js?v=84339918"></script>
-  <script>
-    (async () => {
-      if (!("DecompressionStream" in window)) {
-        throw new Error("Please open this page in a current version of Chrome, Edge, Firefox or Safari.");
-      }
-      const encoded = window.__TRAFALGAR_GZ || "";
-      if (!encoded || encoded.length % 4 !== 0) throw new Error("The application payload did not load completely. Please refresh the page.");
-      const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
-      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-      let html = await new Response(stream).text();
-      delete window.__TRAFALGAR_GZ;
-
-      const worldOpacityBlock = `      <div class="timeline">
-        <span class="small">World opacity</span>
-        <input id="worldOpacity" type="range" min="0" max="100" step="1" value="100" aria-label="World opacity">
-        <span id="worldOpacityLabel" class="small">100%</span>
-      </div>`;
-
-      const celestialScaleControls = `
-      <div class="timeline">
-        <span class="small">Sun display size</span>
-        <input id="sunDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Sun display size multiplier" oninput="document.getElementById('sunDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setSunScale(this.value)">
-        <span id="sunDisplayScaleLabel" class="small">1.0×</span>
+  <div id="app"></div>
+  <div class="loading" id="loading"><div class="loader"><div class="spinner"></div><strong>Preparing the celestial beacon…</strong><div style="margin-top:6px;font-size:11px;color:#91a4be">Trafalgar Square · Sun · Moon · Cubic Postcode</div></div></div>
+  <div class="ui">
+    <section class="panel control-panel" aria-label="Time and beacon controls">
+      <div class="kicker">Cubic Postcode · Celestial Beacon V1</div>
+      <h1>Trafalgar Sky</h1>
+      <p class="subtitle">A red magical beam tracks the Sun; a blue magical beam tracks the Moon. Both originate from the summit of Nelson’s Column.</p>
+      <div class="origin" title="Click the address to copy it">
+        <div class="origin-mark" aria-hidden="true"></div>
+        <div><div class="origin-label">Nelson summit origin cube</div><div id="postcode" class="postcode" tabindex="0" role="button">Calculating…</div><div id="voxel" class="coords"></div></div>
       </div>
-      <div class="timeline">
-        <span class="small">Moon display size</span>
-        <input id="moonDisplayScale" type="range" min="1" max="5" step="0.1" value="1" aria-label="Moon display size multiplier" oninput="document.getElementById('moonDisplayScaleLabel').textContent=Number(this.value).toFixed(1)+'×';window.Trafalgar3D?.setMoonScale(this.value)">
-        <span id="moonDisplayScaleLabel" class="small">1.0×</span>
-      </div>`;
-
-      const scaleFunctions = `    function setSunScale(value) {
-      const factor=Math.max(1,Math.min(5,Number(value)||1));
-      sun.scale.setScalar(factor);
-      return factor;
-    }
-
-    function setMoonScale(value) {
-      const factor=Math.max(1,Math.min(5,Number(value)||1));
-      moon.scale.setScalar(factor);
-      return factor;
-    }
-
-`;
-
-      html = html
-        .replace(worldOpacityBlock, worldOpacityBlock + celestialScaleControls)
-        .replace('The Sun and Moon are enlarged slightly so they remain visible.','Their astronomical positions remain exact; the display-size controls can enlarge either body illustratively from 1× to 5× for clarity.')
-        .replace('    function setWorldVisible(show) {', scaleFunctions + '    function setWorldVisible(show) {')
-        .replace(
-          '    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize};',
-          `    window.Trafalgar3D={update,setWorldOpacity,setWorldVisible,setLightMode,resetView,aerialView,groundView,setHeading,setFov,nudgeView,focusBody,resize,setSunScale,setMoonScale};
-    setSunScale(document.getElementById('sunDisplayScale')?.value||1);
-    setMoonScale(document.getElementById('moonDisplayScale')?.value||1);`
-        );
-
-      document.open();
-      document.write(html);
-      document.close();
-    })().catch(error => {
-      document.body.innerHTML = `<main><h1>Unable to load Trafalgar Sky</h1><p>${String(error.message || error)}</p><p><button onclick="location.reload()">Reload</button></p></main>`;
-    });
-  </script>
+      <div class="time-grid">
+        <input id="dateInput" type="date" aria-label="Date">
+        <input id="timeInput" type="time" step="1" aria-label="Time">
+        <select id="zoneSelect" aria-label="Time zone"><option value="london">London</option><option value="utc">UTC</option></select>
+      </div>
+      <div class="step-row">
+        <button data-step="-86400000">−1 day</button><button data-step="-3600000">−1 hour</button><button data-step="-60000">−1 min</button><button id="nowBtn">Now</button><button data-step="60000">+1 min</button><button data-step="3600000">+1 hour</button><button data-step="86400000">+1 day</button>
+      </div>
+      <div class="play-row"><button id="playBtn">▶ Play</button><select id="speedSelect" class="speed" aria-label="Playback speed"><option value="1">Real time</option><option value="60">1 min / sec</option><option value="3600">1 hour / sec</option><option value="86400">1 day / sec</option></select><label for="speedSelect">Simulation</label></div>
+      <div id="clock" class="clock"></div>
+    </section>
+    <aside class="panel data-panel" aria-label="Sun and Moon information">
+      <div class="kicker">Live celestial bearings</div>
+      <div class="body-card sun"><div class="body-title"><span><i class="dot"></i>&nbsp; Sun</span><span id="sunState" class="state"></span></div><div class="metric"><span>Azimuth</span><b id="sunAz">—</b><span>Altitude</span><b id="sunAlt">—</b><span>Compass</span><b id="sunCompass">—</b></div></div>
+      <div class="body-card moon"><div class="body-title"><span><i class="dot"></i>&nbsp; Moon</span><span id="moonState" class="state"></span></div><div class="metric"><span>Azimuth</span><b id="moonAz">—</b><span>Altitude</span><b id="moonAlt">—</b><span>Illuminated</span><b id="moonPhase">—</b></div></div>
+      <div class="legend"><strong>Scientific axis:</strong> each beam’s bright central core follows the calculated topocentric direction. The surrounding waves, sparkles and travelling address-cubes are illustrative magical energy.</div>
+    </aside>
+    <div class="hint">Drag to orbit · Wheel to zoom · Right-drag to pan · Arrow keys orbit · WASD fly · R/F rise or lower · Autopilot resumes after 100 ms</div>
+  </div>
+  <div id="toast" class="toast">Copied</div>
+  <script type="module" src="moon-beacon-v1.js?v=20260801-1"></script>
+  <script>setTimeout(()=>{if(!window.__beaconReady){const el=document.getElementById('loading');if(el)el.innerHTML='<div class="loader"><h2>Unable to start the celestial beacon</h2><p>The 3D or astronomy library did not load. Please refresh in a current browser.</p><button onclick="location.reload()">Reload</button></div>'}},9000)</script>
 </body>
 </html>
