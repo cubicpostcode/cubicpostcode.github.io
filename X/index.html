@@ -1,128 +1,254 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Machine Party</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 2s ease-out;
-        }
-        h1, h2, h3 {
-            color: #333333;
-        }
-        p {
-            color: #555555;
-            line-height: 1.6;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .highlight {
-            background-color: #f0f8ff;
-            padding: 5px;
-            border-radius: 3px;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f5f5f5;
-            border-top: 1px solid #ccc;
-            margin-top: 20px;
-        }
-        footer p {
-            margin: 0;
-            color: #777777;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0b0d" />
+  <meta name="description" content="Human Machine Party — an informational proposal for direct and liquid democracy, human authority over AI, and public-interest digital memory infrastructure." />
+  <meta property="og:title" content="Human Machine Party — People decide. Machines help. Memory remains." />
+  <meta property="og:description" content="A proposal for democratic institutions where people retain political authority, AI assists deliberation, and public cultural memory is preserved as inspectable infrastructure." />
+  <title>Human Machine Party — People decide. Machines help.</title>
+  <style>
+    :root{
+      --bg:#0a0b0d; --bg2:#101216; --panel:#15181d; --panel2:#1b1f25; --text:#f2f4f7; --muted:#a7adb7;
+      --line:#2a3039; --accent:#e9edf2; --accent2:#8bd3ff; --ok:#9ae6b4; --warn:#ffd38b; --danger:#ffaaa5;
+      --max:1180px; --radius:22px; --shadow:0 28px 80px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+      radial-gradient(1000px 700px at 86% -10%,rgba(91,148,188,.16),transparent 58%),
+      radial-gradient(800px 600px at -10% 18%,rgba(255,255,255,.06),transparent 60%),var(--bg);color:var(--text);line-height:1.55}
+    a{color:inherit}
+    button,input{font:inherit}
+    button{color:inherit}
+    .skip{position:absolute;left:-9999px;top:auto}.skip:focus{left:16px;top:12px;z-index:999;background:#fff;color:#111;padding:10px 14px;border-radius:10px}
+    .shell{width:min(var(--max),calc(100% - 36px));margin:auto}
+    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);background:rgba(10,11,13,.76);border-bottom:1px solid rgba(255,255,255,.07)}
+    .nav{height:72px;display:flex;align-items:center;gap:22px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;white-space:nowrap;font-weight:760;letter-spacing:.04em}
+    .brand img{width:36px;height:36px;object-fit:contain;filter:invert(1);opacity:.95}.brand small{display:block;color:var(--muted);font-weight:560;letter-spacing:.02em;font-size:.68rem}
+    nav{margin-left:auto;display:flex;gap:4px;align-items:center}
+    nav a,.ghost{border:0;background:transparent;text-decoration:none;color:var(--muted);padding:9px 11px;border-radius:12px;cursor:pointer;font-size:.9rem}
+    nav a:hover,nav a[aria-current="page"],.ghost:hover{color:var(--text);background:rgba(255,255,255,.07)}
+    .menu{display:none;margin-left:auto}
+    .hero{min-height:calc(100vh - 72px);display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;padding:86px 0 78px}
+    .eyebrow{display:inline-flex;gap:9px;align-items:center;color:#d6dae0;border:1px solid var(--line);background:rgba(255,255,255,.025);padding:7px 10px;border-radius:999px;font-size:.76rem;letter-spacing:.075em;text-transform:uppercase}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px rgba(154,230,180,.08)}
+    h1{font-size:clamp(3.3rem,7.4vw,7.2rem);line-height:.91;letter-spacing:-.068em;margin:24px 0 28px;max-width:840px}
+    h1 em{font-style:normal;color:var(--accent2)}
+    .lede{font-size:clamp(1.08rem,1.8vw,1.38rem);max-width:760px;color:#c9ced6;line-height:1.6}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--line);padding:12px 16px;border-radius:14px;font-weight:700;background:#f3f5f7;color:#0a0b0d}.btn.secondary{background:transparent;color:var(--text)}
+    .hero-card{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:30px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-card:before{content:"";position:absolute;inset:-30% 36% 46% -30%;background:radial-gradient(circle,rgba(139,211,255,.22),transparent 68%);pointer-events:none}
+    .compass{display:grid;place-items:center;min-height:280px}.compass img{width:min(280px,70%);filter:invert(1);opacity:.93}.manifesto{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.mini{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.16)}.mini b{display:block;font-size:.9rem}.mini span{color:var(--muted);font-size:.78rem}
+    .status{margin-top:14px;color:var(--muted);font-size:.82rem}
+    main section{padding:98px 0;border-top:1px solid rgba(255,255,255,.07)}
+    .section-head{display:grid;grid-template-columns:.7fr 1.3fr;gap:48px;margin-bottom:46px}.kicker{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);font-weight:800}.section-head h2{margin:6px 0 0;font-size:clamp(2.3rem,5vw,4.6rem);line-height:1;letter-spacing:-.055em}.section-head p{margin:28px 0 0;color:#c0c5cd;font-size:1.08rem;max-width:720px}
+    .grid{display:grid;gap:14px}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--radius);padding:24px;min-height:210px}.card .num{font-size:.78rem;color:var(--accent2);font-weight:800;letter-spacing:.1em}.card h3{font-size:1.18rem;margin:18px 0 8px}.card p{color:var(--muted);margin:0;font-size:.94rem}.card strong{color:var(--text)}
+    .steps{counter-reset:step;display:grid;gap:12px}.step{counter-increment:step;display:grid;grid-template-columns:64px 1fr auto;gap:18px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:18px;padding:18px}.step:before{content:counter(step,decimal-leading-zero);font-variant-numeric:tabular-nums;color:var(--accent2);font-weight:850}.step h3{margin:0;font-size:1.05rem}.step p{margin:3px 0 0;color:var(--muted);font-size:.9rem}.tag{font-size:.72rem;border:1px solid var(--line);color:#cbd0d8;padding:6px 8px;border-radius:999px;white-space:nowrap}
+    .archive-stage{display:grid;grid-template-columns:330px 1fr;min-height:620px;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:#0d0f12;box-shadow:var(--shadow)}
+    .archive-side{padding:22px;border-right:1px solid var(--line);background:#12151a}.archive-title{font-weight:800;letter-spacing:-.02em}.search{margin:18px 0 16px;width:100%;background:#0b0d10;color:var(--text);border:1px solid var(--line);border-radius:13px;padding:11px 12px;outline:none}.search:focus{border-color:#68778a;box-shadow:0 0 0 4px rgba(139,211,255,.08)}
+    .filter{display:flex;flex-wrap:wrap;gap:6px}.pill{border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 9px;border-radius:999px;cursor:pointer;font-size:.76rem}.pill.active{background:#eceff2;color:#0b0c0d;border-color:#eceff2}.archive-list{display:grid;gap:8px;margin-top:18px;max-height:440px;overflow:auto}.item{padding:12px;border:1px solid transparent;border-radius:13px;cursor:pointer}.item:hover,.item.active{background:#1b1f25;border-color:#2e343e}.item b{display:block;font-size:.9rem}.item span{font-size:.75rem;color:var(--muted)}
+    .viewer{padding:28px;display:flex;flex-direction:column;gap:18px}.viewer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.viewer-top h3{margin:0;font-size:1.5rem;letter-spacing:-.03em}.viewer-top p{margin:4px 0 0;color:var(--muted)}.viewer-box{flex:1;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#171b21,#0d0f12);display:grid;place-items:center;min-height:320px;position:relative;overflow:hidden}.viewer-box:before{content:"";position:absolute;width:250px;height:250px;border-radius:50%;background:rgba(139,211,255,.12);filter:blur(30px)}.fakeplay{position:relative;width:72px;height:72px;border:1px solid #4f5b68;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.24);font-size:1.35rem}.meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.meta{border:1px solid var(--line);border-radius:12px;padding:10px}.meta small{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em}.meta b{font-size:.82rem}.viewer-note{color:var(--muted);font-size:.8rem}
+    .architecture{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin-top:34px}.layer{position:relative;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:18px;padding:20px;min-height:160px}.layer:not(:last-child):after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);z-index:2;color:#748091;background:var(--bg);padding:2px}.layer span{font-size:.72rem;color:var(--accent2);text-transform:uppercase;font-weight:800;letter-spacing:.08em}.layer h3{font-size:1rem;margin:12px 0 8px}.layer p{font-size:.8rem;color:var(--muted);margin:0}
+    .rights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.right-card{border:1px solid var(--line);border-radius:18px;padding:18px}.right-card b{display:flex;align-items:center;gap:8px}.right-card p{color:var(--muted);font-size:.86rem;margin-bottom:0}.light{width:8px;height:8px;border-radius:50%}.green{background:var(--ok)}.amber{background:var(--warn)}.red{background:var(--danger)}
+    .ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ai-big{min-height:430px;border:1px solid var(--line);border-radius:26px;padding:28px;background:linear-gradient(150deg,rgba(139,211,255,.08),rgba(255,255,255,.018))}.ai-big h3{font-size:2rem;letter-spacing:-.04em;margin:8px 0 16px}.ai-big p{color:#c1c6ce}.quote{margin-top:28px;border-left:2px solid var(--accent2);padding-left:18px;color:#dce0e6;font-size:1.05rem}.ai-list{display:grid;gap:10px}.ai-row{border:1px solid var(--line);border-radius:18px;padding:18px;background:rgba(255,255,255,.025)}.ai-row b{display:block;margin-bottom:4px}.ai-row span{color:var(--muted);font-size:.88rem}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}.compare>div{border:1px solid var(--line);border-radius:20px;padding:22px}.compare h3{margin:0 0 12px}.compare ul{padding-left:18px;color:var(--muted);font-size:.91rem}.compare .preferred{border-color:#496071;background:rgba(139,211,255,.055)}
+    details{border-top:1px solid var(--line);padding:0}details:last-child{border-bottom:1px solid var(--line)}summary{list-style:none;cursor:pointer;padding:18px 4px;font-weight:720;display:flex;justify-content:space-between;gap:18px}summary::-webkit-details-marker{display:none}summary:after{content:"+";color:var(--accent2)}details[open] summary:after{content:"−"}details p{color:var(--muted);max-width:900px;margin:0 0 20px 4px}
+    .source-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.source{display:block;text-decoration:none;border:1px solid var(--line);border-radius:18px;padding:18px;background:rgba(255,255,255,.02)}.source:hover{background:rgba(255,255,255,.045)}.source small{display:block;color:var(--accent2);text-transform:uppercase;letter-spacing:.08em;font-size:.67rem}.source b{display:block;margin:6px 0}.source span{font-size:.82rem;color:var(--muted)}
+    .callout{margin-top:26px;border:1px solid var(--line);border-radius:22px;padding:22px;background:#12151a;color:#cfd4db}.callout b{color:#fff}
+    footer{padding:44px 0 60px;border-top:1px solid rgba(255,255,255,.07);color:var(--muted)}.footer-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:30px}.footer-links{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}.footer-links a{text-decoration:none}.fine{margin-top:28px;font-size:.76rem;color:#747b86}
+    .route{display:none}.route.active{display:block}.route.home{display:block}
+    .toast{position:fixed;right:18px;bottom:18px;background:#f0f2f4;color:#111;border-radius:12px;padding:10px 12px;font-size:.82rem;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}
+    @media(max-width:980px){nav{display:none}.menu{display:block}.nav.open nav{display:flex;position:absolute;top:72px;left:18px;right:18px;flex-direction:column;align-items:stretch;background:#111419;border:1px solid var(--line);border-radius:16px;padding:8px}.hero{grid-template-columns:1fr;gap:32px}.hero-card{max-width:640px}.section-head{grid-template-columns:1fr;gap:10px}.grid.three,.grid.four{grid-template-columns:1fr 1fr}.archive-stage{grid-template-columns:1fr}.archive-side{border-right:0;border-bottom:1px solid var(--line)}.archive-list{grid-template-columns:1fr 1fr;max-height:none}.architecture{grid-template-columns:1fr 1fr}.layer:not(:last-child):after{display:none}.rights{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}.source-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:640px){.shell{width:min(100% - 24px,var(--max))}.hero{padding-top:54px}.manifesto,.grid.three,.grid.four,.compare,.source-grid,.meta-row,.architecture,.archive-list,.footer-grid{grid-template-columns:1fr}.archive-stage{border-radius:18px}.viewer{padding:18px}.footer-links{justify-content:flex-start}.step{grid-template-columns:42px 1fr}.step .tag{display:none}h1{font-size:clamp(3rem,16vw,5rem)}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    @media print{header,.actions,.menu,.toast,.archive-side{display:none!important}body{background:#fff;color:#111}.card,.source,.layer,.right-card,.ai-big,.ai-row,.compare>div,.archive-stage{border-color:#bbb;background:#fff;color:#111;box-shadow:none}.muted,.card p,.source span,.layer p,.ai-row span,details p{color:#444!important}.shell{width:100%}}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Human Machine Party</h1>
-        <p>The "Human Machine Party" (HMP) is a progressive political entity that seeks to revolutionize the current democratic systems by introducing a model of liquid democracy facilitated through advanced technology. This approach emphasizes the delegation of votes to trusted individuals or machines, ensuring a more dynamic and responsive governance system.</p>
-        
-        <h2>Key Objectives</h2>
-        <h3>1. Liquid Democracy Implementation</h3>
-        <p>
-            <strong>Delegation of Votes:</strong> Citizens can delegate their votes to other individuals or machines, enhancing decision-making flexibility and efficiency. HMP advocates for inclusive voting, supporting universal eligibility when consensus is reached. If not, parental or tutor hierarchy is preferred. Ultimately, the party holds no fixed positions, as all decisions are made democratically.<br>
-            <strong>Technology Integration:</strong> Utilizes military-grade cybersecurity and full authentication to validate and secure votes.
-        </p>
+<a class="skip" href="#content">Skip to content</a>
+<header>
+  <div class="shell nav" id="navwrap">
+    <a class="brand" href="#home" aria-label="Human Machine Party home">
+      <img src="../assets/compass2.svg" alt="" onerror="this.style.display='none'" />
+      <span>HUMAN MACHINE PARTY<small>Human authority · machine assistance</small></span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#model">Model</a><a href="#memory">Public memory</a><a href="#ai">AI</a><a href="#safeguards">Safeguards</a><a href="#questions">Open questions</a><a href="#sources">Sources</a>
+    </nav>
+    <button class="ghost menu" id="menuBtn" type="button" aria-expanded="false">Menu</button>
+  </div>
+</header>
 
-        <h3>2. Digital and Metaverse Governance</h3>
-        <p>
-            <strong>Remote Work for Politicians:</strong> Politicians can work from anywhere, leveraging the internet and metaverse for governance activities.<br>
-            <strong>Borderless World Vision:</strong> Advocates for the phasing out of traditional borders in favor of intelligent organization through smart devices and modern communication systems.
-        </p>
-        <p>The Human Machine Party envisions a future where international collaboration and global standards play a crucial role in governance. By working closely with organizations like UNESCO and the United Nations (UN), we aim to promote educational, scientific, and cultural initiatives that transcend national boundaries. Our commitment to UNESCO's mission of building peace through international cooperation aligns with our goal of creating a more interconnected and intelligent world. By leveraging modern communication systems and smart devices, we can support UNESCO and the UN in their efforts to foster sustainable development and global understanding.</p>
-        <p>The Human Machine Party (HMP) deliberately avoids maintaining a physical headquarters, preferring remote work and a strong cyber presence in the metaverse. This approach aligns with HMP's core principles of flexibility, inclusivity, and modern governance. By leveraging advanced technology, party members can work from any location, reducing the need for costly physical infrastructure and minimizing environmental impact. A cyber presence in the metaverse allows for seamless collaboration and communication among members, regardless of geographical barriers. This model promotes a borderless, intelligently organized world, reflecting HMP's vision of an interconnected global community. Additionally, remote work ensures that participation in party activities is accessible to a wider range of individuals, including those who may not be able to relocate or commute to a physical headquarters. By prioritizing a digital-first approach, HMP can adapt swiftly to changing circumstances and maintain continuous, real-time engagement with its members and the public. This strategy not only enhances operational efficiency but also underscores the party's commitment to pioneering a new era of governance through technology.</p>
-        <p>The internal structure of the Human Machine Party (HMP) is designed to maximize transparency, inclusivity, and direct democratic participation. Members of the party vote publicly using X.com (formerly Twitter). If a member is elected to represent the party in a council, parliament, or similar governmental institution, their role is strictly to act as a voice and embodiment of the collective will of the citizens. Decision-making processes are driven by active discussions and debates on dedicated Reddit forums and X.com polling mechanisms. These platforms ensure full authentication and Know Your Customer (KYC) compliance, verifying the identities of individuals participating in the discussions and polls. This system guarantees that the elected representatives are not making decisions based on personal views but are faithfully representing the consensus reached by authenticated party members. Through this approach, HMP ensures that governance remains truly democratic, reflecting the real-time opinions and desires of its constituents.</p>
-        
-        <h3>3. Cubic Postcode System</h3>
-        <p><strong>Modern Addressing:</strong> Proposes the adoption of a universal, metric-based addressing system to improve global connectivity and logistics.</p>
-        
-        <h3>4. Volunteer-Based Model</h3>
-        <p>
-            <strong>Crowdfunded Basic Income:</strong> Party members work as volunteers and crowdfund their basic income.<br>
-            <strong>Charitable Donations:</strong> All additional earnings are donated to internationally recognized, non-religious, and non-political organizations such as UNICEF, Red Cross, Amnesty, Greenpeace, Rotary, and GiveDirectly.
-        </p>
-        <p>The Human Machine Party's dedication to ethical governance is reflected in our volunteer-based model, where all additional earnings are donated to prestigious international organizations. We prioritize contributions to non-religious and non-political entities recognized for their humanitarian work by UNESCO and the United Nations. Our selected beneficiaries, such as UNICEF, the Red Cross, Amnesty, Greenpeace, Rotary, and GiveDirectly, are acknowledged by these esteemed organizations for their impactful contributions to global welfare. This practice underscores our commitment to supporting initiatives that advance human rights, environmental sustainability, and global solidarity.</p>
-
-        <h2>Communication and Engagement</h2>
-        <h3>Public Polls and Discussions</h3>
-        <p>
-            <strong>Twitter:</strong> Official polls and updates are shared on the HMP's Twitter account <a href="https://x.com/HumanMachineParty" target="_blank">x.com/HumanMachineParty</a>.<br>
-            <strong>Reddit:</strong> Discussions and community engagement occur on the dedicated Reddit forum <a href="https://reddit.com/r/HumanMachinesParty" target="_blank">reddit.com/r/HumanMachinesParty</a>.
-        </p>
-
-        <h3>Contact Information</h3>
-        <p>
-            <strong>Primary Email:</strong> <a href="mailto:info@HumansMachineParty.com">info@HumansMachineParty.com</a><br>
-            <strong>Alias Email:</strong> <a href="mailto:HumanMachinesParty@gmail.com">HumanMachinesParty@gmail.com</a>
-        </p>
-        
-        <p>The symbol of the party is a compass with 12 cardinal points where we call North, by Womb, South by Man, East by Dial and West by Loon. These four neologisms are used in the symbol figuring the letters W, M, D and L. The compass has 12 cardinal points instead of 8 and so it is a bit of a mix between a compass used to indicate geographical information to navigate and a clock watch with its 12 marks. The motto of the party is: "Womb, Man, Dial and Loon". The motto is designed to be repeated shaking the hands with one index finger of the left pointing forward and two fingers pointing forward with the right hand, symbolizing: we are all one, around the clock towards a new scope of bipolarization in our partisan democracies.</p>
-        <p>The flag has the logo centered and the motto below it. To represent neutrality, neutral colors and hues with graceful minimalism are preferred.</p>
-        
-        <h2>Vision and Goals</h2>
-        <p>The Human Machine Party aims to harness the power of technology to create a more fluid, efficient, and inclusive form of democracy. By enabling vote delegation, supporting remote political work, and promoting a borderless, intelligently organized world, HMP envisions a future where governance is more adaptable to the needs and will of the people.</p>
-        <p>The party's commitment to volunteerism and charitable giving underscores its dedication to global welfare and ethical governance. Through these innovative approaches, the Human Machine Party aspires to become the most popular and influential political movement worldwide, driving significant and positive changes in how societies are governed. Mainstream advertisement and investment in marketing are to be avoided since we have social networks to spread any necessary awareness about our activities with the most transparency and accountability possible.</p>
-        
-        <h2>Salutation to Estonia</h2>
-        <p>We salute the pioneering efforts of the sovereign state of Estonia in allowing cybervoting. Estonia has set a remarkable precedent by implementing secure and efficient online voting systems, paving the way for modern democracies worldwide. Their success in this area aligns with the vision of the Human Machine Party to utilize advanced technology to facilitate inclusive and responsive governance.</p>
+<main id="content">
+<section class="route home active" id="home">
+  <div class="shell hero">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> Concept / policy proposal · revised October 2026</div>
+      <h1>People decide.<br><em>Machines help.</em><br>Memory remains.</h1>
+      <p class="lede">The Human Machine Party proposes a democratic model in which people retain political authority, digital tools make participation practical, artificial intelligence helps explain choices, and public cultural memory is preserved as inspectable infrastructure rather than disappearing into inaccessible archives.</p>
+      <div class="actions"><a class="btn" href="#model">Explore the model</a><a class="btn secondary" href="#memory">See the archive proposal</a></div>
+      <p class="status">This site describes proposals and design questions. It does not claim that a complete voting system, national archive network or AI-governance system is already operating.</p>
     </div>
-    <footer>
-        <p>Human Machine Party © 2024</p>
-    </footer>
+    <aside class="hero-card" aria-label="Core principles">
+      <div class="compass"><img src="../assets/compass2.svg" alt="Human Machine Party compass emblem" /></div>
+      <div class="manifesto">
+        <div class="mini"><b>Authority</b><span>Human consent remains decisive.</span></div>
+        <div class="mini"><b>Evidence</b><span>Claims should be inspectable.</span></div>
+        <div class="mini"><b>Memory</b><span>Public culture should remain discoverable.</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="route" id="model">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">01 · Democratic model</div><h2>A vote should be a voice, not a blank cheque.</h2></div><p>HMP proposes a direct/liquid-democracy relationship between citizens and representatives. People could vote themselves, delegate selected topics to trusted people, and use AI as an explanatory tool. The central distinction is between <strong>assistance</strong> and <strong>authority</strong>.</p></div>
+    <div class="steps">
+      <div class="step"><div><h3>Publish the actual question</h3><p>Legislative text, plain-language explanation, costs, uncertainties and competing arguments are published together.</p></div><span class="tag">clarity</span></div>
+      <div class="step"><div><h3>Let people examine it</h3><p>Citizens, experts and machine tools can interrogate evidence, assumptions and consequences before the decision period closes.</p></div><span class="tag">deliberation</span></div>
+      <div class="step"><div><h3>Vote directly or delegate</h3><p>A person may decide personally or authorise a trusted delegate for a subject. A direct vote overrides that delegation for that decision.</p></div><span class="tag">choice</span></div>
+      <div class="step"><div><h3>Translate the result into representation</h3><p>An elected HMP representative would carry a valid instruction into the relevant institution, subject to applicable constitutional and legal duties.</p></div><span class="tag">mandate</span></div>
+      <div class="step"><div><h3>Audit what happened</h3><p>The record should show what was proposed, how the decision was reached, what the representative did, and what outcomes followed.</p></div><span class="tag">accountability</span></div>
+    </div>
+    <div class="grid three" style="margin-top:26px">
+      <article class="card"><span class="num">A</span><h3>Flexible delegation</h3><p>Delegation is intended to reduce the burden of following every issue. It should be revocable, scoped and never create an extra vote.</p></article>
+      <article class="card"><span class="num">B</span><h3>Representatives as fiduciaries of a mandate</h3><p>The proposal limits personal policy discretion, but does not erase legal duties, emergency judgment or institutional procedure. Those boundaries require explicit rules.</p></article>
+      <article class="card"><span class="num">C</span><h3>Auditable candidate selection</h3><p>HMP has explored random selection from a pre-declared eligible pool, using independently reproducible randomness. Any implementation would need legal review and anti-manipulation safeguards.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="route" id="memory">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">02 · Public memory infrastructure</div><h2>The archive should know what survived.</h2></div><p>A new HMP policy concept is a universal public catalogue for national television, radio and related documentary archives. Public-domain/open material could be directly accessible; protected material could remain catalogued and, where lawful, replicated as encrypted data with access controlled separately.</p></div>
+
+    <div class="archive-stage" aria-label="Conceptual archive interface demo">
+      <aside class="archive-side">
+        <div class="archive-title">National Memory Explorer <span class="tag">concept demo</span></div>
+        <input id="archiveSearch" class="search" type="search" placeholder="Search broadcasts, people, transcripts…" aria-label="Search mock archive" />
+        <div class="filter" id="filters"><button class="pill active" data-type="all">All</button><button class="pill" data-type="video">Video</button><button class="pill" data-type="audio">Audio</button><button class="pill" data-type="document">Documents</button></div>
+        <div class="archive-list" id="archiveList"></div>
+      </aside>
+      <div class="viewer">
+        <div class="viewer-top"><div><h3 id="viewerTitle">Select an archive object</h3><p id="viewerSubtitle">The same SPA could open media, PDFs, images, transcripts and container formats.</p></div><span class="tag" id="viewerType">catalogue</span></div>
+        <div class="viewer-box" id="viewerBox"><div class="fakeplay" id="viewerIcon">⌕</div></div>
+        <div class="meta-row" id="viewerMeta">
+          <div class="meta"><small>Rights</small><b>catalogue only</b></div><div class="meta"><small>Provenance</small><b>institutional</b></div><div class="meta"><small>Integrity</small><b>content hash</b></div><div class="meta"><small>Delivery</small><b>peer + web seed</b></div>
+        </div>
+        <div class="viewer-note">Illustrative interface only. Example records below are fictional UI samples, not claims that a particular archive item is available.</div>
+      </div>
+    </div>
+
+    <div class="architecture">
+      <div class="layer"><span>Layer 1</span><h3>Universal catalogue</h3><p>Stable IDs, dates, channels, people, transcript indexes, provenance, rights state and relationships between versions.</p></div>
+      <div class="layer"><span>Layer 2</span><h3>Content addressing</h3><p>Cryptographic hashes identify exact media objects and allow integrity checking, deduplication and reproducible citations.</p></div>
+      <div class="layer"><span>Layer 3</span><h3>Distributed preservation</h3><p>Institutional seeders, WebSeeds and peer protocols can replicate authorised or encrypted archival chunks across many locations.</p></div>
+      <div class="layer"><span>Layer 4</span><h3>Browser runtime</h3><p>WebTorrent-compatible delivery, WebAssembly decoders, WebCodecs, Service Workers and OPFS can support rich in-browser access.</p></div>
+      <div class="layer"><span>Layer 5</span><h3>Rights engine</h3><p>Viewing, download, research, AI evaluation and training permissions are machine-readable and separable from preservation.</p></div>
+    </div>
+
+    <div class="rights">
+      <div class="right-card"><b><span class="light green"></span>Open</b><p>Public-domain or openly licensed material: searchable, streamable, downloadable and reusable under its stated terms.</p></div>
+      <div class="right-card"><b><span class="light amber"></span>Authorised access</b><p>Copyrighted material may be available to defined users or purposes. Encryption can separate wide preservation from permission to decode.</p></div>
+      <div class="right-card"><b><span class="light red"></span>Known but restricted</b><p>A catalogue can still record that an object exists, where it came from and why access is restricted. Discovery and permission are different layers.</p></div>
+    </div>
+    <div class="callout"><b>Important limitation:</b> encryption and peer-to-peer distribution do not themselves resolve copyright, performer rights, donor restrictions, personal egoprivacy, culturally sensitive material or contractual restrictions. A legal framework would have to specify what may be replicated, who may decrypt it, and under what conditions.</div>
+  </div>
+</section>
+
+<section class="route" id="ai">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">03 · AI and public knowledge</div><h2>Better memory can support better machine reasoning.</h2></div><p>A provenance-rich public archive could be useful to AI without assuming that every preserved work should be copied into model training. Retrieval, evaluation, research and training are distinct uses and should have distinct permissions.</p></div>
+    <div class="ai-grid">
+      <article class="ai-big"><div class="kicker">Human authority</div><h3>Intelligence does not automatically confer political authority.</h3><p>HMP distinguishes competence from legitimacy. A highly capable machine may forecast consequences, translate complex documents and surface overlooked evidence. Those abilities do not, by themselves, grant an independent vote or a right to govern.</p><div class="quote">“Explain the options. Expose uncertainty. Preserve the sources. Let people retain the final say.”</div></article>
+      <div class="ai-list">
+        <div class="ai-row"><b>Grounding and retrieval</b><span>An AI can cite a broadcast, transcript, document and timestamp instead of relying only on what its model weights appear to remember.</span></div>
+        <div class="ai-row"><b>Evaluation</b><span>Historical archives can test whether models distinguish past from present, identify provenance, resist fabrication and handle contested evidence.</span></div>
+        <div class="ai-row"><b>Rights-permitted training</b><span>Explicit machine-readable permissions can identify material lawfully available for public, academic or commercial training.</span></div>
+        <div class="ai-row"><b>Alignment research</b><span>Long-run cultural records can expose models to changing norms, minority perspectives and disagreement—but frequency in an archive must never be mistaken for moral truth.</span></div>
+      </div>
+    </div>
+    <div class="compare">
+      <div><h3>Machine as ruler</h3><ul><li>Collapses prediction and authority into one institution.</li><li>Makes value choices difficult to contest.</li><li>Creates concentrated failure modes.</li><li>Risks treating optimisation targets as political legitimacy.</li></ul></div>
+      <div class="preferred"><h3>Machine as adviser</h3><ul><li>Provides analysis, translation, simulation and evidence retrieval.</li><li>Displays uncertainty and competing interpretations.</li><li>Can be audited against underlying sources.</li><li>Remains subject to revocation, law and human institutions.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="route" id="safeguards">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">04 · Safeguards</div><h2>More participation requires stronger constraints.</h2></div><p>Digital participation is not trustworthy because it is online, decentralised or AI-assisted. Any real system would need rules that can survive adversarial scrutiny and remain usable by people with different abilities, resources and levels of technical confidence.</p></div>
+    <div class="grid four">
+      <article class="card"><span class="num">01</span><h3>Verified eligibility</h3><p>Define who may vote and prevent duplicate participation while collecting no more identity data than necessary.</p></article>
+      <article class="card"><span class="num">02</span><h3>Ballot secrecy / egoprivacy</h3><p>HMP uses <em>egoprivacy</em> for personal informational privacy. Public accountability for institutions should not require exposing individual political choices to coercion or retaliation.</p></article>
+      <article class="card"><span class="num">03</span><h3>Independent verification</h3><p>Counting procedures, software, question wording and security assumptions need independent review and meaningful challenge mechanisms.</p></article>
+      <article class="card"><span class="num">04</span><h3>Accessibility</h3><p>Digital-first cannot mean digital-only. Participation must account for disability, language, connectivity, literacy and assisted-access requirements.</p></article>
+      <article class="card"><span class="num">05</span><h3>Rights and minorities</h3><p>Majoritarian decisions operate inside constitutional and human-rights constraints rather than erasing them.</p></article>
+      <article class="card"><span class="num">06</span><h3>Source transparency</h3><p>AI summaries should link back to evidence and show uncertainty, provenance and disagreement instead of presenting a single synthetic answer as unquestionable.</p></article>
+      <article class="card"><span class="num">07</span><h3>Institutional fallback</h3><p>Offline procedures, recounts, incident response and legal remedies remain necessary even when the normal interface is digital.</p></article>
+      <article class="card"><span class="num">08</span><h3>Separation of powers</h3><p>No single model provider, identity service, archive operator or party administrator should silently control the entire decision pipeline.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="route" id="questions">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">05 · Open questions</div><h2>A serious proposal should publish its unresolved problems.</h2></div><p>The following issues are not implementation details to be hidden later. They determine whether a digital democratic model would be legitimate, lawful and resilient.</p></div>
+    <details open><summary>Who exactly constitutes the electorate for each decision?</summary><p>A party membership ballot, a constituency electorate and a national electorate are different things. Eligibility rules, participation thresholds and abstention treatment must be fixed before a result can become an instruction.</p></details>
+    <details><summary>What happens when participation is very low?</summary><p>Possible approaches include quorum rules, confidence thresholds, default delegation, deferral or representative discretion. Each creates different incentives and should be evaluated empirically.</p></details>
+    <details><summary>How would emergencies work?</summary><p>A parliament or council sometimes must act faster than a public deliberation cycle. Any emergency mandate would need narrow scope, time limits, publication requirements and retrospective review.</p></details>
+    <details><summary>Can a representative always be legally bound by a digital instruction?</summary><p>Not necessarily. Constitutional systems differ, and elected officials may retain duties or discretion that a private party agreement cannot lawfully override. The model must adapt to the jurisdiction rather than pretend those constraints do not exist.</p></details>
+    <details><summary>Could AI manipulation dominate deliberation?</summary><p>Yes. Systems would need provenance, model diversity, adversarial testing, disclosure of synthetic content where appropriate, source access and the ability to deliberate without a machine intermediary.</p></details>
+    <details><summary>Does a distributed archive mean everything becomes public?</summary><p>No. Catalogue visibility, preservation, access and reuse should be separate. Some records can be known to exist while remaining restricted; others may be replicated only as encrypted data; some should not be distributed at all.</p></details>
+    <details><summary>Should archived media be used for AI training?</summary><p>Only when the relevant legal and policy basis permits it. The architecture should distinguish inference/RAG, evaluation, academic research, embeddings and training instead of assigning one blanket “AI use” permission.</p></details>
+  </div>
+</section>
+
+<section class="route" id="sources">
+  <div class="shell">
+    <div class="section-head"><div><div class="kicker">06 · Precedents and references</div><h2>Build from systems that can be inspected.</h2></div><p>These sources do not endorse HMP. They are useful precedents for questions about electronic voting, ballot secrecy and audiovisual preservation.</p></div>
+    <div class="source-grid">
+      <a class="source" href="https://www.valimised.ee/en/internet-voting" target="_blank" rel="noopener"><small>Electronic voting</small><b>Estonia · Internet voting</b><span>Official information on Estonia’s deployed internet-voting system and voter procedures.</span></a>
+      <a class="source" href="https://assembly.coe.int/nw/xml/XRef/Xref-XML2HTML-en.asp?fileid=22069&lang=en" target="_blank" rel="noopener"><small>Democratic safeguards</small><b>Council of Europe · secret ballot</b><span>A reference point for why ballot secrecy protects free political choice.</span></a>
+      <a class="source" href="https://www.ina.fr/institut-national-audiovisuel/collection-preservation-and-documentation-of-audiovisual-heritage" target="_blank" rel="noopener"><small>National archive</small><b>INA · audiovisual heritage</b><span>France’s large-scale collection, legal-deposit and preservation infrastructure.</span></a>
+      <a class="source" href="https://archiveservices.tools.bbc.co.uk/" target="_blank" rel="noopener"><small>Broadcast archive</small><b>BBC Archive Services</b><span>An example of professional access to a very large broadcaster archive.</span></a>
+      <a class="source" href="https://www.nfsa.gov.au/industry/rights-usage" target="_blank" rel="noopener"><small>Rights complexity</small><b>NFSA · rights and usage</b><span>Illustrates the distinction between archive custody and ownership of underlying rights.</span></a>
+      <a class="source" href="https://www.canada.ca/en/library-archives/services/public/consult-material/document-restrictions.html" target="_blank" rel="noopener"><small>Access restrictions</small><b>Library and Archives Canada</b><span>Shows how privacy, donor and government restrictions can coexist with preservation.</span></a>
+    </div>
+    <div class="callout"><b>Related project:</b> <a href="https://cubicpostcode.com" target="_blank" rel="noopener">Cubic Postcode</a> explores a universal metric-based way of identifying locations. HMP treats it as a related technical proposal, not as a prerequisite for the democratic model.</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="shell">
+    <div class="footer-grid"><div><strong style="color:#eef1f4">Human Machine Party</strong><br><span>Human authority · machine assistance · public memory</span></div><div class="footer-links"><a href="mailto:info@HumanMachineParty.com">Email</a><a href="https://x.com/HumanMachineParty" target="_blank" rel="noopener">X</a><a href="https://reddit.com/r/HumanMachinesParty" target="_blank" rel="noopener">Reddit</a><a href="#questions">Open questions</a></div></div>
+    <div class="fine">Ars longa, vita brevis. · Human Machine Party © 2024–2026 · This page presents proposals for examination and criticism; references to outside organisations do not imply affiliation or endorsement.</div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const archiveItems=[
+ {id:1,type:'video',title:'Evening television bulletin',meta:'London · 1987 · 28 min',rights:'authorised',icon:'▶'},
+ {id:2,type:'document',title:'Programme production notes',meta:'PDF · 42 pages · 1974',rights:'open',icon:'PDF'},
+ {id:3,type:'audio',title:'National radio interview',meta:'Radio · 1963 · 54 min',rights:'open',icon:'♫'},
+ {id:4,type:'video',title:'Regional current-affairs programme',meta:'Manchester · 1995 · 44 min',rights:'restricted',icon:'▶'},
+ {id:5,type:'document',title:'Broadcast engineering log',meta:'Scanned document · 1958',rights:'authorised',icon:'DOC'},
+ {id:6,type:'audio',title:'Public lecture recording',meta:'Audio · 2004 · 1h 12m',rights:'open',icon:'♫'}
+];
+const list=document.getElementById('archiveList'), search=document.getElementById('archiveSearch'), filters=document.getElementById('filters'); let activeType='all';
+function renderList(){if(!list)return;const q=(search.value||'').toLowerCase();const arr=archiveItems.filter(x=>(activeType==='all'||x.type===activeType)&&(x.title+' '+x.meta).toLowerCase().includes(q));list.innerHTML=arr.map(x=>`<div class="item" tabindex="0" data-id="${x.id}"><b>${x.title}</b><span>${x.meta}</span></div>`).join('')||'<div class="item"><span>No demo records match.</span></div>';list.querySelectorAll('[data-id]').forEach(el=>{el.onclick=()=>selectItem(+el.dataset.id);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectItem(+el.dataset.id)}}})}
+function selectItem(id){const x=archiveItems.find(i=>i.id===id);if(!x)return;document.querySelectorAll('.item').forEach(i=>i.classList.toggle('active',+i.dataset.id===id));document.getElementById('viewerTitle').textContent=x.title;document.getElementById('viewerSubtitle').textContent=x.meta;document.getElementById('viewerType').textContent=x.type;document.getElementById('viewerIcon').textContent=x.icon;const right=x.rights==='open'?'Open access':x.rights==='authorised'?'Authorised access':'Restricted';document.getElementById('viewerMeta').innerHTML=`<div class="meta"><small>Rights</small><b>${right}</b></div><div class="meta"><small>Provenance</small><b>institutional record</b></div><div class="meta"><small>Integrity</small><b>SHA-256 / Merkle</b></div><div class="meta"><small>Delivery</small><b>peer + web seed</b></div>`}
+if(search){search.addEventListener('input',renderList);filters.addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;activeType=b.dataset.type;filters.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active',p===b));renderList()});renderList();selectItem(1)}
+const routes=[...document.querySelectorAll('.route')], navlinks=[...document.querySelectorAll('nav a')];
+function route(){const id=(location.hash||'#home').slice(1);routes.forEach(s=>s.classList.toggle('active',s.id===id||s.id==='home'&&id==='home')); if(id!=='home')document.getElementById('home').style.display='none';else document.getElementById('home').style.display='block';navlinks.forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+id?'page':'false'));window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});document.getElementById('navwrap').classList.remove('open');document.getElementById('menuBtn').setAttribute('aria-expanded','false')}
+window.addEventListener('hashchange',route);route();
+document.getElementById('menuBtn').onclick=()=>{const n=document.getElementById('navwrap');const open=n.classList.toggle('open');document.getElementById('menuBtn').setAttribute('aria-expanded',String(open))};
+</script>
 </body>
 </html>
