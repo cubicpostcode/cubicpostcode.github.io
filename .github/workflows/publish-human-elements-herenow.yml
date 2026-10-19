@@ -1,0 +1,51 @@
+name: Publish human elemental composition to here.now
+
+on:
+  push:
+    paths:
+      - "biology/human-elements.html"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish page to here.now
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/here
+          cp biology/human-elements.html /tmp/here/index.html
+          python3 - <<'PY' > /tmp/here/request.json
+          import json,os
+          print(json.dumps({"displayName":"The elements of the human body","displayDescription":"An illustrated, searchable breakdown of the chemical elements in a reference human body by mass.","files":[{"path":"index.html","size":os.path.getsize("/tmp/here/index.html"),"contentType":"text/html; charset=utf-8"}]}))
+          PY
+          curl --fail-with-body --retry 3 -sS -X POST https://here.now/api/v1/publish -H "X-HereNow-Client: chatgpt/github-actions" -H "Content-Type: application/json" --data-binary @/tmp/here/request.json > /tmp/here/create.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/here/create.json'))
+          u=d['upload']['uploads'][0]
+          open('/tmp/here/upload_url','w').write(u['url'])
+          open('/tmp/here/finalize_url','w').write(d['upload']['finalizeUrl'])
+          json.dump({"versionId":d['upload']['versionId']},open('/tmp/here/finalize.json','w'))
+          PY
+          curl --fail-with-body --retry 3 -sS -X PUT "$(cat /tmp/here/upload_url)" -H "Content-Type: text/html; charset=utf-8" --data-binary @/tmp/here/index.html
+          curl --fail-with-body --retry 3 -sS -X POST "$(cat /tmp/here/finalize_url)" -H "X-HereNow-Client: chatgpt/github-actions" -H "Content-Type: application/json" --data-binary @/tmp/here/finalize.json > /tmp/here/finalized.json
+          python3 - <<'PY'
+          import json
+          init=json.load(open('/tmp/here/create.json'))
+          done=json.load(open('/tmp/here/finalized.json'))
+          assert done.get("success") and done.get("publishStatus",{}).get("state") == "live",done
+          print("PUBLIC_SITE_URL="+done['siteUrl'])
+          print("CLAIM_SITE_URL="+init.get('claimUrl','not provided'))
+          print("EXPIRES_AT="+init.get('expiresAt','none'))
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            f.write("## here.now deployment\n\n")
+            f.write("**Public site:** "+done['siteUrl']+"\n\n")
+            f.write("**Claim this anonymous site (within 24 hours):** "+init.get('claimUrl','not provided')+"\n\n")
+            f.write("**Expires:** "+init.get('expiresAt','none')+"\n")
+          PY
